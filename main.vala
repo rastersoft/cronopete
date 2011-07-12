@@ -24,11 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-void show_usage() {
-	GLib.stdout.printf("Usage:\n");
-	GLib.stdout.printf("nanockup [-c|--config config_file] [-a|--add directory to backup] [-a|--add...] [-e|--exclude directory to exclude] [-e|--exclude...] [--hiden] [-h|--help] [-v|--version]\n");
-	exit(0);
-}
+enum SystemStatus { IDLE, BACKING_UP, WARNING, ERROR }
 
 void print_version() {
 	GLib.stdout.printf("Nanockup Version 0.3\n");
@@ -37,43 +33,96 @@ void print_version() {
 class nc_callback : GLib.Object, nsnanockup.callbacks {
 
 	private StatusIcon trayicon;
+	private SystemStatus current_status;
+	private double angle;
+	private int size;
+
+	public void PixbufDestroyNotify (uint8* pixels) {
+		delete pixels;	
+	}
+
+	public bool timer() {
+	
+		this.repaint(this.size);
+		this.angle-=0.20;
+		this.angle%=120.0*Gsl.MathConst.M_PI;
+		return true;
+	
+	}
 
 	public bool repaint(int size) {
+	
+		if (size==0) {
+			return false;
+		}
+	
+		this.size = size;
 	
 		var canvas = new Cairo.ImageSurface(Cairo.Format.ARGB32,size,size);
 		var ctx = new Cairo.Context(canvas);
 		
 		ctx.set_antialias(Cairo.Antialias.GRAY);
 		ctx.scale(size,size);
-		ctx.set_source_rgb(0,1,0);
-		ctx.arc(0.5,0.5,0.3,0,2.0*Gsl.MathConst.M_PI);
-		ctx.set_line_width(0.2);
+
+		switch (this.current_status) {
+		case SystemStatus.IDLE:
+		case SystemStatus.BACKING_UP:
+			ctx.set_source_rgb(0,1,0);
+		break;
+		case SystemStatus.WARNING:
+			ctx.set_source_rgb(1,1,0);
+		break;
+		case SystemStatus.ERROR:
+			ctx.set_source_rgb(1,0,0);
+		break;
+		}
+		ctx.arc(0.5,0.5,0.4,0,2.0*Gsl.MathConst.M_PI);
+		ctx.set_line_width(0.1);
+		ctx.stroke();
+		ctx.translate(0.5,0.5);
+		ctx.save();
+		ctx.rotate(this.angle);
+		ctx.move_to(0,0.02);
+		ctx.line_to(0,-0.4);
+		ctx.stroke();
+		ctx.restore();
+		ctx.rotate(this.angle/60);
+		ctx.move_to(0,0.02);
+		ctx.line_to(0,-0.3);
 		ctx.stroke();
 		
-		uint8* data_icon=new uint8[size*size*4];
+		uint8 *data_icon=new uint8[size*size*4];
 		uint8 *p1=data_icon;
 		uint8 *p2=canvas.get_data();
 		int counter;
-		int max;
 		
-		max=size*size*4;
+		int max=size*size;
 		for(counter=0;counter<max;counter++) {
-			*p1=*p2;
-			p1++;
-			p2++;
+			*p1    =*(p2+2);
+			*(p1+1)=*(p2+1);
+			*(p1+2)=*p2;
+			*(p1+3)=*(p2+3);
+			p1+=4;
+			p2+=4;
 		}
 		
-		var pix=new Pixbuf.from_data((uint8[])data_icon,Gdk.Colorspace.RGB,true,8,size,size,size*4,null);
+		var pix=new Pixbuf.from_data((uint8[])data_icon,Gdk.Colorspace.RGB,true,8,size,size,size*4,PixbufDestroyNotify);
 		this.trayicon.set_from_pixbuf(pix);
 		
 		return true;
 	}
 
 	public nc_callback() {
+	
+		this.current_status = SystemStatus.IDLE;
+		this.angle = 0.0;
+		this.size = 0;
+	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Tray");
 		this.trayicon.set_visible(true);
 		this.trayicon.size_changed.connect(this.repaint);
+		Timeout.add(20,timer);
 	}
 
 	public void backup_folder(string dirpath) {
