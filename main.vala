@@ -22,6 +22,7 @@ using Gee;
 using Gtk;
 using Gdk;
 using Cairo;
+using Gsl;
 
 void show_usage() {
 	GLib.stdout.printf("Usage:\n");
@@ -36,7 +37,6 @@ void print_version() {
 class nc_callback : GLib.Object, nsnanockup.callbacks {
 
 	private StatusIcon trayicon;
-	uint8 [] data_icon;
 
 	public bool repaint(int size) {
 	
@@ -50,7 +50,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		ctx.set_line_width(0.2);
 		ctx.stroke();
 		
-		data_icon=new uint8[size*size*4];
+		uint8* data_icon=new uint8[size*size*4];
 		uint8 *p1=data_icon;
 		uint8 *p2=canvas.get_data();
 		int counter;
@@ -63,7 +63,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 			p2++;
 		}
 		
-		var pix=new Pixbuf.from_data(data_icon,Gdk.Colorspace.RGB,true,8,size,size,size*4,null);
+		var pix=new Pixbuf.from_data((uint8[])data_icon,Gdk.Colorspace.RGB,true,8,size,size,size*4,null);
 		this.trayicon.set_from_pixbuf(pix);
 		
 		return true;
