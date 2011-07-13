@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-enum SystemStatus { IDLE, BACKING_UP, WARNING, ERROR }
+enum SystemStatus { IDLE, BACKING_UP, WARNING, ERROR, END }
 
 void print_version() {
 	GLib.stdout.printf("Nanockup Version 0.3\n");
@@ -36,18 +36,36 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	private SystemStatus current_status;
 	private double angle;
 	private int size;
+	private unowned Thread <void *> b_thread;
+	private uint timer;
 
 	public void PixbufDestroyNotify (uint8* pixels) {
 		delete pixels;	
 	}
 
-	public bool timer() {
+	public bool timer_f() {
 	
+		if (this.current_status==SystemStatus.IDLE) {
+			this.current_status=SystemStatus.BACKING_UP;
+			b_thread=Thread.create <void *>(this.do_backup, false);
+			if (this.timer!=0) {
+				Source.remove(this.timer);
+			}
+			this.timer=Timeout.add(20,this.timer_f);
+		}
+
 		this.repaint(this.size);
 		this.angle-=0.20;
 		this.angle%=120.0*Gsl.MathConst.M_PI;
+		if (this.current_status==SystemStatus.END) {
+			this.current_status=SystemStatus.IDLE;
+			if (this.timer!=0) {
+				Source.remove(this.timer);
+			}
+			this.timer=Timeout.add(60000,this.timer_f);
+			return true;
+		}
 		return true;
-	
 	}
 
 	public bool repaint(int size) {
@@ -61,11 +79,14 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		var canvas = new Cairo.ImageSurface(Cairo.Format.ARGB32,size,size);
 		var ctx = new Cairo.Context(canvas);
 		
-		ctx.set_antialias(Cairo.Antialias.GRAY);
+		//ctx.set_antialias(Cairo.Antialias.GRAY);
 		ctx.scale(size,size);
 
 		switch (this.current_status) {
 		case SystemStatus.IDLE:
+		case SystemStatus.END:
+			ctx.set_source_rgb(1,1,1);
+		break;
 		case SystemStatus.BACKING_UP:
 			ctx.set_source_rgb(0,1,0);
 		break;
@@ -86,9 +107,9 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		ctx.line_to(0,-0.4);
 		ctx.stroke();
 		ctx.restore();
-		ctx.rotate(this.angle/60);
+		ctx.rotate(this.angle/30);
 		ctx.move_to(0,0.02);
-		ctx.line_to(0,-0.3);
+		ctx.line_to(0,-0.25);
 		ctx.stroke();
 		
 		uint8 *data_icon=new uint8[size*size*4];
@@ -108,7 +129,6 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		
 		var pix=new Pixbuf.from_data((uint8[])data_icon,Gdk.Colorspace.RGB,true,8,size,size,size*4,PixbufDestroyNotify);
 		this.trayicon.set_from_pixbuf(pix);
-		
 		return true;
 	}
 
@@ -117,12 +137,13 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.current_status = SystemStatus.IDLE;
 		this.angle = 0.0;
 		this.size = 0;
+		this.timer = 0;
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Tray");
 		this.trayicon.set_visible(true);
 		this.trayicon.size_changed.connect(this.repaint);
-		Timeout.add(20,timer);
+		this.timer_f();
 	}
 
 	public void backup_folder(string dirpath) {
@@ -142,40 +163,48 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	}
 	
 	public void error_copy_file(string o_filepath, string d_filepath) {
+		this.current_status=SystemStatus.WARNING;
 		GLib.stdout.printf("Can't copy file %s to %s\n",o_filepath,d_filepath);
 	}
 	
 	public void error_access_directory(string dirpath) {
+		this.current_status=SystemStatus.WARNING;
 		GLib.stdout.printf("Can't access directory %s\n",dirpath);
 	}
 	
 	public void error_create_directory(string dirpath) {
+		this.current_status=SystemStatus.WARNING;
 		GLib.stdout.printf("Can't create directory %s\n",dirpath);
 	}
 	
 	public void excluding_folder(string dirpath) {
 		//GLib.stdout.printf("Excluding folder %s\n",dirpath);
 	}
+	
+	void* do_backup() {
+
+		var basedir = new nsnanockup.nanockup(this);
+		int retval;
+
+		this.current_status=SystemStatus.BACKING_UP;
+		if (0!=basedir.read_configuration(null)) {
+			this.current_status=SystemStatus.ERROR;
+			GLib.stdout.printf("Error reading configuration\n");
+			return null;
+		}
+	
+		retval=basedir.do_backup();
+	
+		if (0!=retval) {
+			return null;
+		}
+
+		this.current_status=SystemStatus.END;
+		GLib.stdout.printf("Backup done! needed %ld seconds.\n",(long)basedir.time_used);
+		return null;
+	}
 }
 
-void do_backup(nc_callback callbacks) {
-
-	var basedir = new nsnanockup.nanockup(callbacks);
-	int retval;
-
-	if (0!=basedir.read_configuration(null)) {
-		GLib.stdout.printf("Error reading configuration\n");
-	}
-	
-	retval=basedir.do_backup();
-	
-	if (0!=retval) {
-		return;
-	}
-
-	GLib.stdout.printf("Backup done! needed %ld seconds.\n",(long)basedir.time_used);
-
-}
 
 int main(string[] args) {
 	
@@ -186,8 +215,6 @@ int main(string[] args) {
 	var callbacks = new nc_callback();
 	
 	Gtk.main();
-	
-	do_backup(callbacks);
 	
 	return 0;
 }

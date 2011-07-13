@@ -1,12 +1,12 @@
 --- !Project
 name: nanockup
 author: Raster Software Vigo
-version: 0.2.0
+version: 0.3.0
 license: None
 builder: native
 builder-options: !NativeBuilderOptions
   debug: false
-  thread: false
+  thread: true
   disable-assert: false
   disable-checking: false
   disable-non-null: false
