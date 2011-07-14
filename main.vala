@@ -57,13 +57,12 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.repaint(this.size);
 		this.angle-=0.20;
 		this.angle%=120.0*Gsl.MathConst.M_PI;
-		if (this.current_status==SystemStatus.END) {
+		if ((this.current_status==SystemStatus.END) || (this.current_status==SystemStatus.ERROR)) {
 			this.current_status=SystemStatus.IDLE;
 			if (this.timer!=0) {
 				Source.remove(this.timer);
 			}
-			this.timer=Timeout.add(60000,this.timer_f);
-			return true;
+			this.timer=Timeout.add(3600000,this.timer_f);
 		}
 		return true;
 	}
@@ -140,14 +139,17 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.timer = 0;
 	
 		this.trayicon = new StatusIcon();
-		this.trayicon.set_tooltip_text ("Tray");
+		this.trayicon.set_tooltip_text ("Idle");
 		this.trayicon.set_visible(true);
 		this.trayicon.size_changed.connect(this.repaint);
 		this.timer_f();
 	}
 
 	public void backup_folder(string dirpath) {
-		GLib.stdout.printf("Backing up folder %s\n",dirpath);
+		
+		string message = "Backing up folder %s\n".printf(dirpath);
+		
+		this.trayicon.set_tooltip_text (message);
 	}
 	
 	public void backup_file(string filepath) {
@@ -189,18 +191,26 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.current_status=SystemStatus.BACKING_UP;
 		if (0!=basedir.read_configuration(null)) {
 			this.current_status=SystemStatus.ERROR;
-			GLib.stdout.printf("Error reading configuration\n");
+			this.trayicon.set_tooltip_text ("Error reading configuration");
 			return null;
 		}
 	
 		retval=basedir.do_backup();
 	
-		if (0!=retval) {
-			return null;
+		switch (retval) {
+		case 0:
+			this.current_status=SystemStatus.END;
+			this.trayicon.set_tooltip_text ("Backup done!");
+			//GLib.stdout.printf("Backup done! needed %ld seconds.\n",(long)basedir.time_used);
+		break;
+		case -1:
+			this.current_status=SystemStatus.WARNING;
+		break;
+		default:
+			this.current_status=SystemStatus.ERROR;
+		break;
 		}
 
-		this.current_status=SystemStatus.END;
-		GLib.stdout.printf("Backup done! needed %ld seconds.\n",(long)basedir.time_used);
 		return null;
 	}
 }

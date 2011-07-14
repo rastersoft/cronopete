@@ -187,6 +187,8 @@ namespace nsnanockup {
 		public ulong time_used {get; set;}
 		
 		private callbacks callback;
+		
+		private bool made_copy;
 
 		public nanockup(callbacks to_callback) {
 		
@@ -217,11 +219,13 @@ namespace nsnanockup {
 			 *    -2: the class hasn't been configured yet                                                        *
 			 *    -3: the destination directory doesn't exists and can't be created                               *
 			 *    -4: can't create the folder for the current backup                                              *
-			 *    -5: can't rename the temporal backup folder to its definitive name                           *
+			 *    -5: can't rename the temporal backup folder to its definitive name                              *
 			 ******************************************************************************************************/
 		
 			int retval,tmp;
 			string? directory=null;
+			
+			this.made_copy=false;
 			
 			if (this.backup_path=="") { // system not configured
 				GLib.stderr.printf("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
@@ -258,22 +262,25 @@ namespace nsnanockup {
 			// sync the disk to ensure that all the data has been commited
 			Posix.sync();
 			
-			// rename the directory from Bxxxxx to xxxxx to confirm the backup
-			var directory2 = File.new_for_path(this.temporal_path);
-			try {
-				directory2.set_display_name(this.final_path,null);
-			} catch {
-				GLib.stderr.printf("Can't rename the temporal backup to its definitive name. Aborting backup.\n");
-				return -5;
+			if (this.made_copy) {
+			
+				// rename the directory from Bxxxxx to xxxxx to confirm the backup
+				var directory2 = File.new_for_path(this.temporal_path);
+				try {
+					directory2.set_display_name(this.final_path,null);
+				} catch {
+					GLib.stderr.printf("Can't rename the temporal backup to its definitive name. Aborting backup.\n");
+					return -5;
+				}
+			
+				// and sync again the disk to confirm the new name
+				Posix.sync();
+			} else {
+				GLib.stderr.printf("No modified files since last backup.\n");
 			}
-			
-			// and sync again the disk to confirm the new name
-			Posix.sync();
-			
 			var timestamp2=time_t();			
 			
 			this.time_used=(ulong)timestamp2-timestamp;
-			
 			return retval;
 		}
 		
@@ -360,17 +367,18 @@ namespace nsnanockup {
 					// If the file modification time is bigger than the last backup time, or the link failed, we must copy the file
 					if (verror!=0) {
 						try {
+							this.made_copy=true;
 							this.callback.backup_file(full_path);
 							//GLib.stdout.printf("Copying %s to %s\n",full_path,Path.build_filename(this.temporal_path,full_path));
 							File.new_for_path(Path.build_filename(full_path)).copy(File.new_for_path(Path.build_filename(this.temporal_path,full_path)),FileCopyFlags.OVERWRITE,null,null);
 						} catch (Error e) {
 							this.callback.error_copy_file(full_path,Path.build_filename(this.temporal_path,full_path));
-							return -1; // failed to copy a file.
+							retval=-2; // failed to copy a file.
 						}
 					}
 				}
 			}
-			return 0;
+			return (retval);
 		}
 
 
