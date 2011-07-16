@@ -24,20 +24,19 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-enum SystemStatus { IDLE, BACKING_UP, WARNING, ERROR, END }
-
-void print_version() {
-	GLib.stdout.printf("Nanockup Version 0.3\n");
-}
+enum SystemStatus { IDLE, BACKING_UP, ENDED }
+enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
 class nc_callback : GLib.Object, nsnanockup.callbacks {
 
 	private StatusIcon trayicon;
-	private SystemStatus current_status;
+	private SystemStatus backup_running;
+	private BackupStatus current_status;
 	private double angle;
 	private int size;
 	private unowned Thread <void *> b_thread;
 	private uint timer;
+	private StringBuilder messages;
 
 	public void PixbufDestroyNotify (uint8* pixels) {
 		delete pixels;	
@@ -45,25 +44,27 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 
 	public bool timer_f() {
 	
-		if (this.current_status==SystemStatus.IDLE) {
-			this.current_status=SystemStatus.BACKING_UP;
+		if (this.backup_running==SystemStatus.IDLE) {
+			this.backup_running=SystemStatus.BACKING_UP;
 			b_thread=Thread.create <void *>(this.do_backup, false);
 			if (this.timer!=0) {
 				Source.remove(this.timer);
 			}
 			this.timer=Timeout.add(20,this.timer_f);
 		}
-
-		this.repaint(this.size);
-		this.angle-=0.20;
-		this.angle%=120.0*Gsl.MathConst.M_PI;
-		if ((this.current_status==SystemStatus.END) || (this.current_status==SystemStatus.ERROR)) {
-			this.current_status=SystemStatus.IDLE;
+		if (this.backup_running==SystemStatus.ENDED) {
+			this.backup_running=SystemStatus.IDLE;
+			if (this.current_status==BackupStatus.ALLFINE) {
+				this.current_status=BackupStatus.STOPPED;
+			}
 			if (this.timer!=0) {
 				Source.remove(this.timer);
 			}
 			this.timer=Timeout.add(3600000,this.timer_f);
 		}
+		this.repaint(this.size);
+		this.angle-=0.20;
+		this.angle%=120.0*Gsl.MathConst.M_PI;
 		return true;
 	}
 
@@ -82,17 +83,16 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		ctx.scale(size,size);
 
 		switch (this.current_status) {
-		case SystemStatus.IDLE:
-		case SystemStatus.END:
+		case BackupStatus.STOPPED:
 			ctx.set_source_rgb(1,1,1);
 		break;
-		case SystemStatus.BACKING_UP:
+		case BackupStatus.ALLFINE:
 			ctx.set_source_rgb(0,1,0);
 		break;
-		case SystemStatus.WARNING:
+		case BackupStatus.WARNING:
 			ctx.set_source_rgb(1,1,0);
 		break;
-		case SystemStatus.ERROR:
+		case BackupStatus.ERROR:
 			ctx.set_source_rgb(1,0,0);
 		break;
 		}
@@ -133,7 +133,9 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 
 	public nc_callback() {
 	
-		this.current_status = SystemStatus.IDLE;
+		this.messages = new StringBuilder("");
+		this.backup_running = SystemStatus.IDLE;
+		this.current_status = BackupStatus.STOPPED;
 		this.angle = 0.0;
 		this.size = 0;
 		this.timer = 0;
@@ -142,6 +144,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.trayicon.set_tooltip_text ("Idle");
 		this.trayicon.set_visible(true);
 		this.trayicon.size_changed.connect(this.repaint);
+		this.trayicon.activate.connect(() => {GLib.stdout.printf("%s",this.messages.str); } );
 		this.timer_f();
 	}
 
@@ -161,22 +164,22 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	}
 	
 	public void warning_link_file(string o_filepath, string d_filepath) {
-		GLib.stdout.printf("Can't link file %s to %s\n",o_filepath,d_filepath);
+		//GLib.stdout.printf("Can't link file %s to %s\n",o_filepath,d_filepath);
 	}
 	
 	public void error_copy_file(string o_filepath, string d_filepath) {
-		this.current_status=SystemStatus.WARNING;
-		GLib.stdout.printf("Can't copy file %s to %s\n",o_filepath,d_filepath);
+		this.current_status=BackupStatus.WARNING;
+		this.messages.append_printf("Can't copy file %s to %s\n",o_filepath,d_filepath);
 	}
 	
 	public void error_access_directory(string dirpath) {
-		this.current_status=SystemStatus.WARNING;
-		GLib.stdout.printf("Can't access directory %s\n",dirpath);
+		this.current_status=BackupStatus.WARNING;
+		this.messages.append_printf("Can't access directory %s\n",dirpath);
 	}
 	
 	public void error_create_directory(string dirpath) {
-		this.current_status=SystemStatus.WARNING;
-		GLib.stdout.printf("Can't create directory %s\n",dirpath);
+		this.current_status=BackupStatus.WARNING;
+		this.messages.append_printf("Can't create directory %s\n",dirpath);
 	}
 	
 	public void excluding_folder(string dirpath) {
@@ -188,26 +191,29 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		var basedir = new nsnanockup.nanockup(this);
 		int retval;
 
-		this.current_status=SystemStatus.BACKING_UP;
+		this.messages = new StringBuilder("Starting backup\n");
+		
+		this.current_status=BackupStatus.ALLFINE;
 		if (0!=basedir.read_configuration(null)) {
-			this.current_status=SystemStatus.ERROR;
+			this.current_status=BackupStatus.ERROR;
+			this.backup_running=SystemStatus.ENDED;
 			this.trayicon.set_tooltip_text ("Error reading configuration");
 			return null;
 		}
 	
 		retval=basedir.do_backup();
-	
+		this.backup_running=SystemStatus.ENDED;
 		switch (retval) {
 		case 0:
-			this.current_status=SystemStatus.END;
 			this.trayicon.set_tooltip_text ("Backup done!");
-			//GLib.stdout.printf("Backup done! needed %ld seconds.\n",(long)basedir.time_used);
+			this.messages.append_printf("Backup done. Needed %ld seconds.\n",(long)basedir.time_used);
 		break;
 		case -1:
-			this.current_status=SystemStatus.WARNING;
+			this.current_status=BackupStatus.WARNING;
 		break;
 		default:
-			this.current_status=SystemStatus.ERROR;
+			this.trayicon.set_tooltip_text ("Can't do backup");
+			this.current_status=BackupStatus.ERROR;
 		break;
 		}
 
