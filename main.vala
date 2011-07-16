@@ -51,8 +51,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 				Source.remove(this.timer);
 			}
 			this.timer=Timeout.add(20,this.timer_f);
-		}
-		if (this.backup_running==SystemStatus.ENDED) {
+		} else if (this.backup_running==SystemStatus.ENDED) {
 			this.backup_running=SystemStatus.IDLE;
 			if (this.current_status==BackupStatus.ALLFINE) {
 				this.current_status=BackupStatus.STOPPED;
@@ -62,6 +61,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 			}
 			this.timer=Timeout.add(3600000,this.timer_f);
 		}
+
 		this.repaint(this.size);
 		this.angle-=0.20;
 		this.angle%=120.0*Gsl.MathConst.M_PI;
@@ -96,19 +96,28 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 			ctx.set_source_rgb(1,0,0);
 		break;
 		}
-		ctx.arc(0.5,0.5,0.4,0,2.0*Gsl.MathConst.M_PI);
+		ctx.arc(0.55,0.5,0.4,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
 		ctx.set_line_width(0.1);
 		ctx.stroke();
-		ctx.translate(0.5,0.5);
+		ctx.set_line_width(0.0);
+		ctx.move_to(0,0.5);
+		ctx.line_to(0.3,0.5);
+		ctx.line_to(0.15,0.65);
+		ctx.close_path();
+		ctx.fill();
+		ctx.set_line_width(0.1);
+		ctx.translate(0.55,0.5);
 		ctx.save();
 		ctx.rotate(this.angle);
 		ctx.move_to(0,0.02);
 		ctx.line_to(0,-0.4);
 		ctx.stroke();
 		ctx.restore();
+		ctx.save();
 		ctx.rotate(this.angle/30);
 		ctx.move_to(0,0.02);
 		ctx.line_to(0,-0.25);
+		ctx.restore();
 		ctx.stroke();
 		
 		uint8 *data_icon=new uint8[size*size*4];
