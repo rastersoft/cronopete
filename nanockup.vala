@@ -32,6 +32,7 @@ namespace nsnanockup {
 		public abstract void error_access_directory(string directory);
 		public abstract void error_create_directory(string directory);
 		public abstract void excluding_folder(string dirpath);
+		public abstract void show_message(string msg);
 
 	}
 
@@ -228,17 +229,17 @@ namespace nsnanockup {
 			this.made_copy=false;
 			
 			if (this.backup_path=="") { // system not configured
-				GLib.stderr.printf("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
+				this.callback.show_message("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
 				return -2; // the class isn't configured (don't know where to store the backups)
 			}
 
 			if (0!=this.GetBaseDir(this.backup_path)) {
-				GLib.stderr.printf("The backup directory %s doesn't exists and can't be created. Aborting backup.\n",this.backup_path);
+				this.callback.show_message("The backup directory %s doesn't exists and can't be created. Aborting backup.\n".printf(this.backup_path));
 				return -3; // the base backup folder doesn't exists and can't create it
 			}
 			
 			if (0!=this.SetNewDir()) {
-				GLib.stderr.printf("Can't create the folder for this backup. Aborting backup.\n");
+				this.callback.show_message("Can't create the folder for this backup. Aborting backup.\n");
 				return -4; // can't create the folder for the current backup
 			}
 			
@@ -250,14 +251,13 @@ namespace nsnanockup {
 			this.origin_path_list.start_iterator();
 			while (null!=(directory=this.origin_path_list.next_iterator())) {
 				this.callback.backup_folder(directory);
-				//GLib.stdout.printf("Backing up directory %s\n",directory);
 				tmp=this.copy_dir(directory);
 				if (0!=tmp) {
 					retval=-1;
 				}
 			}
 
-			GLib.stdout.printf("Syncing disk\n");
+			this.callback.show_message("Syncing disk\n");
 
 			// sync the disk to ensure that all the data has been commited
 			Posix.sync();
@@ -269,18 +269,19 @@ namespace nsnanockup {
 				try {
 					directory2.set_display_name(this.final_path,null);
 				} catch {
-					GLib.stderr.printf("Can't rename the temporal backup to its definitive name. Aborting backup.\n");
+					this.callback.show_message("Can't rename the temporal backup to its definitive name. Aborting backup.\n");
 					return -5;
 				}
 			
 				// and sync again the disk to confirm the new name
 				Posix.sync();
 			} else {
-				GLib.stderr.printf("No modified files since last backup.\n");
+				this.callback.show_message("No modified files since last backup.\n");
 			}
 			var timestamp2=time_t();			
 			
 			this.time_used=(ulong)timestamp2-timestamp;
+			this.callback.show_message("Backup done. Needed %ld seconds.\n".printf((long)this.time_used));
 			return retval;
 		}
 		

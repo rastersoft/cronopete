@@ -37,6 +37,8 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	private unowned Thread <void *> b_thread;
 	private uint timer;
 	private StringBuilder messages;
+	private bool showing_config;
+	private weak TextBuffer log;
 
 	public void PixbufDestroyNotify (uint8* pixels) {
 		delete pixels;	
@@ -96,16 +98,15 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 			ctx.set_source_rgb(1,0,0);
 		break;
 		}
-		ctx.arc(0.55,0.5,0.4,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
-		ctx.set_line_width(0.1);
-		ctx.stroke();
 		ctx.set_line_width(0.0);
 		ctx.move_to(0,0.5);
 		ctx.line_to(0.3,0.5);
 		ctx.line_to(0.15,0.65);
 		ctx.close_path();
 		ctx.fill();
+		ctx.arc(0.55,0.5,0.4,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
 		ctx.set_line_width(0.1);
+		ctx.stroke();
 		ctx.translate(0.55,0.5);
 		ctx.save();
 		ctx.rotate(this.angle);
@@ -148,20 +149,73 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.angle = 0.0;
 		this.size = 0;
 		this.timer = 0;
+		this.showing_config=false;
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Idle");
 		this.trayicon.set_visible(true);
 		this.trayicon.size_changed.connect(this.repaint);
-		this.trayicon.activate.connect(() => {GLib.stdout.printf("%s",this.messages.str); } );
+		this.trayicon.popup_menu.connect(this.menuSystem_popup);
+		this.trayicon.activate.connect(this.menuSystem_popup);
 		this.timer_f();
 	}
+	
+	private void menuSystem_popup() {
+	
+		var w = new Builder();
+		
+		if (this.showing_config) {
+			return;
+		}
+		
+		this.showing_config=true;
+		
+		try {
+			w.add_from_file("main.ui");
+		} catch (GLib.Error e) {
+			try {
+				w.add_from_file("/usr/share/cronopete/main.ui");
+			} catch (GLib.Error e) {
+					w.add_from_file("/usr/local/share/cronopete/main.ui");
+			}
+		}
+		
+		Notebook tabs = (Notebook) w.get_object("notebook1");
+		var main_w = (Dialog) w.get_object("dialog1");
+		w.connect_signals(this);
+		
+		if ((this.current_status==BackupStatus.WARNING) || (this.current_status==BackupStatus.ERROR)) {
+			tabs.set_current_page(1);
+		} else {
+			tabs.set_current_page(0);
+		}
+		
+		this.log = (TextBuffer) w.get_object("textbuffer1");
+		this.log.set_text(this.messages.str,-1);
+		main_w.show_all();
+		main_w.run();
+		this.showing_config=false;
+		main_w.hide();
+		main_w.destroy();
+	
 
+	}
+	
+	[CCode (instance_pos = -1)]
+	public void on_about_clicked(Button source) {
+		var about = new AboutDialog();
+		about.set_version("0.3.0");
+		about.set_program_name("(Ana)cronopete");
+		about.set_comments("An Apple's TimeMachine clone for Linux");
+		about.set_copyright("2011 Raster Software Vigo");
+		about.run();
+		about.hide();
+	}
+
+	
 	public void backup_folder(string dirpath) {
 		
-		string message = "Backing up folder %s\n".printf(dirpath);
-		
-		this.trayicon.set_tooltip_text (message);
+		this.trayicon.set_tooltip_text ("Backing up folder %s\n".printf(dirpath));
 	}
 	
 	public void backup_file(string filepath) {
@@ -178,21 +232,30 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	
 	public void error_copy_file(string o_filepath, string d_filepath) {
 		this.current_status=BackupStatus.WARNING;
-		this.messages.append_printf("Can't copy file %s to %s\n",o_filepath,d_filepath);
+		this.show_message("Can't copy file %s to %s\n".printf(o_filepath,d_filepath));
 	}
 	
 	public void error_access_directory(string dirpath) {
 		this.current_status=BackupStatus.WARNING;
-		this.messages.append_printf("Can't access directory %s\n",dirpath);
+		this.show_message("Can't access directory %s\n".printf(dirpath));
 	}
 	
 	public void error_create_directory(string dirpath) {
 		this.current_status=BackupStatus.WARNING;
-		this.messages.append_printf("Can't create directory %s\n",dirpath);
+		this.show_message("Can't create directory %s\n".printf(dirpath));
 	}
 	
 	public void excluding_folder(string dirpath) {
 		//GLib.stdout.printf("Excluding folder %s\n",dirpath);
+	}
+	
+	public void show_message(string msg) {
+	
+		this.messages.append(msg);
+		if (this.showing_config) {
+			this.log.insert_at_cursor(msg,msg.length);
+		}
+	
 	}
 	
 	void* do_backup() {
@@ -215,7 +278,6 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		switch (retval) {
 		case 0:
 			this.trayicon.set_tooltip_text ("Backup done!");
-			this.messages.append_printf("Backup done. Needed %ld seconds.\n",(long)basedir.time_used);
 		break;
 		case -1:
 			this.current_status=BackupStatus.WARNING;

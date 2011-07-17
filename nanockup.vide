@@ -10,7 +10,7 @@ builder-options: !NativeBuilderOptions
   disable-assert: false
   disable-checking: false
   disable-non-null: false
-  save-temps: false
+  save-temps: true
   quiet: false
   other: 
 executable-options:
@@ -29,5 +29,6 @@ packages:
 - name: gtk+-2.0
 - name: cairo
 - name: gsl
+- name: gmodule-2.0
 vapi_dir:
 - path: /usr/share/vala/vapi
