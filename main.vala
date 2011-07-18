@@ -218,11 +218,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 			try {
 				w.add_from_file("/usr/share/cronopete/about.ui");
 			} catch (GLib.Error e) {
-				try {
-					w.add_from_file("/usr/local/share/cronopete/about.ui");
-				} catch (GLib.Error e) {
-					GLib.stdout.printf("No puedo abrir ayuda\n");
-				}
+				w.add_from_file("/usr/local/share/cronopete/about.ui");
 			}
 		}
 		
@@ -235,7 +231,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		
 	}
 
-	
+
 	public void backup_folder(string dirpath) {
 		
 		this.trayicon.set_tooltip_text ("Backing up folder %s\n".printf(dirpath));
