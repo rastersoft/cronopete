@@ -163,6 +163,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	private void menuSystem_popup() {
 	
 		var w = new Builder();
+		int retval=0;
 		
 		if (this.showing_config) {
 			return;
@@ -193,7 +194,13 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.log = (TextBuffer) w.get_object("textbuffer1");
 		this.log.set_text(this.messages.str,-1);
 		main_w.show_all();
-		main_w.run();
+		do {
+			retval=main_w.run();
+			GLib.stdout.printf("Valor: %d\n",retval);
+			if (retval==-5) {
+				this.on_about_clicked();
+			}
+		} while (retval!=-4);
 		this.showing_config=false;
 		main_w.hide();
 		main_w.destroy();
@@ -201,15 +208,31 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 
 	}
 	
-	[CCode (instance_pos = -1)]
-	public void on_about_clicked(Button source) {
-		var about = new AboutDialog();
-		about.set_version("0.3.0");
-		about.set_program_name("(Ana)cronopete");
-		about.set_comments("An Apple's TimeMachine clone for Linux");
-		about.set_copyright("2011 Raster Software Vigo");
-		about.run();
-		about.hide();
+	public void on_about_clicked() {
+		
+		var w = new Builder();
+		
+		try {
+			w.add_from_file("about.ui");
+		} catch (GLib.Error e) {
+			try {
+				w.add_from_file("/usr/share/cronopete/about.ui");
+			} catch (GLib.Error e) {
+				try {
+					w.add_from_file("/usr/local/share/cronopete/about.ui");
+				} catch (GLib.Error e) {
+					GLib.stdout.printf("No puedo abrir ayuda\n");
+				}
+			}
+		}
+		
+		var about_w = (Dialog)w.get_object("aboutdialog1");
+		
+		about_w.show();
+		about_w.run();
+		about_w.hide();
+		about_w.destroy();
+		
 	}
 
 	

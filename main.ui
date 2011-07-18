@@ -35,6 +35,22 @@
                 <property name="position">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="button4">
+                <property name="label">gtk-about</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -400,7 +416,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">button1</action-widget>
+      <action-widget response="-4">button1</action-widget>
+      <action-widget response="-5">button4</action-widget>
     </action-widgets>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1"/>
