@@ -39,6 +39,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	private StringBuilder messages;
 	private bool showing_config;
 	private weak TextBuffer log;
+	private string basepath;
 
 	public void PixbufDestroyNotify (uint8* pixels) {
 		delete pixels;	
@@ -150,6 +151,18 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.size = 0;
 		this.timer = 0;
 		this.showing_config=false;
+		
+		var file=File.new_for_path("main.ui");
+		if (file.query_exists()) {
+			this.basepath="";
+		} else {
+			file=File.new_for_path("/usr/share/cronopete/main.ui");
+			if (file.query_exists()) {
+				this.basepath="/usr/share/cronopete/";
+			} else {
+				this.basepath="/usr/local/share/cronopete/";
+			}
+		}
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Idle");
@@ -162,24 +175,16 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	
 	private void menuSystem_popup() {
 	
-		var w = new Builder();
-		int retval=0;
-		
 		if (this.showing_config) {
 			return;
 		}
+	
+		var w = new Builder();
+		int retval=0;
+		
+		w.add_from_file("%smain.ui".printf(this.basepath));
 		
 		this.showing_config=true;
-		
-		try {
-			w.add_from_file("main.ui");
-		} catch (GLib.Error e) {
-			try {
-				w.add_from_file("/usr/share/cronopete/main.ui");
-			} catch (GLib.Error e) {
-					w.add_from_file("/usr/local/share/cronopete/main.ui");
-			}
-		}
 		
 		Notebook tabs = (Notebook) w.get_object("notebook1");
 		var main_w = (Dialog) w.get_object("dialog1");
@@ -196,7 +201,6 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		main_w.show_all();
 		do {
 			retval=main_w.run();
-			GLib.stdout.printf("Valor: %d\n",retval);
 			if (retval==-5) {
 				this.on_about_clicked();
 			}
@@ -204,24 +208,14 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.showing_config=false;
 		main_w.hide();
 		main_w.destroy();
-	
-
 	}
 	
 	public void on_about_clicked() {
 		
 		var w = new Builder();
 		
-		try {
-			w.add_from_file("about.ui");
-		} catch (GLib.Error e) {
-			try {
-				w.add_from_file("/usr/share/cronopete/about.ui");
-			} catch (GLib.Error e) {
-				w.add_from_file("/usr/local/share/cronopete/about.ui");
-			}
-		}
-		
+		w.add_from_file("%sabout.ui".printf(this.basepath));
+
 		var about_w = (Dialog)w.get_object("aboutdialog1");
 		
 		about_w.show();
