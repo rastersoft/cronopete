@@ -10,7 +10,7 @@ builder-options: !NativeBuilderOptions
   disable-assert: false
   disable-checking: false
   disable-non-null: false
-  save-temps: true
+  save-temps: false
   quiet: false
   other: 
 executable-options:
@@ -19,8 +19,8 @@ executable-options:
   working-dir: /home/raster/workspace/nanockup/
   environment: []
 files:
-- path: nanockup.vala
-- path: main.vala
+- path: backup.vala
+- path: cronopete.vala
 packages:
 - name: glib-2.0
 - name: posix

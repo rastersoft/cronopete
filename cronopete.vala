@@ -27,7 +27,74 @@ using Gsl;
 enum SystemStatus { IDLE, BACKING_UP, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
-class nc_callback : GLib.Object, nsnanockup.callbacks {
+/*
+class cp_menus : GLib.Object {
+
+	private bool showing_window;
+	private weak TextBuffer log;
+
+
+	public cp_menus() {
+
+		this.showing_window=false;	
+	
+	
+	}
+
+	public void menuSystem_popup() {
+	
+		if (this.showing_window) {
+			return;
+		}
+	
+		var w = new Builder();
+		int retval=0;
+		
+		w.add_from_file("%smain.ui".printf(this.basepath));
+		
+		this.showing_window=true;
+		
+		Notebook tabs = (Notebook) w.get_object("notebook1");
+		var main_w = (Dialog) w.get_object("dialog1");
+		w.connect_signals(this);
+		
+		if ((this.current_status==BackupStatus.WARNING) || (this.current_status==BackupStatus.ERROR)) {
+			tabs.set_current_page(1);
+		} else {
+			tabs.set_current_page(0);
+		}
+		
+		this.log = (TextBuffer) w.get_object("textbuffer1");
+		this.log.set_text(this.messages.str,-1);
+		main_w.show_all();
+		do {
+			retval=main_w.run();
+			if (retval==-5) {
+				this.on_about_clicked();
+			}
+		} while (retval!=-4);
+		this.showing_window=false;
+		main_w.hide();
+		main_w.destroy();
+	}
+	
+	public void on_about_clicked() {
+		
+		var w = new Builder();
+		
+		w.add_from_file("%sabout.ui".printf(this.basepath));
+
+		var about_w = (Dialog)w.get_object("aboutdialog1");
+		
+		about_w.show();
+		about_w.run();
+		about_w.hide();
+		about_w.destroy();
+		
+	}
+}*/
+
+class cp_callback : GLib.Object, nsnanockup.callbacks {
 
 	private StatusIcon trayicon;
 	private SystemStatus backup_running;
@@ -35,11 +102,50 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	private double angle;
 	private int size;
 	private unowned Thread <void *> b_thread;
-	private uint timer;
+	private uint main_timer;
+	private uint refresh_timer;
 	private StringBuilder messages;
-	private bool showing_config;
-	private weak TextBuffer log;
 	private string basepath;
+	private Menu menuSystem;
+	private string last_backup;
+	private string tmp_last_backup;
+	
+	//private cp_menus menus;
+
+	public cp_callback() {
+	
+		this.messages = new StringBuilder("");
+		this.backup_running = SystemStatus.IDLE;
+		this.current_status = BackupStatus.STOPPED;
+		this.angle = 0.0;
+		this.size = 0;
+		this.refresh_timer = 0;
+
+		this.last_backup="Lastest backup: ...";
+		this.tmp_last_backup="";
+		
+		var file=File.new_for_path("main.ui");
+		if (file.query_exists()) {
+			this.basepath="";
+		} else {
+			file=File.new_for_path("/usr/share/cronopete/main.ui");
+			if (file.query_exists()) {
+				this.basepath="/usr/share/cronopete/";
+			} else {
+				this.basepath="/usr/local/share/cronopete/";
+			}
+		}
+	
+		this.trayicon = new StatusIcon();
+		this.trayicon.set_tooltip_text ("Idle");
+		this.trayicon.set_visible(true);
+		this.trayicon.size_changed.connect(this.repaint);
+		this.trayicon.popup_menu.connect(this.menuSystem_popup);
+		this.trayicon.activate.connect(this.menuSystem_popup);
+
+		this.main_timer=Timeout.add(3600000,this.timer_f);
+		this.timer_f();
+	}
 
 	public void PixbufDestroyNotify (uint8* pixels) {
 		delete pixels;	
@@ -48,21 +154,32 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	public bool timer_f() {
 	
 		if (this.backup_running==SystemStatus.IDLE) {
+		
+			var now = new DateTime.now_local();
+			
+			this.tmp_last_backup = "Latest backup: %s".printf(now.format("%x %X"));
+			
 			this.backup_running=SystemStatus.BACKING_UP;
 			b_thread=Thread.create <void *>(this.do_backup, false);
-			if (this.timer!=0) {
-				Source.remove(this.timer);
+			if (this.refresh_timer!=0) {
+				Source.remove(this.refresh_timer);
 			}
-			this.timer=Timeout.add(20,this.timer_f);
+			this.refresh_timer=Timeout.add(20,this.timer_f);
+			
 		} else if (this.backup_running==SystemStatus.ENDED) {
+			
 			this.backup_running=SystemStatus.IDLE;
+			if ((this.current_status==BackupStatus.ALLFINE)||(this.current_status==BackupStatus.WARNING)) {
+				this.last_backup=tmp_last_backup;
+				this.trayicon.set_tooltip_text (tmp_last_backup);
+			}
 			if (this.current_status==BackupStatus.ALLFINE) {
 				this.current_status=BackupStatus.STOPPED;
 			}
-			if (this.timer!=0) {
-				Source.remove(this.timer);
+			
+			if (this.refresh_timer!=0) {
+				Source.remove(this.refresh_timer);
 			}
-			this.timer=Timeout.add(3600000,this.timer_f);
 		}
 
 		this.repaint(this.size);
@@ -82,7 +199,6 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		var canvas = new Cairo.ImageSurface(Cairo.Format.ARGB32,size,size);
 		var ctx = new Cairo.Context(canvas);
 		
-		//ctx.set_antialias(Cairo.Antialias.GRAY);
 		ctx.scale(size,size);
 
 		switch (this.current_status) {
@@ -100,25 +216,26 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		break;
 		}
 		ctx.set_line_width(0.0);
-		ctx.move_to(0,0.5);
-		ctx.line_to(0.3,0.5);
-		ctx.line_to(0.15,0.65);
+		ctx.move_to(0.005,0.45);
+		ctx.line_to(0.405,0.45);
+		ctx.line_to(0.205,0.625);
 		ctx.close_path();
 		ctx.fill();
-		ctx.arc(0.55,0.5,0.4,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
-		ctx.set_line_width(0.1);
+		ctx.arc(0.545,0.5,0.34,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
+		ctx.set_line_width(0.11);
 		ctx.stroke();
-		ctx.translate(0.55,0.5);
+		ctx.translate(0.545,0.5);
+		ctx.set_line_width(0.08);
 		ctx.save();
 		ctx.rotate(this.angle);
 		ctx.move_to(0,0.02);
-		ctx.line_to(0,-0.4);
+		ctx.line_to(0,-0.25);
 		ctx.stroke();
 		ctx.restore();
 		ctx.save();
 		ctx.rotate(this.angle/30);
 		ctx.move_to(0,0.02);
-		ctx.line_to(0,-0.25);
+		ctx.line_to(0,-0.16);
 		ctx.restore();
 		ctx.stroke();
 		
@@ -142,75 +259,35 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		return true;
 	}
 
-	public nc_callback() {
-	
-		this.messages = new StringBuilder("");
-		this.backup_running = SystemStatus.IDLE;
-		this.current_status = BackupStatus.STOPPED;
-		this.angle = 0.0;
-		this.size = 0;
-		this.timer = 0;
-		this.showing_config=false;
-		
-		var file=File.new_for_path("main.ui");
-		if (file.query_exists()) {
-			this.basepath="";
-		} else {
-			file=File.new_for_path("/usr/share/cronopete/main.ui");
-			if (file.query_exists()) {
-				this.basepath="/usr/share/cronopete/";
-			} else {
-				this.basepath="/usr/local/share/cronopete/";
-			}
-		}
-	
-		this.trayicon = new StatusIcon();
-		this.trayicon.set_tooltip_text ("Idle");
-		this.trayicon.set_visible(true);
-		this.trayicon.size_changed.connect(this.repaint);
-		this.trayicon.popup_menu.connect(this.menuSystem_popup);
-		this.trayicon.activate.connect(this.menuSystem_popup);
-		this.timer_f();
-	}
-	
+
 	private void menuSystem_popup() {
 	
-		if (this.showing_config) {
-			return;
-		}
+		this.menuSystem = new Menu();
 	
-		var w = new Builder();
-		int retval=0;
+		var menuDate = new MenuItem.with_label(this.last_backup);
+		menuDate.sensitive=false;
+		menuSystem.append(menuDate);
 		
-		w.add_from_file("%smain.ui".printf(this.basepath));
+		var menuBar = new MenuItem();
+		menuSystem.append(menuBar);
 		
-		this.showing_config=true;
+		var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
+		menuAbout.activate.connect(about_clicked);
+		this.menuSystem.append(menuAbout);
 		
-		Notebook tabs = (Notebook) w.get_object("notebook1");
-		var main_w = (Dialog) w.get_object("dialog1");
-		w.connect_signals(this);
+		var menuBar2 = new MenuItem();
+		menuSystem.append(menuBar2);
 		
-		if ((this.current_status==BackupStatus.WARNING) || (this.current_status==BackupStatus.ERROR)) {
-			tabs.set_current_page(1);
-		} else {
-			tabs.set_current_page(0);
-		}
-		
-		this.log = (TextBuffer) w.get_object("textbuffer1");
-		this.log.set_text(this.messages.str,-1);
-		main_w.show_all();
-		do {
-			retval=main_w.run();
-			if (retval==-5) {
-				this.on_about_clicked();
-			}
-		} while (retval!=-4);
-		this.showing_config=false;
-		main_w.hide();
-		main_w.destroy();
+		var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
+		menuQuit.activate.connect(Gtk.main_quit);
+		menuSystem.append(menuQuit);
+		menuSystem.show_all();
+	
+		this.menuSystem.popup(null,null,null,2,Gtk.get_current_event_time());
+	
 	}
 	
-	public void on_about_clicked() {
+	public void about_clicked() {
 		
 		var w = new Builder();
 		
@@ -224,8 +301,7 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		about_w.destroy();
 		
 	}
-
-
+	
 	public void backup_folder(string dirpath) {
 		
 		this.trayicon.set_tooltip_text ("Backing up folder %s\n".printf(dirpath));
@@ -265,10 +341,9 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 	public void show_message(string msg) {
 	
 		this.messages.append(msg);
-		if (this.showing_config) {
+		/*if (this.showing_window) {
 			this.log.insert_at_cursor(msg,msg.length);
-		}
-	
+		}*/
 	}
 	
 	void* do_backup() {
@@ -290,7 +365,6 @@ class nc_callback : GLib.Object, nsnanockup.callbacks {
 		this.backup_running=SystemStatus.ENDED;
 		switch (retval) {
 		case 0:
-			this.trayicon.set_tooltip_text ("Backup done!");
 		break;
 		case -1:
 			this.current_status=BackupStatus.WARNING;
@@ -312,7 +386,7 @@ int main(string[] args) {
 	Gdk.threads_init();
 	Gtk.init(ref args);
 	
-	var callbacks = new nc_callback();
+	var callbacks = new cp_callback();
 	
 	Gtk.main();
 	
