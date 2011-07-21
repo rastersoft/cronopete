@@ -216,15 +216,15 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		break;
 		}
 		ctx.set_line_width(0.0);
-		ctx.move_to(0.005,0.45);
-		ctx.line_to(0.405,0.45);
-		ctx.line_to(0.205,0.625);
+		ctx.move_to(0.0,0.45);
+		ctx.line_to(0.4,0.45);
+		ctx.line_to(0.2,0.625);
 		ctx.close_path();
 		ctx.fill();
-		ctx.arc(0.545,0.5,0.34,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
+		ctx.arc(0.54,0.5,0.34,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
 		ctx.set_line_width(0.11);
 		ctx.stroke();
-		ctx.translate(0.545,0.5);
+		ctx.translate(0.54,0.5);
 		ctx.set_line_width(0.08);
 		ctx.save();
 		ctx.rotate(this.angle);
