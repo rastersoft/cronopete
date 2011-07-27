@@ -274,8 +274,11 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	
 	public void main_clicked() {
 	
-		this.main_menu.show_main(true,this.messages.str);
-
+		if ((this.current_status==BackupStatus.WARNING)||(this.current_status==BackupStatus.ERROR)) {
+			this.main_menu.show_main(true,this.messages.str);
+		} else {
+			this.main_menu.show_main(false,this.messages.str);
+		}
 	}
 	
 	public void backup_folder(string dirpath) {
@@ -350,18 +353,12 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			this.current_status=BackupStatus.ERROR;
 		break;
 		default:
-			this.trayicon.set_tooltip_text ("Can't do backup");
+			this.trayicon.set_tooltip_text (_("Can't do backup"));
 			this.current_status=BackupStatus.ERROR;
 		break;
 		}
 		this.basedir=null;
 		return null;
-	}
-	
-	public void show_msg() {
-	
-		GLib.stdout.printf(this.messages.str);
-		
 	}
 	
 }
@@ -378,6 +375,5 @@ int main(string[] args) {
 	var callbacks = new cp_callback();
 	
 	Gtk.main();
-	callbacks.show_msg();
 	return 0;
 }
