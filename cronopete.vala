@@ -44,6 +44,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string last_backup;
 	private string tmp_last_backup;
 	private nsnanockup.nanockup? basedir;
+	private c_main_menu main_menu;
 	
 	//private cp_menus menus;
 
@@ -72,6 +73,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		}
 	
 		this.basedir = null;
+		this.main_menu = new c_main_menu(this.basepath);
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Idle");
@@ -219,16 +221,17 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
 		
-		var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
-		menuAbout.activate.connect(about_clicked);
-		this.menuSystem.append(menuAbout);
+		var menuMain = new MenuItem.with_label(_("Open Cronopete Preferences..."));
+		menuMain.activate.connect(main_clicked);
+		menuSystem.append(menuMain);
 		
 		var menuBar2 = new MenuItem();
 		menuSystem.append(menuBar2);
 		
-		var menuQuit = new ImageMenuItem.from_stock(Stock.QUIT, null);
-		menuQuit.activate.connect(Gtk.main_quit);
-		menuSystem.append(menuQuit);
+		var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
+		menuAbout.activate.connect(about_clicked);
+		this.menuSystem.append(menuAbout);
+	
 		menuSystem.show_all();
 	
 		this.menuSystem.popup(null,null,null,2,Gtk.get_current_event_time());
@@ -267,6 +270,12 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		about_w.hide();
 		about_w.destroy();
 		
+	}
+	
+	public void main_clicked() {
+	
+		this.main_menu.show_main(true,this.messages.str);
+
 	}
 	
 	public void backup_folder(string dirpath) {
@@ -308,9 +317,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	public void show_message(string msg) {
 	
 		this.messages.append(msg);
-		/*if (this.showing_window) {
-			this.log.insert_at_cursor(msg,msg.length);
-		}*/
+		this.main_menu.insert_log(msg);
 	}
 	
 	void* do_backup() {

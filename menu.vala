@@ -19,39 +19,74 @@
 using GLib;
 using Gtk;
 
-class main_menu : GLib.Object {
+class c_main_menu : GLib.Object {
 
 	private weak TextBuffer log;
 	private string basepath;
-	private StringBuilder messages;
+	private Window main_w;
+	private Builder builder;
+	private Notebook tabs;
 	
-	public main_menu(string path,bool show_log,string log) {
+	public bool is_visible;
+	
+	public c_main_menu(string path) {
 
-		var w = new Builder();
+		this.builder = new Builder();
 		int retval=0;
 		
 		this.basepath=path;
 		
-		w.add_from_file("%smain.ui".printf(this.basepath));
+		this.builder.add_from_file("%smain.ui".printf(this.basepath));
 		
-		Notebook tabs = (Notebook) w.get_object("notebook1");
-		var main_w = (Dialog) w.get_object("dialog1");
-		w.connect_signals(this);
+		this.main_w = (Window) this.builder.get_object("window1");
+		this.builder.connect_signals(this);
 		
-		if (show_log) {
-			tabs.set_current_page(1);
-		} else {
-			tabs.set_current_page(0);
+		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
+		this.tabs = (Notebook) this.builder.get_object("notebook1");
+		
+		this.is_visible = false;
+		
+	}
+
+	public void insert_log(string msg) {
+	
+		if (this.is_visible) {
+			this.log.insert_at_cursor(msg,msg.length);
 		}
 		
-		this.log = (TextBuffer) w.get_object("textbuffer1");
+	}
+
+	public void show_main(bool show_log, string log) {
+
 		this.log.set_text(log,-1);
-		main_w.show_all();
-		do {
-			retval=main_w.run();
-		} while (retval!=-4);
-		main_w.hide();
-		main_w.destroy();
+	
+		if (show_log) {
+			this.tabs.set_current_page(1);
+		} else {
+			this.tabs.set_current_page(0);
+		}
+
+		this.main_w.show_all();
+		this.is_visible = true;
+	
+	}
+
+	[CCode (instance_pos = -1)]
+	public bool on_destroy_event(Gdk.Event e) {
+	
+		GLib.stdout.printf("Destroy\n");
+		this.main_w.hide_all();	
+		this.is_visible = false;
+		return true;
+	}
+	
+	[CCode (instance_pos = -1)]
+	public bool on_delete_event(Widget source, Gdk.Event e) {
+	
+		this.is_visible = false;
+		this.main_w.hide_all();
+		return true;
+		
 	}
 	
 }
