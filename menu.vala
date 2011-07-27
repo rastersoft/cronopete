@@ -59,14 +59,14 @@ class c_main_menu : GLib.Object {
 	public void show_main(bool show_log, string log) {
 
 		this.log.set_text(log,-1);
+		this.main_w.show_all();
 	
-		if (show_log) {
+		if (show_log==true) {
 			this.tabs.set_current_page(1);
 		} else {
 			this.tabs.set_current_page(0);
 		}
 
-		this.main_w.show_all();
 		this.is_visible = true;
 	
 	}

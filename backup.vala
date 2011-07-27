@@ -195,7 +195,7 @@ namespace nsnanockup {
 		
 		public void abort_backup() {
 		
-			abort = true;
+			this.abort = true;
 			
 		}
 
