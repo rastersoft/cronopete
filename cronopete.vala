@@ -27,72 +27,6 @@ using Gsl;
 enum SystemStatus { IDLE, BACKING_UP, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
-/*
-class cp_menus : GLib.Object {
-
-	private bool showing_window;
-	private weak TextBuffer log;
-
-
-	public cp_menus() {
-
-		this.showing_window=false;	
-	
-	
-	}
-
-	public void menuSystem_popup() {
-	
-		if (this.showing_window) {
-			return;
-		}
-	
-		var w = new Builder();
-		int retval=0;
-		
-		w.add_from_file("%smain.ui".printf(this.basepath));
-		
-		this.showing_window=true;
-		
-		Notebook tabs = (Notebook) w.get_object("notebook1");
-		var main_w = (Dialog) w.get_object("dialog1");
-		w.connect_signals(this);
-		
-		if ((this.current_status==BackupStatus.WARNING) || (this.current_status==BackupStatus.ERROR)) {
-			tabs.set_current_page(1);
-		} else {
-			tabs.set_current_page(0);
-		}
-		
-		this.log = (TextBuffer) w.get_object("textbuffer1");
-		this.log.set_text(this.messages.str,-1);
-		main_w.show_all();
-		do {
-			retval=main_w.run();
-			if (retval==-5) {
-				this.on_about_clicked();
-			}
-		} while (retval!=-4);
-		this.showing_window=false;
-		main_w.hide();
-		main_w.destroy();
-	}
-	
-	public void on_about_clicked() {
-		
-		var w = new Builder();
-		
-		w.add_from_file("%sabout.ui".printf(this.basepath));
-
-		var about_w = (Dialog)w.get_object("aboutdialog1");
-		
-		about_w.show();
-		about_w.run();
-		about_w.hide();
-		about_w.destroy();
-		
-	}
-}*/
 
 class cp_callback : GLib.Object, nsnanockup.callbacks {
 
@@ -109,6 +43,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private Menu menuSystem;
 	private string last_backup;
 	private string tmp_last_backup;
+	private nsnanockup.nanockup? basedir;
 	
 	//private cp_menus menus;
 
@@ -135,6 +70,8 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 				this.basepath="/usr/local/share/cronopete/";
 			}
 		}
+	
+		this.basedir = null;
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Idle");
@@ -268,6 +205,17 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		menuDate.sensitive=false;
 		menuSystem.append(menuDate);
 		
+		if (this.backup_running==SystemStatus.IDLE) {
+			var menuBUnow = new MenuItem.with_label(_("Back Up Now"));
+			menuBUnow.activate.connect(backup_now);
+			this.menuSystem.append(menuBUnow);
+		} else {
+			var menuBUnow = new MenuItem.with_label(_("Stop Back Up"));
+			menuBUnow.activate.connect(stop_backup);
+			this.menuSystem.append(menuBUnow);
+		}
+
+		
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
 		
@@ -284,6 +232,25 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		menuSystem.show_all();
 	
 		this.menuSystem.popup(null,null,null,2,Gtk.get_current_event_time());
+	
+	}
+	
+	public void backup_now() {
+	
+		if (this.backup_running==SystemStatus.IDLE) {
+			Source.remove(this.refresh_timer);
+			this.main_timer=Timeout.add(3600000,this.timer_f);
+			this.timer_f();
+		}
+	}
+	
+	public void stop_backup() {
+	
+		if ((this.backup_running==SystemStatus.BACKING_UP)&&(this.basedir!=null)) {
+			this.basedir.abort_backup();
+			Source.remove(this.main_timer);
+			this.main_timer=Timeout.add(3600000,this.timer_f);
+		}
 	
 	}
 	
@@ -348,8 +315,9 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	
 	void* do_backup() {
 
-		var basedir = new nsnanockup.nanockup(this);
 		int retval;
+
+		this.basedir = new nsnanockup.nanockup(this);
 
 		this.messages = new StringBuilder("Starting backup\n");
 		
@@ -358,6 +326,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			this.current_status=BackupStatus.ERROR;
 			this.backup_running=SystemStatus.ENDED;
 			this.trayicon.set_tooltip_text ("Error reading configuration");
+			this.basedir=null;
 			return null;
 		}
 	
@@ -369,26 +338,39 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		case -1:
 			this.current_status=BackupStatus.WARNING;
 		break;
+		case -6:
+			this.trayicon.set_tooltip_text (_("Backup aborted"));
+			this.current_status=BackupStatus.ERROR;
+		break;
 		default:
 			this.trayicon.set_tooltip_text ("Can't do backup");
 			this.current_status=BackupStatus.ERROR;
 		break;
 		}
-
+		this.basedir=null;
 		return null;
 	}
+	
+	public void show_msg() {
+	
+		GLib.stdout.printf(this.messages.str);
+		
+	}
+	
 }
 
 
 int main(string[] args) {
 	
-	
 	Gdk.threads_init();
 	Gtk.init(ref args);
-	
+	Intl.bindtextdomain( "cronopete", "/var");
+	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
+	Intl.textdomain( "cronopete" );
+
 	var callbacks = new cp_callback();
 	
 	Gtk.main();
-	
+	callbacks.show_msg();
 	return 0;
 }

@@ -190,6 +190,14 @@ namespace nsnanockup {
 		private callbacks callback;
 		
 		private bool made_copy;
+		
+		private bool abort;
+		
+		public void abort_backup() {
+		
+			abort = true;
+			
+		}
 
 		public nanockup(callbacks to_callback) {
 		
@@ -205,6 +213,7 @@ namespace nsnanockup {
 			this.temporal_path="";
 			this.final_path="";
 			this.last_path="";
+			this.abort = false;
 
 		}
 		
@@ -221,12 +230,14 @@ namespace nsnanockup {
 			 *    -3: the destination directory doesn't exists and can't be created                               *
 			 *    -4: can't create the folder for the current backup                                              *
 			 *    -5: can't rename the temporal backup folder to its definitive name                              *
+			 *    -6: backup aborted                                                                              *
 			 ******************************************************************************************************/
 		
 			int retval,tmp;
 			string? directory=null;
 			
 			this.made_copy=false;
+			this.abort=false;
 			
 			if (this.backup_path=="") { // system not configured
 				this.callback.show_message("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
@@ -250,6 +261,10 @@ namespace nsnanockup {
 			// backup all the directories
 			this.origin_path_list.start_iterator();
 			while (null!=(directory=this.origin_path_list.next_iterator())) {
+				if (this.abort) {
+					this.callback.show_message(_("Backup aborted\n"));
+					return -6;
+				}
 				this.callback.backup_folder(directory);
 				tmp=this.copy_dir(directory);
 				if (0!=tmp) {
@@ -295,6 +310,7 @@ namespace nsnanockup {
 			 * Returns:                                                                                          *
 			 *      0: if successful                                                                             *
 			 *     -1: if there were errors during the backup of this folder                                     *
+			 *     -2: if it was aborted                                                                         *
 			 *****************************************************************************************************/
 		
 			FileInfo info_file;
@@ -326,6 +342,10 @@ namespace nsnanockup {
 			}
 
 			while ((info_file = enumerator.next_file(null)) != null) {
+
+				if (this.abort) {
+					return -2;
+				}
 
 				full_path=Path.build_filename(first_path,info_file.get_name());
 				typeinfo=info_file.get_file_type();
