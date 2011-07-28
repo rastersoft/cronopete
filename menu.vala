@@ -56,6 +56,7 @@ class c_main_menu : GLib.Object {
 			} else {
 				this.log.insert_at_cursor(msg,msg.length);
 			}
+			Gdk.flush();
 			Gdk.threads_leave();
 		}
 	}
