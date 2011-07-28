@@ -217,6 +217,25 @@ namespace nsnanockup {
 
 		}
 		
+		public void set_config(string b_path,Gee.List<string> origin_path,Gee.List<string> exclude_path,Gee.List<string> exclude_path_hiden, bool skip_h) {
+
+			this.origin_path_list=new path_list();
+			this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
+			this.exclude_path_hiden_list=new HashSet<string>(str_hash,str_equal);
+		
+			this.backup_path = b_path;
+			foreach (string tmp in origin_path) {
+				this.origin_path_list.add(tmp);
+			}
+			foreach (string tmp in exclude_path) {
+				this.exclude_path_list.add(tmp);
+			}
+			foreach (string tmp in exclude_path_hiden) {
+				this.exclude_path_hiden_list.add(tmp);
+			}
+		
+		}
+		
 		public int do_backup() {
 		
 			/******************************************************************************************************
@@ -402,106 +421,6 @@ namespace nsnanockup {
 			return (retval);
 		}
 
-
-		public int read_configuration(string? config_path) {
-		
-			/****************************************************************************************
-			 * If CONFIG_PATH is null, will read the configuration from the file ~/.nanockup.cfg    *
-			 * If not, it will use that file to get the configuration                               *
-			 * Returns:                                                                             *
-			 *   0: on success                                                                      *
-			 *  -1: the config file doesn't exists                                                  *
-			 *  -2: can't read the config file                                                      *
-			 *  +N: parse error at line N in config file                                            *			 
-			 ****************************************************************************************/
-		
-			File config_file;
-			bool failed=false;
-			FileInputStream file_read;
-			
-			if (config_path==null) {
-				string home=Environment.get_home_dir();
-				config_file = File.new_for_path (Path.build_filename(home,".nanockup.cfg"));
-			} else {
-				config_file = File.new_for_path (config_path);
-			}
-			
-			if (!config_file.query_exists (null)) {
-				return -1;
-			}
-
-			try {
-				file_read=config_file.read(null);
-			} catch {
-				return -2;
-			}
-			var in_stream = new DataInputStream (file_read);
-			string line;
-			int line_counter=0;
-
-			this.skip_hiden=true;
-			while ((line = in_stream.read_line (null, null)) != null) {
-				line_counter++;
-				
-				// ignore comments
-				if (line[0]=='#') {
-					continue;
-				}
-				
-				// remove unwanted blank spaces
-				line.strip();
-
-				// ignore empty lines				
-				if (line.length==0) {
-					continue;
-				}
-				
-				if (line.has_prefix("add_directory ")) {
-					this.origin_path_list.add(line.substring(14).strip());
-					continue;
-				}
-				
-				if (line.has_prefix("exclude_directory ")) {
-					this.exclude_path_list.add(line.substring(18).strip());
-					continue;
-				}
-				
-				if (line.has_prefix("exclude_directory_hiden ")) {
-					this.exclude_path_hiden_list.add(line.substring(24).strip());
-					continue;
-				}
-				
-				if (line.has_prefix("backup_directory ")) {
-					this.backup_path=line.substring(17).strip();
-					continue;
-				}
-				
-				if (line=="backup_hiden") {
-					this.skip_hiden=false;
-					continue;
-				}
-				failed=true;
-				break;
-			}
-
-			try {
-				in_stream.close(null);
-			} catch {
-			}
-			try {
-				file_read.close(null);
-			} catch {
-			}
-
-			if (failed) {
-				GLib.stderr.printf("Invalid parameter in config file %s (line %d)\n",config_file.get_path(),line_counter);
-				return line_counter;
-			}
-			
-			return 0;
-		}
-
-
 		int SetNewDir() {
 
 			/*********************************************************************
@@ -601,119 +520,6 @@ namespace nsnanockup {
 			}
 			this.last_path=Path.build_filename(basepath,"nanockup",Environment.get_user_name(),tmp_directory);
 			this.last_backup_time=int64.parse(last_date);
-			return 0;
-		}
-		
-		public int command_line(string[] args) {
-		
-			/*******************************************************************
-			 * Processes the command line arguments to allow to use nanockup   *
-			 * from command line or with alternative configuration files       *
-			 * Returns:                                                        *
-			 *  0 all OK                                                       *
-			 *  1 user asked for version                                       *
-			 *  2 user asked for help                                          *
-			 * -1 if specified both a configuration file and more command line *
-			 *    parameters                                                   *
-			 * -2 not specified a file with the -a parameter                   *
-			 * -3 not specifies a file with the -e parameter                   *
-			 * -4 not specifies a file with the --exclude_hiden parameter      *
-			 * -5 not specifies a file with the -c parameter                   *
-			 * -6 incorrect configuration file with the -c parameter           *
-			 * -7 unknown parameter                                            *
-			 *******************************************************************/
-		
-			int counter;
-			int size;
-			bool config_file=false;
-			bool cmd=false;
-			
-			counter=1;
-			size=args.length;
-			
-			while (counter<size) {
-				if ((args[counter]=="-a") || (args[counter]=="--add")) {
-					if (config_file) {
-						GLib.stderr.printf("Can't specify a configuration file and command line parameters. Aborting.\n");
-						return -1; // can't specify a config file and command line parameters
-					}
-					cmd=true;
-					if ((counter+1)==size) {
-						GLib.stderr.printf("The parameter -a must be followed of a path. Aborting.\n");
-						return -2; // there's no parameter for this command
-					}
-					this.origin_path_list.add(args[counter+1]);
-					counter+=2;
-					continue;
-				}
-				
-				if ((args[counter]=="-e") || (args[counter]=="--exclude")) {
-					if (config_file) {
-						GLib.stderr.printf("Can't specify a configuration file and command line parameters. Aborting.\n");
-						return -1; // can't specify a config file and command line parameters
-					}
-					cmd=true;
-					if ((counter+1)==size) {
-						GLib.stderr.printf("The parameter -e must be followed of a path. Aborting.\n");
-						return -3; // there's no parameter for this command
-					}
-					this.exclude_path_list.add(args[counter+1]);
-					counter+=2;
-					continue;
-				}
-				
-				if (args[counter]=="--exclude_hiden") {
-					if (config_file) {
-						GLib.stderr.printf("Can't specify a configuration file and command line parameters. Aborting.\n");
-						return -1; // can't specify a config file and command line parameters
-					}
-					cmd=true;
-					if ((counter+1)==size) {
-						GLib.stderr.printf("The parameter --exclude_hiden must be followed of a path. Aborting.\n");
-						return -4; // there's no parameter for this command
-					}
-					this.exclude_path_hiden_list.add(args[counter+1]);
-					counter+=2;
-					continue;
-				}
-				
-				if ((args[counter]=="--hiden")) {
-					if (config_file) {
-						GLib.stderr.printf("Can't specify a configuration file and command line parameters. Aborting.\n");
-						return -1; // can't specify a config file and command line parameters
-					}
-					cmd=true;
-					this.skip_hiden=false;
-					counter+=1;
-					continue;
-				}
-				if ((args[counter]=="-h") || (args[counter]=="--help")) {
-					return 2; // asked for help
-				}
-				
-				if ((args[counter]=="-v") || (args[counter]=="--version")) {
-					return 1;
-				}
-				
-				if ((args[counter]=="-c") || (args[counter]=="--config")) {
-					if (cmd) {
-						GLib.stderr.printf("Can't specify a configuration file and command line parameters. Aborting.\n");
-						return -1; // can't specify a config file and command line parameters
-					}
-					config_file=true;
-					if ((counter+1)==size) {
-						GLib.stderr.printf("The parameter -c must be followed of a file path and name. Aborting.\n");
-						return -5; // there's no parameter for this command
-					}
-					if (0!=this.read_configuration(args[counter+1])) {
-						return -6;
-					}
-					counter+=2;
-					continue;
-				}
-				GLib.stderr.printf("Unknown parameter %s.\n",args[counter]);
-				return -7;
-			}
 			return 0;
 		}
 	}

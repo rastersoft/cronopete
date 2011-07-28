@@ -32,7 +32,6 @@ class c_main_menu : GLib.Object {
 	public c_main_menu(string path) {
 
 		this.builder = new Builder();
-		int retval=0;
 		
 		this.basepath=path;
 		
@@ -48,12 +47,17 @@ class c_main_menu : GLib.Object {
 		
 	}
 
-	public void insert_log(string msg) {
+	public void insert_log(string msg,bool reset) {
 	
 		if (this.is_visible) {
-			this.log.insert_at_cursor(msg,msg.length);
+			Gdk.threads_enter();
+			if (reset) {
+				this.log.set_text(msg,-1);
+			} else {
+				this.log.insert_at_cursor(msg,msg.length);
+			}
+			Gdk.threads_leave();
 		}
-		
 	}
 
 	public void show_main(bool show_log, string log) {

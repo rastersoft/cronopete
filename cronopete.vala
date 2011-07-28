@@ -46,7 +46,17 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private nsnanockup.nanockup? basedir;
 	private c_main_menu main_menu;
 	
-	//private cp_menus menus;
+	
+	// Configuration data
+
+	private bool skip_hiden;
+	private Gee.List<string> origin_path_list;
+	private Gee.List<string> exclude_path_list;
+	private Gee.List<string> exclude_path_hiden_list;
+	private string backup_path;
+	private bool configuration_read;
+	private bool active;
+
 
 	public cp_callback() {
 	
@@ -56,6 +66,9 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		this.angle = 0.0;
 		this.size = 0;
 		this.refresh_timer = 0;
+		this.configuration_read = false;
+		
+		this.read_configuration();
 
 		this.last_backup="Lastest backup: ...";
 		this.tmp_last_backup="";
@@ -96,7 +109,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		
 			var now = new DateTime.now_local();
 			
-			this.tmp_last_backup = "Latest backup: %s".printf(now.format("%x %X"));
+			this.tmp_last_backup = _("Latest backup: %s").printf(now.format("%x %X"));
 			
 			this.backup_running=SystemStatus.BACKING_UP;
 			b_thread=Thread.create <void *>(this.do_backup, false);
@@ -283,7 +296,9 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	
 	public void backup_folder(string dirpath) {
 		
-		this.trayicon.set_tooltip_text ("Backing up folder %s\n".printf(dirpath));
+		var msg = "Backing up folder %s\n".printf(dirpath);
+		this.trayicon.set_tooltip_text (msg);
+		this.show_message(msg);
 	}
 	
 	public void backup_file(string filepath) {
@@ -320,7 +335,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	public void show_message(string msg) {
 	
 		this.messages.append(msg);
-		this.main_menu.insert_log(msg);
+		this.main_menu.insert_log(msg,false);
 	}
 	
 	void* do_backup() {
@@ -328,18 +343,25 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		int retval;
 
 		this.basedir = new nsnanockup.nanockup(this);
-
-		this.messages = new StringBuilder("Starting backup\n");
+		
+		this.messages = new StringBuilder(_("Starting backup\n"));
+		this.main_menu.insert_log(this.messages.str,true);
 		
 		this.current_status=BackupStatus.ALLFINE;
-		if (0!=basedir.read_configuration(null)) {
-			this.current_status=BackupStatus.ERROR;
-			this.backup_running=SystemStatus.ENDED;
-			this.trayicon.set_tooltip_text ("Error reading configuration");
-			this.basedir=null;
-			return null;
+		if (this.configuration_read==false) {
+			if (0!=this.read_configuration()) {
+				this.current_status = BackupStatus.ERROR;
+				this.backup_running = SystemStatus.ENDED;
+				this.trayicon.set_tooltip_text (_("Error reading configuration"));
+				this.basedir=null;
+				return null;
+			} else {
+				this.configuration_read = true;
+			}
 		}
-	
+		
+		basedir.set_config(this.backup_path,this.origin_path_list,this.exclude_path_list,this.exclude_path_hiden_list,this.skip_hiden);
+		
 		retval=basedir.do_backup();
 		this.backup_running=SystemStatus.ENDED;
 		switch (retval) {
@@ -361,6 +383,154 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		return null;
 	}
 	
+	private int write_configuration() {
+
+		FileOutputStream file_write;
+	
+		var home=Environment.get_home_dir();
+	
+		var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete2.cfg"));
+	
+		try {
+			file_write=config_file.replace(null,false,0,null);
+		} catch {
+			return -2;
+		}
+	
+		var out_stream = new DataOutputStream (file_write);
+		
+		if (this.skip_hiden==false) {
+			out_stream.put_string("backup_hiden\n",null);
+		}
+		
+		if (this.active==true) {
+			out_stream.put_string("active\n",null);
+		}
+		
+		if (this.backup_path!="") {
+			out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
+		}
+		
+		foreach (string str in this.origin_path_list) {
+			out_stream.put_string("add_directory %s\n".printf(str),null);
+		}
+		foreach (string str in this.exclude_path_list) {
+			out_stream.put_string("exclude_directory %s\n".printf(str),null);
+		}
+		foreach (string str in this.exclude_path_hiden_list) {
+			out_stream.put_string("exclude_directory_hiden %s\n".printf(str),null);
+		}
+		
+		return 0;
+	}
+	
+	private int read_configuration() {
+		
+			/****************************************************************************************
+			 * This function will read the configuration from the file ~/.cronopete.cfg              *
+			 * If not, it will use that file to get the configuration                               *
+			 * Returns:                                                                             *
+			 *   0: on success                                                                      *
+			 *  -1: the config file doesn't exists                                                  *
+			 *  -2: can't read the config file                                                      *
+			 *  +N: parse error at line N in config file                                            *			 
+			 ****************************************************************************************/
+		
+			this.origin_path_list = new Gee.ArrayList<string>();
+			this.exclude_path_list = new Gee.ArrayList<string>();
+			this.exclude_path_hiden_list = new Gee.ArrayList<string>();
+			this.backup_path = "";
+			this.skip_hiden = true;
+			this.active = false;
+		
+			bool failed=false;
+			FileInputStream file_read;
+			
+			string home=Environment.get_home_dir();
+			var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
+			
+			if (!config_file.query_exists (null)) {
+				this.origin_path_list.add(home);
+				this.skip_hiden = false;
+				return -1;
+			}
+
+			try {
+				file_read=config_file.read(null);
+			} catch {
+				return -2;
+			}
+			var in_stream = new DataInputStream (file_read);
+			string line;
+			int line_counter=0;
+
+			this.skip_hiden=true;
+			while ((line = in_stream.read_line (null, null)) != null) {
+				line_counter++;
+				
+				// ignore comments
+				if (line[0]=='#') {
+					continue;
+				}
+				
+				// remove unwanted blank spaces
+				line.strip();
+
+				// ignore empty lines				
+				if (line.length==0) {
+					continue;
+				}
+				
+				if (line.has_prefix("add_directory ")) {
+					this.origin_path_list.add(line.substring(14).strip());
+					continue;
+				}
+				
+				if (line.has_prefix("exclude_directory ")) {
+					this.exclude_path_list.add(line.substring(18).strip());
+					continue;
+				}
+				
+				if (line.has_prefix("exclude_directory_hiden ")) {
+					this.exclude_path_hiden_list.add(line.substring(24).strip());
+					continue;
+				}
+				
+				if (line.has_prefix("backup_directory ")) {
+					this.backup_path=line.substring(17).strip();
+					continue;
+				}
+				
+				if (line=="backup_hiden") {
+					this.skip_hiden=false;
+					continue;
+				}
+				
+				if (line=="active") {
+					this.active=true;
+				}
+				
+				failed=true;
+				break;
+			}
+
+			try {
+				in_stream.close(null);
+			} catch {
+			}
+			try {
+				file_read.close(null);
+			} catch {
+			}
+
+			if (failed) {
+				GLib.stderr.printf("Invalid parameter in config file %s (line %d)\n",config_file.get_path(),line_counter);
+				return line_counter;
+			}
+			
+			return 0;
+		}
+	
 }
 
 
@@ -372,8 +542,12 @@ int main(string[] args) {
 	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
 	Intl.textdomain( "cronopete" );
 
+	Gdk.threads_init();
+
 	var callbacks = new cp_callback();
 	
+	Gdk.threads_enter();
 	Gtk.main();
+	Gdk.threads_leave();
 	return 0;
 }
