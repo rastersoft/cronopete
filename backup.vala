@@ -1,7 +1,7 @@
 /*
  Copyright 2011 (C) Raster Software Vigo (Sergio Costas)
 
- This file is part of Nanockup
+ This file is part of Cronopete
 
  Nanockup is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

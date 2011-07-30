@@ -1,7 +1,7 @@
 /*
  Copyright 2011 (C) Raster Software Vigo (Sergio Costas)
 
- This file is part of Nanockup
+ This file is part of Cronopete
 
  Nanockup is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class c_main_menu : GLib.Object {
 		
 		this.basepath=path;
 		
-		this.builder.add_from_file("%smain.ui".printf(this.basepath));
+		this.builder.add_from_file(Path.build_filename(this.basepath,"main.ui"));
 		
 		this.main_w = (Window) this.builder.get_object("window1");
 		this.builder.connect_signals(this);

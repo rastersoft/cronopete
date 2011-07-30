@@ -22,6 +22,7 @@ files:
 - path: cronopete.vala
 - path: backup.vala
 - path: menu.vala
+- path: options.vala
 packages:
 - name: gmodule-2.0
 - name: gsl

@@ -337,7 +337,7 @@
               <object class="GtkTextView" id="textview1">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="editable">False</property>
                 <property name="cursor_visible">False</property>
                 <property name="buffer">textbuffer1</property>
