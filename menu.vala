@@ -26,10 +26,14 @@ class c_main_menu : GLib.Object {
 	private Window main_w;
 	private Builder builder;
 	private Notebook tabs;
+	private cp_callback parent;
+	private CheckButton active;
 	
 	public bool is_visible;
 	
-	public c_main_menu(string path) {
+	public c_main_menu(string path, cp_callback p) {
+
+		this.parent = p;
 
 		this.builder = new Builder();
 		
@@ -42,6 +46,7 @@ class c_main_menu : GLib.Object {
 		
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
 		this.tabs = (Notebook) this.builder.get_object("notebook1");
+		this.active = (CheckButton) this.builder.get_object("is_active");
 		
 		this.is_visible = false;
 		
@@ -71,15 +76,29 @@ class c_main_menu : GLib.Object {
 		} else {
 			this.tabs.set_current_page(0);
 		}
+		
+		if (this.parent.active) {
+			this.active.set_active(true);
+		} else {
+			this.active.set_active(false);
+		}
 
 		this.is_visible = true;
 	
 	}
 
 	[CCode (instance_pos = -1)]
+	public void cronopete_is_active_callback(Widget source) {
+		if (this.active.get_active()) {
+			this.parent.active=true;
+		} else {
+			this.parent.active=false;
+		}
+	}
+
+	[CCode (instance_pos = -1)]
 	public bool on_destroy_event(Gdk.Event e) {
 	
-		GLib.stdout.printf("Destroy\n");
 		this.main_w.hide_all();	
 		this.is_visible = false;
 		return true;

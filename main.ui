@@ -83,7 +83,7 @@
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="cronopete_is_active_callback" swapped="no"/>
+                    <signal name="toggled" handler="c_main_menu_cronopete_is_active_callback" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>

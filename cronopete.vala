@@ -45,6 +45,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string tmp_last_backup;
 	private nsnanockup.nanockup? basedir;
 	private c_main_menu main_menu;
+	private bool backup_pending;
 	
 	
 	// Configuration data
@@ -55,8 +56,26 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private Gee.List<string> exclude_path_hiden_list;
 	private string backup_path;
 	private bool configuration_read;
-	private bool active;
-
+	private bool _active;
+	public bool active{
+		get {
+			return this._active;
+		}
+		
+		set {
+			this._active=value;
+			this.write_configuration();
+			this.repaint(this.size);
+			if (this._active) {
+				this.trayicon.set_tooltip_text(this.tmp_last_backup);
+				if (this.backup_pending) {
+					this.timer_f();
+				}
+			} else {
+				this.trayicon.set_tooltip_text(_("Backup disabled"));
+			}
+		}
+	}
 
 	public cp_callback() {
 	
@@ -67,10 +86,11 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		this.size = 0;
 		this.refresh_timer = 0;
 		this.configuration_read = false;
+		this.backup_pending=false;
 		
 		this.read_configuration();
 
-		this.last_backup="Lastest backup: ...";
+		this.last_backup="";
 		this.tmp_last_backup="";
 		
 		var file=File.new_for_path("main.ui");
@@ -86,7 +106,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		}
 	
 		this.basedir = null;
-		this.main_menu = new c_main_menu(this.basepath);
+		this.main_menu = new c_main_menu(this.basepath,this);
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.set_tooltip_text ("Idle");
@@ -106,6 +126,13 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	public bool timer_f() {
 	
 		if (this.backup_running==SystemStatus.IDLE) {
+		
+			if (this._active==false) {
+				this.backup_pending=true;
+				return true;
+			}
+			
+			this.backup_pending=false;
 		
 			var now = new DateTime.now_local();
 			
@@ -153,19 +180,23 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		
 		ctx.scale(size,size);
 
-		switch (this.current_status) {
-		case BackupStatus.STOPPED:
-			ctx.set_source_rgb(1,1,1);
-		break;
-		case BackupStatus.ALLFINE:
-			ctx.set_source_rgb(0,1,0);
-		break;
-		case BackupStatus.WARNING:
-			ctx.set_source_rgb(1,1,0);
-		break;
-		case BackupStatus.ERROR:
+		if (this._active) {
+			switch (this.current_status) {
+			case BackupStatus.STOPPED:
+				ctx.set_source_rgb(1,1,1);
+			break;
+			case BackupStatus.ALLFINE:
+				ctx.set_source_rgb(0,1,0);
+			break;
+			case BackupStatus.WARNING:
+				ctx.set_source_rgb(1,1,0);
+			break;
+			case BackupStatus.ERROR:
+				ctx.set_source_rgb(1,0,0);
+			break;
+			}
+		} else {
 			ctx.set_source_rgb(1,0,0);
-		break;
 		}
 		ctx.set_line_width(0.0);
 		ctx.move_to(0.0,0.45);
@@ -225,7 +256,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			menuBUnow.activate.connect(backup_now);
 			this.menuSystem.append(menuBUnow);
 		} else {
-			var menuBUnow = new MenuItem.with_label(_("Stop Back Up"));
+			var menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
 			menuBUnow.activate.connect(stop_backup);
 			this.menuSystem.append(menuBUnow);
 		}
@@ -254,8 +285,10 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	public void backup_now() {
 	
 		if (this.backup_running==SystemStatus.IDLE) {
-			Source.remove(this.refresh_timer);
-			this.main_timer=Timeout.add(3600000,this.timer_f);
+			if (this.refresh_timer>0) {
+				Source.remove(this.refresh_timer);
+				this.main_timer=Timeout.add(3600000,this.timer_f);
+			}
 			this.timer_f();
 		}
 	}
@@ -296,7 +329,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	
 	public void backup_folder(string dirpath) {
 		
-		var msg = "Backing up folder %s\n".printf(dirpath);
+		var msg = _("Backing up folder %s\n").printf(dirpath);
 		this.trayicon.set_tooltip_text (msg);
 		this.show_message(msg);
 	}
@@ -315,17 +348,17 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	
 	public void error_copy_file(string o_filepath, string d_filepath) {
 		this.current_status=BackupStatus.WARNING;
-		this.show_message("Can't copy file %s to %s\n".printf(o_filepath,d_filepath));
+		this.show_message(_("Can't copy file %s to %s\n").printf(o_filepath,d_filepath));
 	}
 	
 	public void error_access_directory(string dirpath) {
 		this.current_status=BackupStatus.WARNING;
-		this.show_message("Can't access directory %s\n".printf(dirpath));
+		this.show_message(_("Can't access directory %s\n").printf(dirpath));
 	}
 	
 	public void error_create_directory(string dirpath) {
 		this.current_status=BackupStatus.WARNING;
-		this.show_message("Can't create directory %s\n".printf(dirpath));
+		this.show_message(_("Can't create directory %s\n").printf(dirpath));
 	}
 	
 	public void excluding_folder(string dirpath) {
@@ -389,7 +422,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	
 		var home=Environment.get_home_dir();
 	
-		var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete2.cfg"));
+		var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
 	
 		try {
 			file_write=config_file.replace(null,false,0,null);
@@ -403,7 +436,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			out_stream.put_string("backup_hiden\n",null);
 		}
 		
-		if (this.active==true) {
+		if (this._active==true) {
 			out_stream.put_string("active\n",null);
 		}
 		
@@ -441,7 +474,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			this.exclude_path_hiden_list = new Gee.ArrayList<string>();
 			this.backup_path = "";
 			this.skip_hiden = true;
-			this.active = false;
+			this._active = false;
 		
 			bool failed=false;
 			FileInputStream file_read;
@@ -507,7 +540,8 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 				}
 				
 				if (line=="active") {
-					this.active=true;
+					this._active=true;
+					continue;
 				}
 				
 				failed=true;
@@ -524,7 +558,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			}
 
 			if (failed) {
-				GLib.stderr.printf("Invalid parameter in config file %s (line %d)\n",config_file.get_path(),line_counter);
+				GLib.stderr.printf(_("Invalid parameter in config file %s (line %d)\n"),config_file.get_path(),line_counter);
 				return line_counter;
 			}
 			
