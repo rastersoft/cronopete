@@ -423,7 +423,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		return null;
 	}
 	
-	private int write_configuration() {
+	public int write_configuration() {
 
 		FileOutputStream file_write;
 	

@@ -86,6 +86,7 @@ class c_options : GLib.Object {
 			foreach (string s in this.tmp_exclude_folders) {
 				this.exclude_folders.add(s);
 			}
+			this.parent.write_configuration();
 		}
 	}
 	
@@ -162,7 +163,7 @@ class c_options : GLib.Object {
 		selector.show_all();
 		retval = selector.run();
 		if (retval==-6) {
-			var file_uri = selector.get_file().get_uri();
+			var file_uri = selector.get_file().get_path();
 			if (file_uri.has_prefix("file://")) {
 				file_uri = file_uri.substring(7,-1);
 			}
@@ -188,7 +189,7 @@ class c_options : GLib.Object {
 		selector.show_all();
 		retval = selector.run();
 		if (retval==-6) {
-			var file_uri = selector.get_file().get_uri();
+			var file_uri = selector.get_file().get_path();
 			if (file_uri.has_prefix("file://")) {
 				file_uri = file_uri.substring(7,-1);
 			}
