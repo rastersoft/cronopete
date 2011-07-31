@@ -64,7 +64,7 @@ class c_options : GLib.Object {
 		
 		this.backup_listmodel = new ListStore (1, typeof (string));
 		this.backup_view.set_model(this.backup_listmodel);
-		this.backup_view.insert_column_with_attributes (-1, "Folders to exclude", new CellRendererText (), "text", 0);
+		this.backup_view.insert_column_with_attributes (-1, "Folders to backup", new CellRendererText (), "text", 0);
 		
 		this.exclude_listmodel = new ListStore (1, typeof (string));
 		this.exclude_view.set_model(this.exclude_listmodel);
