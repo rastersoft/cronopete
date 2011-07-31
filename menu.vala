@@ -88,6 +88,16 @@ class c_main_menu : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
+	public void cronopete_options_callback(Widget source) {
+	
+		this.main_w.hide();
+		var tmp = new c_options(this.basepath,this.parent);
+		this.main_w.show();
+		tmp = null;
+	
+	}
+
+	[CCode (instance_pos = -1)]
 	public void cronopete_is_active_callback(Widget source) {
 		if (this.active.get_active()) {
 			this.parent.active=true;

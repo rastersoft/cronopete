@@ -77,6 +77,13 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		}
 	}
 
+	public void get_path_list(out Gee.List<string> origin, out Gee.List<string> exclude) {
+	
+		origin=this.origin_path_list;
+		exclude=this.exclude_path_list;
+	
+	}
+
 	public cp_callback() {
 	
 		this.messages = new StringBuilder("");

@@ -160,7 +160,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
-                            <signal name="clicked" handler="cronopete_options_callback" swapped="no"/>
+                            <signal name="clicked" handler="c_main_menu_cronopete_options_callback" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
