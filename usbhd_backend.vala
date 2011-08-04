@@ -74,7 +74,6 @@ class usbhd_backend: Object, nsnanockup.backends {
 		var tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%lld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup_date);
 		var final_path=Path.build_filename(this.backup_path,tmppath);
 		
-		//GLib.stdout.printf("Borro %s\n",final_path);
 		Process.spawn_command_line_sync("rm -rf "+final_path);
 		return true;
 	}

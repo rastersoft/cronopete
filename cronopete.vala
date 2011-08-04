@@ -42,7 +42,6 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string basepath;
 	private Menu menuSystem;
 	private string last_backup;
-	private string tmp_last_backup;
 	private nsnanockup.nanockup? basedir;
 	private c_main_menu main_menu;
 	private bool backup_pending;
@@ -57,7 +56,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string backup_path;
 	private bool configuration_read;
 	private bool _active;
-	private nsnanockup.backends backend;
+	private nsnanockup.backends? backend;
 	public bool active{
 		get {
 			return this._active;
@@ -68,7 +67,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			this.write_configuration();
 			this.repaint(this.size);
 			if (this._active) {
-				this.trayicon.set_tooltip_text(this.tmp_last_backup);
+				this.trayicon.set_tooltip_text(this.last_backup);
 				if (this.backup_pending) {
 					this.timer_f();
 				}
@@ -99,10 +98,9 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		this.read_configuration();
 
 		this.backend=new usbhd_backend(this.backup_path);
-
-		this.last_backup="";
-		this.tmp_last_backup="";
 		
+		this.fill_last_backup();
+
 		var file=File.new_for_path("main.ui");
 		if (file.query_exists()) {
 			this.basepath="";
@@ -129,6 +127,32 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		this.timer_f();
 	}
 
+	private void fill_last_backup() {
+	
+		if (this.backend==null) {
+			this.last_backup="";
+			return;
+		}
+
+		var backups = this.backend.get_backup_list();
+		if (backups==null) {
+			this.last_backup="";
+			return;
+		}
+		
+		time_t lastb=0;
+		foreach (time_t t in backups) {
+			if (t>lastb) {
+				lastb=t;
+			}
+		}
+		if (lastb==0) {
+			this.last_backup="";
+		}
+		var lb = new DateTime.from_unix_local(lastb);
+		this.last_backup = _("Latest backup: %s").printf(lb.format("%x %X"));
+	}
+
 	public void PixbufDestroyNotify (uint8* pixels) {
 		delete pixels;	
 	}
@@ -143,10 +167,6 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			}
 			
 			this.backup_pending=false;
-		
-			var now = new DateTime.now_local();
-			
-			this.tmp_last_backup = _("Latest backup: %s").printf(now.format("%x %X"));
 			
 			this.backup_running=SystemStatus.BACKING_UP;
 			b_thread=Thread.create <void *>(this.do_backup, false);
@@ -159,8 +179,8 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			
 			this.backup_running=SystemStatus.IDLE;
 			if ((this.current_status==BackupStatus.ALLFINE)||(this.current_status==BackupStatus.WARNING)) {
-				this.last_backup=tmp_last_backup;
-				this.trayicon.set_tooltip_text (tmp_last_backup);
+				this.fill_last_backup();
+				this.trayicon.set_tooltip_text (this.last_backup);
 			}
 			if (this.current_status==BackupStatus.ALLFINE) {
 				this.current_status=BackupStatus.STOPPED;
