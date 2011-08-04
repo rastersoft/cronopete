@@ -19,18 +19,19 @@ executable-options:
   working-dir: /home/raster/workspace/nanockup/
   environment: []
 files:
-- path: cronopete.vala
-- path: backup.vala
-- path: menu.vala
 - path: options.vala
+- path: menu.vala
+- path: backup.vala
+- path: cronopete.vala
+- path: usbhd_backend.vala
 packages:
-- name: gmodule-2.0
-- name: gsl
-- name: cairo
-- name: gtk+-2.0
-- name: gee-1.0
-- name: gio-2.0
-- name: posix
 - name: glib-2.0
+- name: posix
+- name: gio-2.0
+- name: gee-1.0
+- name: gtk+-2.0
+- name: cairo
+- name: gsl
+- name: gmodule-2.0
 vapi_dir:
 - path: /usr/share/vala/vapi

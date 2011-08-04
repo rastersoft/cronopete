@@ -57,6 +57,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string backup_path;
 	private bool configuration_read;
 	private bool _active;
+	private nsnanockup.backends backend;
 	public bool active{
 		get {
 			return this._active;
@@ -96,6 +97,8 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		this.backup_pending=false;
 		
 		this.read_configuration();
+
+		this.backend=new usbhd_backend(this.backup_path);
 
 		this.last_backup="";
 		this.tmp_last_backup="";
@@ -338,7 +341,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		
 		var msg = _("Backing up folder %s\n").printf(dirpath);
 		this.trayicon.set_tooltip_text (msg);
-		this.show_message(msg);
+		//this.show_message(msg);
 	}
 	
 	public void backup_file(string filepath) {
@@ -382,7 +385,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 
 		int retval;
 
-		this.basedir = new nsnanockup.nanockup(this);
+		this.basedir = new nsnanockup.nanockup(this,this.backend);
 		
 		this.messages = new StringBuilder(_("Starting backup\n"));
 		this.main_menu.insert_log(this.messages.str,true);
@@ -401,6 +404,8 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		}
 		
 		basedir.set_config(this.backup_path,this.origin_path_list,this.exclude_path_list,this.exclude_path_hiden_list,this.skip_hiden);
+		this.trayicon.set_tooltip_text (_("Erasing old backups"));
+		this.basedir.delete_old_backups();
 		
 		retval=basedir.do_backup();
 		this.backup_running=SystemStatus.ENDED;

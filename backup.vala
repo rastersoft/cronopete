@@ -35,6 +35,20 @@ namespace nsnanockup {
 		public abstract void show_message(string msg);
 
 	}
+	
+	enum BACKUP_RETVAL { OK, CANT_COPY, CANT_LINK, NO_DISK_SPACE, ERROR }
+	
+	interface backends : GLib.Object {
+	
+		public abstract Gee.List<int64?>? get_backup_list();
+		public abstract bool delete_backup(int64 backup_date);
+		/*public abstract BACKUP_RETVAL start_backup();
+		public abstract BACKUP_RETVAL end_backup();
+		public abstract BACKUP_RETVAL abort_backup();
+		public abstract BACKUP_RETVAL copy_file(string path);
+		public abstract BACKUP_RETVAL link_file(string path);*/
+	
+	}
 
 	class path_node:Object {
 	
@@ -188,8 +202,7 @@ namespace nsnanockup {
 		public ulong time_used {get; set;}
 		
 		private callbacks callback;
-		
-		private bool made_copy;
+		private backends backend;
 		
 		private bool abort;
 		
@@ -199,12 +212,13 @@ namespace nsnanockup {
 			
 		}
 
-		public nanockup(callbacks to_callback) {
+		public nanockup(callbacks to_callback,backends to_backend) {
 		
 			this.origin_path_list=new path_list();
 			this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
 			this.exclude_path_hiden_list=new HashSet<string>(str_hash,str_equal);
 			this.callback=to_callback;
+			this.backend=to_backend;
 			
 			// by default, don't backup hidden files or folders
 			this.skip_hiden=true;
@@ -215,6 +229,49 @@ namespace nsnanockup {
 			this.last_path="";
 			this.abort = false;
 
+		}
+
+		public static int mysort_64(int64? a, int64? b) {
+	
+			if(a>b) {
+				return 1;
+			}
+			if(a<b) {
+				return -1;
+			}
+			return 0;
+		}
+		
+		public void delete_old_backups() {
+		
+			var lbacks=this.backend.get_backup_list();
+			lbacks.sort((CompareFunc)mysort_64);
+			
+			var ctime=time_t();
+			
+			var day_limit=ctime-86400; // 24 hour period for hourly backups
+			var week_limit=ctime-2678400; // 1 month (31 days) period for daily backups
+			
+			int64 divider=0;
+			
+			foreach (int64 v in lbacks) {
+				if (v>day_limit) { // keep all backups for a day
+					continue;
+				}
+				if (v>week_limit) {
+					if ((v/86400)!=divider) { // keep a daily backup for the last month
+						divider=v/86400;
+					} else {
+						this.backend.delete_backup(v);
+					}
+					continue;
+				}
+				if ((v/604800)!=divider) { // keep a weekly backup for backups older than a month
+					divider=v/604800;
+				} else {
+					this.backend.delete_backup(v);
+				}
+			}
 		}
 		
 		public void set_config(string b_path,Gee.List<string> origin_path,Gee.List<string> exclude_path,Gee.List<string> exclude_path_hiden, bool skip_h) {
@@ -255,7 +312,6 @@ namespace nsnanockup {
 			int retval,tmp;
 			string? directory=null;
 			
-			this.made_copy=false;
 			this.abort=false;
 			
 			if (this.backup_path=="") { // system not configured
@@ -296,22 +352,17 @@ namespace nsnanockup {
 			// sync the disk to ensure that all the data has been commited
 			Posix.sync();
 			
-			if (this.made_copy) {
-			
-				// rename the directory from Bxxxxx to xxxxx to confirm the backup
-				var directory2 = File.new_for_path(this.temporal_path);
-				try {
-					directory2.set_display_name(this.final_path,null);
-				} catch {
-					this.callback.show_message("Can't rename the temporal backup to its definitive name. Aborting backup.\n");
-					return -5;
-				}
-			
-				// and sync again the disk to confirm the new name
-				Posix.sync();
-			} else {
-				this.callback.show_message("No modified files since last backup.\n");
+			// rename the directory from Bxxxxx to xxxxx to confirm the backup
+			var directory2 = File.new_for_path(this.temporal_path);
+			try {
+				directory2.set_display_name(this.final_path,null);
+			} catch {
+				this.callback.show_message("Can't rename the temporal backup to its definitive name. Aborting backup.\n");
+				return -5;
 			}
+		
+			// and sync again the disk to confirm the new name
+			Posix.sync();
 			var timestamp2=time_t();			
 			
 			this.time_used=(ulong)timestamp2-timestamp;
@@ -407,7 +458,6 @@ namespace nsnanockup {
 					// If the file modification time is bigger than the last backup time, or the link failed, we must copy the file
 					if (verror!=0) {
 						try {
-							this.made_copy=true;
 							this.callback.backup_file(full_path);
 							//GLib.stdout.printf("Copying %s to %s\n",full_path,Path.build_filename(this.temporal_path,full_path));
 							File.new_for_path(Path.build_filename(full_path)).copy(File.new_for_path(Path.build_filename(this.temporal_path,full_path)),FileCopyFlags.OVERWRITE,null,null);
@@ -456,12 +506,11 @@ namespace nsnanockup {
 			string dirname;
 			string basepath=mediapath;
 			
-			long timestamp;
 			string tmppath;
 			
 			// First, get the timestamp and fill some class properties
 
-			timestamp=time_t();
+			var timestamp=time_t();
 			var ctime = GLib.Time.local(timestamp);
 
 			tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,timestamp);
