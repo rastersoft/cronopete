@@ -40,8 +40,8 @@ namespace nsnanockup {
 	
 	interface backends : GLib.Object {
 	
-		public abstract Gee.List<int64?>? get_backup_list();
-		public abstract bool delete_backup(int64 backup_date);
+		public abstract Gee.List<time_t?>? get_backup_list();
+		public abstract bool delete_backup(time_t backup_date);
 		/*public abstract BACKUP_RETVAL start_backup();
 		public abstract BACKUP_RETVAL end_backup();
 		public abstract BACKUP_RETVAL abort_backup();
@@ -231,7 +231,7 @@ namespace nsnanockup {
 
 		}
 
-		public static int mysort_64(int64? a, int64? b) {
+		public static int mysort_64(time_t? a, time_t? b) {
 	
 			if(a>b) {
 				return 1;
@@ -252,9 +252,9 @@ namespace nsnanockup {
 			var day_limit=ctime-86400; // 24 hour period for hourly backups
 			var week_limit=ctime-2678400; // 1 month (31 days) period for daily backups
 			
-			int64 divider=0;
+			time_t divider=0;
 			
-			foreach (int64 v in lbacks) {
+			foreach (time_t v in lbacks) {
 				if (v>day_limit) { // keep all backups for a day
 					continue;
 				}

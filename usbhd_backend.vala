@@ -29,9 +29,9 @@ class usbhd_backend: Object, nsnanockup.backends {
 		this.backup_path=Path.build_filename(bpath,"nanockup",Environment.get_user_name());
 	}
 
-	public Gee.List<int64?>? get_backup_list() {
+	public Gee.List<time_t?>? get_backup_list() {
 	
-		var blist = new Gee.ArrayList<int64?>();
+		var blist = new Gee.ArrayList<time_t?>();
 		string dirname;
 					
 		var directory = File.new_for_path(this.backup_path);
@@ -52,7 +52,7 @@ class usbhd_backend: Object, nsnanockup.backends {
 				if (dirname[0]=='B') {
 					Process.spawn_command_line_sync("rm -rf "+Path.build_filename(this.backup_path,dirname));
 				} else {
-					blist.add(int64.parse(dirname.substring(20)));
+					blist.add(dirname.substring(20).to_long());
 				}
 			}
 		} catch (Error e) {
@@ -68,14 +68,14 @@ class usbhd_backend: Object, nsnanockup.backends {
 
 	}
 	
-	public bool delete_backup(int64 backup_date) {
+	public bool delete_backup(time_t backup_date) {
 	
 		var ctime = GLib.Time.local((time_t)backup_date);
 		var tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%lld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup_date);
 		var final_path=Path.build_filename(this.backup_path,tmppath);
 		
-		//GLib.stdout.printf("Borro %s\n",final_path);
-		Process.spawn_command_line_sync("rm -rf "+final_path);
+		GLib.stdout.printf("Borro %s\n",final_path);
+		//Process.spawn_command_line_sync("rm -rf "+final_path);
 		return true;
 	}
 
