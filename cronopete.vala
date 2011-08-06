@@ -45,7 +45,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private nsnanockup.nanockup? basedir;
 	private c_main_menu main_menu;
 	private bool backup_pending;
-	
+	private time_t next_backup;
 	
 	// Configuration data
 
@@ -123,6 +123,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
+		this.next_backup=36000000+time_t();
 		this.main_timer=Timeout.add(3600000,this.timer_f);
 		this.timer_f();
 	}
@@ -160,6 +161,8 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	public bool timer_f() {
 	
 		if (this.backup_running==SystemStatus.IDLE) {
+		
+			this.next_backup=3600+time_t();
 		
 			if (this._active==false) {
 				this.backup_pending=true;
@@ -246,7 +249,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		ctx.stroke();
 		ctx.restore();
 		ctx.save();
-		ctx.rotate(this.angle/30);
+		ctx.rotate(this.angle/15);
 		ctx.move_to(0,0.02);
 		ctx.line_to(0,-0.16);
 		ctx.restore();
@@ -595,6 +598,34 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 			}
 			
 			return 0;
+		}
+		
+		public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next) {
+		
+			id = this.backend.get_backup_id();
+			
+			var list_backup = this.backend.get_backup_list();
+			oldest=0;
+			newest=0;
+			next=0;
+			
+			if (list_backup==null) {
+				return;
+			}
+			
+			foreach(time_t v in list_backup) {
+				if ((oldest==0) || (oldest>v)) {
+					oldest=v;
+				}
+				if ((newest==0) || (newest<v)) {
+					newest=v;
+				}
+			}
+			if (this._active) {
+				next=this.next_backup;
+			} else {
+				next=0;
+			}
 		}
 	
 }

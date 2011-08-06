@@ -22,11 +22,19 @@ using Gee;
 
 class usbhd_backend: Object, nsnanockup.backends {
 
-	public string backup_path;
+	private string backup_path;
+	private string id;
 	
 	public usbhd_backend(string bpath) {
 	
+		this.id=bpath.dup();
 		this.backup_path=Path.build_filename(bpath,"nanockup",Environment.get_user_name());
+	}
+
+	public string? get_backup_id() {
+	
+		return (this.id);
+	
 	}
 
 	public Gee.List<time_t?>? get_backup_list() {
@@ -49,9 +57,9 @@ class usbhd_backend: Object, nsnanockup.backends {
 		 		// unfinished backup, so remove it
 				
 				dirname=file_info.get_name();
-				if (dirname[0]=='B') {
-					Process.spawn_command_line_sync("rm -rf "+Path.build_filename(this.backup_path,dirname));
-				} else {
+				if (dirname[0]!='B') {
+					//Process.spawn_command_line_sync("rm -rf "+Path.build_filename(this.backup_path,dirname));
+				//} else {
 					blist.add(dirname.substring(20).to_long());
 				}
 			}
@@ -78,11 +86,35 @@ class usbhd_backend: Object, nsnanockup.backends {
 		return true;
 	}
 
-/*	public BACKUP_RETVAL start_backup();
-	public BACKUP_RETVAL end_backup();
-	public BACKUP_RETVAL abort_backup();
-	public BACKUP_RETVAL copy_file(string path);
-	public BACKUP_RETVAL link_file(string path);*/
+	public nsnanockup.BACKUP_RETVAL start_backup() {
+	
+		string dirname;
+		var directory = File.new_for_path(this.backup_path);
+
+		try {
+			var myenum = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME, 0, null);
+			FileInfo file_info;
+		
+			while ((file_info = myenum.next_file (null)) != null) {
+				
+				// If the directory starts with 'B', it's a temporary directory from an
+		 		// unfinished backup, so remove it
+				
+				dirname=file_info.get_name();
+				if (dirname[0]=='B') {
+					Process.spawn_command_line_sync("rm -rf "+Path.build_filename(this.backup_path,dirname));
+				}
+			}
+		} catch (Error e) {
+			return nsnanockup.BACKUP_RETVAL.ERROR; // Error: can't create the base directory
+		}
+		return nsnanockup.BACKUP_RETVAL.OK;
+	}
+
+	// public BACKUP_RETVAL end_backup();
+	// public BACKUP_RETVAL abort_backup();
+	// public BACKUP_RETVAL copy_file(string path);
+	// public BACKUP_RETVAL link_file(string path);
 
 
 

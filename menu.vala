@@ -28,6 +28,10 @@ class c_main_menu : GLib.Object {
 	private Notebook tabs;
 	private cp_callback parent;
 	private CheckButton active;
+	private Label Lvid;
+	private Label Loldest;
+	private Label Lnewest;
+	private Label Lnext;
 	
 	public bool is_visible;
 	
@@ -47,7 +51,10 @@ class c_main_menu : GLib.Object {
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
 		this.tabs = (Notebook) this.builder.get_object("notebook1");
 		this.active = (CheckButton) this.builder.get_object("is_active");
-		
+		this.Lvid = (Label) this.builder.get_object("label_volume");
+		this.Loldest = (Label) this.builder.get_object("label_oldest_backup");
+		this.Lnewest = (Label) this.builder.get_object("label_newest_backup");
+		this.Lnext = (Label) this.builder.get_object("label_next_backup");
 		this.is_visible = false;
 		
 	}
@@ -66,7 +73,44 @@ class c_main_menu : GLib.Object {
 		}
 	}
 
+	private string parse_date(time_t val) {
+		
+		string retval;
+		
+		if (val==0) {
+				retval=_("None");
+		} else {
+			var date = new DateTime.from_unix_local(val);
+			
+			
+			time_t current = new time_t();
+			if ((current-val)<86400) {
+				retval = date.format("%X").dup();
+			} else {
+				retval = date.format("%x").dup();
+			}
+		}
+		
+		return retval;		
+	}
+
 	public void show_main(bool show_log, string log) {
+
+		string? volume_id;
+		time_t oldest;
+		time_t newest;
+		time_t next;
+
+		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next);
+		if (volume_id==null) {
+			this.Lvid.set_text(_("Not defined"));
+		} else {
+			this.Lvid.set_text(volume_id);
+		}
+		
+		this.Loldest.set_text(this.parse_date(oldest));
+		this.Lnewest.set_text(this.parse_date(newest));
+		this.Lnext.set_text(this.parse_date(next));
 
 		this.log.set_text(log,-1);
 		this.main_w.show_all();

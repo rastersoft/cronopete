@@ -40,13 +40,14 @@ namespace nsnanockup {
 	
 	interface backends : GLib.Object {
 	
+		public abstract string? get_backup_id();
 		public abstract Gee.List<time_t?>? get_backup_list();
 		public abstract bool delete_backup(time_t backup_date);
-		/*public abstract BACKUP_RETVAL start_backup();
-		public abstract BACKUP_RETVAL end_backup();
-		public abstract BACKUP_RETVAL abort_backup();
-		public abstract BACKUP_RETVAL copy_file(string path);
-		public abstract BACKUP_RETVAL link_file(string path);*/
+		public abstract BACKUP_RETVAL start_backup();
+		//public abstract BACKUP_RETVAL end_backup();
+		//public abstract BACKUP_RETVAL abort_backup();
+		//public abstract BACKUP_RETVAL copy_file(string path);
+		//public abstract BACKUP_RETVAL link_file(string path);
 	
 	}
 
@@ -313,6 +314,8 @@ namespace nsnanockup {
 			string? directory=null;
 			
 			this.abort=false;
+			
+			this.backend.start_backup();
 			
 			if (this.backup_path=="") { // system not configured
 				this.callback.show_message("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
