@@ -290,7 +290,7 @@ class nanockup:Object {
 		foreach (string tmp in exclude_path_hiden) {
 			this.exclude_path_hiden_list.add(tmp);
 		}
-	
+		this.skip_hiden=skip_h;
 	}
 	
 	public int do_backup() {
@@ -315,8 +315,6 @@ class nanockup:Object {
 		this.abort=false;
 		
 		this.backend.start_backup(out this.last_backup_time);
-		
-		GLib.stdout.printf("Ultimo backup %ld\n",(long)this.last_backup_time);
 		
 		if (this.backup_path=="") { // system not configured
 			this.callback.show_message("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
