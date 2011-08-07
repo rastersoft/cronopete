@@ -28,7 +28,7 @@ enum SystemStatus { IDLE, BACKING_UP, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
 
-class cp_callback : GLib.Object, nsnanockup.callbacks {
+class cp_callback : GLib.Object, callbacks {
 
 	private StatusIcon trayicon;
 	private SystemStatus backup_running;
@@ -42,7 +42,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string basepath;
 	private Menu menuSystem;
 	private string last_backup;
-	private nsnanockup.nanockup? basedir;
+	private nanockup? basedir;
 	private c_main_menu main_menu;
 	private bool backup_pending;
 	private time_t next_backup;
@@ -56,7 +56,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	private string backup_path;
 	private bool configuration_read;
 	private bool _active;
-	private nsnanockup.backends? backend;
+	private backends? backend;
 	public bool active{
 		get {
 			return this._active;
@@ -97,7 +97,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 		
 		this.read_configuration();
 
-		this.backend=new usbhd_backend(this.backup_path);
+		this.backend=new usbhd_backend(this.backup_path,this);
 		
 		this.fill_last_backup();
 
@@ -368,7 +368,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 	}
 	
 	public void backup_file(string filepath) {
-		//GLib.stdout.printf("Backing up file %s\n",filepath);
+		GLib.stdout.printf("Backing up file %s\n",filepath);
 	}
 	
 	public void backup_link_file(string filepath) {
@@ -408,7 +408,7 @@ class cp_callback : GLib.Object, nsnanockup.callbacks {
 
 		int retval;
 
-		this.basedir = new nsnanockup.nanockup(this,this.backend);
+		this.basedir = new nanockup(this,this.backend);
 		
 		this.messages = new StringBuilder(_("Starting backup\n"));
 		this.main_menu.insert_log(this.messages.str,true);

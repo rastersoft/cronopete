@@ -83,7 +83,7 @@ class c_main_menu : GLib.Object {
 			var date = new DateTime.from_unix_local(val);
 			
 			
-			time_t current = new time_t();
+			time_t current = time_t();
 			if ((current-val)<86400) {
 				retval = date.format("%X").dup();
 			} else {
