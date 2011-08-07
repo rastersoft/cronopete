@@ -368,7 +368,7 @@ class cp_callback : GLib.Object, callbacks {
 	}
 	
 	public void backup_file(string filepath) {
-		GLib.stdout.printf("Backing up file %s\n",filepath);
+		//GLib.stdout.printf("Backing up file %s\n",filepath);
 	}
 	
 	public void backup_link_file(string filepath) {
