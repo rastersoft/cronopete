@@ -235,6 +235,13 @@ class usbhd_backend: Object, backends {
 	
 	}
 
-	// public BACKUP_RETVAL abort_backup();
+	public BACKUP_RETVAL abort_backup() {
+		if (this.cfinal_path==null) {
+			return BACKUP_RETVAL.NO_STARTED;
+		}
+	
+		this.cfinal_path=null;
+		return BACKUP_RETVAL.OK;
+	}
 
 }

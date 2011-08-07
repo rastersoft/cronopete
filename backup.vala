@@ -47,7 +47,7 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL create_folder(string path);
 	public abstract BACKUP_RETVAL copy_file(string path);
 	public abstract BACKUP_RETVAL link_file(string path);
-	//public abstract BACKUP_RETVAL abort_backup();
+	public abstract BACKUP_RETVAL abort_backup();
 }
 
 class path_node:Object {
@@ -330,6 +330,7 @@ class nanockup:Object {
 		while (null!=(directory=this.origin_path_list.next_iterator())) {
 			if (this.abort) {
 				this.callback.show_message(_("Backup aborted\n"));
+				this.backend.abort_backup();
 				return -6;
 			}
 			this.callback.backup_folder(directory);
