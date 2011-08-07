@@ -48,7 +48,7 @@ class usbhd_backend: Object, backends {
 	
 		var blist = new Gee.ArrayList<time_t?>();
 		string dirname;
-					
+		
 		var directory = File.new_for_path(this.backup_path);
 
 		try {
@@ -122,12 +122,16 @@ class usbhd_backend: Object, backends {
 	public BACKUP_RETVAL start_backup(out int64 last_backup_time) {
 	
 		if (this.cfinal_path!=null) {
-			this.callback.show_message("Already started a backup\n");
+			this.callback.show_message(_("Already started a backup\n"));
 			return BACKUP_RETVAL.ALREADY_STARTED;
 		}
 	
 		string dirname;
 		var directory = File.new_for_path(this.backup_path);
+		if (directory.query_exists(null)==false) {
+			this.callback.show_message(_("Backup device not available\n"));
+			return BACKUP_RETVAL.NOT_AVAILABLE;
+		}
 		
 		var timestamp=time_t();
 		var ctime = GLib.Time.local(timestamp);
@@ -226,9 +230,13 @@ class usbhd_backend: Object, backends {
 		try {
 			var dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
 			dir2.make_directory_with_parents(null);
-		} catch (Error e) {
+		} catch (IOError e) {
 			this.callback.error_create_directory(path);
-			return BACKUP_RETVAL.CANT_CREATE_FOLDER;
+			if (e is IOError.NO_SPACE) {
+				return BACKUP_RETVAL.NO_SPC;
+			} else {
+				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
+			}
 		}
 	
 		return BACKUP_RETVAL.OK;

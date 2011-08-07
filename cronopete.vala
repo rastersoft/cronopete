@@ -117,9 +117,9 @@ class cp_callback : GLib.Object, callbacks {
 		this.main_menu = new c_main_menu(this.basepath,this);
 	
 		this.trayicon = new StatusIcon();
+		this.trayicon.size_changed.connect(this.repaint);
 		this.trayicon.set_tooltip_text ("Idle");
 		this.trayicon.set_visible(true);
-		this.trayicon.size_changed.connect(this.repaint);
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
@@ -494,140 +494,144 @@ class cp_callback : GLib.Object, callbacks {
 	
 	private int read_configuration() {
 		
-			/****************************************************************************************
-			 * This function will read the configuration from the file ~/.cronopete.cfg              *
-			 * If not, it will use that file to get the configuration                               *
-			 * Returns:                                                                             *
-			 *   0: on success                                                                      *
-			 *  -1: the config file doesn't exists                                                  *
-			 *  -2: can't read the config file                                                      *
-			 *  +N: parse error at line N in config file                                            *			 
-			 ****************************************************************************************/
-		
-			this.origin_path_list = new Gee.ArrayList<string>();
-			this.exclude_path_list = new Gee.ArrayList<string>();
-			this.exclude_path_hiden_list = new Gee.ArrayList<string>();
-			this.backup_path = "";
-			this.skip_hiden = true;
-			this._active = false;
-		
-			bool failed=false;
-			FileInputStream file_read;
-			
-			string home=Environment.get_home_dir();
-			var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
-			
-			if (!config_file.query_exists (null)) {
-				this.origin_path_list.add(home);
-				this.skip_hiden = false;
-				return -1;
-			}
-
-			try {
-				file_read=config_file.read(null);
-			} catch {
-				return -2;
-			}
-			var in_stream = new DataInputStream (file_read);
-			string line;
-			int line_counter=0;
-
-			this.skip_hiden=true;
-			while ((line = in_stream.read_line (null, null)) != null) {
-				line_counter++;
-				
-				// ignore comments
-				if (line[0]=='#') {
-					continue;
-				}
-				
-				// remove unwanted blank spaces
-				line.strip();
-
-				// ignore empty lines				
-				if (line.length==0) {
-					continue;
-				}
-				
-				if (line.has_prefix("add_directory ")) {
-					this.origin_path_list.add(line.substring(14).strip());
-					continue;
-				}
-				
-				if (line.has_prefix("exclude_directory ")) {
-					this.exclude_path_list.add(line.substring(18).strip());
-					continue;
-				}
-				
-				if (line.has_prefix("exclude_directory_hiden ")) {
-					this.exclude_path_hiden_list.add(line.substring(24).strip());
-					continue;
-				}
-				
-				if (line.has_prefix("backup_directory ")) {
-					this.backup_path=line.substring(17).strip();
-					continue;
-				}
-				
-				if (line=="backup_hiden") {
-					this.skip_hiden=false;
-					continue;
-				}
-				
-				if (line=="active") {
-					this._active=true;
-					continue;
-				}
-				
-				failed=true;
-				break;
-			}
-
-			try {
-				in_stream.close(null);
-			} catch {
-			}
-			try {
-				file_read.close(null);
-			} catch {
-			}
-
-			if (failed) {
-				GLib.stderr.printf(_("Invalid parameter in config file %s (line %d)\n"),config_file.get_path(),line_counter);
-				return line_counter;
-			}
-			
-			return 0;
-		}
-		
-		public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next) {
-		
-			id = this.backend.get_backup_id();
-			
-			var list_backup = this.backend.get_backup_list();
-			oldest=0;
-			newest=0;
-			next=0;
-			
-			if (list_backup==null) {
-				return;
-			}
-			
-			foreach(time_t v in list_backup) {
-				if ((oldest==0) || (oldest>v)) {
-					oldest=v;
-				}
-				if ((newest==0) || (newest<v)) {
-					newest=v;
-				}
-			}
-			if (this._active) {
-				next=this.next_backup;
-			} else {
-				next=0;
-			}
-		}
+		/****************************************************************************************
+		 * This function will read the configuration from the file ~/.cronopete.cfg              *
+		 * If not, it will use that file to get the configuration                               *
+		 * Returns:                                                                             *
+		 *   0: on success                                                                      *
+		 *  -1: the config file doesn't exists                                                  *
+		 *  -2: can't read the config file                                                      *
+		 *  +N: parse error at line N in config file                                            *			 
+		 ****************************************************************************************/
 	
+		this.origin_path_list = new Gee.ArrayList<string>();
+		this.exclude_path_list = new Gee.ArrayList<string>();
+		this.exclude_path_hiden_list = new Gee.ArrayList<string>();
+		this.backup_path = "";
+		this.skip_hiden = true;
+		this._active = false;
+	
+		bool failed=false;
+		FileInputStream file_read;
+		
+		string home=Environment.get_home_dir();
+		var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
+		
+		if (!config_file.query_exists (null)) {
+			this.origin_path_list.add(home);
+			this.skip_hiden = false;
+			return -1;
+		}
+
+		try {
+			file_read=config_file.read(null);
+		} catch {
+			return -2;
+		}
+		var in_stream = new DataInputStream (file_read);
+		string line;
+		int line_counter=0;
+
+		this.skip_hiden=true;
+		while ((line = in_stream.read_line (null, null)) != null) {
+			line_counter++;
+			
+			// ignore comments
+			if (line[0]=='#') {
+				continue;
+			}
+			
+			// remove unwanted blank spaces
+			line.strip();
+
+			// ignore empty lines				
+			if (line.length==0) {
+				continue;
+			}
+			
+			if (line.has_prefix("add_directory ")) {
+				this.origin_path_list.add(line.substring(14).strip());
+				continue;
+			}
+			
+			if (line.has_prefix("exclude_directory ")) {
+				this.exclude_path_list.add(line.substring(18).strip());
+				continue;
+			}
+			
+			if (line.has_prefix("exclude_directory_hiden ")) {
+				this.exclude_path_hiden_list.add(line.substring(24).strip());
+				continue;
+			}
+			
+			if (line.has_prefix("backup_directory ")) {
+				this.backup_path=line.substring(17).strip();
+				continue;
+			}
+			
+			if (line=="backup_hiden") {
+				this.skip_hiden=false;
+				continue;
+			}
+			
+			if (line=="active") {
+				this._active=true;
+				continue;
+			}
+			
+			failed=true;
+			break;
+		}
+
+		try {
+			in_stream.close(null);
+		} catch {
+		}
+		try {
+			file_read.close(null);
+		} catch {
+		}
+
+		if (failed) {
+			GLib.stderr.printf(_("Invalid parameter in config file %s (line %d)\n"),config_file.get_path(),line_counter);
+			return line_counter;
+		}
+		
+		return 0;
+	}
+	
+	public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next) {
+	
+		id = this.backend.get_backup_id();
+		
+		var list_backup = this.backend.get_backup_list();
+		if (list_backup == null) {
+			this.next_backup=0;
+			return;
+		}
+
+		oldest=0;
+		newest=0;
+		next=0;
+		
+		if (list_backup==null) {
+			return;
+		}
+		
+		foreach(time_t v in list_backup) {
+			if ((oldest==0) || (oldest>v)) {
+				oldest=v;
+			}
+			if ((newest==0) || (newest<v)) {
+				newest=v;
+			}
+		}
+		if (this._active) {
+			next=this.next_backup;
+		} else {
+			next=0;
+		}
+	}
 }
 
 

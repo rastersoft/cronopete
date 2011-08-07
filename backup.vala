@@ -35,7 +35,7 @@ interface callbacks : GLib.Object {
 }
 
 enum BACKUP_RETVAL { OK, CANT_COPY, CANT_LINK, NO_DISK_SPACE, NO_STARTED, CANT_CREATE_FOLDER, ALREADY_STARTED,
-	NOT_AVAILABLE, NOT_WRITABLE, ERROR }
+	NOT_AVAILABLE, NOT_WRITABLE, NO_SPC, ERROR }
 
 interface backends : GLib.Object {
 
@@ -245,6 +245,10 @@ class nanockup:Object {
 	public void delete_old_backups() {
 	
 		var lbacks=this.backend.get_backup_list();
+		if (lbacks==null) {
+			return;
+		}
+
 		lbacks.sort((CompareFunc)mysort_64);
 		
 		var ctime=time_t();
@@ -314,7 +318,11 @@ class nanockup:Object {
 		
 		this.abort=false;
 		
-		this.backend.start_backup(out this.last_backup_time);
+		var rv=this.backend.start_backup(out this.last_backup_time);
+		
+		if (rv!=BACKUP_RETVAL.OK) {
+			return -3;
+		}
 		
 		if (this.backup_path=="") { // system not configured
 			this.callback.show_message("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
