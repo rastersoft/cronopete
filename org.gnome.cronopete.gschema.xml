@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/org/gnome/cronopete/" id="org.gnome.cronopete">
+
+    <key type="as" name="paths-to-backup">
+      <default>['$HOME']</default>
+      <summary>List of paths to be backed up by (ana)cronopete</summary>
+      <description>(ana)Cronopete will backup all the files and folders contained in the list of folders contained in the list. The substring $HOME will be replaced by the user's home folder (thus, "$HOME/tmp" will be replaced by "/home/username/tmp").</description>
+    </key>
+
+    <key type="as" name="paths-to-exclude">
+      <default>[]</default>
+      <summary>List of paths to be excluded from being backed up by (ana)cronopete</summary>
+      <description>(ana)Cronopete will not backup the files and folders contained in the list of folders contained in the list, unless they are also specifically set in paths-to-backup. The substring $HOME will be replaced by the user's home folder (thus, "$HOME/tmp" will be replaced by "/home/username/tmp").</description>
+    </key>
+
+    <key type="b" name="exclude-hiden-in-home">
+      <default>true</default>
+      <summary>Whether to backup or not the hiden files/folders in the $HOME folder</summary>
+      <description>If true, (ana)cronopete will not backup the hiden files and folders contained in the $HOME folder.</description>
+    </key>
+
+
+    <key type="b" name="backup-enabled">
+      <default>false</default>
+      <summary>Whether (ana)cronopete backup is enabled or not</summary>
+      <description>Set to true to enable the backing up of the hard disk; set to false to disable it.</description>
+    </key>
+
+  </schema>
+</schemalist>

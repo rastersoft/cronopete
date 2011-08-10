@@ -49,10 +49,9 @@ class cp_callback : GLib.Object, callbacks {
 	
 	// Configuration data
 
-	private bool skip_hiden;
+	private bool skip_hiden_at_home;
 	private Gee.List<string> origin_path_list;
 	private Gee.List<string> exclude_path_list;
-	private Gee.List<string> exclude_path_hiden_list;
 	private string backup_path;
 	private bool configuration_read;
 	private bool _active;
@@ -77,11 +76,32 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	}
 
-	public void get_path_list(out Gee.List<string> origin, out Gee.List<string> exclude) {
+	public void get_path_list(out Gee.List<string> origin, out Gee.List<string> exclude, out bool backup_hiden_ah) {
 	
 		origin=this.origin_path_list;
 		exclude=this.exclude_path_list;
+		if (this.skip_hiden_at_home) {
+			backup_hiden_ah=false;
+		} else {
+			backup_hiden_ah=true;
+		}
+	}
 	
+	public void set_path_list(Gee.List<string>origin, Gee.List<string>exclude, bool backup_hiden_ah) {
+		
+		this.origin_path_list.clear();
+		foreach (string s in origin) {
+			this.origin_path_list.add(s);
+		}
+		this.exclude_path_list.clear();
+		foreach (string s in exclude) {
+			this.exclude_path_list.add(s);
+		}
+		if (backup_hiden_ah) {
+			this.skip_hiden_at_home=false;
+		} else {
+			this.skip_hiden_at_home=true;
+		}
 	}
 
 	public cp_callback() {
@@ -97,7 +117,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 		this.read_configuration();
 
-		this.backend=new usbhd_backend(this.backup_path,this);
+		this.backend=new usbhd_backend(this.backup_path);
 		
 		this.fill_last_backup();
 
@@ -375,13 +395,13 @@ class cp_callback : GLib.Object, callbacks {
 		//GLib.stdout.printf("Linking file %s\n",filepath);
 	}
 	
-	public void warning_link_file(string o_filepath, string d_filepath) {
+	public void warning_link_file(string o_filepath) {
 		//GLib.stdout.printf("Can't link file %s to %s\n",o_filepath,d_filepath);
 	}
 	
-	public void error_copy_file(string o_filepath, string d_filepath) {
+	public void error_copy_file(string filepath) {
 		this.current_status=BackupStatus.WARNING;
-		this.show_message(_("Can't copy file %s to %s\n").printf(o_filepath,d_filepath));
+		this.show_message(_("Can't copy file %s\n").printf(filepath));
 	}
 	
 	public void error_access_directory(string dirpath) {
@@ -426,7 +446,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 		}
 		
-		basedir.set_config(this.backup_path,this.origin_path_list,this.exclude_path_list,this.exclude_path_hiden_list,this.skip_hiden);
+		basedir.set_config(this.backup_path,this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
 		this.trayicon.set_tooltip_text (_("Erasing old backups"));
 		this.basedir.delete_old_backups();
 		
@@ -467,8 +487,8 @@ class cp_callback : GLib.Object, callbacks {
 	
 		var out_stream = new DataOutputStream (file_write);
 		
-		if (this.skip_hiden==false) {
-			out_stream.put_string("backup_hiden\n",null);
+		if (this.skip_hiden_at_home==false) {
+			out_stream.put_string("backup_hiden_at_home\n",null);
 		}
 		
 		if (this._active==true) {
@@ -484,9 +504,6 @@ class cp_callback : GLib.Object, callbacks {
 		}
 		foreach (string str in this.exclude_path_list) {
 			out_stream.put_string("exclude_directory %s\n".printf(str),null);
-		}
-		foreach (string str in this.exclude_path_hiden_list) {
-			out_stream.put_string("exclude_directory_hiden %s\n".printf(str),null);
 		}
 		
 		return 0;
@@ -506,9 +523,8 @@ class cp_callback : GLib.Object, callbacks {
 	
 		this.origin_path_list = new Gee.ArrayList<string>();
 		this.exclude_path_list = new Gee.ArrayList<string>();
-		this.exclude_path_hiden_list = new Gee.ArrayList<string>();
 		this.backup_path = "";
-		this.skip_hiden = true;
+		this.skip_hiden_at_home = true;
 		this._active = false;
 	
 		bool failed=false;
@@ -519,7 +535,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 		if (!config_file.query_exists (null)) {
 			this.origin_path_list.add(home);
-			this.skip_hiden = false;
+			this.skip_hiden_at_home = false;
 			return -1;
 		}
 
@@ -532,7 +548,6 @@ class cp_callback : GLib.Object, callbacks {
 		string line;
 		int line_counter=0;
 
-		this.skip_hiden=true;
 		while ((line = in_stream.read_line (null, null)) != null) {
 			line_counter++;
 			
@@ -559,18 +574,13 @@ class cp_callback : GLib.Object, callbacks {
 				continue;
 			}
 			
-			if (line.has_prefix("exclude_directory_hiden ")) {
-				this.exclude_path_hiden_list.add(line.substring(24).strip());
-				continue;
-			}
-			
 			if (line.has_prefix("backup_directory ")) {
 				this.backup_path=line.substring(17).strip();
 				continue;
 			}
 			
-			if (line=="backup_hiden") {
-				this.skip_hiden=false;
+			if (line=="backup_hiden_at_home") {
+				this.skip_hiden_at_home=false;
 				continue;
 			}
 			

@@ -27,15 +27,29 @@ class usbhd_backend: Object, backends {
 	private string? cbackup_path;
 	private string? cfinal_path;
 	private string? last_backup;
-	private callbacks callback;
+	private string drive_path;
 	
-	public usbhd_backend(string bpath, callbacks cb) {
+	public usbhd_backend(string bpath) {
 	
-		this.callback=cb;
 		this.id=bpath.dup();
 		this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
 		this.cbackup_path=null;
 		this.cfinal_path=null;
+		this.drive_path=bpath;
+	}
+
+	public bool get_free_space(out uint64 space) {
+	
+		try {
+			var file = File.new_for_path(this.drive_path);
+			var info = file.query_filesystem_info(FILE_ATTRIBUTE_FILESYSTEM_FREE,null);
+			space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_FREE);
+			return true;
+		} catch (Error e) {
+			space = 0;
+			return false;
+		}
+	
 	}
 
 	public string? get_backup_id() {
@@ -98,8 +112,6 @@ class usbhd_backend: Object, backends {
 			return BACKUP_RETVAL.NO_STARTED;
 		}
 	
-		this.callback.show_message("Syncing disk\n");
-
 		// sync the disk to ensure that all the data has been commited
 		Posix.sync();
 		
@@ -108,7 +120,6 @@ class usbhd_backend: Object, backends {
 		try {
 			directory2.set_display_name(this.cfinal_path,null);
 		} catch (Error e) {
-			this.callback.show_message("Can't rename the temporal backup %s to its definitive name %s (%s). Aborting backup.\n".printf(this.cbackup_path,this.cfinal_path,e.message));
 			this.cfinal_path=null;
 			return BACKUP_RETVAL.ERROR;
 		}
@@ -122,14 +133,12 @@ class usbhd_backend: Object, backends {
 	public BACKUP_RETVAL start_backup(out int64 last_backup_time) {
 	
 		if (this.cfinal_path!=null) {
-			this.callback.show_message(_("Already started a backup\n"));
 			return BACKUP_RETVAL.ALREADY_STARTED;
 		}
 	
 		string dirname;
 		var directory = File.new_for_path(this.backup_path);
 		if (directory.query_exists(null)==false) {
-			this.callback.show_message(_("Backup device not available\n"));
 			return BACKUP_RETVAL.NOT_AVAILABLE;
 		}
 		
@@ -186,7 +195,7 @@ class usbhd_backend: Object, backends {
 				last_backup_time=0;
 				directory.make_directory_with_parents(null);
 			} catch (Error e) {
-				return BACKUP_RETVAL.NOT_AVAILABLE; // Error: can't create the base directory
+				return BACKUP_RETVAL.CANT_CREATE_BASE; // Error: can't create the base directory
 			}
 		}
 
@@ -196,7 +205,6 @@ class usbhd_backend: Object, backends {
 		try {
 			directory2.make_directory_with_parents(null);
 		} catch (Error e) {
-			this.callback.show_message("Can't create the folder for this backup. Aborting backup.\n");
 			return BACKUP_RETVAL.NOT_WRITABLE; // can't create the folder for the current backup
 		}
 		
@@ -205,12 +213,16 @@ class usbhd_backend: Object, backends {
 
 	public BACKUP_RETVAL copy_file(string path) {
 	
+		var newfile = Path.build_filename(this.cbackup_path,path);
 		try {
-			this.callback.backup_file(path);
-			File.new_for_path(Path.build_filename(path)).copy(File.new_for_path(Path.build_filename(this.cbackup_path,path)),FileCopyFlags.OVERWRITE,null,null);
-		} catch (Error e) {
-			this.callback.error_copy_file(path,Path.build_filename(this.cbackup_path,path));
-			return BACKUP_RETVAL.CANT_COPY;
+			File.new_for_path(Path.build_filename(path)).copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
+		} catch (IOError e) {
+			if (e is IOError.NO_SPACE) {
+				Posix.unlink(newfile);
+				return BACKUP_RETVAL.NO_SPC;
+			} else {
+				return BACKUP_RETVAL.CANT_COPY;
+			}
 		}
 		return BACKUP_RETVAL.OK;	
 	}
@@ -219,8 +231,14 @@ class usbhd_backend: Object, backends {
 		
 		//GLib.stdout.printf("Linkando %s a %s\n",Path.build_filename(this.last_backup,path),Path.build_filename(this.cbackup_path,path));
 		
-		if ((link(Path.build_filename(this.last_backup,path),Path.build_filename(this.cbackup_path,path)))!=0) {
-			return BACKUP_RETVAL.CANT_LINK;
+		var retval=link(Path.build_filename(this.last_backup,path),Path.build_filename(this.cbackup_path,path));
+		
+		if (retval!=0) {
+			if (retval==Posix.ENOSPC) {
+				return BACKUP_RETVAL.NO_SPC;
+			} else {
+				return BACKUP_RETVAL.CANT_LINK;
+			}
 		}
 		return BACKUP_RETVAL.OK;
 	}
@@ -231,23 +249,19 @@ class usbhd_backend: Object, backends {
 			var dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
 			dir2.make_directory_with_parents(null);
 		} catch (IOError e) {
-			this.callback.error_create_directory(path);
 			if (e is IOError.NO_SPACE) {
 				return BACKUP_RETVAL.NO_SPC;
 			} else {
 				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
 			}
 		}
-	
 		return BACKUP_RETVAL.OK;
-	
 	}
 
 	public BACKUP_RETVAL abort_backup() {
 		if (this.cfinal_path==null) {
 			return BACKUP_RETVAL.NO_STARTED;
 		}
-	
 		this.cfinal_path=null;
 		return BACKUP_RETVAL.OK;
 	}
