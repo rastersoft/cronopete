@@ -49,6 +49,7 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL link_file(string path);
 	public abstract BACKUP_RETVAL abort_backup();
 	public abstract bool get_free_space(out uint64 space);
+
 }
 
 class path_node:Object {
@@ -171,19 +172,6 @@ class path_list:Object {
 class nanockup:Object {
 
 	// This is the backup class itself
-
-	// Base directory where we will do the backup
-	private string backup_path;
-	
-	// Temporal backup directory (starting with 'B')
-	private string temporal_path;
-	
-	// Final backup directory (the same than the temporal, but without
-	// the 'B' letter)
-	private string final_path;
-	
-	// Directory with the last backup done (to link files from)
-	private string last_path;
 	
 	// Contains the time (in seconds from EPOCH) of the last backup
 	private int64 last_backup_time;
@@ -220,10 +208,6 @@ class nanockup:Object {
 		// by default, don't backup hidden files or folders at HOME folder
 		this.skip_hiden_at_HOME=true;
 		this.last_backup_time=0;
-		this.backup_path="";
-		this.temporal_path="";
-		this.final_path="";
-		this.last_path="";
 		this.abort = false;
 
 	}
@@ -275,12 +259,11 @@ class nanockup:Object {
 		}
 	}
 	
-	public void set_config(string b_path,Gee.List<string> origin_path,Gee.List<string> exclude_path, bool skip_h_at_h) {
+	public void set_config(Gee.List<string> origin_path,Gee.List<string> exclude_path, bool skip_h_at_h) {
 
 		this.origin_path_list=new path_list();
 		this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
 	
-		this.backup_path = b_path;
 		foreach (string tmp in origin_path) {
 			this.origin_path_list.add(tmp);
 		}
@@ -313,6 +296,12 @@ class nanockup:Object {
 		
 		int do_loop=0;
 		
+		if (this.backend.get_backup_id()==null) { // system not configured
+			this.callback.show_message("User didn't specified a device where to store the backups. Aborting backup.\n"); 
+			return -2; // the class isn't configured (don't know where to store the backups)
+		}
+		
+		
 		while(do_loop<2) {
 			var rv=this.backend.start_backup(out this.last_backup_time);
 		
@@ -334,9 +323,9 @@ class nanockup:Object {
 					return -3;
 				break;
 				case BACKUP_RETVAL.NO_SPC:
-					this.callback.show_message(_("Failed to free disk space to start a backup. Aborting backup.\n"));
-					if (false==this.free_bytes(1000000)) {
-						return -3;
+					if ((do_loop!=0)||(false==this.free_bytes(1000000))) {
+						this.callback.show_message(_("Failed to free disk space to start a backup. Aborting backup.\n"));
+						return 3;
 					}
 					do_loop++;
 				break;
@@ -345,12 +334,7 @@ class nanockup:Object {
 				break;
 			}
 		}
-		
-		if (this.backup_path=="") { // system not configured
-			this.callback.show_message("User didn't specified a directory where to store the backups. Aborting backup.\n"); 
-			return -2; // the class isn't configured (don't know where to store the backups)
-		}
-		
+
 		var timestamp=time_t();
 		
 		retval=0;
@@ -400,10 +384,8 @@ class nanockup:Object {
 		FileEnumerator enumerator;
 		string full_path;
 		string initial_path;
-		string filepath;
 		FileType typeinfo;
 		int verror,retval;
-		bool do_loop;
 		BACKUP_RETVAL rv;
 
 		initial_path=first_path;
@@ -455,12 +437,12 @@ class nanockup:Object {
 				if ((info_file.get_name()[0]=='.') && (this.skip_hiden_at_HOME) && (first_path==Environment.get_home_dir())) {
 					continue;
 				}
-				filepath=Path.build_filename(this.last_path,full_path);
+				
 				// If the modification time is before the last backup time, just link; if not, copy to the directory
 				info_file.get_modification_time(out result);
 				if (result.tv_sec < ((long)this.last_backup_time)) {
-					this.callback.backup_link_file(filepath);
-					rv = this.backend.link_file(filepath);
+					this.callback.backup_link_file(full_path);
+					rv = this.backend.link_file(full_path);
 					switch (rv) {
 					case BACKUP_RETVAL.CANT_LINK:
 						verror=-1;
@@ -472,7 +454,7 @@ class nanockup:Object {
 						if (false==this.free_bytes(1000000)) {
 							verror=-1;
 						}
-						if (this.backend.link_file(filepath)==BACKUP_RETVAL.OK) {
+						if (this.backend.link_file(full_path)==BACKUP_RETVAL.OK) {
 							verror=0;
 						} else {
 							verror=1;
@@ -483,25 +465,25 @@ class nanockup:Object {
 					break;
 					}
 					if (verror!=0) {
-						this.callback.warning_link_file(Path.build_filename(this.last_path,full_path));
+						this.callback.warning_link_file(Path.build_filename(full_path));
 					}
 				} else {
 					verror=1; // assign a false error to force a copy
 				}
 				// If the file modification time is bigger than the last backup time, or the link failed, we must copy the file
 				if (verror!=0) {
-					this.callback.backup_file(filepath);
-					rv = this.backend.copy_file(filepath);
+					this.callback.backup_file(full_path);
+					rv = this.backend.copy_file(full_path);
 					switch (rv) {
 					case BACKUP_RETVAL.CANT_COPY:
-						this.callback.error_copy_file(filepath);
+						this.callback.error_copy_file(full_path);
 						retval=-1;
 					break;
 					case BACKUP_RETVAL.NO_SPC:
 						if (false==this.free_bytes(1000000+info_file.get_size())) {
 							retval=-1;
 						}
-						if (this.backend.copy_file(filepath)!=BACKUP_RETVAL.OK) {
+						if (this.backend.copy_file(full_path)!=BACKUP_RETVAL.OK) {
 							retval=-1;
 						}
 					break;

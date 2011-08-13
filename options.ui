@@ -252,7 +252,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="backup_root_hiden">
-            <property name="label" translatable="yes">Backup hiden folders in HOME folder</property>
+            <property name="label" translatable="yes">Backup hiden files and folders in $HOME folder</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -260,8 +260,9 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
+            <property name="padding">6</property>
             <property name="position">3</property>
           </packing>
         </child>

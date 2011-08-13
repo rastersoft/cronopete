@@ -32,6 +32,7 @@ class c_main_menu : GLib.Object {
 	private Label Loldest;
 	private Label Lnewest;
 	private Label Lnext;
+	private Image img;
 	
 	public bool is_visible;
 	
@@ -55,6 +56,7 @@ class c_main_menu : GLib.Object {
 		this.Loldest = (Label) this.builder.get_object("label_oldest_backup");
 		this.Lnewest = (Label) this.builder.get_object("label_newest_backup");
 		this.Lnext = (Label) this.builder.get_object("label_next_backup");
+		this.img = (Image) this.builder.get_object("image_disk");
 		this.is_visible = false;
 		
 	}
@@ -97,17 +99,19 @@ class c_main_menu : GLib.Object {
 	public void show_main(bool show_log, string log) {
 
 		string? volume_id;
+		string icon;
 		time_t oldest;
 		time_t newest;
 		time_t next;
 
 		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next);
+		
 		if (volume_id==null) {
 			this.Lvid.set_text(_("Not defined"));
 		} else {
 			this.Lvid.set_text(volume_id);
 		}
-		
+
 		this.Loldest.set_text(this.parse_date(oldest));
 		this.Lnewest.set_text(this.parse_date(newest));
 		this.Lnext.set_text(this.parse_date(next));
@@ -134,9 +138,7 @@ class c_main_menu : GLib.Object {
 	[CCode (instance_pos = -1)]
 	public void cronopete_options_callback(Widget source) {
 	
-		this.main_w.hide();
 		var tmp = new c_options(this.basepath,this.parent);
-		this.main_w.show();
 		tmp = null;
 	
 	}
@@ -165,6 +167,14 @@ class c_main_menu : GLib.Object {
 		this.main_w.hide_all();
 		return true;
 		
+	}
+	
+	[CCode (instance_pos = -1)]
+	public void cronopete_change_disk_callback(Widget source) {
+	
+		var tmp = new c_choose_disk(this.basepath,this.parent);
+		tmp = null;
+	
 	}
 	
 }

@@ -446,7 +446,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 		}
 		
-		basedir.set_config(this.backup_path,this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
+		basedir.set_config(this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
 		this.trayicon.set_tooltip_text (_("Erasing old backups"));
 		this.basedir.delete_old_backups();
 		
@@ -512,7 +512,7 @@ class cp_callback : GLib.Object, callbacks {
 	private int read_configuration() {
 		
 		/****************************************************************************************
-		 * This function will read the configuration from the file ~/.cronopete.cfg              *
+		 * This function will read the configuration from the file ~/.cronopete.cfg             *
 		 * If not, it will use that file to get the configuration                               *
 		 * Returns:                                                                             *
 		 *   0: on success                                                                      *
@@ -526,7 +526,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.backup_path = "";
 		this.skip_hiden_at_home = true;
 		this._active = false;
-	
+
 		bool failed=false;
 		FileInputStream file_read;
 		

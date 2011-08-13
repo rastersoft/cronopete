@@ -31,7 +31,10 @@ class usbhd_backend: Object, backends {
 	
 	public usbhd_backend(string bpath) {
 	
-		this.id=bpath.dup();
+		var tmpid=bpath.split("/");
+		foreach (string v in tmpid) {
+			this.id=v;
+		}
 		this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
 		this.cbackup_path=null;
 		this.cfinal_path=null;
@@ -54,8 +57,11 @@ class usbhd_backend: Object, backends {
 
 	public string? get_backup_id() {
 	
-		return (this.id);
-	
+		if (this.id=="") {
+			return null;
+		} else {
+			return (this.id);
+		}
 	}
 
 	public Gee.List<time_t?>? get_backup_list() {

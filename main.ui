@@ -128,7 +128,7 @@
                         <property name="can_focus">False</property>
                         <property name="border_width">4</property>
                         <child>
-                          <object class="GtkImage" id="image2">
+                          <object class="GtkImage" id="image_disk">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-harddisk</property>
@@ -147,7 +147,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
-                            <signal name="clicked" handler="cronopete_change_disk_callback" swapped="no"/>
+                            <signal name="clicked" handler="c_main_menu_cronopete_change_disk_callback" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -191,7 +191,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Name:</property>
+                            <property name="label" translatable="yes">Device:</property>
                           </object>
                         </child>
                         <child>
