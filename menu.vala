@@ -140,7 +140,7 @@ class c_main_menu : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public void cronopete_options_callback(Widget source) {
+	public void cronopete_options_callback(Button source) {
 	
 		var tmp = new c_options(this.basepath,this.parent);
 		tmp = null;
@@ -148,7 +148,7 @@ class c_main_menu : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public void cronopete_is_active_callback(Widget source) {
+	public void cronopete_is_active_callback(ToggleButton source) {
 		if (this.active.get_active()) {
 			this.parent.active=true;
 		} else {
@@ -157,7 +157,7 @@ class c_main_menu : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public bool on_destroy_event(Gdk.Event e) {
+	public bool on_destroy_event(Gtk.Object o) {
 	
 		this.main_w.hide_all();	
 		this.is_visible = false;
@@ -165,7 +165,7 @@ class c_main_menu : GLib.Object {
 	}
 	
 	[CCode (instance_pos = -1)]
-	public bool on_delete_event(Widget source, Gdk.Event e) {
+	public bool on_delete_event(Gtk.Widget source, Gdk.Event e) {
 	
 		this.is_visible = false;
 		this.main_w.hide_all();
@@ -174,7 +174,7 @@ class c_main_menu : GLib.Object {
 	}
 	
 	[CCode (instance_pos = -1)]
-	public void cronopete_change_disk_callback(Widget source) {
+	public void cronopete_change_disk_callback(Button source) {
 	
 		var tmp = new c_choose_disk(this.basepath,this.parent);
 		tmp = null;

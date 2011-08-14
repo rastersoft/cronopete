@@ -156,7 +156,7 @@ class c_choose_disk : GLib.Object {
 	}
 	
 	[CCode (instance_pos = -1)]
-	public bool on_press_event(Widget w , Event v) {
+	public bool on_press_event(Gtk.Widget w , Gdk.Event v) {
 
 		this.set_ok();
 		return false;

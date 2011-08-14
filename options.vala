@@ -120,7 +120,7 @@ class c_options : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public void on_remove_backup_clicked(Widget w) {
+	public void on_remove_backup_clicked(Gtk.Button w) {
 	
 		var selected = this.backup_view.get_selection();
 		if (selected.count_selected_rows()!=0) {
@@ -136,7 +136,7 @@ class c_options : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public void on_remove_exclude_clicked(Widget w) {
+	public void on_remove_exclude_clicked(Gtk.Button w) {
 	
 		var selected = this.exclude_view.get_selection();
 		if (selected.count_selected_rows()!=0) {
@@ -152,7 +152,7 @@ class c_options : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public void on_add_backup_clicked(Widget w) {
+	public void on_add_backup_clicked(Gtk.Button w) {
 	
 		int retval;
 		var tmp_builder = new Builder();
@@ -177,7 +177,7 @@ class c_options : GLib.Object {
 
 	
 	[CCode (instance_pos = -1)]
-	public void on_add_exclude_clicked(Widget w) {
+	public void on_add_exclude_clicked(Gtk.Button w) {
 	
 		int retval;
 		
