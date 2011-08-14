@@ -255,7 +255,7 @@ class cp_callback : GLib.Object, callbacks {
 				ctx.set_source_rgb(0,1,0);
 			break;
 			case BackupStatus.WARNING:
-				ctx.set_source_rgb(1,1,0);
+				ctx.set_source_rgb(1,0.7,0);
 			break;
 			case BackupStatus.ERROR:
 				ctx.set_source_rgb(1,0,0);
@@ -473,6 +473,10 @@ class cp_callback : GLib.Object, callbacks {
 		break;
 		case -6:
 			this.trayicon.set_tooltip_text (_("Backup aborted"));
+			this.current_status=BackupStatus.ERROR;
+		break;
+		case -7:
+			this.trayicon.set_tooltip_text (_("Can't do backup; disk is too small"));
 			this.current_status=BackupStatus.ERROR;
 		break;
 		default:

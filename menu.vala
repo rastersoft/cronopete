@@ -33,6 +33,8 @@ class c_main_menu : GLib.Object {
 	private Label Lnewest;
 	private Label Lnext;
 	private Image img;
+	private TextMark mark;
+	private TextView log_view;
 	
 	public bool is_visible;
 	
@@ -50,6 +52,7 @@ class c_main_menu : GLib.Object {
 		this.builder.connect_signals(this);
 		
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
+		this.log_view = (TextView) this.builder.get_object("textview1");
 		this.tabs = (Notebook) this.builder.get_object("notebook1");
 		this.active = (CheckButton) this.builder.get_object("is_active");
 		this.Lvid = (Label) this.builder.get_object("label_volume");
@@ -64,12 +67,16 @@ class c_main_menu : GLib.Object {
 	public void insert_log(string msg,bool reset) {
 	
 		if (this.is_visible) {
+			TextIter iter;
 			Gdk.threads_enter();
 			if (reset) {
 				this.log.set_text(msg,-1);
 			} else {
 				this.log.insert_at_cursor(msg,msg.length);
 			}
+			this.log.get_end_iter(out iter);				
+			this.mark = this.log.create_mark("end", iter, false);
+			this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 			Gdk.flush();
 			Gdk.threads_leave();
 		}
@@ -102,6 +109,7 @@ class c_main_menu : GLib.Object {
 
 		this.log.set_text(log,-1);
 		this.main_w.show_all();
+		this.main_w.present();
 	
 		if (show_log==true) {
 			this.tabs.set_current_page(1);
@@ -114,6 +122,11 @@ class c_main_menu : GLib.Object {
 		} else {
 			this.active.set_active(false);
 		}
+		
+		TextIter iter;
+		this.log.get_end_iter(out iter);				
+		this.mark = this.log.create_mark("end", iter, false);
+		this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 
 		this.is_visible = true;
 	

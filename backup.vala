@@ -287,6 +287,7 @@ class nanockup:Object {
 		 *    -4: can't create the folder for the current backup                                              *
 		 *    -5: can't rename the temporal backup folder to its definitive name                              *
 		 *    -6: backup aborted                                                                              *
+		 *    -7: there's not enought disk space to do just one backup                                        *
 		 ******************************************************************************************************/
 	
 		int retval,tmp;
@@ -345,12 +346,24 @@ class nanockup:Object {
 			if (this.abort) {
 				this.callback.show_message(_("Backup aborted\n"));
 				this.backend.abort_backup();
-				return -6;
+				if (retval==-7) {
+					return retval;
+				} else {
+					return -6;
+				}
 			}
 			this.callback.backup_folder(directory);
 			tmp=this.copy_dir(directory);
-			if (0!=tmp) {
+			switch (tmp) {
+			case 0:
+			break;
+			case -3:
+				this.callback.show_message(_("The disk is too small to hold a single backup.\nAdjust the list of backup and exclude folders.\n"));
+				retval=-7;
+			break;
+			default:
 				retval=-1;
+			break;
 			}
 		}
 
@@ -377,6 +390,7 @@ class nanockup:Object {
 		 *      0: if successful                                                                             *
 		 *     -1: if there were errors during the backup of this folder                                     *
 		 *     -2: if it was aborted                                                                         *
+		 *     -3: if it can't free the needed space to complete a backup                                    *
 		 *****************************************************************************************************/
 	
 		FileInfo info_file;
@@ -408,7 +422,11 @@ class nanockup:Object {
 		while ((info_file = enumerator.next_file(null)) != null) {
 
 			if (this.abort) {
-				return -2;
+				if (retval==-3) {
+					return -3;
+				} else {
+					return -2;
+				}
 			}
 
 			full_path=Path.build_filename(first_path,info_file.get_name());
@@ -452,7 +470,7 @@ class nanockup:Object {
 					break;
 					case BACKUP_RETVAL.NO_SPC:
 						if (false==this.free_bytes(1000000)) {
-							verror=-1;
+							verror=-3;
 						}
 						if (this.backend.link_file(full_path)==BACKUP_RETVAL.OK) {
 							verror=0;
@@ -481,9 +499,14 @@ class nanockup:Object {
 					break;
 					case BACKUP_RETVAL.NO_SPC:
 						if (false==this.free_bytes(1000000+info_file.get_size())) {
-							retval=-1;
+							retval=-3;
 						}
-						if (this.backend.copy_file(full_path)!=BACKUP_RETVAL.OK) {
+						int rv2;
+						rv2 = this.backend.copy_file(full_path);
+						if (rv2==BACKUP_RETVAL.NO_SPC) {
+							this.abort=true;
+							retval=-3;
+						} else if (rv2!=BACKUP_RETVAL.OK) {
 							retval=-1;
 						}
 					break;
