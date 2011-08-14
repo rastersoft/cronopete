@@ -155,7 +155,6 @@ class c_options : GLib.Object {
 	public void on_add_backup_clicked(Widget w) {
 	
 		int retval;
-		
 		var tmp_builder = new Builder();
 		tmp_builder.add_from_file(Path.build_filename(this.basepath,"folder_selector.ui"));
 		var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");

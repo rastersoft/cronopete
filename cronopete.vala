@@ -56,7 +56,7 @@ class cp_callback : GLib.Object, callbacks {
 	private bool configuration_read;
 	private bool _active;
 	private backends? backend;
-	public bool active{
+	public bool active {
 		get {
 			return this._active;
 		}
@@ -73,6 +73,19 @@ class cp_callback : GLib.Object, callbacks {
 			} else {
 				this.trayicon.set_tooltip_text(_("Backup disabled"));
 			}
+		}
+	}
+	
+	public string p_backup_path {
+	
+		get {
+			return this.backup_path;
+		}
+		
+		set {
+			this.backup_path=value;
+			this.write_configuration();
+			this.backend=new usbhd_backend(value);
 		}
 	}
 

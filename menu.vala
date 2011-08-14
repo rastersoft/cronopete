@@ -98,23 +98,7 @@ class c_main_menu : GLib.Object {
 
 	public void show_main(bool show_log, string log) {
 
-		string? volume_id;
-		string icon;
-		time_t oldest;
-		time_t newest;
-		time_t next;
-
-		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next);
-		
-		if (volume_id==null) {
-			this.Lvid.set_text(_("Not defined"));
-		} else {
-			this.Lvid.set_text(volume_id);
-		}
-
-		this.Loldest.set_text(this.parse_date(oldest));
-		this.Lnewest.set_text(this.parse_date(newest));
-		this.Lnext.set_text(this.parse_date(next));
+		this.refresh_backup_data();
 
 		this.log.set_text(log,-1);
 		this.main_w.show_all();
@@ -132,6 +116,26 @@ class c_main_menu : GLib.Object {
 		}
 
 		this.is_visible = true;
+	
+	}
+
+	public void refresh_backup_data() {
+	
+		string? volume_id;
+		time_t oldest;
+		time_t newest;
+		time_t next;
+
+		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next);
+		
+		if (volume_id==null) {
+			this.Lvid.set_text(_("Not defined"));
+		} else {
+			this.Lvid.set_text(volume_id);
+		}
+		this.Loldest.set_text(this.parse_date(oldest));
+		this.Lnewest.set_text(this.parse_date(newest));
+		this.Lnext.set_text(this.parse_date(next));
 	
 	}
 
@@ -174,6 +178,7 @@ class c_main_menu : GLib.Object {
 	
 		var tmp = new c_choose_disk(this.basepath,this.parent);
 		tmp = null;
+		this.refresh_backup_data();
 	
 	}
 	
