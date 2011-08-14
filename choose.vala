@@ -20,6 +20,76 @@ using GLib;
 using Gtk;
 using Gdk;
 
+class c_format : GLib.Object {
+
+	public int retval;
+
+	public c_format(string path, string filesystem) {
+	
+		var builder = new Builder();
+		builder.add_from_file(Path.build_filename(path,"format.ui"));
+		builder.connect_signals(this);
+	
+		var message = _("The file system %s is acceptable for Cronopete, but not optimal. The best file system is ReiserFS.\n\nTo use the disk with the current file format, click the <i>Accept</i> button.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+		
+		var label = (Label) builder.get_object("label_text");
+		label.set_label(message);
+		
+		var window = (Dialog) builder.get_object("dialog_format");
+		
+		window.show_all();
+		this.retval=window.run();
+		window.destroy();
+
+	}
+}
+
+class c_format_fat : GLib.Object {
+
+	public int retval;
+
+	public c_format_fat(string path, string filesystem) {
+	
+		var builder = new Builder();
+		builder.add_from_file(Path.build_filename(path,"format_fat.ui"));
+		builder.connect_signals(this);
+	
+		var message = _("The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+		
+		var label = (Label) builder.get_object("label_text");
+		label.set_label(message);
+		
+		var window = (Dialog) builder.get_object("dialog_format");
+		
+		window.show_all();
+		this.retval=window.run();
+		window.destroy();
+	}
+}
+
+class c_format_btrfs : GLib.Object {
+
+	public int retval;
+
+	public c_format_btrfs(string path, string filesystem) {
+	
+		var builder = new Builder();
+		builder.add_from_file(Path.build_filename(path,"format_fat.ui"));
+		builder.connect_signals(this);
+	
+		var message = _("The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+		
+		var label = (Label) builder.get_object("label_text");
+		label.set_label(message);
+		
+		var window = (Dialog) builder.get_object("dialog_format");
+		
+		window.show_all();
+		this.retval=window.run();
+		window.destroy();
+	}
+}
+
 class c_choose_disk : GLib.Object {
 
 	private cp_callback parent;
@@ -61,16 +131,48 @@ class c_choose_disk : GLib.Object {
 		
 		this.choose_w.show();
 
-		var r=this.choose_w.run();
-		if (r==-5) {
+		bool do_run;
+		
+		do_run=true;
+		while (do_run) {
+			var r=this.choose_w.run();
+			if (r!=-5) {
+				do_run = false;
+				break;
+			}
+
 			var selected = this.disk_list.get_selection();
 			if (selected.count_selected_rows()!=0) {
 				TreeModel model;
 				TreeIter iter;
 				selected.get_selected(out model, out iter);
-				GLib.Value val;
-				model.get_value(iter,4,out val);
-				this.parent.p_backup_path=val.get_string().dup();
+				GLib.Value spath;
+				GLib.Value stype;
+				model.get_value(iter,4,out spath);
+				model.get_value(iter,2,out stype);
+				var fstype = stype.get_string();
+				if (fstype == "reiserfs") { // Reiser3 is the recomended filesystem for cronopete
+					this.parent.p_backup_path=spath.get_string().dup();
+					do_run=false;
+					break;
+				}
+				
+				if ((fstype.has_prefix("ext2")) || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
+					var w = new c_format(this.basepath,fstype);
+					if (w.retval==0) {
+						this.parent.p_backup_path=spath.get_string().dup();
+						do_run=false;
+						break;
+					}
+					continue;
+				}
+				
+				if (fstype=="btrfs") {
+					var w = new c_format_btrfs(this.basepath, fstype);
+					continue;
+				}
+				var w = new c_format_fat(this.basepath, fstype);
+				continue;
 			}
 		}
 		this.choose_w.hide();
@@ -96,6 +198,7 @@ class c_choose_disk : GLib.Object {
 		string path;
 		string bpath;
 		string ssize;
+		string fsystem;
 		bool first;
 	
 		var volumes = this.monitor.get_volumes();
@@ -111,14 +214,23 @@ class c_choose_disk : GLib.Object {
 			}
 
 			root=mnt.get_root();
+			var info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
+			fsystem = info.get_attribute_string("filesystem::type");
+			
+			if (fsystem=="isofs") {
+				continue;
+			}
+			
 			path = root.get_path();
 			bpath = root.get_basename();
 
 			this.disk_listmodel.append (out iter);
 			
 			tmp="";
-			foreach (string s in v.get_icon().to_string().split(" ")) {
 			
+			
+			foreach (string s in v.get_icon().to_string().split(" ")) {
+
 				if (s=="GThemedIcon") {
 					continue;
 				}
@@ -129,11 +241,9 @@ class c_choose_disk : GLib.Object {
 				break;
 			}
 			
-			var info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
-			
 			this.disk_listmodel.set (iter,0,tmp);
 			this.disk_listmodel.set (iter,1,bpath);
-			this.disk_listmodel.set (iter,2,info.get_attribute_string("filesystem::type"));
+			this.disk_listmodel.set (iter,2,fsystem);
 			var size = info.get_attribute_uint64("filesystem::size");
 			if (size >= 1000000000) {
 				ssize = "%lld GB".printf((size+500000000)/1000000000);
