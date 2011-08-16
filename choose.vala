@@ -19,6 +19,76 @@
 using GLib;
 using Gtk;
 using Gdk;
+using Posix;
+
+[DBus (name = "org.freedesktop.UDisks")]
+interface UDisk_if : GLib.Object {
+	public abstract ObjectPath[] EnumerateDevices() throws IOError;
+}
+
+[DBus (name = "org.freedesktop.UDisks.Device")]
+interface Device_if : GLib.Object {
+	public abstract string IdLabel { owned get; }
+	public abstract string[] DeviceMountPaths { owned get; }
+	
+	public abstract void FilesystemUnmount(string[] options) throws IOError;
+	public abstract void FilesystemCreate(string type, string[] options) throws IOError;
+	public abstract void FilesystemMount(string type, string[] options, out string mount_path) throws IOError;
+}
+
+class c_formater : GLib.Object {
+
+	private ObjectPath? device;
+	private string? mount_path;
+
+	public bool find_drive(string path_mount) {
+	
+		UDisk_if udisk = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
+		var retval = udisk.EnumerateDevices();
+		udisk=null;
+
+		Device_if device2;
+
+		this.device=null;
+		this.mount_path=null;
+		// Find the device which is mounted in the specified path
+		foreach (ObjectPath o in retval) {
+			device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",o);
+			foreach (string s in device2.DeviceMountPaths) {
+				if (s == path_mount) {
+					this.device=o;
+					this.mount_path=path_mount.dup();
+					return (true);
+				}
+			}
+		}
+		return (false);
+	}
+	
+	public bool format_drive() {
+	
+		if (this.device==null) {
+			return false;
+		}
+		
+		Device_if device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
+		string label = device2.IdLabel.dup();
+		device2.FilesystemUnmount(null);
+		string[] options = new string[3];
+		options[0]="label=%s".printf(label);
+		options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
+		options[2]="take_ownership_gid=%d".printf((int)Posix.getgid());
+		device2.FilesystemCreate("reiserfs",options);
+		string out_path;
+		device2.FilesystemMount("reiserfs",null,out out_path);
+		
+		GLib.stdout.printf("Montado en %s\n",out_path);
+		
+		return true;
+	
+	}
+	
+}
 
 class c_format : GLib.Object {
 
@@ -151,8 +221,15 @@ class c_choose_disk : GLib.Object {
 				model.get_value(iter,4,out spath);
 				model.get_value(iter,2,out stype);
 				var fstype = stype.get_string();
+				var final_path = spath.get_string().dup();
+				
+				/*var test = new c_formater();
+				if (true==test.find_drive(final_path)) {
+					test.format_drive();
+				}*/
+				
 				if (fstype == "reiserfs") { // Reiser3 is the recomended filesystem for cronopete
-					this.parent.p_backup_path=spath.get_string().dup();
+					this.parent.p_backup_path=final_path;
 					do_run=false;
 					break;
 				}
@@ -160,7 +237,7 @@ class c_choose_disk : GLib.Object {
 				if ((fstype.has_prefix("ext2")) || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
 					var w = new c_format(this.basepath,fstype);
 					if (w.retval==0) {
-						this.parent.p_backup_path=spath.get_string().dup();
+						this.parent.p_backup_path=final_path;
 						do_run=false;
 						break;
 					}

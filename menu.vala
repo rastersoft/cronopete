@@ -27,7 +27,7 @@ class c_main_menu : GLib.Object {
 	private Builder builder;
 	private Notebook tabs;
 	private cp_callback parent;
-	private CheckButton active;
+	private Image active;
 	private Label Lvid;
 	private Label Loldest;
 	private Label Lnewest;
@@ -35,26 +35,24 @@ class c_main_menu : GLib.Object {
 	private Image img;
 	private TextMark mark;
 	private TextView log_view;
+	private bool status;
 	
 	public bool is_visible;
 	
 	public c_main_menu(string path, cp_callback p) {
 
 		this.parent = p;
-
-		this.builder = new Builder();
-		
 		this.basepath=path;
 		
+		this.builder = new Builder();		
 		this.builder.add_from_file(Path.build_filename(this.basepath,"main.ui"));
-		
+		this.builder.connect_signals(this);		
 		this.main_w = (Window) this.builder.get_object("window1");
-		this.builder.connect_signals(this);
 		
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
 		this.log_view = (TextView) this.builder.get_object("textview1");
 		this.tabs = (Notebook) this.builder.get_object("notebook1");
-		this.active = (CheckButton) this.builder.get_object("is_active");
+		this.active = (Image) this.builder.get_object("is_active");
 		this.Lvid = (Label) this.builder.get_object("label_volume");
 		this.Loldest = (Label) this.builder.get_object("label_oldest_backup");
 		this.Lnewest = (Label) this.builder.get_object("label_newest_backup");
@@ -118,9 +116,11 @@ class c_main_menu : GLib.Object {
 		}
 		
 		if (this.parent.active) {
-			this.active.set_active(true);
+			this.active.set_from_file("cronopete_on.png");
+			status=true;
 		} else {
-			this.active.set_active(false);
+			this.active.set_from_file("cronopete_off.png");
+			status=false;
 		}
 		
 		TextIter iter;
@@ -161,11 +161,15 @@ class c_main_menu : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public void cronopete_is_active_callback(ToggleButton source) {
-		if (this.active.get_active()) {
-			this.parent.active=true;
-		} else {
+	public void cronopete_is_active_callback(Button source) {
+	
+		if (this.parent.active) {
 			this.parent.active=false;
+			this.parent.stop_backup();
+			this.active.set_from_file("cronopete_off.png");
+		} else {
+			this.active.set_from_file("cronopete_on.png");
+			this.parent.active=true;
 		}
 	}
 
