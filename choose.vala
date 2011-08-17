@@ -36,8 +36,11 @@ interface Device_if : GLib.Object {
 	public abstract void FilesystemMount(string type, string[] options, out string mount_path) throws IOError;
 }
 
-class c_formater : GLib.Object {
 
+class c_format : GLib.Object {
+
+	public int retval;
+	public string? final_path;
 	private ObjectPath? device;
 	private string? mount_path;
 
@@ -68,6 +71,7 @@ class c_formater : GLib.Object {
 	public bool format_drive() {
 	
 		if (this.device==null) {
+			final_path=null;
 			return false;
 		}
 		
@@ -82,83 +86,58 @@ class c_formater : GLib.Object {
 		string out_path;
 		device2.FilesystemMount("reiserfs",null,out out_path);
 		
-		GLib.stdout.printf("Montado en %s\n",out_path);
+		this.final_path=out_path.dup();
 		
 		return true;
 	
 	}
-	
-}
 
-class c_format : GLib.Object {
+	public c_format(string path, string filesystem, string disk_path) {
 
-	public int retval;
+		this.mount_path=null;
+		this.device=null;
+		this.final_path="";
 
-	public c_format(string path, string filesystem) {
-	
+		string message;
 		var builder = new Builder();
-		builder.add_from_file(Path.build_filename(path,"format.ui"));
-		builder.connect_signals(this);
-	
-		var message = _("The file system %s is acceptable for Cronopete, but not optimal. The best file system is ReiserFS.\n\nTo use the disk with the current file format, click the <i>Accept</i> button.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
 		
+		if ((filesystem.has_prefix("ext2")) || (filesystem.has_prefix("ext3")) || (filesystem.has_prefix("ext4"))) {
+			builder.add_from_file(Path.build_filename(path,"format_allow.ui"));
+			message = _("The file system %s is acceptable for Cronopete, but not optimal. The best file system is ReiserFS.\n\nTo use the disk with the current file format, click the <i>Accept</i> button.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);			
+		} else if (filesystem=="btrfs") {
+			builder.add_from_file(Path.build_filename(path,"format_force.ui"));
+			message = _("The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+		} else {
+			builder.add_from_file(Path.build_filename(path,"format_force.ui"));
+			message = _("The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk to ReiserFS, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+		}
+		builder.connect_signals(this);
+
 		var label = (Label) builder.get_object("label_text");
 		label.set_label(message);
 		
 		var window = (Dialog) builder.get_object("dialog_format");
 		
 		window.show_all();
-		this.retval=window.run();
-		window.destroy();
-
-	}
-}
-
-class c_format_fat : GLib.Object {
-
-	public int retval;
-
-	public c_format_fat(string path, string filesystem) {
-	
-		var builder = new Builder();
-		builder.add_from_file(Path.build_filename(path,"format_fat.ui"));
-		builder.connect_signals(this);
-	
-		var message = _("The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
-		
-		var label = (Label) builder.get_object("label_text");
-		label.set_label(message);
-		
-		var window = (Dialog) builder.get_object("dialog_format");
-		
-		window.show_all();
-		this.retval=window.run();
+		var rv=window.run();
+		if (rv==1) { // format
+			if (this.find_drive(disk_path)) {
+				this.format_drive();
+				this.retval=0;
+			} else {
+				GLib.stdout.printf("Error, no encontrado %s\n",disk_path);
+				this.retval=-1;
+			}
+		} else if (rv==0) {
+			this.final_path=path.dup();
+			this.retval=0;
+		} else {
+			retval=-1;
+		}
 		window.destroy();
 	}
 }
 
-class c_format_btrfs : GLib.Object {
-
-	public int retval;
-
-	public c_format_btrfs(string path, string filesystem) {
-	
-		var builder = new Builder();
-		builder.add_from_file(Path.build_filename(path,"format_fat.ui"));
-		builder.connect_signals(this);
-	
-		var message = _("The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
-		
-		var label = (Label) builder.get_object("label_text");
-		label.set_label(message);
-		
-		var window = (Dialog) builder.get_object("dialog_format");
-		
-		window.show_all();
-		this.retval=window.run();
-		window.destroy();
-	}
-}
 
 class c_choose_disk : GLib.Object {
 
@@ -233,22 +212,14 @@ class c_choose_disk : GLib.Object {
 					do_run=false;
 					break;
 				}
-				
-				if ((fstype.has_prefix("ext2")) || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
-					var w = new c_format(this.basepath,fstype);
-					if (w.retval==0) {
-						this.parent.p_backup_path=final_path;
-						do_run=false;
-						break;
-					}
-					continue;
+				this.choose_w.hide();
+				var w = new c_format(this.basepath,fstype,final_path);
+				if (w.retval==0) {
+					this.parent.p_backup_path=w.final_path;
+					do_run=false;
+					break;
 				}
-				
-				if (fstype=="btrfs") {
-					var w = new c_format_btrfs(this.basepath, fstype);
-					continue;
-				}
-				var w = new c_format_fat(this.basepath, fstype);
+				this.choose_w.show();
 				continue;
 			}
 		}

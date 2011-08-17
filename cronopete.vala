@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-enum SystemStatus { IDLE, BACKING_UP, ENDED }
+enum SystemStatus { IDLE, BACKING_UP, ABORTING, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
 
@@ -46,6 +46,8 @@ class cp_callback : GLib.Object, callbacks {
 	private c_main_menu main_menu;
 	private bool backup_pending;
 	private time_t next_backup;
+	private bool tooltip_changed;
+	private string tooltip_value;
 	
 	// Configuration data
 
@@ -66,12 +68,12 @@ class cp_callback : GLib.Object, callbacks {
 			this.write_configuration();
 			this.repaint(this.size);
 			if (this._active) {
-				this.trayicon.set_tooltip_text(this.last_backup);
+				this.set_tooltip(_("Idle"),true);
 				if (this.backup_pending) {
 					this.timer_f();
 				}
 			} else {
-				this.trayicon.set_tooltip_text(_("Backup disabled"));
+				this.set_tooltip(_("Backup disabled"),true);
 			}
 		}
 	}
@@ -151,7 +153,7 @@ class cp_callback : GLib.Object, callbacks {
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.size_changed.connect(this.repaint);
-		this.trayicon.set_tooltip_text ("Idle");
+		this.set_tooltip ("Idle");
 		this.trayicon.set_visible(true);
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
@@ -191,7 +193,30 @@ class cp_callback : GLib.Object, callbacks {
 		delete pixels;	
 	}
 
+	public void set_tooltip(string message, bool backup_thread=false) {
+
+		if (backup_thread) {
+
+			// this function can be called both from the main thread and the backup thread, so is mandatory to take precautions
+			lock (this.tooltip_value) {
+				this.tooltip_value=message.dup();
+				this.tooltip_changed=true;
+			}
+		} else {
+			this.trayicon.set_tooltip_text (message);
+			this.main_menu.set_status(message);
+		}
+	}
+
 	public bool timer_f() {
+	
+		if (this.tooltip_changed) {
+			lock (this.tooltip_value) {
+				this.set_tooltip(this.tooltip_value);
+				this.tooltip_value=null;
+				this.tooltip_changed=false;
+			}
+		}
 	
 		if (this.backup_running==SystemStatus.IDLE) {
 		
@@ -216,7 +241,7 @@ class cp_callback : GLib.Object, callbacks {
 			this.backup_running=SystemStatus.IDLE;
 			if ((this.current_status==BackupStatus.ALLFINE)||(this.current_status==BackupStatus.WARNING)) {
 				this.fill_last_backup();
-				this.trayicon.set_tooltip_text (this.last_backup);
+				this.set_tooltip(_("Idle"));
 			}
 			if (this.current_status==BackupStatus.ALLFINE) {
 				this.current_status=BackupStatus.STOPPED;
@@ -230,7 +255,12 @@ class cp_callback : GLib.Object, callbacks {
 		this.repaint(this.size);
 		this.angle-=0.20;
 		this.angle%=120.0*Gsl.MathConst.M_PI;
-		return true;
+		
+		if (this.backup_running==SystemStatus.ABORTING) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public bool repaint(int size) {
@@ -363,8 +393,6 @@ class cp_callback : GLib.Object, callbacks {
 	
 		if ((this.backup_running==SystemStatus.BACKING_UP)&&(this.basedir!=null)) {
 			this.basedir.abort_backup();
-			Source.remove(this.main_timer);
-			this.main_timer=Timeout.add(3600000,this.timer_f);
 		}
 	
 	}
@@ -396,7 +424,7 @@ class cp_callback : GLib.Object, callbacks {
 	public void backup_folder(string dirpath) {
 		
 		var msg = _("Backing up folder %s\n").printf(dirpath);
-		this.trayicon.set_tooltip_text (msg);
+		this.set_tooltip(msg,true);
 		//this.show_message(msg);
 	}
 	
@@ -451,7 +479,7 @@ class cp_callback : GLib.Object, callbacks {
 			if (0!=this.read_configuration()) {
 				this.current_status = BackupStatus.ERROR;
 				this.backup_running = SystemStatus.ENDED;
-				this.trayicon.set_tooltip_text (_("Error reading configuration"));
+				this.set_tooltip(_("Error reading configuration"));
 				this.basedir=null;
 				return null;
 			} else {
@@ -460,7 +488,7 @@ class cp_callback : GLib.Object, callbacks {
 		}
 		
 		basedir.set_config(this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
-		this.trayicon.set_tooltip_text (_("Erasing old backups"));
+		this.set_tooltip(_("Erasing old backups"));
 		this.basedir.delete_old_backups();
 		
 		retval=basedir.do_backup();
@@ -472,15 +500,15 @@ class cp_callback : GLib.Object, callbacks {
 			this.current_status=BackupStatus.WARNING;
 		break;
 		case -6:
-			this.trayicon.set_tooltip_text (_("Backup aborted"));
+			this.set_tooltip (_("Backup aborted"));
 			this.current_status=BackupStatus.ERROR;
 		break;
 		case -7:
-			this.trayicon.set_tooltip_text (_("Can't do backup; disk is too small"));
+			this.set_tooltip (_("Can't do backup; disk is too small"));
 			this.current_status=BackupStatus.ERROR;
 		break;
 		default:
-			this.trayicon.set_tooltip_text (_("Can't do backup"));
+			this.set_tooltip (_("Can't do backup"));
 			this.current_status=BackupStatus.ERROR;
 		break;
 		}

@@ -32,10 +32,12 @@ class c_main_menu : GLib.Object {
 	private Label Loldest;
 	private Label Lnewest;
 	private Label Lnext;
+	private Label text_status;
 	private Image img;
 	private TextMark mark;
 	private TextView log_view;
 	private bool status;
+	private string last_status;
 	
 	public bool is_visible;
 	
@@ -57,9 +59,18 @@ class c_main_menu : GLib.Object {
 		this.Loldest = (Label) this.builder.get_object("label_oldest_backup");
 		this.Lnewest = (Label) this.builder.get_object("label_newest_backup");
 		this.Lnext = (Label) this.builder.get_object("label_next_backup");
+		this.text_status = (Label) this.builder.get_object("status_label");
 		this.img = (Image) this.builder.get_object("image_disk");
 		this.is_visible = false;
 		
+	}
+
+	public void set_status(string msg) {
+	
+		this.last_status=_("Status: %s").printf(msg);
+		if (this.is_visible) {
+			this.text_status.set_label(this.last_status);
+		}
 	}
 
 	public void insert_log(string msg,bool reset) {
@@ -127,7 +138,7 @@ class c_main_menu : GLib.Object {
 		this.log.get_end_iter(out iter);				
 		this.mark = this.log.create_mark("end", iter, false);
 		this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
-
+		this.text_status.set_label(this.last_status);
 		this.is_visible = true;
 	
 	}
@@ -165,8 +176,8 @@ class c_main_menu : GLib.Object {
 	
 		if (this.parent.active) {
 			this.parent.active=false;
-			this.parent.stop_backup();
 			this.active.set_from_file("cronopete_off.png");
+			this.parent.stop_backup();
 		} else {
 			this.active.set_from_file("cronopete_on.png");
 			this.parent.active=true;
