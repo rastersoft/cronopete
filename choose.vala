@@ -43,50 +43,73 @@ class c_format : GLib.Object {
 	public string? final_path;
 	private ObjectPath? device;
 	private string? mount_path;
+	private string uipath;
 
-	public bool find_drive(string path_mount) {
+	private void show_error(string msg) {
 	
-		UDisk_if udisk = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
-		var retval = udisk.EnumerateDevices();
-		udisk=null;
+		var builder=new Builder();
+		builder.add_from_file(Path.build_filename(this.uipath,"format_error.ui"));
+		var label = (Label) builder.get_object("msg_error");
+		label.set_label(msg);
+		var w = (Dialog) builder.get_object("error_dialog");
+		w.show_all();
+		w.run();
+		w.hide();
+		w.destroy();
 
-		Device_if device2;
+	}
 
-		this.device=null;
-		this.mount_path=null;
-		// Find the device which is mounted in the specified path
-		foreach (ObjectPath o in retval) {
-			device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",o);
-			foreach (string s in device2.DeviceMountPaths) {
-				if (s == path_mount) {
-					this.device=o;
-					this.mount_path=path_mount.dup();
-					return (true);
+	private bool find_drive(string path_mount) {
+	
+		try {
+			UDisk_if udisk = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
+			var retval = udisk.EnumerateDevices();
+			udisk=null;
+
+			Device_if device2;
+
+			this.device=null;
+			this.mount_path=null;
+			// Find the device which is mounted in the specified path
+			foreach (ObjectPath o in retval) {
+				device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",o);
+				foreach (string s in device2.DeviceMountPaths) {
+					if (s == path_mount) {
+						this.device=o;
+						this.mount_path=path_mount.dup();
+						return (true);
+					}
 				}
 			}
+		} catch (IOError e) {
+			this.show_error(e.message);
 		}
 		return (false);
 	}
 	
-	public bool format_drive() {
+	private bool format_drive() {
 	
 		if (this.device==null) {
 			final_path=null;
 			return false;
 		}
 		
-		Device_if device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
-		string label = device2.IdLabel.dup();
-		device2.FilesystemUnmount(null);
-		string[] options = new string[3];
-		options[0]="label=%s".printf(label);
-		options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
-		options[2]="take_ownership_gid=%d".printf((int)Posix.getgid());
-		device2.FilesystemCreate("reiserfs",options);
-		string out_path;
-		device2.FilesystemMount("reiserfs",null,out out_path);
-		
-		this.final_path=out_path.dup();
+		try {
+			Device_if device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
+			string label = device2.IdLabel.dup();
+			device2.FilesystemUnmount(null);
+			string[] options = new string[3];
+			options[0]="label=%s".printf(label);
+			options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
+			options[2]="take_ownership_gid=%d".printf((int)Posix.getgid());
+			device2.FilesystemCreate("reiserfs",options);
+			string out_path;
+			device2.FilesystemMount("reiserfs",null,out out_path);
+			this.final_path=out_path.dup();
+		} catch (IOError e) {
+			this.show_error(e.message);
+			return false;
+		}		
 		
 		return true;
 	
@@ -97,6 +120,7 @@ class c_format : GLib.Object {
 		this.mount_path=null;
 		this.device=null;
 		this.final_path="";
+		this.uipath=path;
 
 		string message;
 		var builder = new Builder();
@@ -120,10 +144,14 @@ class c_format : GLib.Object {
 		
 		window.show_all();
 		var rv=window.run();
+		window.destroy();
 		if (rv==1) { // format
 			if (this.find_drive(disk_path)) {
-				this.format_drive();
-				this.retval=0;
+				if (this.format_drive()) {
+					this.retval=0;
+				} else {
+					this.retval=-1;
+				}
 			} else {
 				GLib.stdout.printf("Error, no encontrado %s\n",disk_path);
 				this.retval=-1;
@@ -134,7 +162,6 @@ class c_format : GLib.Object {
 		} else {
 			retval=-1;
 		}
-		window.destroy();
 	}
 }
 
@@ -201,11 +228,6 @@ class c_choose_disk : GLib.Object {
 				model.get_value(iter,2,out stype);
 				var fstype = stype.get_string();
 				var final_path = spath.get_string().dup();
-				
-				/*var test = new c_formater();
-				if (true==test.find_drive(final_path)) {
-					test.format_drive();
-				}*/
 				
 				if (fstype == "reiserfs") { // Reiser3 is the recomended filesystem for cronopete
 					this.parent.p_backup_path=final_path;
