@@ -6,8 +6,7 @@
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">anaCRONOPETE</property>
-    <property name="resizable">False</property>
-    <property name="window_position">center-always</property>
+    <property name="window_position">center</property>
     <signal name="destroy-event" handler="c_main_menu_on_destroy_event" swapped="no"/>
     <signal name="delete-event" handler="c_main_menu_on_delete_event" swapped="no"/>
     <child>
@@ -77,55 +76,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox4">
+                  <object class="GtkFrame" id="switch_container">
                     <property name="visible">True</property>
+                    <property name="app_paintable">True</property>
                     <property name="can_focus">False</property>
+                    <property name="events"></property>
+                    <property name="extension_events">all</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">out</property>
                     <child>
-                      <object class="GtkLabel" id="label8">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">OFF</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
+                      <placeholder/>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="button_is_active">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
-                        <property name="relief">none</property>
-                        <property name="focus_on_click">False</property>
-                        <signal name="clicked" handler="c_main_menu_cronopete_is_active_callback" swapped="no"/>
-                        <child>
-                          <object class="GtkImage" id="is_active">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="pixbuf">cronopete_off.png</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">ON</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
+                    <child type="label_item">
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>

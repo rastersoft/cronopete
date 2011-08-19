@@ -325,6 +325,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 		int max=size*size;
 		for(counter=0;counter<max;counter++) {
+			// R and B channels are swapped in Cairo and Pixbuf areas
 			*p1    =*(p2+2);
 			*(p1+1)=*(p2+1);
 			*(p1+2)=*p2;

@@ -153,7 +153,7 @@ class c_format : GLib.Object {
 					this.retval=-1;
 				}
 			} else {
-				GLib.stdout.printf("Error, no encontrado %s\n",disk_path);
+				GLib.stdout.printf("Error, not found disk %s\n",disk_path);
 				this.retval=-1;
 			}
 		} else if (rv==0) {

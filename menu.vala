@@ -38,6 +38,7 @@ class c_main_menu : GLib.Object {
 	private TextView log_view;
 	private bool status;
 	private string last_status;
+	private Switch_Widget my_widget;
 	
 	public bool is_visible;
 	
@@ -61,6 +62,12 @@ class c_main_menu : GLib.Object {
 		this.Lnext = (Label) this.builder.get_object("label_next_backup");
 		this.text_status = (Label) this.builder.get_object("status_label");
 		this.img = (Image) this.builder.get_object("image_disk");
+		
+		var cnt = (Frame) this.builder.get_object("switch_container");
+		this.my_widget=new Switch_Widget();
+		this.my_widget.show();
+		cnt.add(this.my_widget);
+		
 		this.is_visible = false;
 		
 	}
@@ -126,13 +133,13 @@ class c_main_menu : GLib.Object {
 			this.tabs.set_current_page(0);
 		}
 		
-		if (this.parent.active) {
+		/*if (this.parent.active) {
 			this.active.set_from_file("cronopete_on.png");
 			status=true;
 		} else {
 			this.active.set_from_file("cronopete_off.png");
 			status=false;
-		}
+		}*/
 		
 		TextIter iter;
 		this.log.get_end_iter(out iter);				
