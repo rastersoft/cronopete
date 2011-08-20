@@ -33,6 +33,7 @@ interface Device_if : GLib.Object {
 	
 	public abstract void FilesystemUnmount(string[] options) throws IOError;
 	public abstract void FilesystemCreate(string type, string[] options) throws IOError;
+	public abstract void PartitionModify (string type, string label, string[] options) throws IOError;
 	public abstract void FilesystemMount(string type, string[] options, out string mount_path) throws IOError;
 }
 
@@ -93,16 +94,30 @@ class c_format : GLib.Object {
 			final_path=null;
 			return false;
 		}
+		Device_if device2;
+		string label;
 		
 		try {
-			Device_if device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
-			string label = device2.IdLabel.dup();
+			device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
+			label = device2.IdLabel.dup();
 			device2.FilesystemUnmount(null);
 			string[] options = new string[3];
 			options[0]="label=%s".printf(label);
 			options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
 			options[2]="take_ownership_gid=%d".printf((int)Posix.getgid());
 			device2.FilesystemCreate("reiserfs",options);
+		} catch (IOError e) {
+			this.show_error(e.message);
+			return false;
+		}
+		
+		try {
+			device2.PartitionModify("131",label,null);
+		} catch (IOError e) {
+		
+		}
+		
+		try {
 			string out_path;
 			device2.FilesystemMount("reiserfs",null,out out_path);
 			this.final_path=out_path.dup();

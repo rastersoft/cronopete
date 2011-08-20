@@ -22,11 +22,21 @@ using Gtk;
 
 public class Switch_Widget : DrawingArea {
 
-	private int w;
-	private int h;
-	private int px;
-	private int py;
 	private bool _active;
+	public bool active {
+		get {
+			return (this._active);
+		}
+		
+		set {
+			this._active=value;
+			if (this.visible) {
+				this.refresh(null);
+			}
+		}
+	}
+
+	public signal void toggled(Switch_Widget w);
 
 	public Switch_Widget () {
 
@@ -36,49 +46,105 @@ public class Switch_Widget : DrawingArea {
 
 		// Set favored widget size
 		set_size_request (86, 26);
-		this.w=86;
-		this.h=26;
-		this.px=0;
-		this.py=0;
 		this._active=false;
 	}
 
 	/* Widget is asked to draw itself */
 	public override bool expose_event (Gdk.EventExpose event) {
 
-		GLib.stdout.printf("Expose\n");
+		return (this.refresh(event));
+		
+	}
+
+	private bool refresh(Gdk.EventExpose? event) {
+
+		int width;
+		int height;
+		int ox;
+		int oy;
+		int pos;
+		
+		this.window.get_size(out width,out height);
+
+		ox=(width-86)/2;
+		oy=(height-26)/2;
+
 		// Create a Cairo context
 		var cr = Gdk.cairo_create (this.window);
 
 		// Set clipping area in order to avoid unnecessary drawing
-		cr.rectangle (event.area.x, event.area.y,event.area.width, event.area.height);
-		cr.clip ();
+		if (event!=null) {
+			cr.rectangle (event.area.x, event.area.y,event.area.width, event.area.height);
+			cr.clip ();
+		}
 
-		cr.set_source_rgb(0,0,0);
-		cr.rectangle(this.px,this.py,86,26);
+		cr.set_source_rgb(0.4,0.4,0.4);
+		cr.set_line_width(1.0);
+		this.do_switch(ox,oy,86,26,cr);
+		cr.stroke();
+		var pattern=new Cairo.Pattern.linear(ox,oy,ox,oy+26);
+		pattern.add_color_stop_rgb(0.0,0.9,0.9,0.9);
+		pattern.add_color_stop_rgb(1.0,0.6,0.6,0.6);
+		cr.set_source(pattern);
+		if (this._active) {
+			pos=43;
+		} else {
+			pos=0;
+		}
+		this.do_switch(ox+pos,oy,43,26,cr);
 		cr.fill();
+		cr.set_source_rgb(0.4,0.4,0.4);
+		cr.set_line_width(1.0);
+		this.do_switch(ox+pos,oy,43,26,cr);
+		cr.stroke();
 
 		return false;
+	}
+
+	void do_switch(int ox, int oy, int size_x, int size_y, Cairo.Context cr) {
+	
+		int cx;
+		int cy;
+	
+		cx = ox+size_x;
+		cy = oy+size_y;
+	
+		cr.move_to(ox+5,oy+1);
+		cr.line_to(cx-5,oy+1);
+		cr.arc(cx-5,oy+5,4,4.712388,0);
+		cr.line_to(cx-1,cy-5);
+		cr.arc(cx-5,cy-5,4,0,1.570796);
+		cr.line_to(ox+5,cy-1);
+		cr.arc(ox+5,cy-5,4,1.570796,3.141592);
+		cr.line_to(ox+1,oy+5);
+		cr.arc(ox+5,oy+5,4,3.141592,4.712388);
+		cr.close_path();
+
 	}
 
 	/* Mouse button got released */
 	public override bool button_release_event (Gdk.EventButton event) {
-		GLib.stdout.printf("Click\n");
+		
+		int width;
+		int height;
+		int ox;
+		int oy;
+
+		this.window.get_size(out width,out height);
+		ox=(width-86)/2;
+		oy=(height-26)/2;
+
+		if ((event.x>=ox)&&(event.x<ox+86)&&(event.y>=oy)&&(event.y<oy+26)) {
+
+			if (this._active) {
+				this._active=false;
+			} else {
+				this._active=true;
+			}
+		
+			this.window.clear_area_e(0,0,width,height);
+			this.toggled(this);
+		}
 		return false;
-	}
-
-	/*public override void show() {
-	
-		GLib.stdout.printf("show\n");
-	}*/
-
-	public override void size_allocate (Gdk.Rectangle allocation) {
-
-		this.w=allocation.width;
-		this.h=allocation.height;
-		this.px=(this.w-86)/2;
-		this.py=(this.h-26)/2;
-		GLib.stdout.printf("Nuevo tamano: %d %d\n",this.w,this.h);
-		base.size_allocate(allocation);
 	}
 }

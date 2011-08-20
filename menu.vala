@@ -63,11 +63,13 @@ class c_main_menu : GLib.Object {
 		this.text_status = (Label) this.builder.get_object("status_label");
 		this.img = (Image) this.builder.get_object("image_disk");
 		
-		var cnt = (Frame) this.builder.get_object("switch_container");
+		var cnt = (HBox) this.builder.get_object("hbox_switch");
 		this.my_widget=new Switch_Widget();
+		this.my_widget.toggled.connect(this.cronopete_is_active_callback);
 		this.my_widget.show();
-		cnt.add(this.my_widget);
-		
+		cnt.pack_start(this.my_widget,false,true,0);
+		cnt.reorder_child(this.my_widget,1);
+
 		this.is_visible = false;
 		
 	}
@@ -127,19 +129,9 @@ class c_main_menu : GLib.Object {
 		this.main_w.show_all();
 		this.main_w.present();
 	
-		if (show_log==true) {
-			this.tabs.set_current_page(1);
-		} else {
-			this.tabs.set_current_page(0);
-		}
+		this.tabs.set_current_page(0);
 		
-		/*if (this.parent.active) {
-			this.active.set_from_file("cronopete_on.png");
-			status=true;
-		} else {
-			this.active.set_from_file("cronopete_off.png");
-			status=false;
-		}*/
+		this.my_widget.active=this.parent.active;
 		
 		TextIter iter;
 		this.log.get_end_iter(out iter);				
@@ -178,16 +170,13 @@ class c_main_menu : GLib.Object {
 	
 	}
 
-	[CCode (instance_pos = -1)]
-	public void cronopete_is_active_callback(Button source) {
+	public void cronopete_is_active_callback(){//Switch_Widget source) {
 	
-		if (this.parent.active) {
-			this.parent.active=false;
-			this.active.set_from_file("cronopete_off.png");
-			this.parent.stop_backup();
-		} else {
-			this.active.set_from_file("cronopete_on.png");
+		if (this.my_widget.active) {
 			this.parent.active=true;
+		} else {
+			this.parent.active=false;
+			this.parent.stop_backup();
 		}
 	}
 
