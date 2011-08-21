@@ -92,7 +92,7 @@ class c_format : GLib.Object {
 		return (false);
 	}
 	
-	private bool format_drive(string format,bool umount) {
+	private bool format_drive(string format) {
 	
 		if (this.device==null) {
 			final_path=null;
@@ -104,10 +104,19 @@ class c_format : GLib.Object {
 		
 		try {
 			device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
-			label = device2.IdLabel.dup();
-			if (umount) {
-				device2.FilesystemUnmount(null);
-			}
+		} catch (IOError e) {
+			this.ioerror =e.message.dup();
+			return false;
+		}
+		
+		label = device2.IdLabel.dup();
+		
+		try {
+			device2.FilesystemUnmount(null);
+		} catch (IOError e) {
+		}
+		
+		try {
 			string[] options = new string[3];
 			options[0]="label=%s".printf(label);
 			options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
@@ -121,7 +130,6 @@ class c_format : GLib.Object {
 		try {
 			device2.PartitionModify("131",label,null);
 		} catch (IOError e) {
-		
 		}
 		
 		try {
@@ -205,11 +213,11 @@ class c_format : GLib.Object {
 	
 	private void* format_thread() {
 
-		if (this.format_drive("reiserfs",true)) {
+		if (this.format_drive("reiserfs")) {
 			this.retval=0;
 			return null;
 		} 
-		this.format_drive("ext4",false);
+		this.format_drive("ext4");
 		this.retval=-1;
 		return null;
 	}
