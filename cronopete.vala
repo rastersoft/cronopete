@@ -158,7 +158,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
-		this.next_backup=36000000+time_t();
+		this.next_backup=3600000+time_t();
 		this.main_timer=Timeout.add(3600000,this.timer_f);
 		this.timer_f();
 	}
@@ -466,7 +466,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.main_menu.insert_log(msg,false);
 	}
 	
-	void* do_backup() {
+	private void* do_backup() {
 
 		int retval;
 

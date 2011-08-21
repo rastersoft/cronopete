@@ -45,6 +45,10 @@ class c_format : GLib.Object {
 	private ObjectPath? device;
 	private string? mount_path;
 	private string uipath;
+	private string? ioerror;
+	private Dialog format_window;
+	private uint check_timer;
+	private unowned Thread <void *> b_thread;
 
 	private void show_error(string msg) {
 	
@@ -63,7 +67,7 @@ class c_format : GLib.Object {
 	private bool find_drive(string path_mount) {
 	
 		try {
-			UDisk_if udisk = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
+			UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
 			var retval = udisk.EnumerateDevices();
 			udisk=null;
 
@@ -73,7 +77,7 @@ class c_format : GLib.Object {
 			this.mount_path=null;
 			// Find the device which is mounted in the specified path
 			foreach (ObjectPath o in retval) {
-				device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",o);
+				device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",o);
 				foreach (string s in device2.DeviceMountPaths) {
 					if (s == path_mount) {
 						this.device=o;
@@ -88,26 +92,29 @@ class c_format : GLib.Object {
 		return (false);
 	}
 	
-	private bool format_drive() {
+	private bool format_drive(string format,bool umount) {
 	
 		if (this.device==null) {
 			final_path=null;
 			return false;
 		}
+
 		Device_if device2;
 		string label;
 		
 		try {
-			device2 = Bus.get_proxy_sync (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
+			device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
 			label = device2.IdLabel.dup();
-			device2.FilesystemUnmount(null);
+			if (umount) {
+				device2.FilesystemUnmount(null);
+			}
 			string[] options = new string[3];
 			options[0]="label=%s".printf(label);
 			options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
 			options[2]="take_ownership_gid=%d".printf((int)Posix.getgid());
-			device2.FilesystemCreate("reiserfs",options);
+			device2.FilesystemCreate(format,options);
 		} catch (IOError e) {
-			this.show_error(e.message);
+			this.ioerror =e.message.dup();
 			return false;
 		}
 		
@@ -119,10 +126,10 @@ class c_format : GLib.Object {
 		
 		try {
 			string out_path;
-			device2.FilesystemMount("reiserfs",null,out out_path);
+			device2.FilesystemMount(format,null,out out_path);
 			this.final_path=out_path.dup();
 		} catch (IOError e) {
-			this.show_error(e.message);
+			this.ioerror =e.message.dup();
 			return false;
 		}		
 		
@@ -136,6 +143,7 @@ class c_format : GLib.Object {
 		this.device=null;
 		this.final_path="";
 		this.uipath=path;
+		this.ioerror=null;
 
 		string message;
 		var builder = new Builder();
@@ -162,21 +170,48 @@ class c_format : GLib.Object {
 		window.destroy();
 		if (rv==1) { // format
 			if (this.find_drive(disk_path)) {
-				if (this.format_drive()) {
-					this.retval=0;
-				} else {
-					this.retval=-1;
-				}
+				var builder2 = new Builder();
+				builder2.add_from_file(Path.build_filename(path,"formatting.ui"));
+				this.format_window = (Dialog) builder2.get_object("formatting");
+				this.format_window.show_all();
+				this.retval=2;
+				this.b_thread=Thread.create <void *>(this.format_thread, false);
+				this.check_timer=Timeout.add(1000,this.timer_end);
+				this.format_window.run();
+				this.format_window.destroy();
 			} else {
-				GLib.stdout.printf("Error, not found disk %s\n",disk_path);
+				GLib.stdout.printf("Error, can't find disk %s\n",disk_path);
 				this.retval=-1;
 			}
 		} else if (rv==0) {
-			this.final_path=path.dup();
+			this.final_path=disk_path.dup();
 			this.retval=0;
 		} else {
 			retval=-1;
 		}
+		if (this.ioerror!=null) {
+			this.show_error(this.ioerror);
+		}
+	}
+	
+	public bool timer_end() {
+
+		if(this.retval==2) {
+			return true;
+		}
+		this.format_window.close();
+		return false;
+	}
+	
+	private void* format_thread() {
+
+		if (this.format_drive("reiserfs",true)) {
+			this.retval=0;
+			return null;
+		} 
+		this.format_drive("ext4",false);
+		this.retval=-1;
+		return null;
 	}
 }
 

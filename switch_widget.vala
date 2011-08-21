@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>. */
  
- /* A switch widget, since GTK2 has not it */
+ /* A switch widget, since GTK2 doesn't have it */
  
 using Gtk;
 
