@@ -52,6 +52,7 @@ class c_options : GLib.Object {
 		this.backup_view = (TreeView) this.builder.get_object("backup_folders");
 		this.exclude_view = (TreeView) this.builder.get_object("exclude_folders");
 		this.b_hiden = (CheckButton) this.builder.get_object("backup_root_hiden");
+		this.b_hiden.label=_("Backup hiden files and folders in %s").printf(Environment.get_home_dir());
 		
 		p.get_path_list(out this.backup_folders,out this.exclude_folders, out this.backup_hiden_at_home);
 		
