@@ -20,9 +20,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkVBox" id="vbox1">
+              <object class="GtkVBox" id="vbox_switch">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="border_width">8</property>
+                <property name="spacing">4</property>
                 <child>
                   <object class="GtkImage" id="image1">
                     <property name="visible">True</property>
@@ -77,48 +79,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkLabel" id="label8">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">OFF</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">ON</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="padding">22</property>
+                <property name="padding">14</property>
                 <property name="position">0</property>
               </packing>
             </child>

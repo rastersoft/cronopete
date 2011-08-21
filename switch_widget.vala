@@ -86,6 +86,17 @@ public class Switch_Widget : DrawingArea {
 		cr.set_line_width(1.0);
 		this.do_switch(ox,oy,86,26,cr);
 		cr.stroke();
+		cr.set_source_rgb(0.0,0.0,0.0);
+		cr.set_line_width(1.8);
+		cr.move_to(ox+20,oy+6);
+		cr.line_to(ox+26,oy+6);
+		cr.move_to(ox+23,oy+6);
+		cr.line_to(ox+23,oy+20);
+		cr.move_to(ox+20,oy+20);
+		cr.line_to(ox+26,oy+20);
+		cr.stroke();
+		cr.arc(ox+63,oy+13,7,0,6.283182);
+		cr.stroke();
 		var pattern=new Cairo.Pattern.linear(ox,oy,ox,oy+26);
 		pattern.add_color_stop_rgb(0.0,0.9,0.9,0.9);
 		pattern.add_color_stop_rgb(1.0,0.6,0.6,0.6);

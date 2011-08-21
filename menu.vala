@@ -63,12 +63,12 @@ class c_main_menu : GLib.Object {
 		this.text_status = (Label) this.builder.get_object("status_label");
 		this.img = (Image) this.builder.get_object("image_disk");
 		
-		var cnt = (HBox) this.builder.get_object("hbox_switch");
+		var cnt = (VBox) this.builder.get_object("vbox_switch");
 		this.my_widget=new Switch_Widget();
 		this.my_widget.toggled.connect(this.cronopete_is_active_callback);
 		this.my_widget.show();
 		cnt.pack_start(this.my_widget,false,true,0);
-		cnt.reorder_child(this.my_widget,1);
+		//cnt.reorder_child(this.my_widget,1);
 
 		this.is_visible = false;
 		
