@@ -78,6 +78,10 @@ public class Switch_Widget : DrawingArea {
 			cr.clip ();
 		}
 
+
+		cr.set_source_rgb(0.9,0.9,0.9);
+		this.do_switch(ox,oy,86,26,cr);
+		cr.fill();
 		cr.set_source_rgb(0.4,0.4,0.4);
 		cr.set_line_width(1.0);
 		this.do_switch(ox,oy,86,26,cr);
