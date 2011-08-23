@@ -693,6 +693,8 @@ class cp_callback : GLib.Object, callbacks {
 
 int main(string[] args) {
 	
+	sleep(3); // To ensure that the menu bar has been loaded
+	
 	Gdk.threads_init();
 	Gtk.init(ref args);
 	Intl.bindtextdomain( "cronopete", "/var");

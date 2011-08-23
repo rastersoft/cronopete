@@ -23,7 +23,7 @@ using Posix;
 
 [DBus (name = "org.freedesktop.UDisks")]
 interface UDisk_if : GLib.Object {
-	public abstract ObjectPath[] EnumerateDevices() throws IOError;
+	public abstract void EnumerateDevices(out ObjectPath[] path) throws IOError;
 }
 
 [DBus (name = "org.freedesktop.UDisks.Device")]
@@ -66,9 +66,11 @@ class c_format : GLib.Object {
 
 	private bool find_drive(string path_mount) {
 	
+		ObjectPath[] retval;
+	
 		try {
 			UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
-			var retval = udisk.EnumerateDevices();
+			udisk.EnumerateDevices(out retval);
 			udisk=null;
 
 			Device_if device2;

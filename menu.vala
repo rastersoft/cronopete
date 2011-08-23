@@ -200,10 +200,20 @@ class c_main_menu : GLib.Object {
 	[CCode (instance_pos = -1)]
 	public void cronopete_change_disk_callback(Button source) {
 	
+		bool not_configured;
+
+		if (this.parent.p_backup_path=="") {
+			not_configured=true;
+		} else {
+			not_configured=false;
+		}
 		var tmp = new c_choose_disk(this.basepath,this.parent);
 		tmp = null;
 		this.refresh_backup_data();
-	
+
+		if ((this.parent.p_backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
+			this.parent.active=true;
+			this.my_widget.active=true;
+		}
 	}
-	
 }
