@@ -249,6 +249,7 @@ class cp_callback : GLib.Object, callbacks {
 			
 			if (this.refresh_timer!=0) {
 				Source.remove(this.refresh_timer);
+				this.refresh_timer=0;
 			}
 		}
 
@@ -384,6 +385,9 @@ class cp_callback : GLib.Object, callbacks {
 		if (this.backup_running==SystemStatus.IDLE) {
 			if (this.refresh_timer>0) {
 				Source.remove(this.refresh_timer);
+			}
+			if (this.main_timer>0) {
+				Source.remove(this.main_timer);
 				this.main_timer=Timeout.add(3600000,this.timer_f);
 			}
 			this.timer_f();
