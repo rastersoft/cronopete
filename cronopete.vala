@@ -38,6 +38,7 @@ class cp_callback : GLib.Object, callbacks {
 	private unowned Thread <void *> b_thread;
 	private uint main_timer;
 	private uint refresh_timer;
+	private uint start_timer;
 	private StringBuilder messages;
 	private string basepath;
 	private Menu menuSystem;
@@ -127,6 +128,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.angle = 0.0;
 		this.size = 0;
 		this.refresh_timer = 0;
+		this.start_timer = 0;
 		this.configuration_read = false;
 		this.backup_pending=false;
 		
@@ -159,8 +161,8 @@ class cp_callback : GLib.Object, callbacks {
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
 		this.next_backup=3600000+time_t();
+		this.start_timer=Timeout.add(60000,this.timer_f); // wait 60 seconds after being launched before doing the backup
 		this.main_timer=Timeout.add(3600000,this.timer_f);
-		this.timer_f();
 	}
 
 	private void fill_last_backup() {
@@ -209,6 +211,11 @@ class cp_callback : GLib.Object, callbacks {
 	}
 
 	public bool timer_f() {
+	
+		if (this.start_timer!=0) {
+			Source.remove(this.start_timer);
+			this.start_timer=0;
+		}
 	
 		if (this.tooltip_changed) {
 			lock (this.tooltip_value) {
@@ -698,12 +705,15 @@ class cp_callback : GLib.Object, callbacks {
 int main(string[] args) {
 	
 	sleep(3); // To ensure that the menu bar has been loaded
+	Intl.bindtextdomain( "cronopete", "/usr/share/locale");
+	Intl.setlocale (LocaleCategory.ALL, "");
+	Intl.textdomain("cronopete");
+	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
+
 	
 	Gdk.threads_init();
 	Gtk.init(ref args);
-	Intl.bindtextdomain( "cronopete", "/var");
-	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
-	Intl.textdomain( "cronopete" );
+	//
 
 	Gdk.threads_init();
 
