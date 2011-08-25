@@ -31,10 +31,10 @@ interface Device_if : GLib.Object {
 	public abstract string IdLabel { owned get; }
 	public abstract string[] DeviceMountPaths { owned get; }
 	
-	public abstract void FilesystemUnmount(string[] options) throws IOError;
+	public abstract void FilesystemUnmount(string[]? options) throws IOError;
 	public abstract void FilesystemCreate(string type, string[] options) throws IOError;
-	public abstract void PartitionModify (string type, string label, string[] options) throws IOError;
-	public abstract void FilesystemMount(string type, string[] options, out string mount_path) throws IOError;
+	public abstract void PartitionModify (string type, string label, string[]? options) throws IOError;
+	public abstract void FilesystemMount(string type, string[]? options, out string mount_path) throws IOError;
 }
 
 
@@ -46,6 +46,7 @@ class c_format : GLib.Object {
 	private string? mount_path;
 	private string uipath;
 	private string? ioerror;
+	private string? label;
 	private Dialog format_window;
 	private uint check_timer;
 	private unowned Thread <void *> b_thread;
@@ -77,6 +78,7 @@ class c_format : GLib.Object {
 
 			this.device=null;
 			this.mount_path=null;
+			this.label=null;
 			// Find the device which is mounted in the specified path
 			foreach (ObjectPath o in retval) {
 				device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",o);
@@ -84,6 +86,7 @@ class c_format : GLib.Object {
 					if (s == path_mount) {
 						this.device=o;
 						this.mount_path=path_mount.dup();
+						this.label = device2.IdLabel.dup();
 						return (true);
 					}
 				}
@@ -101,8 +104,9 @@ class c_format : GLib.Object {
 			return false;
 		}
 
+		this.ioerror=null;
+
 		Device_if device2;
-		string label;
 		
 		try {
 			device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
@@ -111,18 +115,21 @@ class c_format : GLib.Object {
 			return false;
 		}
 		
-		label = device2.IdLabel.dup();
-		
 		try {
 			device2.FilesystemUnmount(null);
 		} catch (IOError e) {
 		}
 		
 		try {
-			string[] options = new string[3];
-			options[0]="label=%s".printf(label);
-			options[1]="take_ownership_uid=%d".printf((int)Posix.getuid());
-			options[2]="take_ownership_gid=%d".printf((int)Posix.getgid());
+			string[] options;
+			if ((this.label==null)||(this.label=="")) {
+				options = new string[2];
+			} else {
+				options = new string[3];
+				options[2]="label=%s".printf(this.label);
+			}			
+			options[0]="take_ownership_uid=%d".printf((int)Posix.getuid());
+			options[1]="take_ownership_gid=%d".printf((int)Posix.getgid());
 			device2.FilesystemCreate(format,options);
 		} catch (IOError e) {
 			this.ioerror =e.message.dup();
@@ -130,8 +137,9 @@ class c_format : GLib.Object {
 		}
 		
 		try {
-			device2.PartitionModify("131",label,null);
+			device2.PartitionModify("131","",null);
 		} catch (IOError e) {
+			GLib.stdout.printf("Fallo al cambiar tipo de particion %s\n",e.message);
 		}
 		
 		try {
@@ -158,15 +166,16 @@ class c_format : GLib.Object {
 		string message;
 		var builder = new Builder();
 		
-		if ((filesystem.has_prefix("ext2")) || (filesystem.has_prefix("ext3")) || (filesystem.has_prefix("ext4"))) {
+		/*if ((filesystem.has_prefix("ext2")) || (filesystem.has_prefix("ext3")) || (filesystem.has_prefix("ext4"))) {
 			builder.add_from_file(Path.build_filename(path,"format_allow.ui"));
 			message = _("The file system %s is acceptable for Cronopete, but not optimal. The best file system is ReiserFS.\n\nTo use the disk with the current file format, click the <i>Accept</i> button.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);			
-		} else if (filesystem=="btrfs") {
+		} else */
+		if (filesystem=="btrfs") {
 			builder.add_from_file(Path.build_filename(path,"format_force.ui"));
 			message = _("The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
 		} else {
 			builder.add_from_file(Path.build_filename(path,"format_force.ui"));
-			message = _("The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk to ReiserFS, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+			message = _("The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
 		}
 		builder.connect_signals(this);
 
@@ -215,11 +224,14 @@ class c_format : GLib.Object {
 	
 	private void* format_thread() {
 
-		if (this.format_drive("reiserfs")) {
+		if (this.format_drive("reiserfs")==true) {
 			this.retval=0;
 			return null;
-		} 
-		this.format_drive("ext4");
+		}
+		if (this.format_drive("ext4")==true) {
+			this.retval=0;
+			return null;
+		}
 		this.retval=-1;
 		return null;
 	}
@@ -289,7 +301,10 @@ class c_choose_disk : GLib.Object {
 				var fstype = stype.get_string();
 				var final_path = spath.get_string().dup();
 				
-				if (fstype == "reiserfs") { // Reiser3 is the recomended filesystem for cronopete
+				// Reiser3 is the recomended filesystem for cronopete
+				if ((fstype == "reiserfs") ||
+					  (fstype.has_prefix("ext3")) ||
+					  (fstype.has_prefix("ext4"))) {
 					this.parent.p_backup_path=final_path;
 					do_run=false;
 					break;
