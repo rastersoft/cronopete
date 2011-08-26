@@ -1,0 +1,280 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Sergio <raster@rastersoft.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cronopete 0.92\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-26 22:36+0200\n"
+"PO-Revision-Date: 2011-08-26 22:28+0200\n"
+"Last-Translator: Sergio <raster@rastersoft.com>\n"
+"Language-Team:  <raster@rastersoft.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#: ../menu.vala:79
+#, c-format
+msgid "Status: %s"
+msgstr "Estado: %s"
+
+#: ../menu.vala:108
+msgid "None"
+msgstr "Ninguna"
+
+#: ../menu.vala:155
+msgid "Not defined"
+msgstr "No definida"
+
+#: ../options.vala:55
+#, c-format
+msgid "Backup hiden files and folders in %s"
+msgstr "Copiar ficheros y carpetas ocultos en %s"
+
+#: ../backup.vala:311
+msgid "Can't create the folder for this backup. Aborting backup.\n"
+msgstr "No se ha podido crear la carpeta para esta copia. Abortando.\n"
+
+#: ../backup.vala:315
+msgid "Can't create the base folders to do backups. Aborting backup.\n"
+msgstr "No se han podido crear las carpetas base para las copias. Abortando.\n"
+
+#: ../backup.vala:319
+msgid "Backup device not available. Aborting backup.\n"
+msgstr "El disco externo no está disponible. Abortando.\n"
+
+#: ../backup.vala:323
+msgid "Already started a backup.\n"
+msgstr "Ya se está haciendo una copia.\n"
+
+#: ../backup.vala:328
+msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+msgstr ""
+"No se ha podido liberar espacio en disco para comenzar una copia. "
+"Abortando.\n"
+
+#: ../backup.vala:347
+msgid "Backup aborted\n"
+msgstr "Copia cancelada.\n"
+
+#: ../backup.vala:361
+msgid ""
+"The disk is too small to hold a single backup.\n"
+"Adjust the list of backup and exclude folders.\n"
+msgstr ""
+"El disco es demasiado pequeño para poder copiar todo.\n"
+"Ajuste la lista de carpetas a copiar y a excluir.\n"
+
+#: ../backup.vala:372
+msgid "Can't close the backup. Aborting.\n"
+msgstr "No se ha podido cerrar la copia. Abortando.\n"
+
+#: ../backup.vala:378
+#, c-format
+msgid "Backup done. Needed %ld seconds.\n"
+msgstr "Copia terminada. Se tardaron %ld segundos.\n"
+
+#: ../choose.vala:175
+#, c-format
+msgid ""
+"The file system %s is not valid for Cronopete because, currently, it has "
+"several bugs that can put in risk your backups. The optimal file system is "
+"ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"\n"
+"To change the file format in the disk, click the <i>Format disk</i> button. "
+"<b>All the data in the drive will be erased</b>."
+msgstr ""
+"El sistema de ficheros %s no se puede utilizar con Cronopete porque, "
+"actualmente, tiene bugs que pueden poner en riesgo las copias. El sistema de "
+"ficheros óptimo es ReiserFS, pero también se puede utilizar Ext3/Ext4.\n"
+"\n"
+"Para cambiar el sistema de ficheros del disco, pulse el botón <i>Formatear "
+"disco</i>. <b>Todos los datos contenidos en el disco se perderán</b>."
+
+#: ../choose.vala:178
+#, c-format
+msgid ""
+"The file system %s is not valid for Cronopete. The optimal file system is "
+"ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"\n"
+"To change the file format in the disk, click the <i>Format disk</i> button. "
+"<b>All the data in the drive will be erased</b>."
+msgstr ""
+"El sistema de ficheros %s no se puede utilizar con Cronopete. El sistema de "
+"ficheros óptimo es ReiserFS, pero también se puede utilizar Ext3/Ext4.\n"
+"\n"
+"Para cambiar el sistema de ficheros del disco, pulse el botón <i>Formatear "
+"disco</i>. <b>Todos los datos contenidos en el disco se perderán</b>."
+
+#: ../cronopete.vala:72 ../cronopete.vala:241
+msgid "Idle"
+msgstr "En reposo"
+
+#: ../cronopete.vala:77
+msgid "Backup disabled"
+msgstr "Copias desactivadas"
+
+#: ../cronopete.vala:181
+#, c-format
+msgid "Latest backup: %s"
+msgstr "Ultima copia: %s"
+
+#: ../cronopete.vala:350
+msgid "Back Up Now"
+msgstr "Copiar ahora"
+
+#: ../cronopete.vala:354
+msgid "Stop Backing Up"
+msgstr "Detener copia"
+
+#: ../cronopete.vala:363
+msgid "Open Cronopete Preferences..."
+msgstr "Abrir preferencias de Cronopete..."
+
+#: ../cronopete.vala:428
+#, c-format
+msgid "Backing up folder %s\n"
+msgstr "Copiando carpeta %s\n"
+
+#: ../cronopete.vala:447
+#, c-format
+msgid "Can't copy file %s\n"
+msgstr "Fallo al copiar el fichero %s\n"
+
+#: ../cronopete.vala:452
+#, c-format
+msgid "Can't access directory %s\n"
+msgstr "Fallo al acceder a la carpeta %s\n"
+
+#: ../cronopete.vala:457
+#, c-format
+msgid "Can't create directory %s\n"
+msgstr "Fallo al crear la carpeta %s\n"
+
+#: ../cronopete.vala:476
+msgid "Starting backup\n"
+msgstr "Comenzando copia\n"
+
+#: ../cronopete.vala:484
+msgid "Error reading configuration"
+msgstr "Fallo al leer la configuración"
+
+#: ../cronopete.vala:493
+msgid "Erasing old backups"
+msgstr "Borrando copias antiguas"
+
+#: ../cronopete.vala:505
+msgid "Backup aborted"
+msgstr "Copia cancelada"
+
+#: ../cronopete.vala:509
+msgid "Can't do backup; disk is too small"
+msgstr "Fallo al hacer la copia; el disco es demasiado pequeño"
+
+#: ../cronopete.vala:513
+msgid "Can't do backup"
+msgstr "Fallo al hacer la copia"
+
+#: ../cronopete.vala:653
+#, c-format
+msgid "Invalid parameter in config file %s (line %d)\n"
+msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
+
+#: ../about.ui.h:1
+msgid "(C) 2011 Raster Software Vigo"
+msgstr ""
+
+#: ../format_error.ui.h:1
+msgid "<b>Error info</b>"
+msgstr "<b>Información del error</b>"
+
+#: ../format_error.ui.h:2
+msgid ""
+"There was an error during the\n"
+"formating operation. Aborted."
+msgstr ""
+"Se ha producido un error durante\n"
+"la operación de formateado. Cancelado."
+
+#: ../format_force.ui.h:1
+msgid "Format disk"
+msgstr "Formatear disco"
+
+#: ../formatting.ui.h:1
+msgid "Formating disk. Please, wait."
+msgstr "Formateando el disco. Por favor, espere."
+
+#: ../main.ui.h:1
+msgid "Change disk..."
+msgstr "Cambiar disco..."
+
+#: ../main.ui.h:2
+msgid "Configuration"
+msgstr "Configuración"
+
+#: ../main.ui.h:3
+msgid ""
+"Cronopete keeps:\n"
+"\n"
+" * Hourly backups for the past 24 hours\n"
+" * Daily backups for the past month\n"
+" * Weekely backups until your hard disk is full"
+msgstr ""
+"Cronopete mantiene:\n"
+"\n"
+" * Una copia cada hora para las últimas 24 horas\n"
+" * Una copia diaria para el último mes\n"
+" * Copias semanales hasta que se llene el disco"
+
+#: ../main.ui.h:8
+msgid "Device:"
+msgstr "Dispositivo:"
+
+#: ../main.ui.h:9
+msgid "Latest backup:"
+msgstr "Última copia:"
+
+#: ../main.ui.h:10
+msgid "Log"
+msgstr "Registro"
+
+#: ../main.ui.h:11
+msgid "Next backup:"
+msgstr "Próxima copia:"
+
+#: ../main.ui.h:12
+msgid "Oldest backup:"
+msgstr "Primera copia:"
+
+#: ../main.ui.h:13 ../options.ui.h:4
+msgid "Options"
+msgstr "Opciones"
+
+#: ../main.ui.h:14
+msgid "ana"
+msgstr ""
+
+#: ../main.ui.h:15
+msgid "anaCRONOPETE"
+msgstr ""
+
+#: ../main.ui.h:16
+msgid "cronopete"
+msgstr ""
+
+#: ../options.ui.h:1
+msgid "<b>Backup these folders</b>"
+msgstr "<b>Copiar estas carpetas</b>"
+
+#: ../options.ui.h:2
+msgid "<b>Exclude these folders</b>"
+msgstr "<b>Excluir estas carpetas</b>"
+
+#: ../options.ui.h:3
+msgid "Folders to backup"
+msgstr "Carpetas a copiar"

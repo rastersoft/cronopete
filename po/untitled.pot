@@ -1,0 +1,257 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-26 22:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../menu.vala:79
+#, c-format
+msgid "Status: %s"
+msgstr ""
+
+#: ../menu.vala:108
+msgid "None"
+msgstr ""
+
+#: ../menu.vala:155
+msgid "Not defined"
+msgstr ""
+
+#: ../options.vala:55
+#, c-format
+msgid "Backup hiden files and folders in %s"
+msgstr ""
+
+#: ../backup.vala:311
+msgid "Can't create the folder for this backup. Aborting backup.\n"
+msgstr ""
+
+#: ../backup.vala:315
+msgid "Can't create the base folders to do backups. Aborting backup.\n"
+msgstr ""
+
+#: ../backup.vala:319
+msgid "Backup device not available. Aborting backup.\n"
+msgstr ""
+
+#: ../backup.vala:323
+msgid "Already started a backup.\n"
+msgstr ""
+
+#: ../backup.vala:328
+msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+msgstr ""
+
+#: ../backup.vala:347
+msgid "Backup aborted\n"
+msgstr ""
+
+#: ../backup.vala:361
+msgid ""
+"The disk is too small to hold a single backup.\n"
+"Adjust the list of backup and exclude folders.\n"
+msgstr ""
+
+#: ../backup.vala:372
+msgid "Can't close the backup. Aborting.\n"
+msgstr ""
+
+#: ../backup.vala:378
+#, c-format
+msgid "Backup done. Needed %ld seconds.\n"
+msgstr ""
+
+#: ../choose.vala:175
+#, c-format
+msgid ""
+"The file system %s is not valid for Cronopete because, currently, it has "
+"several bugs that can put in risk your backups. The optimal file system is "
+"ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"\n"
+"To change the file format in the disk, click the <i>Format disk</i> button. "
+"<b>All the data in the drive will be erased</b>."
+msgstr ""
+
+#: ../choose.vala:178
+#, c-format
+msgid ""
+"The file system %s is not valid for Cronopete. The optimal file system is "
+"ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"\n"
+"To change the file format in the disk, click the <i>Format disk</i> button. "
+"<b>All the data in the drive will be erased</b>."
+msgstr ""
+
+#: ../cronopete.vala:72 ../cronopete.vala:241
+msgid "Idle"
+msgstr ""
+
+#: ../cronopete.vala:77
+msgid "Backup disabled"
+msgstr ""
+
+#: ../cronopete.vala:181
+#, c-format
+msgid "Latest backup: %s"
+msgstr ""
+
+#: ../cronopete.vala:350
+msgid "Back Up Now"
+msgstr ""
+
+#: ../cronopete.vala:354
+msgid "Stop Backing Up"
+msgstr ""
+
+#: ../cronopete.vala:363
+msgid "Open Cronopete Preferences..."
+msgstr ""
+
+#: ../cronopete.vala:428
+#, c-format
+msgid "Backing up folder %s\n"
+msgstr ""
+
+#: ../cronopete.vala:447
+#, c-format
+msgid "Can't copy file %s\n"
+msgstr ""
+
+#: ../cronopete.vala:452
+#, c-format
+msgid "Can't access directory %s\n"
+msgstr ""
+
+#: ../cronopete.vala:457
+#, c-format
+msgid "Can't create directory %s\n"
+msgstr ""
+
+#: ../cronopete.vala:476
+msgid "Starting backup\n"
+msgstr ""
+
+#: ../cronopete.vala:484
+msgid "Error reading configuration"
+msgstr ""
+
+#: ../cronopete.vala:493
+msgid "Erasing old backups"
+msgstr ""
+
+#: ../cronopete.vala:505
+msgid "Backup aborted"
+msgstr ""
+
+#: ../cronopete.vala:509
+msgid "Can't do backup; disk is too small"
+msgstr ""
+
+#: ../cronopete.vala:513
+msgid "Can't do backup"
+msgstr ""
+
+#: ../cronopete.vala:653
+#, c-format
+msgid "Invalid parameter in config file %s (line %d)\n"
+msgstr ""
+
+#: ../about.ui.h:1
+msgid "(C) 2011 Raster Software Vigo"
+msgstr ""
+
+#: ../format_error.ui.h:1
+msgid "<b>Error info</b>"
+msgstr ""
+
+#: ../format_error.ui.h:2
+msgid ""
+"There was an error during the\n"
+"formating operation. Aborted."
+msgstr ""
+
+#: ../format_force.ui.h:1
+msgid "Format disk"
+msgstr ""
+
+#: ../formatting.ui.h:1
+msgid "Formating disk. Please, wait."
+msgstr ""
+
+#: ../main.ui.h:1
+msgid "Change disk..."
+msgstr ""
+
+#: ../main.ui.h:2
+msgid "Configuration"
+msgstr ""
+
+#: ../main.ui.h:3
+msgid ""
+"Cronopete keeps:\n"
+"\n"
+" * Hourly backups for the past 24 hours\n"
+" * Daily backups for the past month\n"
+" * Weekely backups until your hard disk is full"
+msgstr ""
+
+#: ../main.ui.h:8
+msgid "Device:"
+msgstr ""
+
+#: ../main.ui.h:9
+msgid "Latest backup:"
+msgstr ""
+
+#: ../main.ui.h:10
+msgid "Log"
+msgstr ""
+
+#: ../main.ui.h:11
+msgid "Next backup:"
+msgstr ""
+
+#: ../main.ui.h:12
+msgid "Oldest backup:"
+msgstr ""
+
+#: ../main.ui.h:13 ../options.ui.h:4
+msgid "Options"
+msgstr ""
+
+#: ../main.ui.h:14
+msgid "ana"
+msgstr ""
+
+#: ../main.ui.h:15
+msgid "anaCRONOPETE"
+msgstr ""
+
+#: ../main.ui.h:16
+msgid "cronopete"
+msgstr ""
+
+#: ../options.ui.h:1
+msgid "<b>Backup these folders</b>"
+msgstr ""
+
+#: ../options.ui.h:2
+msgid "<b>Exclude these folders</b>"
+msgstr ""
+
+#: ../options.ui.h:3
+msgid "Folders to backup"
+msgstr ""

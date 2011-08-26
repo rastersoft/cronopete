@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "es_ES (spanish)"
+intltool-update es
+

@@ -120,7 +120,7 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	}
 
-	public cp_callback() {
+	public cp_callback(string path) {
 	
 		this.messages = new StringBuilder("");
 		this.backup_running = SystemStatus.IDLE;
@@ -138,29 +138,19 @@ class cp_callback : GLib.Object, callbacks {
 		
 		this.fill_last_backup();
 
-		var file=File.new_for_path("main.ui");
-		if (file.query_exists()) {
-			this.basepath="";
-		} else {
-			file=File.new_for_path("/usr/share/cronopete/main.ui");
-			if (file.query_exists()) {
-				this.basepath="/usr/share/cronopete/";
-			} else {
-				this.basepath="/usr/local/share/cronopete/";
-			}
-		}
+		this.basepath=path;
 	
 		this.basedir = null;
 		this.main_menu = new c_main_menu(this.basepath,this);
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.size_changed.connect(this.repaint);
-		this.set_tooltip ("Idle");
+		this.set_tooltip (_("Idle"));
 		this.trayicon.set_visible(true);
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
-		this.next_backup=3600000+time_t();
+		this.next_backup=60+time_t();
 		this.start_timer=Timeout.add(60000,this.timer_f); // wait 60 seconds after being launched before doing the backup
 		this.main_timer=Timeout.add(3600000,this.timer_f);
 	}
@@ -705,19 +695,31 @@ class cp_callback : GLib.Object, callbacks {
 int main(string[] args) {
 	
 	sleep(3); // To ensure that the menu bar has been loaded
-	Intl.bindtextdomain( "cronopete", "/usr/share/locale");
-	Intl.setlocale (LocaleCategory.ALL, "");
+	string basepath;
+	
+	var file=File.new_for_path("main.ui");
+	if (file.query_exists()) {
+		basepath="";
+		Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
+	} else {
+		file=File.new_for_path("/usr/share/cronopete/main.ui");
+		if (file.query_exists()) {
+			basepath="/usr/share/cronopete/";
+			Intl.bindtextdomain( "cronopete", "/usr/share/locale");
+		} else {
+			basepath="/usr/local/share/cronopete/";
+			Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
+		}
+	}
+	
+	//Intl.setlocale (LocaleCategory.ALL, "");
 	Intl.textdomain("cronopete");
 	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
 
-	
 	Gdk.threads_init();
 	Gtk.init(ref args);
-	//
 
-	Gdk.threads_init();
-
-	var callbacks = new cp_callback();
+	var callbacks = new cp_callback(basepath);
 	
 	Gdk.threads_enter();
 	Gtk.main();

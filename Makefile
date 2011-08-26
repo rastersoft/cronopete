@@ -7,6 +7,7 @@ install:
 	cp *.ui /usr/local/share/cronopete
 	cp *.svg /usr/local/share/cronopete
 	cp cronopete.desktop /etc/xdg/autostart/
+	cp po/es.mo /usr/local/share/locale/es/LC_MESSAGES/cronopete.mo
 
 clean:
 	rm cronopete
@@ -15,4 +16,5 @@ uninstall:
 	rm /usr/local/bin/cronopete
 	rm -rf /usr/local/share/cronopete
 	rm  /etc/xdg/autostart/cronopete.desktop
+	rm /usr/local/share/locale/es/LC_MESSAGES/cronopete.mo
 
