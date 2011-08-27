@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-26 22:36+0200\n"
-"PO-Revision-Date: 2011-08-26 22:28+0200\n"
+"POT-Creation-Date: 2011-08-27 11:14+0200\n"
+"PO-Revision-Date: 2011-08-27 11:15+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
 "Language: \n"
@@ -18,16 +18,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
 
-#: ../menu.vala:79
+#. This string shows the current status of Cronopete. It could be
+#. Status: idle, or Status: copying file...
+#: ../menu.vala:81
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
-#: ../menu.vala:108
+#. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
+#: ../menu.vala:111
 msgid "None"
 msgstr "Ninguna"
 
-#: ../menu.vala:155
+#. This text means that the user still has not selected a hard disk where to do the backups
+#: ../menu.vala:159
 msgid "Not defined"
 msgstr "No definida"
 
@@ -70,6 +74,10 @@ msgstr ""
 "El disco es demasiado pequeño para poder copiar todo.\n"
 "Ajuste la lista de carpetas a copiar y a excluir.\n"
 
+#: ../backup.vala:370
+msgid "Syncing disk\n"
+msgstr "Sincronizando el disco\n"
+
 #: ../backup.vala:372
 msgid "Can't close the backup. Aborting.\n"
 msgstr "No se ha podido cerrar la copia. Abortando.\n"
@@ -111,89 +119,94 @@ msgstr ""
 "Para cambiar el sistema de ficheros del disco, pulse el botón <i>Formatear "
 "disco</i>. <b>Todos los datos contenidos en el disco se perderán</b>."
 
-#: ../cronopete.vala:72 ../cronopete.vala:241
+#. Idle is the status of Cronopete when is doing nothing
+#: ../cronopete.vala:73 ../cronopete.vala:149 ../cronopete.vala:242
 msgid "Idle"
 msgstr "En reposo"
 
-#: ../cronopete.vala:77
+#: ../cronopete.vala:78
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../cronopete.vala:181
+#: ../cronopete.vala:182
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Ultima copia: %s"
 
-#: ../cronopete.vala:350
+#: ../cronopete.vala:351
 msgid "Back Up Now"
 msgstr "Copiar ahora"
 
-#: ../cronopete.vala:354
+#: ../cronopete.vala:355
 msgid "Stop Backing Up"
 msgstr "Detener copia"
 
-#: ../cronopete.vala:363
+#: ../cronopete.vala:364
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir preferencias de Cronopete..."
 
-#: ../cronopete.vala:428
+#: ../cronopete.vala:429
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando carpeta %s\n"
 
-#: ../cronopete.vala:447
+#: ../cronopete.vala:448
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Fallo al copiar el fichero %s\n"
 
-#: ../cronopete.vala:452
+#: ../cronopete.vala:453
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Fallo al acceder a la carpeta %s\n"
 
-#: ../cronopete.vala:457
+#: ../cronopete.vala:458
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Fallo al crear la carpeta %s\n"
 
-#: ../cronopete.vala:476
+#: ../cronopete.vala:477
 msgid "Starting backup\n"
 msgstr "Comenzando copia\n"
 
-#: ../cronopete.vala:484
+#: ../cronopete.vala:485
 msgid "Error reading configuration"
 msgstr "Fallo al leer la configuración"
 
-#: ../cronopete.vala:493
+#: ../cronopete.vala:494
 msgid "Erasing old backups"
 msgstr "Borrando copias antiguas"
 
-#: ../cronopete.vala:505
+#: ../cronopete.vala:506
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:509
+#: ../cronopete.vala:510
 msgid "Can't do backup; disk is too small"
 msgstr "Fallo al hacer la copia; el disco es demasiado pequeño"
 
-#: ../cronopete.vala:513
+#: ../cronopete.vala:514
 msgid "Can't do backup"
 msgstr "Fallo al hacer la copia"
 
-#: ../cronopete.vala:653
+#: ../cronopete.vala:654
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
 
-#: ../about.ui.h:1
-msgid "(C) 2011 Raster Software Vigo"
-msgstr ""
+#: ../interface/about.ui.h:1
+msgid "An Apple's Time Machine clone for Linux"
+msgstr "Un clon para Linux de Time Machine de Apple"
 
-#: ../format_error.ui.h:1
+#: ../interface/about.ui.h:2
+msgid "© 2011 Raster Software Vigo"
+msgstr "© 2011 Raster Software Vigo"
+
+#: ../interface/format_error.ui.h:1
 msgid "<b>Error info</b>"
 msgstr "<b>Información del error</b>"
 
-#: ../format_error.ui.h:2
+#: ../interface/format_error.ui.h:2
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
@@ -201,23 +214,23 @@ msgstr ""
 "Se ha producido un error durante\n"
 "la operación de formateado. Cancelado."
 
-#: ../format_force.ui.h:1
+#: ../interface/format_force.ui.h:1
 msgid "Format disk"
 msgstr "Formatear disco"
 
-#: ../formatting.ui.h:1
+#: ../interface/formatting.ui.h:1
 msgid "Formating disk. Please, wait."
 msgstr "Formateando el disco. Por favor, espere."
 
-#: ../main.ui.h:1
+#: ../interface/main.ui.h:1
 msgid "Change disk..."
 msgstr "Cambiar disco..."
 
-#: ../main.ui.h:2
+#: ../interface/main.ui.h:2
 msgid "Configuration"
 msgstr "Configuración"
 
-#: ../main.ui.h:3
+#: ../interface/main.ui.h:3
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -231,50 +244,52 @@ msgstr ""
 " * Una copia diaria para el último mes\n"
 " * Copias semanales hasta que se llene el disco"
 
-#: ../main.ui.h:8
+#: ../interface/main.ui.h:8
 msgid "Device:"
 msgstr "Dispositivo:"
 
-#: ../main.ui.h:9
+#: ../interface/main.ui.h:9
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: ../main.ui.h:10
+#: ../interface/main.ui.h:10
 msgid "Log"
 msgstr "Registro"
 
-#: ../main.ui.h:11
+#: ../interface/main.ui.h:11
 msgid "Next backup:"
 msgstr "Próxima copia:"
 
-#: ../main.ui.h:12
+#: ../interface/main.ui.h:12
 msgid "Oldest backup:"
 msgstr "Primera copia:"
 
-#: ../main.ui.h:13 ../options.ui.h:4
+#: ../interface/main.ui.h:13 ../interface/options.ui.h:4
 msgid "Options"
 msgstr "Opciones"
 
-#: ../main.ui.h:14
+#. Don't translate this. Is part of the name in the main window
+#: ../interface/main.ui.h:15
 msgid "ana"
-msgstr ""
+msgstr "ana"
 
-#: ../main.ui.h:15
+#: ../interface/main.ui.h:16
 msgid "anaCRONOPETE"
-msgstr ""
+msgstr "anaCRONOPETE"
 
-#: ../main.ui.h:16
+#. Don't translate this. Is part of the name in the main window.
+#: ../interface/main.ui.h:18
 msgid "cronopete"
-msgstr ""
+msgstr "cronopete"
 
-#: ../options.ui.h:1
+#: ../interface/options.ui.h:1
 msgid "<b>Backup these folders</b>"
 msgstr "<b>Copiar estas carpetas</b>"
 
-#: ../options.ui.h:2
+#: ../interface/options.ui.h:2
 msgid "<b>Exclude these folders</b>"
 msgstr "<b>Excluir estas carpetas</b>"
 
-#: ../options.ui.h:3
+#: ../interface/options.ui.h:3
 msgid "Folders to backup"
 msgstr "Carpetas a copiar"
