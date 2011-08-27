@@ -46,6 +46,7 @@ class cp_callback : GLib.Object, callbacks {
 	private nanockup? basedir;
 	private c_main_menu main_menu;
 	private bool backup_pending;
+	private bool backup_forced;
 	private time_t next_backup;
 	private bool tooltip_changed;
 	private string tooltip_value;
@@ -132,6 +133,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.start_timer = 0;
 		this.configuration_read = false;
 		this.backup_pending=false;
+		this.backup_forced=false;
 		
 		this.read_configuration();
 
@@ -151,9 +153,12 @@ class cp_callback : GLib.Object, callbacks {
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
-		this.next_backup=180+time_t();
-		this.start_timer=Timeout.add(180000,this.timer_f); // wait three minutes after being launched before doing the backup
-		this.main_timer=Timeout.add(3600000,this.timer_f);
+		int init_delay=180;
+
+		this.next_backup=init_delay+time_t();
+		init_delay*=1000;
+		this.start_timer=Timeout.add(init_delay,this.timer_f); // wait three minutes after being launched before doing the backup
+		this.main_timer=Timeout.add(3600000+init_delay,this.timer_f);
 	}
 
 	private void fill_last_backup() {
@@ -220,7 +225,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 			this.next_backup=3600+time_t();
 		
-			if (this._active==false) {
+			if ((this._active==false)&&(this.backup_forced==false)) {
 				this.backup_pending=true;
 				return true;
 			}
@@ -235,7 +240,7 @@ class cp_callback : GLib.Object, callbacks {
 			this.refresh_timer=Timeout.add(20,this.timer_f);
 			
 		} else if (this.backup_running==SystemStatus.ENDED) {
-			
+			this.backup_forced=false;
 			this.backup_running=SystemStatus.IDLE;
 			if ((this.current_status==BackupStatus.ALLFINE)||(this.current_status==BackupStatus.WARNING)) {
 				this.fill_last_backup();
@@ -275,7 +280,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 		ctx.scale(size,size);
 
-		if (this._active) {
+		if ((this._active)||(this.backup_forced)) {
 			switch (this.current_status) {
 			case BackupStatus.STOPPED:
 				ctx.set_source_rgb(1,1,1);
@@ -291,7 +296,7 @@ class cp_callback : GLib.Object, callbacks {
 			break;
 			}
 		} else {
-			ctx.set_source_rgb(1,0,0);
+			ctx.set_source_rgb(1,0.5,0);
 		}
 		ctx.set_line_width(0.0);
 		ctx.move_to(0.0,0.45);
@@ -388,6 +393,9 @@ class cp_callback : GLib.Object, callbacks {
 				Source.remove(this.main_timer);
 				this.main_timer=Timeout.add(3600000,this.timer_f);
 			}
+			if (this._active==false) {
+				this.backup_forced=true;
+			}
 			this.timer_f();
 		}
 	}
@@ -395,6 +403,7 @@ class cp_callback : GLib.Object, callbacks {
 	public void stop_backup() {
 	
 		if ((this.backup_running==SystemStatus.BACKING_UP)&&(this.basedir!=null)) {
+			this.backup_forced=false;
 			this.basedir.abort_backup();
 		}
 	

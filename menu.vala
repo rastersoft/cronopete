@@ -174,7 +174,7 @@ class c_main_menu : GLib.Object {
 	
 	}
 
-	public void cronopete_is_active_callback(){//Switch_Widget source) {
+	public void cronopete_is_active_callback() {
 	
 		if (this.my_widget.active) {
 			this.parent.active=true;
@@ -182,6 +182,7 @@ class c_main_menu : GLib.Object {
 			this.parent.active=false;
 			this.parent.stop_backup();
 		}
+		this.refresh_backup_data();
 	}
 
 	[CCode (instance_pos = -1)]
