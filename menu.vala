@@ -76,6 +76,8 @@ class c_main_menu : GLib.Object {
 
 	public void set_status(string msg) {
 	
+		/* This string shows the current status of Cronopete. It could be
+			Status: idle, or Status: copying file... */
 		this.last_status=_("Status: %s").printf(msg);
 		if (this.is_visible) {
 			this.text_status.set_label(this.last_status);
@@ -105,7 +107,8 @@ class c_main_menu : GLib.Object {
 		string retval;
 		
 		if (val==0) {
-				retval=_("None");
+			// This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
+			retval=_("None");
 		} else {
 			var date = new DateTime.from_unix_local(val);
 			
@@ -152,6 +155,7 @@ class c_main_menu : GLib.Object {
 		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next);
 		
 		if (volume_id==null) {
+			// This text means that the user still has not selected a hard disk where to do the backups
 			this.Lvid.set_text(_("Not defined"));
 		} else {
 			this.Lvid.set_text(volume_id);
@@ -181,9 +185,9 @@ class c_main_menu : GLib.Object {
 	}
 
 	[CCode (instance_pos = -1)]
-	public bool on_destroy_event(Gtk.Object o) {
+	public bool on_destroy_event(Gtk.Widget o) {
 	
-		this.main_w.hide_all();	
+		this.main_w.hide();	
 		this.is_visible = false;
 		return true;
 	}
@@ -192,7 +196,7 @@ class c_main_menu : GLib.Object {
 	public bool on_delete_event(Gtk.Widget source, Gdk.Event e) {
 	
 		this.is_visible = false;
-		this.main_w.hide_all();
+		this.main_w.hide();
 		return true;
 		
 	}

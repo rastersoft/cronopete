@@ -69,6 +69,7 @@ class cp_callback : GLib.Object, callbacks {
 			this.write_configuration();
 			this.repaint(this.size);
 			if (this._active) {
+				// Idle is the status of Cronopete when is doing nothing
 				this.set_tooltip(_("Idle"),true);
 				if (this.backup_pending) {
 					this.timer_f();
@@ -150,8 +151,8 @@ class cp_callback : GLib.Object, callbacks {
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
-		this.next_backup=60+time_t();
-		this.start_timer=Timeout.add(60000,this.timer_f); // wait 60 seconds after being launched before doing the backup
+		this.next_backup=180+time_t();
+		this.start_timer=Timeout.add(180000,this.timer_f); // wait three minutes after being launched before doing the backup
 		this.main_timer=Timeout.add(3600000,this.timer_f);
 	}
 
@@ -697,9 +698,9 @@ int main(string[] args) {
 	sleep(3); // To ensure that the menu bar has been loaded
 	string basepath;
 	
-	var file=File.new_for_path("main.ui");
+	var file=File.new_for_path("./interface/main.ui");
 	if (file.query_exists()) {
-		basepath="";
+		basepath="./interface";
 		Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
 	} else {
 		file=File.new_for_path("/usr/share/cronopete/main.ui");
