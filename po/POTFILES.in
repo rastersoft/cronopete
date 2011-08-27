@@ -5,11 +5,11 @@ usbhd_backend.vala
 backup.vala
 choose.vala
 cronopete.vala
-[type: gettext/glade]about.ui
-[type: gettext/glade]chooser.ui
-[type: gettext/glade]folder_selector.ui
-[type: gettext/glade]format_error.ui
-[type: gettext/glade]format_force.ui
-[type: gettext/glade]formatting.ui
-[type: gettext/glade]main.ui
-[type: gettext/glade]options.ui
+[type: gettext/glade]interface/about.ui
+[type: gettext/glade]interface/chooser.ui
+[type: gettext/glade]interface/folder_selector.ui
+[type: gettext/glade]interface/format_error.ui
+[type: gettext/glade]interface/format_force.ui
+[type: gettext/glade]interface/formatting.ui
+[type: gettext/glade]interface/main.ui
+[type: gettext/glade]interface/options.ui
