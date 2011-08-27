@@ -367,7 +367,7 @@ class nanockup:Object {
 			}
 		}
 
-		this.callback.show_message("Syncing disk\n");
+		this.callback.show_message(_("Syncing disk\n"));
 		if (this.backend.end_backup()!=BACKUP_RETVAL.OK) {
 			this.callback.show_message(_("Can't close the backup. Aborting.\n"));
 			return -5;
@@ -375,7 +375,7 @@ class nanockup:Object {
 	
 		var timestamp2=time_t();			
 		this.time_used=(ulong)timestamp2-timestamp;
-		this.callback.show_message(_("Backup done. Needed %ld seconds.\n".printf((long)this.time_used)));
+		this.callback.show_message(_("Backup done. Needed %ld seconds.\n").printf((long)this.time_used));
 		return retval;
 	}
 	
