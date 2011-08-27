@@ -706,6 +706,7 @@ class cp_callback : GLib.Object, callbacks {
 int main(string[] args) {
 	
 	sleep(3); // To ensure that the menu bar has been loaded
+	GLib.stdout.printf("prioridad %d\n",nice(19)); // Minimum priority
 	string basepath;
 	
 	var file=File.new_for_path("./interface/main.ui");
