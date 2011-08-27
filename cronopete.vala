@@ -153,11 +153,12 @@ class cp_callback : GLib.Object, callbacks {
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 
-		int init_delay=180;
+		// wait five minutes after being launched before doing the backup
+		int init_delay=300;
 
 		this.next_backup=init_delay+time_t();
 		init_delay*=1000;
-		this.start_timer=Timeout.add(init_delay,this.timer_f); // wait three minutes after being launched before doing the backup
+		this.start_timer=Timeout.add(init_delay,this.timer_f);
 		this.main_timer=Timeout.add(3600000+init_delay,this.timer_f);
 	}
 
