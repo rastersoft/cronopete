@@ -165,13 +165,13 @@ class cp_callback : GLib.Object, callbacks {
 	private void fill_last_backup() {
 	
 		if (this.backend==null) {
-			this.last_backup="";
+			this.last_backup=_("Latest backup: %s").printf(_("Not defined"));
 			return;
 		}
 
 		var backups = this.backend.get_backup_list();
 		if (backups==null) {
-			this.last_backup="";
+			this.last_backup=_("Latest backup: %s").printf(_("None"));
 			return;
 		}
 		
@@ -182,7 +182,8 @@ class cp_callback : GLib.Object, callbacks {
 			}
 		}
 		if (lastb==0) {
-			this.last_backup="";
+			this.last_backup=_("Latest backup: %s").printf(_("None"));
+			return;
 		}
 		var lb = new DateTime.from_unix_local(lastb);
 		this.last_backup = _("Latest backup: %s").printf(lb.format("%x %X"));
@@ -414,7 +415,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 		var w = new Builder();
 		
-		w.add_from_file("%sabout.ui".printf(this.basepath));
+		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
 
 		var about_w = (Dialog)w.get_object("aboutdialog1");
 		
@@ -670,6 +671,8 @@ class cp_callback : GLib.Object, callbacks {
 	
 	public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next) {
 	
+		this.fill_last_backup();
+	
 		id = this.backend.get_backup_id();
 		
 		var list_backup = this.backend.get_backup_list();
@@ -706,12 +709,12 @@ class cp_callback : GLib.Object, callbacks {
 int main(string[] args) {
 	
 	sleep(3); // To ensure that the menu bar has been loaded
-	GLib.stdout.printf("prioridad %d\n",nice(19)); // Minimum priority
+	nice(19); // Minimum priority
 	string basepath;
 	
 	var file=File.new_for_path("./interface/main.ui");
 	if (file.query_exists()) {
-		basepath="./interface";
+		basepath="./interface/";
 		Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
 	} else {
 		file=File.new_for_path("/usr/share/cronopete/main.ui");
