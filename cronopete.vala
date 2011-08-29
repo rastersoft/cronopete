@@ -69,14 +69,12 @@ class cp_callback : GLib.Object, callbacks {
 			this._active=value;
 			this.write_configuration();
 			this.repaint(this.size);
+			this.status_tooltip();
 			if (this._active) {
 				// Idle is the status of Cronopete when is doing nothing
-				this.set_tooltip(_("Idle"),true);
 				if (this.backup_pending) {
 					this.timer_f();
 				}
-			} else {
-				this.set_tooltip(_("Backup disabled"),true);
 			}
 		}
 	}
@@ -91,6 +89,8 @@ class cp_callback : GLib.Object, callbacks {
 			this.backup_path=value;
 			this.write_configuration();
 			this.backend=new usbhd_backend(value);
+			this.backend.status.connect(this.refresh_status);
+			this.refresh_status(null);
 		}
 	}
 
@@ -122,6 +122,13 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	}
 
+	public void refresh_status(usbhd_backend? b) {
+	
+		this.repaint(this.size);
+		this.status_tooltip();
+		this.main_menu.refresh_backup_data();
+	}
+
 	public cp_callback(string path) {
 	
 		this.messages = new StringBuilder("");
@@ -134,10 +141,12 @@ class cp_callback : GLib.Object, callbacks {
 		this.configuration_read = false;
 		this.backup_pending=false;
 		this.backup_forced=false;
+		this.tooltip_value="";
 		
 		this.read_configuration();
 
 		this.backend=new usbhd_backend(this.backup_path);
+		this.backend.status.connect(this.refresh_status);
 		
 		this.fill_last_backup();
 
@@ -148,11 +157,11 @@ class cp_callback : GLib.Object, callbacks {
 	
 		this.trayicon = new StatusIcon();
 		this.trayicon.size_changed.connect(this.repaint);
-		this.set_tooltip (_("Idle"));
 		this.trayicon.set_visible(true);
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
-
+		this.refresh_status(null);
+		this.set_tooltip (_("Idle"));
 		// wait five minutes after being launched before doing the backup
 		int init_delay=300;
 
@@ -193,18 +202,29 @@ class cp_callback : GLib.Object, callbacks {
 		delete pixels;	
 	}
 
-	public void set_tooltip(string message, bool backup_thread=false) {
+	public void set_tooltip(string? message, bool backup_thread=false) {
 
 		if (backup_thread) {
-
 			// this function can be called both from the main thread and the backup thread, so is mandatory to take precautions
 			lock (this.tooltip_value) {
-				this.tooltip_value=message.dup();
+				if (message==null) {
+					this.tooltip_value="";
+				} else {
+					this.tooltip_value=message.dup();
+				}
 				this.tooltip_changed=true;
 			}
 		} else {
-			this.trayicon.set_tooltip_text (message);
-			this.main_menu.set_status(message);
+			lock (this.tooltip_value) {
+				if (message==null) {
+					this.trayicon.set_tooltip_text (this.tooltip_value);
+					this.main_menu.set_status(this.tooltip_value);
+					this.tooltip_changed=false;
+				} else {
+					this.trayicon.set_tooltip_text (message);
+					this.main_menu.set_status(message);
+				}
+			}
 		}
 	}
 
@@ -216,11 +236,7 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	
 		if (this.tooltip_changed) {
-			lock (this.tooltip_value) {
-				this.set_tooltip(this.tooltip_value);
-				this.tooltip_value=null;
-				this.tooltip_changed=false;
-			}
+				this.set_tooltip(null);
 		}
 	
 		if (this.backup_running==SystemStatus.IDLE) {
@@ -269,6 +285,18 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	}
 
+	private void status_tooltip() {
+		if (this.backend.available==false) {
+			this.set_tooltip(_("Storage not available"));
+		} else {
+			if (this._active) {
+				this.set_tooltip(_("Idle"));
+			} else {
+				this.set_tooltip(_("Backup disabled"));
+			}
+		}
+	}
+
 	public bool repaint(int size) {
 	
 		if (size==0) {
@@ -282,23 +310,27 @@ class cp_callback : GLib.Object, callbacks {
 		
 		ctx.scale(size,size);
 
-		if ((this._active)||(this.backup_forced)) {
-			switch (this.current_status) {
-			case BackupStatus.STOPPED:
-				ctx.set_source_rgb(1,1,1);
-			break;
-			case BackupStatus.ALLFINE:
-				ctx.set_source_rgb(0,1,0);
-			break;
-			case BackupStatus.WARNING:
-				ctx.set_source_rgb(1,0.7,0);
-			break;
-			case BackupStatus.ERROR:
-				ctx.set_source_rgb(1,0,0);
-			break;
-			}
+		if (this.backend.available==false) {
+			ctx.set_source_rgb(1,0,0);
 		} else {
-			ctx.set_source_rgb(1,0.5,0);
+			if ((this._active)||(this.backup_forced)) {
+				switch (this.current_status) {
+				case BackupStatus.STOPPED:
+					ctx.set_source_rgb(1,1,1);
+				break;
+				case BackupStatus.ALLFINE:
+					ctx.set_source_rgb(0,1,0);
+				break;
+				case BackupStatus.WARNING:
+					ctx.set_source_rgb(1,0.7,0);
+				break;
+				case BackupStatus.ERROR:
+					ctx.set_source_rgb(1,0,0);
+				break;
+				}
+			} else {
+				ctx.set_source_rgb(1,0.5,0);
+			}
 		}
 		ctx.set_line_width(0.0);
 		ctx.move_to(0.0,0.45);
@@ -349,21 +381,25 @@ class cp_callback : GLib.Object, callbacks {
 	private void menuSystem_popup() {
 	
 		this.menuSystem = new Menu();
-	
+
+		this.fill_last_backup();
 		var menuDate = new MenuItem.with_label(this.last_backup);
+
 		menuDate.sensitive=false;
 		menuSystem.append(menuDate);
 		
+		MenuItem menuBUnow;
 		if (this.backup_running==SystemStatus.IDLE) {
-			var menuBUnow = new MenuItem.with_label(_("Back Up Now"));
+			menuBUnow = new MenuItem.with_label(_("Back Up Now"));
 			menuBUnow.activate.connect(backup_now);
 			this.menuSystem.append(menuBUnow);
 		} else {
-			var menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
+			menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
 			menuBUnow.activate.connect(stop_backup);
 			this.menuSystem.append(menuBUnow);
 		}
 
+		menuBUnow.sensitive=this.backend.available;
 		
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
@@ -674,17 +710,19 @@ class cp_callback : GLib.Object, callbacks {
 		this.fill_last_backup();
 	
 		id = this.backend.get_backup_id();
-		
-		var list_backup = this.backend.get_backup_list();
-		if (list_backup == null) {
-			this.next_backup=0;
-			return;
-		}
 
 		oldest=0;
 		newest=0;
 		next=0;
 		
+		var list_backup = this.backend.get_backup_list();
+		if (list_backup == null) {
+			oldest=0;
+			newest=0;
+			next=0;
+			return;
+		}
+
 		if (list_backup==null) {
 			return;
 		}

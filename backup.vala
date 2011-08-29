@@ -49,6 +49,9 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL link_file(string path);
 	public abstract BACKUP_RETVAL abort_backup();
 	public abstract bool get_free_space(out uint64 space);
+	
+	public abstract bool available {get;}
+	public signal void status(usbhd_backend b);
 
 }
 

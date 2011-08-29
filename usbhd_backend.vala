@@ -28,6 +28,14 @@ class usbhd_backend: Object, backends {
 	private string? cfinal_path;
 	private string? last_backup;
 	private string drive_path;
+	private VolumeMonitor monitor;
+	public bool _available;
+	public bool available {
+		get {
+			return (this._available);
+		}
+	}
+	private int last_msg;
 	
 	public usbhd_backend(string bpath) {
 	
@@ -39,6 +47,40 @@ class usbhd_backend: Object, backends {
 		this.cbackup_path=null;
 		this.cfinal_path=null;
 		this.drive_path=bpath;
+		
+		this.monitor = VolumeMonitor.get();
+		this.monitor.mount_added.connect_after(this.refresh_connect);
+		this.monitor.mount_removed.connect_after(this.refresh_connect);
+		this.last_msg=0;
+		this.refresh_connect();
+		
+	}
+
+	public void refresh_connect() {
+	
+		var volumes = this.monitor.get_volumes();
+		Mount mnt;
+		foreach (Volume v in volumes) {		
+
+			mnt=v.get_mount();
+			if ((mnt is Mount)==false) {
+				continue;
+			}
+
+			if (this.drive_path==mnt.get_root().get_path()) {
+				this._available=true;
+				if (this.last_msg!=1) {
+					this.last_msg=1;
+					this.status(this);
+				}
+				return;
+			}
+		}
+		this._available=false;
+		if (this.last_msg!=2) {
+			this.last_msg=2;
+			this.status(this);
+		}
 	}
 
 	public bool get_free_space(out uint64 space) {
@@ -271,5 +313,4 @@ class usbhd_backend: Object, backends {
 		this.cfinal_path=null;
 		return BACKUP_RETVAL.OK;
 	}
-
 }

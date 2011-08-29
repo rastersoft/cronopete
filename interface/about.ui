@@ -13,6 +13,7 @@
     <property name="copyright" translatable="yes">© 2011 Raster Software Vigo</property>
     <property name="comments" translatable="yes">An Apple's Time Machine clone for Linux</property>
     <property name="website">http://www.rastersoft.com</property>
+    <property name="website_label">www.rastersoft.com</property>
     <property name="license">                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
