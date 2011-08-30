@@ -127,6 +127,9 @@ class cp_callback : GLib.Object, callbacks {
 		this.repaint(this.size);
 		this.status_tooltip();
 		this.main_menu.refresh_backup_data();
+		if ((this._active) && (this.backend.available) && (this.backup_pending)) {
+			this.timer_f();
+		}
 	}
 
 	public cp_callback(string path) {
@@ -243,7 +246,7 @@ class cp_callback : GLib.Object, callbacks {
 		
 			this.next_backup=3600+time_t();
 		
-			if ((this._active==false)&&(this.backup_forced==false)) {
+			if (((this._active==false)||(this.backend.available==false))&&(this.backup_forced==false)) {
 				this.backup_pending=true;
 				return true;
 			}

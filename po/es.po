@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-30 00:05+0200\n"
-"PO-Revision-Date: 2011-08-30 00:04+0200\n"
+"POT-Creation-Date: 2011-08-30 23:47+0200\n"
+"PO-Revision-Date: 2011-08-30 23:51+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
 "Language: \n"
@@ -26,13 +26,13 @@ msgid "Status: %s"
 msgstr "Estado: %s"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:111 ../cronopete.vala:183 ../cronopete.vala:194
+#: ../menu.vala:111 ../cronopete.vala:186 ../cronopete.vala:197
 #, c-format
 msgid "None"
 msgstr "Ninguna"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:159 ../cronopete.vala:177
+#: ../menu.vala:159 ../cronopete.vala:180
 #, c-format
 msgid "Not defined"
 msgstr "No definida"
@@ -121,81 +121,81 @@ msgstr ""
 "Para cambiar el sistema de ficheros del disco, pulse el botón <i>Formatear "
 "disco</i>. <b>Todos los datos contenidos en el disco se perderán</b>."
 
-#: ../cronopete.vala:164 ../cronopete.vala:265 ../cronopete.vala:293
+#: ../cronopete.vala:167 ../cronopete.vala:268 ../cronopete.vala:296
 msgid "Idle"
 msgstr "En reposo"
 
-#: ../cronopete.vala:177 ../cronopete.vala:183 ../cronopete.vala:194
-#: ../cronopete.vala:198
+#: ../cronopete.vala:180 ../cronopete.vala:186 ../cronopete.vala:197
+#: ../cronopete.vala:201
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Ultima copia: %s"
 
-#: ../cronopete.vala:290
+#: ../cronopete.vala:293
 msgid "Storage not available"
-msgstr "Almacenamiento no disponible"
+msgstr "El almacenamiento no está disponible"
 
-#: ../cronopete.vala:295
+#: ../cronopete.vala:298
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../cronopete.vala:393
+#: ../cronopete.vala:396
 msgid "Back Up Now"
 msgstr "Copiar ahora"
 
-#: ../cronopete.vala:397
+#: ../cronopete.vala:400
 msgid "Stop Backing Up"
 msgstr "Detener copia"
 
-#: ../cronopete.vala:407
+#: ../cronopete.vala:410
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir preferencias de Cronopete..."
 
-#: ../cronopete.vala:476
+#: ../cronopete.vala:479
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando carpeta %s\n"
 
-#: ../cronopete.vala:495
+#: ../cronopete.vala:498
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Fallo al copiar el fichero %s\n"
 
-#: ../cronopete.vala:500
+#: ../cronopete.vala:503
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Fallo al acceder a la carpeta %s\n"
 
-#: ../cronopete.vala:505
+#: ../cronopete.vala:508
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Fallo al crear la carpeta %s\n"
 
-#: ../cronopete.vala:524
+#: ../cronopete.vala:527
 msgid "Starting backup\n"
 msgstr "Comenzando copia\n"
 
-#: ../cronopete.vala:532
+#: ../cronopete.vala:535
 msgid "Error reading configuration"
 msgstr "Fallo al leer la configuración"
 
-#: ../cronopete.vala:541
+#: ../cronopete.vala:544
 msgid "Erasing old backups"
 msgstr "Borrando copias antiguas"
 
-#: ../cronopete.vala:553
+#: ../cronopete.vala:556
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:557
+#: ../cronopete.vala:560
 msgid "Can't do backup; disk is too small"
 msgstr "Fallo al hacer la copia; el disco es demasiado pequeño"
 
-#: ../cronopete.vala:561
+#: ../cronopete.vala:564
 msgid "Can't do backup"
 msgstr "Fallo al hacer la copia"
 
-#: ../cronopete.vala:701
+#: ../cronopete.vala:704
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
@@ -205,6 +205,40 @@ msgid "An Apple's Time Machine clone for Linux"
 msgstr "Un clon para Linux de Time Machine de Apple"
 
 #: ../interface/about.ui.h:2
+msgid ""
+"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
+"the first novel with a time-travel machine.\n"
+"\n"
+"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
+"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
+"first novel to feature a machine that allows to \"fly against time\".\n"
+"\n"
+"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
+"Leopard. Several simmilar programs for Linux surged.\n"
+"\n"
+"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
+"Linux."
+msgstr ""
+"En 1895, H.G. Wells publicó <b>La Máquina del Tiempo</b>, considerada "
+"durante años como la primera novela con una máquina capaz de viajar en el "
+"tiempo.\n"
+"\n"
+"Pero en 1887, ocho años antes, Enrique Gaspar y Rimbau publicó <b>El "
+"anacronópete</b>, una novela en formato de zarzuela, que es realmente la "
+"primera novela que incorpora una máquina que permite \"volar a través del "
+"tiempo\".\n"
+"\n"
+"En 2007, Apple lanzó <b>Time Machine</b>, un programa de backup para MacOS X "
+"Leopard. Pronto surgieron varios programas similares para Linux.\n"
+"\n"
+"En 2011 llega ana<b>CRONOPETE</b>, EL clon para Linux de Time Machine de "
+"Apple."
+
+#: ../interface/about.ui.h:9
+msgid "Why <i>ana<b>CRONOPETE</b></i>?"
+msgstr "¿Por qué <i>ana<b>CRONOPETE</b></i>?"
+
+#: ../interface/about.ui.h:10
 msgid "© 2011 Raster Software Vigo"
 msgstr "© 2011 Raster Software Vigo"
 
@@ -300,9 +334,8 @@ msgstr "<b>Excluir estas carpetas</b>"
 msgid "Folders to backup"
 msgstr "Carpetas a copiar"
 
-#: ../interface/options.ui.h:5
-msgid "Time interval between backups (in hours):"
-msgstr "Intervalo entre copias (en horas):"
+#~ msgid "Time interval between backups (in hours):"
+#~ msgstr "Intervalo entre copias (en horas):"
 
 #~ msgid "Latest backup: unknown"
 #~ msgstr "Última copia: desconocido"

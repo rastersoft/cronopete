@@ -3,13 +3,14 @@
   <requires lib="gtk+" version="2.20"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkAboutDialog" id="aboutdialog1">
+    <property name="width_request">450</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
-    <property name="window_position">center</property>
+    <property name="window_position">center-always</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">anaCRONOPETE</property>
-    <property name="version">0.99a</property>
+    <property name="version">0.99c</property>
     <property name="copyright" translatable="yes">© 2011 Raster Software Vigo</property>
     <property name="comments" translatable="yes">An Apple's Time Machine clone for Linux</property>
     <property name="website">http://www.rastersoft.com</property>
@@ -656,7 +657,57 @@ copy of the Program in return for a fee.
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkExpander" id="expander1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <object class="GtkFrame" id="frame1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">In 1895, H.G. Wells published &lt;b&gt;The Time Machine&lt;/b&gt;, considerer for years the first novel with a time-travel machine.
+
+But in 1887, eight years before, Enrique Gaspar y Rimbau published &lt;b&gt;El anacronópete&lt;/b&gt;, a novel in the format of a zarzuela, which is the truly first novel to feature a machine that allows to "fly against time".
+
+In 2007, Apple launched &lt;b&gt;Time Machine&lt;/b&gt;, a backup program for MacOS X Leopard. Several simmilar programs for Linux surged.
+
+In 2011, arrives ana&lt;b&gt;CRONOPETE&lt;/b&gt;, THE Apple's Time Machine clone for Linux.</property>
+                        <property name="use_markup">True</property>
+                        <property name="wrap">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label_item">
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Why &lt;i&gt;ana&lt;b&gt;CRONOPETE&lt;/b&gt;&lt;/i&gt;?</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
         </child>
       </object>
     </child>

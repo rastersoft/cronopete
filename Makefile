@@ -2,7 +2,7 @@ cronopete: backup.vala choose.vala cronopete.vala menu.vala options.vala switch_
 	valac -q -X -D'GETTEXT_PACKAGE="cronopete"' backup.vala choose.vala cronopete.vala menu.vala options.vala switch_widget.vala usbhd_backend.vala --pkg gio-2.0 --pkg gtk+-2.0 --pkg posix --pkg gee-1.0 --pkg gsl --pkg gmodule-2.0 -o cronopete
 
 install:
-	rm /usr/local/bin/cronopete
+	rm -f /usr/local/bin/cronopete
 	cp cronopete /usr/local/bin
 	install -d /usr/local/share/cronopete
 	cp interface/*.ui /usr/local/share/cronopete
