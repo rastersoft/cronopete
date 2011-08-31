@@ -279,9 +279,7 @@ class nanockup:Object {
 		string exclude_this_path=Path.build_filename(Environment.get_home_dir(),".gvfs");
 		if (false==this.exclude_path_list.contains(exclude_this_path)) {
 			this.exclude_path_list.add(exclude_this_path);
-			GLib.stdout.printf("Añadiendo .gvfs\n");
 		}
-		
 	}
 	
 	public int do_backup() {
