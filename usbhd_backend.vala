@@ -85,6 +85,12 @@ class usbhd_backend: Object, backends {
 
 	public bool get_free_space(out uint64 total_space, out uint64 free_space) {
 	
+		if (this._available==false) {
+			total_space=0;
+			free_space=0;
+			return false;
+		}
+	
 		try {
 			var file = File.new_for_path(this.drive_path);
 			var info = file.query_filesystem_info(FILE_ATTRIBUTE_FILESYSTEM_SIZE+","+FILE_ATTRIBUTE_FILESYSTEM_FREE,null);
@@ -92,11 +98,10 @@ class usbhd_backend: Object, backends {
 			total_space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_SIZE);
 			return true;
 		} catch (Error e) {
-			total_space = 0;
-			free_space = 0;
-			return false;
 		}
-	
+		total_space = 0;
+		free_space = 0;
+		return false;
 	}
 
 	public string? get_backup_id() {
