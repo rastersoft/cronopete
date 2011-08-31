@@ -83,15 +83,17 @@ class usbhd_backend: Object, backends {
 		}
 	}
 
-	public bool get_free_space(out uint64 space) {
+	public bool get_free_space(out uint64 total_space, out uint64 free_space) {
 	
 		try {
 			var file = File.new_for_path(this.drive_path);
-			var info = file.query_filesystem_info(FILE_ATTRIBUTE_FILESYSTEM_FREE,null);
-			space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_FREE);
+			var info = file.query_filesystem_info(FILE_ATTRIBUTE_FILESYSTEM_SIZE+","+FILE_ATTRIBUTE_FILESYSTEM_FREE,null);
+			free_space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_FREE);
+			total_space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_SIZE);
 			return true;
 		} catch (Error e) {
-			space = 0;
+			total_space = 0;
+			free_space = 0;
 			return false;
 		}
 	

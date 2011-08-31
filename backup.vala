@@ -48,7 +48,7 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL copy_file(string path);
 	public abstract BACKUP_RETVAL link_file(string path);
 	public abstract BACKUP_RETVAL abort_backup();
-	public abstract bool get_free_space(out uint64 space);
+	public abstract bool get_free_space(out uint64 total_space, out uint64 free_space);
 	
 	public abstract bool available {get;}
 	public signal void status(usbhd_backend b);
@@ -204,7 +204,7 @@ class nanockup:Object {
 	public nanockup(callbacks to_callback,backends to_backend) {
 	
 		this.origin_path_list=new path_list();
-		this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
+		this.exclude_path_list =new HashSet<string>(str_hash,str_equal);
 		this.callback=to_callback;
 		this.backend=to_backend;
 		
@@ -274,6 +274,14 @@ class nanockup:Object {
 			this.exclude_path_list.add(tmp);
 		}
 		this.skip_hiden_at_HOME=skip_h_at_h;
+		
+		// Never back up the .gvfs folder
+		string exclude_this_path=Path.build_filename(Environment.get_home_dir(),".gvfs");
+		if (false==this.exclude_path_list.contains(exclude_this_path)) {
+			this.exclude_path_list.add(exclude_this_path);
+			GLib.stdout.printf("Añadiendo .gvfs\n");
+		}
+		
 	}
 	
 	public int do_backup() {
@@ -523,8 +531,9 @@ class nanockup:Object {
 	public bool free_bytes(uint64 d_size) {
 	
 		uint64 c_size;
+		uint64 t_size;
 
-		if (false==this.backend.get_free_space(out c_size)) {
+		if (false==this.backend.get_free_space(out t_size,out c_size)) {
 			return false;
 		}
 		if (c_size>=d_size) {
@@ -546,7 +555,7 @@ class nanockup:Object {
 			entry = blist.remove_at(0);
 			//GLib.stdout.printf("Need to free up to %lld; currently there are %lld bytes free; erasing backup %lld\n",d_size,c_size,entry);
 			this.backend.delete_backup(entry);
-			if (false==this.backend.get_free_space(out c_size)) {
+			if (false==this.backend.get_free_space(out t_size,out c_size)) {
 				return false;
 			}
 		}

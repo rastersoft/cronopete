@@ -708,9 +708,13 @@ class cp_callback : GLib.Object, callbacks {
 		return 0;
 	}
 	
-	public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next) {
+	public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next,
+															out uint64 total_space, out uint64 free_space) {
+	
 	
 		this.fill_last_backup();
+
+		this.backend.get_free_space(out total_space,out free_space);
 	
 		id = this.backend.get_backup_id();
 

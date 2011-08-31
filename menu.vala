@@ -32,6 +32,7 @@ class c_main_menu : GLib.Object {
 	private Label Loldest;
 	private Label Lnewest;
 	private Label Lnext;
+	private Label Lspace;
 	private Label text_status;
 	private Image img;
 	private TextMark mark;
@@ -60,6 +61,7 @@ class c_main_menu : GLib.Object {
 		this.Loldest = (Label) this.builder.get_object("label_oldest_backup");
 		this.Lnewest = (Label) this.builder.get_object("label_newest_backup");
 		this.Lnext = (Label) this.builder.get_object("label_next_backup");
+		this.Lspace = (Label) this.builder.get_object("label_free_space");
 		this.text_status = (Label) this.builder.get_object("status_label");
 		this.img = (Image) this.builder.get_object("image_disk");
 		
@@ -151,8 +153,10 @@ class c_main_menu : GLib.Object {
 		time_t oldest;
 		time_t newest;
 		time_t next;
+		uint64 total_space;
+		uint64 free_space;
 
-		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next);
+		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next, out total_space, out free_space);
 		
 		if (volume_id==null) {
 			// This text means that the user still has not selected a hard disk where to do the backups
@@ -163,6 +167,8 @@ class c_main_menu : GLib.Object {
 		this.Loldest.set_text(this.parse_date(oldest));
 		this.Lnewest.set_text(this.parse_date(newest));
 		this.Lnext.set_text(this.parse_date(next));
+		/* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB */
+		this.Lspace.set_text(_("%lld GB of %lld GB").printf((free_space+900000000)/1073741824,(total_space+900000000)/1073741824));
 	
 	}
 

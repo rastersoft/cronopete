@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-30 23:47+0200\n"
-"PO-Revision-Date: 2011-08-31 09:01+0200\n"
+"POT-Creation-Date: 2011-08-31 22:13+0200\n"
+"PO-Revision-Date: 2011-08-31 22:14+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
 "Language: \n"
@@ -20,55 +20,62 @@ msgstr ""
 
 #. This string shows the current status of Cronopete. It could be
 #. Status: idle, or Status: copying file...
-#: ../menu.vala:81
+#: ../menu.vala:83
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:111 ../cronopete.vala:186 ../cronopete.vala:197
+#: ../menu.vala:113 ../cronopete.vala:186 ../cronopete.vala:197
 #, c-format
 msgid "None"
 msgstr "Ninguna"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:159 ../cronopete.vala:180
+#: ../menu.vala:163 ../cronopete.vala:180
 #, c-format
 msgid "Not defined"
-msgstr "No definida"
+msgstr "No definido"
+
+#. This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
+#: ../menu.vala:171
+#, c-format
+msgid "%lld GB of %lld GB"
+msgstr "%lld GB de %lld GB"
 
 #: ../options.vala:55
 #, c-format
 msgid "Backup hiden files and folders in %s"
 msgstr "Copiar ficheros y carpetas ocultos en %s"
 
-#: ../backup.vala:314
-msgid "Can't create the folder for this backup. Aborting backup.\n"
-msgstr "No se ha podido crear la carpeta para esta copia. Abortando.\n"
-
-#: ../backup.vala:318
-msgid "Can't create the base folders to do backups. Aborting backup.\n"
-msgstr "No se han podido crear las carpetas base para las copias. Abortando.\n"
-
 #: ../backup.vala:322
-msgid "Backup device not available. Aborting backup.\n"
-msgstr "El disco externo no está disponible. Abortando.\n"
+msgid "Can't create the folder for this backup. Aborting backup.\n"
+msgstr "No se ha podido crear la carpeta para esta copia. Cancelando.\n"
 
 #: ../backup.vala:326
+msgid "Can't create the base folders to do backups. Aborting backup.\n"
+msgstr ""
+"No se han podido crear las carpetas base para las copias. Cancelando.\n"
+
+#: ../backup.vala:330
+msgid "Backup device not available. Aborting backup.\n"
+msgstr "El disco externo no está disponible. Cancelando.\n"
+
+#: ../backup.vala:334
 msgid "Already started a backup.\n"
 msgstr "Ya se está haciendo una copia.\n"
 
-#: ../backup.vala:331
+#: ../backup.vala:339
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 "No se ha podido liberar espacio en disco para comenzar una copia. "
-"Abortando.\n"
+"Cancelando.\n"
 
-#: ../backup.vala:350
+#: ../backup.vala:358
 msgid "Backup aborted\n"
 msgstr "Copia cancelada.\n"
 
-#: ../backup.vala:364
+#: ../backup.vala:372
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -76,15 +83,15 @@ msgstr ""
 "El disco es demasiado pequeño para poder copiar todo.\n"
 "Ajuste la lista de carpetas a copiar y a excluir.\n"
 
-#: ../backup.vala:373
+#: ../backup.vala:381
 msgid "Syncing disk\n"
 msgstr "Sincronizando el disco\n"
 
-#: ../backup.vala:375
+#: ../backup.vala:383
 msgid "Can't close the backup. Aborting.\n"
-msgstr "No se ha podido cerrar la copia. Abortando.\n"
+msgstr "No se ha podido cerrar la copia. Cancelando.\n"
 
-#: ../backup.vala:381
+#: ../backup.vala:389
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Copia terminada. Se tardaron %ld segundos.\n"
@@ -100,8 +107,8 @@ msgid ""
 "<b>All the data in the drive will be erased</b>."
 msgstr ""
 "El sistema de ficheros %s no se puede utilizar con Cronopete porque, "
-"actualmente, tiene bugs que pueden poner en riesgo las copias. El sistema de "
-"ficheros óptimo es ReiserFS, pero también se puede utilizar Ext3/Ext4.\n"
+"actualmente, tiene errores que pueden poner en riesgo las copias. El sistema "
+"de ficheros óptimo es ReiserFS, pero también se puede utilizar Ext3/Ext4.\n"
 "\n"
 "Para cambiar el sistema de ficheros del disco, pulse el botón <i>Formatear "
 "disco</i>. <b>Todos los datos contenidos en el disco se perderán</b>."
@@ -129,7 +136,7 @@ msgstr "En reposo"
 #: ../cronopete.vala:201
 #, c-format
 msgid "Latest backup: %s"
-msgstr "Ultima copia: %s"
+msgstr "Última copia: %s"
 
 #: ../cronopete.vala:293
 msgid "Storage not available"
@@ -145,39 +152,39 @@ msgstr "Copiar ahora"
 
 #: ../cronopete.vala:400
 msgid "Stop Backing Up"
-msgstr "Detener copia"
+msgstr "Detener la copia"
 
 #: ../cronopete.vala:410
 msgid "Open Cronopete Preferences..."
-msgstr "Abrir preferencias de Cronopete..."
+msgstr "Abrir las preferencias de Cronopete..."
 
 #: ../cronopete.vala:479
 #, c-format
 msgid "Backing up folder %s\n"
-msgstr "Copiando carpeta %s\n"
+msgstr "Copiando la carpeta %s\n"
 
 #: ../cronopete.vala:498
 #, c-format
 msgid "Can't copy file %s\n"
-msgstr "Fallo al copiar el fichero %s\n"
+msgstr "Se produjo un fallo al copiar el fichero %s\n"
 
 #: ../cronopete.vala:503
 #, c-format
 msgid "Can't access directory %s\n"
-msgstr "Fallo al acceder a la carpeta %s\n"
+msgstr "Se produjo un fallo al acceder a la carpeta %s\n"
 
 #: ../cronopete.vala:508
 #, c-format
 msgid "Can't create directory %s\n"
-msgstr "Fallo al crear la carpeta %s\n"
+msgstr "Se produjo un fallo al crear la carpeta %s\n"
 
 #: ../cronopete.vala:527
 msgid "Starting backup\n"
-msgstr "Comenzando copia\n"
+msgstr "Comenzando la copia\n"
 
 #: ../cronopete.vala:535
 msgid "Error reading configuration"
-msgstr "Fallo al leer la configuración"
+msgstr "Se produjo un fallo al leer la configuración"
 
 #: ../cronopete.vala:544
 msgid "Erasing old backups"
@@ -189,11 +196,11 @@ msgstr "Copia cancelada"
 
 #: ../cronopete.vala:560
 msgid "Can't do backup; disk is too small"
-msgstr "Fallo al hacer la copia; el disco es demasiado pequeño"
+msgstr "Se produjo un fallo al hacer la copia; el disco es demasiado pequeño"
 
 #: ../cronopete.vala:564
 msgid "Can't do backup"
-msgstr "Fallo al hacer la copia"
+msgstr "Se produjo un fallo al hacer la copia"
 
 #: ../cronopete.vala:704
 #, c-format
@@ -202,7 +209,7 @@ msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
 
 #: ../interface/about.ui.h:1
 msgid "An Apple's Time Machine clone for Linux"
-msgstr "Un clon para Linux de Time Machine de Apple"
+msgstr "Un clon para Linux del «Time Machine» de Apple"
 
 #: ../interface/about.ui.h:2
 msgid ""
@@ -220,18 +227,18 @@ msgid ""
 "Linux."
 msgstr ""
 "En 1895, H.G. Wells publicó <b>La Máquina del Tiempo</b>, considerada "
-"durante décadas como la primera novela con una máquina capaz de viajar en el "
+"durante años como la primera novela con una máquina capaz de viajar en el "
 "tiempo.\n"
 "\n"
-"Pero en 1887, ocho años antes, Enrique Gaspar y Rimbau había publicado <b>El "
+"Pero en 1887, ocho años antes, Enrique Gaspar y Rimbau habia publicado <b>El "
 "anacronópete</b>, una novela en formato de zarzuela que es realmente la "
-"primera que incorpora una máquina que permite \"volar a través del tiempo"
-"\".\n"
+"primera en incorporar una máquina que permite «volar a través del tiempo».\n"
 "\n"
-"En 2007, Apple lanzó <b>Time Machine</b>, un programa de backup para MacOS X "
-"Leopard. Pronto surgieron varios programas similares para Linux.\n"
+"En 2007, Apple lanzó <b>Time Machine</b>, un programa de copias de seguridad "
+"para MacOS X Leopard. Pronto surgieron varios programas similares para "
+"Linux.\n"
 "\n"
-"En 2011 llega ana<b>CRONOPETE</b>, EL clon para Linux de Time Machine de "
+"En 2011 llega ana<b>CRONOPETE</b>, EL clon para Linux de «Time Machine» de "
 "Apple."
 
 #: ../interface/about.ui.h:9
@@ -256,15 +263,15 @@ msgstr ""
 
 #: ../interface/format_force.ui.h:1
 msgid "Format disk"
-msgstr "Formatear disco"
+msgstr "Formatear el disco"
 
 #: ../interface/formatting.ui.h:1
 msgid "Formating disk. Please, wait."
-msgstr "Formateando el disco. Por favor, espere."
+msgstr "Formateando el disco. Espere."
 
 #: ../interface/main.ui.h:1
 msgid "Change disk..."
-msgstr "Cambiar disco..."
+msgstr "Cambiar el disco..."
 
 #: ../interface/main.ui.h:2
 msgid "Configuration"
@@ -308,17 +315,23 @@ msgstr "Primera copia:"
 msgid "Options"
 msgstr "Opciones"
 
-#. Don't translate this. Is part of the name in the main window
+#. Refers to the free disk space available in the backup's hard disk
 #: ../interface/main.ui.h:15
+msgctxt "Refers to the free disk space available in the backup's hard disk"
+msgid "Available:"
+msgstr "Disponible:"
+
+#. Don't translate this. Is part of the name in the main window
+#: ../interface/main.ui.h:17
 msgid "ana"
 msgstr "ana"
 
-#: ../interface/main.ui.h:16
+#: ../interface/main.ui.h:18
 msgid "anaCRONOPETE"
 msgstr "anaCRONOPETE"
 
 #. Don't translate this. Is part of the name in the main window.
-#: ../interface/main.ui.h:18
+#: ../interface/main.ui.h:20
 msgid "cronopete"
 msgstr "cronopete"
 
@@ -333,12 +346,3 @@ msgstr "<b>Excluir estas carpetas</b>"
 #: ../interface/options.ui.h:3
 msgid "Folders to backup"
 msgstr "Carpetas a copiar"
-
-#~ msgid "Time interval between backups (in hours):"
-#~ msgstr "Intervalo entre copias (en horas):"
-
-#~ msgid "Latest backup: unknown"
-#~ msgstr "Última copia: desconocido"
-
-#~ msgid "Latest backup: none"
-#~ msgstr "Última copia: ninguna"
