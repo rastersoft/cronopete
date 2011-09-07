@@ -16,6 +16,10 @@ install:
 clean:
 	rm cronopete
 
+launch:
+	killall -q cronopete || cd
+	cronopete &	
+
 uninstall:
 	rm /usr/local/bin/cronopete
 	rm -rf /usr/local/share/cronopete

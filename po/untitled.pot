@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-31 22:13+0200\n"
+"POT-Creation-Date: 2011-09-03 00:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,45 +47,45 @@ msgstr ""
 msgid "Backup hiden files and folders in %s"
 msgstr ""
 
-#: ../backup.vala:322
+#: ../backup.vala:320
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:326
+#: ../backup.vala:324
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:330
+#: ../backup.vala:328
 msgid "Backup device not available. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:334
+#: ../backup.vala:332
 msgid "Already started a backup.\n"
 msgstr ""
 
-#: ../backup.vala:339
+#: ../backup.vala:337
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:358
+#: ../backup.vala:356
 msgid "Backup aborted\n"
 msgstr ""
 
-#: ../backup.vala:372
+#: ../backup.vala:370
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
 msgstr ""
 
-#: ../backup.vala:381
+#: ../backup.vala:379
 msgid "Syncing disk\n"
 msgstr ""
 
-#: ../backup.vala:383
+#: ../backup.vala:381
 msgid "Can't close the backup. Aborting.\n"
 msgstr ""
 
-#: ../backup.vala:389
+#: ../backup.vala:387
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr ""

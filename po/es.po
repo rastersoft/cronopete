@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-31 22:13+0200\n"
+"POT-Creation-Date: 2011-09-03 00:05+0200\n"
 "PO-Revision-Date: 2011-08-31 22:14+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
@@ -48,34 +48,34 @@ msgstr "%lld GB de %lld GB"
 msgid "Backup hiden files and folders in %s"
 msgstr "Copiar ficheros y carpetas ocultos en %s"
 
-#: ../backup.vala:322
+#: ../backup.vala:320
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr "No se ha podido crear la carpeta para esta copia. Cancelando.\n"
 
-#: ../backup.vala:326
+#: ../backup.vala:324
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 "No se han podido crear las carpetas base para las copias. Cancelando.\n"
 
-#: ../backup.vala:330
+#: ../backup.vala:328
 msgid "Backup device not available. Aborting backup.\n"
 msgstr "El disco externo no está disponible. Cancelando.\n"
 
-#: ../backup.vala:334
+#: ../backup.vala:332
 msgid "Already started a backup.\n"
 msgstr "Ya se está haciendo una copia.\n"
 
-#: ../backup.vala:339
+#: ../backup.vala:337
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 "No se ha podido liberar espacio en disco para comenzar una copia. "
 "Cancelando.\n"
 
-#: ../backup.vala:358
+#: ../backup.vala:356
 msgid "Backup aborted\n"
 msgstr "Copia cancelada.\n"
 
-#: ../backup.vala:372
+#: ../backup.vala:370
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -83,15 +83,15 @@ msgstr ""
 "El disco es demasiado pequeño para poder copiar todo.\n"
 "Ajuste la lista de carpetas a copiar y a excluir.\n"
 
-#: ../backup.vala:381
+#: ../backup.vala:379
 msgid "Syncing disk\n"
 msgstr "Sincronizando el disco\n"
 
-#: ../backup.vala:383
+#: ../backup.vala:381
 msgid "Can't close the backup. Aborting.\n"
 msgstr "No se ha podido cerrar la copia. Cancelando.\n"
 
-#: ../backup.vala:389
+#: ../backup.vala:387
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Copia terminada. Se tardaron %ld segundos.\n"

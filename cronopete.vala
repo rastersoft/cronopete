@@ -420,9 +420,10 @@ class cp_callback : GLib.Object, callbacks {
 	
 		menuSystem.show_all();
 	
-		this.menuSystem.popup(null,null,null,2,Gtk.get_current_event_time());
+		this.menuSystem.popup(null,null,this.trayicon.position_menu,2,Gtk.get_current_event_time());
 	
 	}
+	
 	
 	public void backup_now() {
 	
@@ -783,6 +784,7 @@ int main(string[] args) {
 	
 	Gdk.threads_enter();
 	Gtk.main();
+
 	Gdk.threads_leave();
 	return 0;
 }
