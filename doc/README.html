@@ -1,0 +1,116 @@
+<html><head><title>Cronopete 1.0</title></head>
+<body>
+<div align="center"><h1>CRONOPETE 1.0</h1></div>
+
+<p>The Apple's TimeMachine clone for Linux</p>
+
+<p>Cronopete is a backup program, designed to mimic Apple's TimeMachine as close
+as possible. Currently it only does backups, but lacks the restoring interface.
+This is not a problem, because files are stored without compressing, so you can
+just go to your backup hard disk and copy the desired file to your home folder.
+In future versions, an interface for this will be added, using clutter.</p>
+
+<p>The name comes from <i>anacronopete</i> (who flies through time), which is a time machine featured in the novel from Enrique Gaspar y Rimbaud, and
+published in 1887 (eight years before than H.G. Wells'<i>Time Machine</i>.</p>
+
+<p>Cronopete is distributed under <a href="gpl.html">GPL v3 license</a>.</p>
+
+<h2>How does it work?</h2>
+
+<p>Cronopete makes a full copy of the local hard disk each hour, storing it <i>as-is</i> in an external hard disk. To save space and speed up the copy
+proccess, only modified files are copied, while non-modified files are linked to the previous backup. That way, if a file of 4GB is not modified, it won't
+occupy 4GB in each backup, but only in the first one.</p>
+
+<p>Cronopete uses only the date to decide if a file has been modified or not since last backup, so it's very fast and uses very little CPU and disk
+resources. It also does as many operations as possible in the external hard disk, to reduce the traffic in the main hard disk.</p>
+
+<p>Storing the files <i>as-is</i> allows to restore a file without needing specific tools, just using your usual file manager.</p>
+
+<p>To save even more disk space, cronopete keeps only hourly copies for the last 24 hours. In the past month stores a daily copy. Finally, keeps a
+weekly copy until the hard disk is full.</p>
+
+<p>Finally, to ensure the integrity of the backups, cronopete follows these steps:</p>
+<ul>
+<li>Copy all the files to a temporary folder in the external hard disk. This temporary folder is clearly marked as it, so, in case that the backup fails,
+it's easily deleted.</li>
+<li>Syncs the hard disk to dump all the cache data, ensuring that all the files have been physically stored in the media.</li>
+<li>Renames the temporary folder to its final name.</li>
+<li>Syncs again the hard disk to ensure that the name change has been physically stored.</li>
+</ul>
+
+<p>This procedure ensures that a backup, when successful, will remain correct even in the case of power failure or other problems.</p>
+
+<p>Currently, it only can do backups to local hard disks; in a near future I hope to add support for remote disks.</p>
+
+<p>Version 1.0 still doesn't have an interface to restore files, so you have to do it manually using your favourite file manager. In a near future I
+hope to build an interface, using clutter, which mimics the apple's one.</p>
+
+<p>Cronopete creates in the external disk a folder, called <b>cronopete</b>, and inside it creates one folder for each user using it. The name of these
+folders are the user login name.</p>
+<p>Then, inside each user folder, cronopete creates one folder for each backup. The name of that folder follows the format:</p>
+<div align="center"><p>YYYY_MM_DD_hh:mm:ss_unixtime</p></div>
+<p>Being <em>YYYY</em> the year, <em>MM</em> the month, <em>DD</em> the day, <em>hh</em> the hour, <em>mm</em> the minutes, <em>ss</em> the seconds, all
+of them in local time; and <em>unixtime</em> the UTC time in UNIX format (seconds since Jan, 1, 1970). If the folder begins with a <em>B</em> letter, is
+a temporal backup (one that is still being made).</p>
+
+<h2>Installing Cronopete</h2>
+
+<p>Cronopete is written in Vala, so you need to install it:</p>
+<p><ul>
+<li>A recent version of Vala (0.12 or later)</li>
+<li>GSL library</li>
+<li>GTK+ 2.20 or later</li>
+<li>(Optional) ReiserFS tools (for Reiser 3.0)</li>
+</ul></p>
+
+<p>If your Vala version is too old (maybe because you are using Ubuntu 11.04 or older), you can add the Vala team PPA, just typing in a terminal
+<i>sudo apt-add-repository ppa:vala-team/ppa</i>, followed by <i>sudo apt-get update</i>.</p>
+
+<p>After installing all the dependencies, you can type <i>make && sudo make install</i>, and cronopete will be installed in your system, and configured to
+be automagically launched each time you log into your session.</p>
+<p>Now, launch it with <i>make launch</i> and, after a delay of 3 seconds, you will see this orange icon in your toolbar:</p>
+<div align="center"><img src="cronopete1.png" /></div>
+<p>This icon shows the current status of Cronopete. If it's red, then there's a critical problem that prevents backups to be done (like if there's no external
+disk configured or connected, or the backups are disabled). If it's orange, then there was some problem during backup (like when one file wouldn't be backed
+up, or can't access into a folder). If it's green or white, all is working fine.</p>
+<p>When cronopete is doing a backup, the icon is animated, like a backward-moving clock. When it stops, the backup ended.</p>
+<p>Now it's time to configure cronopete. If you click on the icon, you will see this menu:</p>
+<div align="center"><img src="cronopete2.png" /></div>
+<p>By clicking on <b>Open cronopete preferences...</b> you will see the main window:</p>
+<div align="center"><img src="cronopete3.png" /></div>
+<p>Here are two tabs: the main, with all the configuration options, and the <b>log</b> tab, where you can check if a backup ended fine, or there were errors.</p>
+<p>The first thing to do is to choose the external hard disk to use to do the backups. By clicking the <b>change disk</b> button a windows with the currently
+mounted USB hard disks will be shown:</p>
+<div align="center"><img src="cronopete4.png" /></div>
+<p>If we choose the MSDOS/FAT formatted disk, a new window will be shown:</p>
+<div align="center"><img src="cronopete6.png" /></div>
+<p>The best file system to use is ReiserFS because it supports <a href="http://en.wikipedia.org/wiki/Tail_packing">tail packing</a>, which allows to optimize
+the disk usage; but EXT3/EXT4 is also allowed. BTRFS is not allowed because it still has bugs which prevents it to be reliabely used with cronopete.</p>
+<p>If you click the <b>Format disk</b> button, cronopete will try to format the disk in ReiserFS format; if it fails (let's say, because reiserfstools are not
+installed in the system), then it will try to format it in EXT4 format. Of course, this operation will erase all the data in the external disk.</p>
+<p>When the disk is ready, cronopete will show its main window like this:</p>
+<div align="center"><img src="cronopete7.png" /></div>
+<p>Now we can see the currently active disk, the available disk space, when the first and last backups were made and when will be done the next backup, the
+current status, and, in the switch under the <b>anaCRONOPETE</b> name, the ON/OFF status of cronopete.</p>
+<p>Now it's time to set up the folders to backup. By clicking the <b>Options</b> button, this window will be shown:</p>
+<div align="center"><img src="cronopete5.png" /></div>
+<p>The first list contains the folders to be backed up. By default it backs up the HOME folder only, but you can add other folders if you like.</p>
+<p>The second list contains the folders to be skip. By default is empty (but, internally, cronopete automatically refuses to backup the <b>.gvfs</b> folder
+in your HOME directory, for obvious reasons). You can add here folders like <i>aMule's Incoming</i> folder, or similar. The first list takes precedence over
+this, so if a folder is in both lists, it will be backed up.</p>
+<p>Finally, the checkbutton at the bottom allows you to avoid to back up the hidden files and folders in your HOME directory. By unchecking it, cronopete
+will not backup them (but hidden files/folders in other folders will be copied). Again, the first list takes precedence over this, so you can uncheck it
+to save disk space, but add your <i>HOME/.mozilla-thunderbird</i> folder in the first list to backup all your local mail.</p>
+<p>Here is an example of this:</p>
+<div align="center"><img src="cronopete8.png" /></div>
+<h2>Restoring files</h2>
+<p>Currently there is no specific interface for restoring files, so it has to be done manually. But since files are stored "as is", without compression,
+is as easy as opening the external disk and copy the desired files back to the main disk.</p>
+<h2>Uninstalling cronopete</h2>
+<p>To uninstall cronopete, just use <i>make uninstall</i>.</p>
+<h2>Contacting the author</h2>
+<p>Sergio Costas Rodríguez<br/>
+raster@rastersoft.com<br/>
+<a href="http://www.rastersoft.com">www.rastersoft.com</a></p>
+
+</body></html>
