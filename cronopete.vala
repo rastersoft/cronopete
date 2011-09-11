@@ -38,7 +38,6 @@ class cp_callback : GLib.Object, callbacks {
 	private unowned Thread <void *> b_thread;
 	private uint main_timer;
 	private uint refresh_timer;
-	private uint start_timer;
 	private StringBuilder messages;
 	private string basepath;
 	private Menu menuSystem;
@@ -48,6 +47,8 @@ class cp_callback : GLib.Object, callbacks {
 	private bool backup_pending;
 	private bool backup_forced;
 	private time_t next_backup;
+	private uint cur_period;
+	private uint new_period;
 	private bool tooltip_changed;
 	private string tooltip_value;
 	
@@ -140,7 +141,6 @@ class cp_callback : GLib.Object, callbacks {
 		this.angle = 0.0;
 		this.size = 0;
 		this.refresh_timer = 0;
-		this.start_timer = 0;
 		this.configuration_read = false;
 		this.backup_pending=false;
 		this.backup_forced=false;
@@ -167,11 +167,11 @@ class cp_callback : GLib.Object, callbacks {
 		this.set_tooltip (_("Idle"));
 		// wait five minutes after being launched before doing the backup
 		int init_delay=300;
-
+		this.cur_period=init_delay;
+		this.new_period=3600;
 		this.next_backup=init_delay+time_t();
 		init_delay*=1000;
-		this.start_timer=Timeout.add(init_delay,this.timer_f);
-		this.main_timer=Timeout.add(3600000+init_delay,this.timer_f);
+		this.main_timer=Timeout.add(init_delay,this.timer_f);
 	}
 
 	private void fill_last_backup() {
@@ -233,18 +233,21 @@ class cp_callback : GLib.Object, callbacks {
 
 	public bool timer_f() {
 	
-		if (this.start_timer!=0) {
-			Source.remove(this.start_timer);
-			this.start_timer=0;
-		}
-	
 		if (this.tooltip_changed) {
 				this.set_tooltip(null);
 		}
 	
 		if (this.backup_running==SystemStatus.IDLE) {
 		
-			this.next_backup=3600+time_t();
+			if (this.cur_period!=this.new_period) {
+				this.cur_period=this.new_period;
+				if (this.main_timer!=0) {
+					Source.remove(this.main_timer);
+				}
+				this.main_timer=Timeout.add(this.cur_period*1000,this.timer_f);
+			}
+	
+			this.next_backup=this.cur_period+time_t();
 		
 			if (((this._active==false)||(this.backend.available==false))&&(this.backup_forced==false)) {
 				this.backup_pending=true;
