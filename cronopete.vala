@@ -38,7 +38,6 @@ class cp_callback : GLib.Object, callbacks {
 	private unowned Thread <void *> b_thread;
 	private uint main_timer;
 	private uint refresh_timer;
-	private uint start_timer;
 	private StringBuilder messages;
 	private string basepath;
 	private Menu menuSystem;
@@ -48,6 +47,8 @@ class cp_callback : GLib.Object, callbacks {
 	private bool backup_pending;
 	private bool backup_forced;
 	private time_t next_backup;
+	private uint cur_period;
+	private uint new_period;
 	private bool tooltip_changed;
 	private string tooltip_value;
 	
@@ -57,7 +58,7 @@ class cp_callback : GLib.Object, callbacks {
 	private Gee.List<string> origin_path_list;
 	private Gee.List<string> exclude_path_list;
 	private string backup_path;
-	private bool configuration_read;
+	//private bool configuration_read;
 	private bool _active;
 	private backends? backend;
 	public bool active {
@@ -94,7 +95,7 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	}
 
-	public void get_path_list(out Gee.List<string> origin, out Gee.List<string> exclude, out bool backup_hiden_ah) {
+	public void get_path_list(out Gee.List<string> origin, out Gee.List<string> exclude, out bool backup_hiden_ah, out uint period) {
 	
 		origin=this.origin_path_list;
 		exclude=this.exclude_path_list;
@@ -103,9 +104,10 @@ class cp_callback : GLib.Object, callbacks {
 		} else {
 			backup_hiden_ah=true;
 		}
+		period=this.new_period;
 	}
 	
-	public void set_path_list(Gee.List<string>origin, Gee.List<string>exclude, bool backup_hiden_ah) {
+	public void set_path_list(Gee.List<string>origin, Gee.List<string>exclude, bool backup_hiden_ah, uint period) {
 		
 		this.origin_path_list.clear();
 		foreach (string s in origin) {
@@ -120,6 +122,9 @@ class cp_callback : GLib.Object, callbacks {
 		} else {
 			this.skip_hiden_at_home=true;
 		}
+		
+		this.new_period=period;
+		
 	}
 
 	public void refresh_status(usbhd_backend? b) {
@@ -140,12 +145,11 @@ class cp_callback : GLib.Object, callbacks {
 		this.angle = 0.0;
 		this.size = 0;
 		this.refresh_timer = 0;
-		this.start_timer = 0;
-		this.configuration_read = false;
+		//this.configuration_read = false;
 		this.backup_pending=false;
 		this.backup_forced=false;
 		this.tooltip_value="";
-		
+		this.new_period=3600;
 		this.read_configuration();
 
 		this.backend=new usbhd_backend(this.backup_path);
@@ -167,11 +171,10 @@ class cp_callback : GLib.Object, callbacks {
 		this.set_tooltip (_("Idle"));
 		// wait five minutes after being launched before doing the backup
 		int init_delay=300;
-
+		this.cur_period=init_delay;
 		this.next_backup=init_delay+time_t();
 		init_delay*=1000;
-		this.start_timer=Timeout.add(init_delay,this.timer_f);
-		this.main_timer=Timeout.add(3600000+init_delay,this.timer_f);
+		this.main_timer=Timeout.add(init_delay,this.timer_f);
 	}
 
 	private void fill_last_backup() {
@@ -233,18 +236,21 @@ class cp_callback : GLib.Object, callbacks {
 
 	public bool timer_f() {
 	
-		if (this.start_timer!=0) {
-			Source.remove(this.start_timer);
-			this.start_timer=0;
-		}
-	
 		if (this.tooltip_changed) {
 				this.set_tooltip(null);
 		}
 	
 		if (this.backup_running==SystemStatus.IDLE) {
 		
-			this.next_backup=3600+time_t();
+			if (this.cur_period!=this.new_period) {
+				this.cur_period=this.new_period;
+				if (this.main_timer!=0) {
+					Source.remove(this.main_timer);
+				}
+				this.main_timer=Timeout.add(this.cur_period*1000,this.timer_f);
+			}
+	
+			this.next_backup=this.cur_period+time_t();
 		
 			if (((this._active==false)||(this.backend.available==false))&&(this.backup_forced==false)) {
 				this.backup_pending=true;
@@ -529,7 +535,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.main_menu.insert_log(this.messages.str,true);
 		
 		this.current_status=BackupStatus.ALLFINE;
-		if (this.configuration_read==false) {
+		/*if (this.configuration_read==false) {
 			if (0!=this.read_configuration()) {
 				this.current_status = BackupStatus.ERROR;
 				this.backup_running = SystemStatus.ENDED;
@@ -539,7 +545,7 @@ class cp_callback : GLib.Object, callbacks {
 			} else {
 				this.configuration_read = true;
 			}
-		}
+		}*/
 		
 		basedir.set_config(this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
 		this.set_tooltip(_("Erasing old backups"));
@@ -598,6 +604,8 @@ class cp_callback : GLib.Object, callbacks {
 			out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
 		}
 		
+		out_stream.put_string("backup_period %d\n".printf((int)this.new_period));
+		
 		foreach (string str in this.origin_path_list) {
 			out_stream.put_string("add_directory %s\n".printf(str),null);
 		}
@@ -625,6 +633,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.backup_path = "";
 		this.skip_hiden_at_home = true;
 		this._active = false;
+		this.new_period=3600;
 
 		bool failed=false;
 		FileInputStream file_read;
@@ -685,6 +694,14 @@ class cp_callback : GLib.Object, callbacks {
 			
 			if (line=="active") {
 				this._active=true;
+				continue;
+			}
+			
+			if (line.has_prefix("backup_period ")) {
+			try {
+				this.new_period=line.substring(14).strip().to_int();
+			} catch {
+			}
 				continue;
 			}
 			
@@ -754,7 +771,7 @@ class cp_callback : GLib.Object, callbacks {
 
 int main(string[] args) {
 	
-	sleep(3); // To ensure that the menu bar has been loaded
+	sleep(2); // To ensure that the menu bar has been loaded
 	nice(19); // Minimum priority
 	string basepath;
 	

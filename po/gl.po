@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-03 00:05+0200\n"
+"POT-Creation-Date: 2011-09-17 22:55+0200\n"
 "PO-Revision-Date: 2011-09-01 00:56+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
@@ -28,13 +28,13 @@ msgid "Status: %s"
 msgstr "Estado: %s"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:113 ../cronopete.vala:186 ../cronopete.vala:197
+#: ../menu.vala:113 ../cronopete.vala:189 ../cronopete.vala:200
 #, c-format
 msgid "None"
 msgstr "Ningunha"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:163 ../cronopete.vala:180
+#: ../menu.vala:163 ../cronopete.vala:183
 #, c-format
 msgid "Not defined"
 msgstr "Non definida"
@@ -45,7 +45,7 @@ msgstr "Non definida"
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
 
-#: ../options.vala:55
+#: ../options.vala:58
 #, c-format
 msgid "Backup hiden files and folders in %s"
 msgstr "Copiar ficheiros e cartafoles agochados en %s"
@@ -130,81 +130,77 @@ msgstr ""
 "Para cambiar o sistema de ficheiros do disco, prema o botón <i>Formatar o "
 "disco</i>. <b>Perderanse todos os datos contidos no disco</b>."
 
-#: ../cronopete.vala:167 ../cronopete.vala:268 ../cronopete.vala:296
+#: ../cronopete.vala:171 ../cronopete.vala:274 ../cronopete.vala:302
 msgid "Idle"
 msgstr "En repouso"
 
-#: ../cronopete.vala:180 ../cronopete.vala:186 ../cronopete.vala:197
-#: ../cronopete.vala:201
+#: ../cronopete.vala:183 ../cronopete.vala:189 ../cronopete.vala:200
+#: ../cronopete.vala:204
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
 
-#: ../cronopete.vala:293
+#: ../cronopete.vala:299
 msgid "Storage not available"
 msgstr "O almacenamento non está dispoñíbel "
 
-#: ../cronopete.vala:298
+#: ../cronopete.vala:304
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../cronopete.vala:396
+#: ../cronopete.vala:402
 msgid "Back Up Now"
 msgstr "Copiar agora"
 
-#: ../cronopete.vala:400
+#: ../cronopete.vala:406
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: ../cronopete.vala:410
+#: ../cronopete.vala:416
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir as preferencias de Cronopete..."
 
-#: ../cronopete.vala:479
+#: ../cronopete.vala:486
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../cronopete.vala:498
+#: ../cronopete.vala:505
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../cronopete.vala:503
+#: ../cronopete.vala:510
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../cronopete.vala:508
+#: ../cronopete.vala:515
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../cronopete.vala:527
+#: ../cronopete.vala:534
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../cronopete.vala:535
-msgid "Error reading configuration"
-msgstr "Produciuse un erro ao ler a configuración"
-
-#: ../cronopete.vala:544
+#: ../cronopete.vala:551
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../cronopete.vala:556
+#: ../cronopete.vala:563
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:560
+#: ../cronopete.vala:567
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../cronopete.vala:564
+#: ../cronopete.vala:571
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../cronopete.vala:704
+#: ../cronopete.vala:722
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
@@ -348,5 +344,9 @@ msgstr "<b>Excluír estes cartafoles</b>"
 msgid "Folders to backup"
 msgstr "Cartafoles a copiar"
 
-#~ msgid "Time interval between backups (in hours):"
-#~ msgstr "Tempo entre copias (en horas):"
+#: ../interface/options.ui.h:5
+msgid "Time interval between backups (in hours):"
+msgstr "Tempo entre copias (en horas):"
+
+#~ msgid "Error reading configuration"
+#~ msgstr "Produciuse un erro ao ler a configuración"

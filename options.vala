@@ -29,6 +29,7 @@ class c_options : GLib.Object {
 	private TreeView backup_view;
 	private TreeView exclude_view;
 	private CheckButton b_hiden;
+	private SpinButton w_period;
 	ListStore backup_listmodel;
 	ListStore exclude_listmodel;
 	private Gee.List<string> backup_folders;
@@ -36,6 +37,7 @@ class c_options : GLib.Object {
 	private Gee.List<string> tmp_backup_folders;
 	private Gee.List<string> tmp_exclude_folders;
 	private bool backup_hiden_at_home;
+	private uint period;
 
 	public c_options(string path, cp_callback p) {
 	
@@ -52,9 +54,12 @@ class c_options : GLib.Object {
 		this.backup_view = (TreeView) this.builder.get_object("backup_folders");
 		this.exclude_view = (TreeView) this.builder.get_object("exclude_folders");
 		this.b_hiden = (CheckButton) this.builder.get_object("backup_root_hiden");
+		this.w_period = (SpinButton) this.builder.get_object("backup_period");
 		this.b_hiden.label=_("Backup hiden files and folders in %s").printf(Environment.get_home_dir());
 		
-		p.get_path_list(out this.backup_folders,out this.exclude_folders, out this.backup_hiden_at_home);
+		p.get_path_list(out this.backup_folders,out this.exclude_folders, out this.backup_hiden_at_home, out this.period);
+		
+		this.w_period.set_value((float)(this.period/3600));
 		
 		this.tmp_backup_folders = new Gee.ArrayList<string>();
 		foreach (string s in this.backup_folders) {
@@ -85,7 +90,8 @@ class c_options : GLib.Object {
 		this.main_w.destroy();
 		if (retval==-6) {
 			this.backup_hiden_at_home=this.b_hiden.active;
-			this.parent.set_path_list(this.tmp_backup_folders,this.tmp_exclude_folders,this.backup_hiden_at_home);
+			this.period=3600*((uint)this.w_period.get_value_as_int());
+			this.parent.set_path_list(this.tmp_backup_folders,this.tmp_exclude_folders,this.backup_hiden_at_home, this.period);
 			this.parent.write_configuration();
 		}
 	}
