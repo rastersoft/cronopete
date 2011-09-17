@@ -176,6 +176,7 @@ class c_main_menu : GLib.Object {
 	public void cronopete_options_callback(Button source) {
 	
 		var tmp = new c_options(this.basepath,this.parent);
+		this.refresh_backup_data();
 		tmp = null;
 	
 	}
