@@ -401,14 +401,17 @@ class cp_callback : GLib.Object, callbacks {
 		if (this.backup_running==SystemStatus.IDLE) {
 			menuBUnow = new MenuItem.with_label(_("Back Up Now"));
 			menuBUnow.activate.connect(backup_now);
-			this.menuSystem.append(menuBUnow);
 		} else {
 			menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
 			menuBUnow.activate.connect(stop_backup);
-			this.menuSystem.append(menuBUnow);
 		}
+		this.menuSystem.append(menuBUnow);
 
 		menuBUnow.sensitive=this.backend.available;
+
+		var menuEnter = new MenuItem.with_label(_("Enter Cronopete"));
+		menuEnter.activate.connect(enter_clicked);
+		menuSystem.append(menuEnter);
 		
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
@@ -470,6 +473,18 @@ class cp_callback : GLib.Object, callbacks {
 		about_w.hide();
 		about_w.destroy();
 		
+	}
+	
+	public void enter_clicked() {
+	
+		var mywindow=new Gtk.Window();
+		var mywidget=new filelist_icons("","/home/raster");
+		
+		mywindow.add(mywidget);
+		
+		mywindow.show_all();
+		
+	
 	}
 	
 	public void main_clicked() {
@@ -771,7 +786,10 @@ class cp_callback : GLib.Object, callbacks {
 
 int main(string[] args) {
 	
-	sleep(2); // To ensure that the menu bar has been loaded
+	if (args.length>1) {
+		sleep(3); // To ensure that the menu bar has been loaded
+	}
+
 	nice(19); // Minimum priority
 	string basepath;
 	

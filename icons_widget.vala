@@ -19,9 +19,215 @@
 using GLib;
 using Gee;
 using Gtk;
+using Gdk;
 
-class filelist_icons : Widget {
+class filelist_icons : Box {
 
+	private VBox main_container;
+	private Label main_title;
+	private HBox buttons_path;
+	private ListStore path_model;
+	private IconView path_view;
+	private ScrolledWindow scroll;
+	private string basepath;
+	private string current_path;
+	private Gee.List<ToggleButton> path_list;
 	
+	public filelist_icons(string p_basepath,string p_current_path) {
+	
+		this.basepath=p_basepath;
+		this.current_path=p_current_path;
+		
+		this.main_container=new VBox(false,2);
+		
+		this.main_title=new Label("");
+		this.main_container.pack_start(this.main_title,false,true,0);
+		
+		this.buttons_path=new HBox(false,0);
+		//this.buttons_path.layout_style=ButtonBoxStyle.START;
+		this.buttons_path.homogeneous=false;
+		this.main_container.pack_start(this.buttons_path,false,false,0);
+		
+		this.scroll = new ScrolledWindow(null,null);
+		this.main_container.pack_start(this.scroll,true,true,0);
+		
+		/* path_model stores the data for each file/folder:
+		   - file name (string)
+		   - icon (string)
+		   - is_folder (boolean)
+		*/
+		this.path_model=new ListStore(3,typeof(string),typeof(Pixbuf),typeof(bool));
+		this.path_view=new IconView.with_model(this.path_model);
+		this.path_view.set_pixbuf_column(1);
+		this.path_view.set_text_column(0);
+		this.path_view.selection_mode=SelectionMode.MULTIPLE;
+		this.path_view.button_press_event.connect(this.selection_made);
+		this.scroll.add_with_viewport(this.path_view);
+		this.pack_start(this.main_container,true,true,2);
+		
+		this.path_list=new Gee.ArrayList<ToggleButton>();
+		
+		this.refresh_icons();
+		this.refresh_path_list();
+		
+	}
+
+	public bool selection_made(EventButton event) {
+	
+		if (event.type==EventType.2BUTTON_PRESS) {
+		
+			Gee.ArrayList<string> files;
+			Gee.ArrayList<string> folders;
+		
+			get_selected_items(out files,out folders);
+			
+			if ((files.size!=0)||(folders.size!=1)) {
+				return false;
+			}
+			
+			var newfolder=folders.get(0);
+			
+			this.current_path=Path.build_filename(this.current_path,newfolder);
+			this.refresh_icons();
+			this.refresh_path_list();
+			this.set_scroll_top();
+			
+		}
+		return false;
+	}
+
+	public void get_selected_items(out Gee.ArrayList<string> files_selected, out Gee.ArrayList<string> folders_selected) {
+	
+		var selection = this.path_view.get_selected_items();
+		TreeIter iter;
+		var model = this.path_view.model;
+		GLib.Value path;
+		GLib.Value isfolder;
+
+		files_selected = new Gee.ArrayList<string>();
+		folders_selected = new Gee.ArrayList<string>();
+	
+		foreach (var v in selection) {
+
+			model.get_iter(out iter,v);
+			model.get_value(iter,2,out isfolder);
+			model.get_value(iter,0,out path);
+			if (isfolder.get_boolean()==true) {
+				folders_selected.add(path.get_string());
+			} else {
+				files_selected.add(path.get_string());
+			}
+		}
+	}
+
+	private void refresh_path_list() {
+	
+		foreach (ToggleButton b in this.path_list) {
+			b.destroy();
+		}
+
+		var btn = new ToggleButton.with_label("/");
+		btn.show();
+		btn.released.connect(this.change_path);
+		this.buttons_path.pack_start(btn,false,false,0);
+		this.path_list.add(btn);
+		
+		var elements=this.current_path.split("/");
+		foreach (string s in elements) {
+			if (s=="") {
+				continue;
+			}
+			btn = new ToggleButton.with_label(s);
+			btn.show();
+			btn.released.connect(this.change_path);
+			this.buttons_path.pack_start(btn,false,false,0);
+			this.path_list.add(btn);
+		}
+		
+		btn.active=true;
+		btn.has_focus=true;
+	
+	}
+	
+	private void set_scroll_top() {
+	
+		this.scroll.hadjustment.value=this.scroll.hadjustment.lower;
+		this.scroll.vadjustment.value=this.scroll.vadjustment.lower;
+	
+	}
+
+	public void change_path(Widget btn) {
+	
+		string fpath="";
+		bool found;
+	
+		found = false;
+		foreach (ToggleButton b in this.path_list) {
+		
+			if (!found) {
+				fpath = Path.build_filename(fpath,b.label);
+			}
+			if (b!=btn) {
+				b.active=false;
+			} else {
+				found=true;
+			}
+		}
+		this.current_path=fpath;
+		this.refresh_icons();
+		this.set_scroll_top();
+	}
+
+	private void refresh_icons() {
+	
+		FileInfo info_file;
+		FileType typeinfo;
+		TreeIter iter;
+		Gee.List<string> folders=new Gee.ArrayList<string>();
+		Gee.List<string> files=new Gee.ArrayList<string>();
+	
+		this.path_model.clear();
+		
+		var directory = File.new_for_path(Path.build_filename(this.basepath,this.current_path));
+		var listfile = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
+		
+		while ((info_file = listfile.next_file(null)) != null) {
+
+			typeinfo=info_file.get_file_type();
+
+			if (typeinfo==FileType.DIRECTORY) {
+				folders.add(info_file.get_name());
+			}
+			
+			if (typeinfo==FileType.REGULAR) {
+				files.add(info_file.get_name());
+			}
+		}
+		folders.sort();
+		files.sort();
+		
+		var pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
+		
+		foreach (string f in folders) {
+
+			this.path_model.append (out iter);
+			this.path_model.set (iter,0,f);
+			this.path_model.set (iter,1,pbuf);
+			this.path_model.set (iter,2,true);
+
+		}
+
+		pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
+
+		foreach (string f in files) {
+			
+			this.path_model.append (out iter);
+			this.path_model.set (iter,0,f);
+			this.path_model.set (iter,1,pbuf);
+			this.path_model.set (iter,2,false);
+
+		}
+
+	}
 
 }
