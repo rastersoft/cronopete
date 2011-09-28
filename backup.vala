@@ -21,7 +21,7 @@ using Posix;
 using Gee;
 
 interface callbacks : GLib.Object {
-	
+
 	public abstract void backup_folder(string foldername);
 	public abstract void backup_file(string filename);
 	public abstract void backup_link_file(string filename);
@@ -52,6 +52,8 @@ interface backends : GLib.Object {
 	
 	public abstract bool available {get;}
 	public signal void status(usbhd_backend b);
+
+	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.FileInfo ?> files, out string date);
 
 }
 
@@ -543,7 +545,7 @@ class nanockup:Object {
 			return false;
 		}
 	
-		blist.sort(mysort_64);
+		blist.sort((CompareFunc)mysort_64);
 		
 		time_t entry;
 		while(c_size<=d_size) {

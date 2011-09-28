@@ -20,6 +20,27 @@ using GLib;
 using Posix;
 using Gee;
 
+class iconbrowser_backend: Object,FilelistIcons.IconBrowser_Backend {
+
+	private string basepath;
+	private time_t current_backup;
+	private backends backup_backend;	
+	
+	public iconbrowser_backend(backends p_be,time_t backup) {
+	
+		this.current_backup=backup;
+		this.backup_backend=p_be;
+	}
+	
+	public bool get_filelist(string current_path, out Gee.List<FilelistIcons.FileInfo ?> files, out string title) {
+		
+		return(this.backup_backend.get_filelist(current_path, this.current_backup, out files, out title));
+
+	}
+	
+}
+
+
 class usbhd_backend: Object, backends {
 
 	private string backup_path;
@@ -55,6 +76,52 @@ class usbhd_backend: Object, backends {
 		this.refresh_connect();
 		
 	}
+
+	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.FileInfo ?> files, out string date) {
+	
+		FileInfo info_file;
+		FileType typeinfo;
+
+		try {
+		
+			files = new Gee.ArrayList<FilelistIcons.FileInfo ?>();
+		
+			var ctime = GLib.Time.local(backup);
+
+			var basepath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup);
+
+			date=ctime.to_string().dup();
+	
+			var finalpath = Path.build_filename(this.backup_path,basepath,current_path);
+	
+			var directory = File.new_for_path(finalpath);
+			var listfile = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
+		
+			while ((info_file = listfile.next_file(null)) != null) {
+
+				var tmpinfo = FilelistIcons.FileInfo();
+
+				typeinfo=info_file.get_file_type();
+				tmpinfo.name=info_file.get_name().dup();
+
+				if (typeinfo==FileType.DIRECTORY) {
+					tmpinfo.isdir=true;
+				} else {
+					tmpinfo.isdir=false;
+				}
+				
+				info_file.get_modification_time(out tmpinfo.mod_time);
+				tmpinfo.size = info_file.get_size();
+				
+				files.add(tmpinfo);
+				
+			}
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
 
 	public void refresh_connect() {
 	

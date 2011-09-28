@@ -52,6 +52,8 @@ class cp_callback : GLib.Object, callbacks {
 	private bool tooltip_changed;
 	private string tooltip_value;
 	
+	public restore_iface restore_w;
+	
 	// Configuration data
 
 	private bool skip_hiden_at_home;
@@ -477,13 +479,7 @@ class cp_callback : GLib.Object, callbacks {
 	
 	public void enter_clicked() {
 	
-		var mywindow=new Gtk.Window();
-		var mywidget=new filelist_icons("","/home/raster");
-		
-		mywindow.add(mywidget);
-		
-		mywindow.show_all();
-		
+		this.restore_w=new restore_iface(this.backend);
 	
 	}
 	
