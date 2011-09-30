@@ -38,7 +38,7 @@ namespace FilelistIcons {
 
 	}
 
-	class IconBrowser : Box {
+	class IconBrowser : Frame {
 
 		private VBox main_container;
 		private Label main_title;
@@ -49,6 +49,7 @@ namespace FilelistIcons {
 		private string current_path;
 		private Gee.List<ToggleButton> path_list;
 		private FilelistIcons.IconBrowser_Backend backend;
+		private EventBox background_eb;
 	
 		public IconBrowser(FilelistIcons.IconBrowser_Backend p_backend,string p_current_path) {
 	
@@ -81,8 +82,12 @@ namespace FilelistIcons {
 			this.path_view.set_text_column(0);
 			this.path_view.selection_mode=SelectionMode.MULTIPLE;
 			this.path_view.button_press_event.connect(this.selection_made);
+			this.path_view.orientation=Orientation.VERTICAL;
 			this.scroll.add_with_viewport(this.path_view);
-			this.pack_start(this.main_container,true,true,2);
+			//this.pack_start(this.main_container,true,true,2);
+			this.background_eb = new EventBox();
+			this.background_eb.add(this.main_container);
+			this.add(this.background_eb);
 		
 			this.path_list=new Gee.ArrayList<ToggleButton>();
 		
@@ -197,6 +202,18 @@ namespace FilelistIcons {
 			this.set_scroll_top();
 		}
 
+		public static int mysort_files(FileInfo? a, FileInfo? b) {
+		
+			if (a.name>b.name) {
+				return 1;
+			}
+		
+			if (a.name<b.name) {
+				return -1;
+			}
+			return 0;
+		}
+
 		private void refresh_icons() {
 	
 			TreeIter iter;
@@ -211,7 +228,7 @@ namespace FilelistIcons {
 			
 			this.main_title.label=title;
 			
-			files.sort();
+			files.sort(mysort_files);
 		
 			var pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
 		
