@@ -32,34 +32,26 @@ namespace FilelistIcons {
 	
 	}
 
-	interface IconBrowser_Backend : GLib.Object {
-
-		public abstract bool get_filelist(string path, out Gee.List<FileInfo ?> files, out string window_title);
-
-	}
 
 	class IconBrowser : Frame {
 
 		private VBox main_container;
-		private Label main_title;
 		private HBox buttons_path;
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
 		private string current_path;
 		private Gee.List<ToggleButton> path_list;
-		private FilelistIcons.IconBrowser_Backend backend;
 		private EventBox background_eb;
+		private time_t current_backup;
+		private backends backend;
 	
-		public IconBrowser(FilelistIcons.IconBrowser_Backend p_backend,string p_current_path) {
+		public IconBrowser(backends p_backend,string p_current_path) {
 	
 			this.backend=p_backend;
 			this.current_path=p_current_path;
 		
 			this.main_container=new VBox(false,2);
-		
-			this.main_title=new Label("");
-			this.main_container.pack_start(this.main_title,false,true,0);
 		
 			this.buttons_path=new HBox(false,0);
 			this.buttons_path.homogeneous=false;
@@ -84,16 +76,24 @@ namespace FilelistIcons {
 			this.path_view.button_press_event.connect(this.selection_made);
 			this.path_view.orientation=Orientation.VERTICAL;
 			this.scroll.add_with_viewport(this.path_view);
-			//this.pack_start(this.main_container,true,true,2);
 			this.background_eb = new EventBox();
 			this.background_eb.add(this.main_container);
 			this.add(this.background_eb);
+
+			this.path_view.item_width=175;
 		
 			this.path_list=new Gee.ArrayList<ToggleButton>();
 		
 			this.refresh_icons();
 			this.refresh_path_list();
 		
+		}
+
+		public void set_backup_time(time_t backup) {
+			
+			this.current_backup=backup;
+			this.refresh_icons();
+			
 		}
 
 		public bool selection_made(EventButton event) {
@@ -222,11 +222,9 @@ namespace FilelistIcons {
 	
 			this.path_model.clear();
 			
-			if (false==this.backend.get_filelist(this.current_path, out files, out title)) {
+			if (false==this.backend.get_filelist(this.current_path,this.current_backup, out files, out title)) {
 				return;
 			}
-			
-			this.main_title.label=title;
 			
 			files.sort(mysort_files);
 		

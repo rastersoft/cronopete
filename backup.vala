@@ -321,19 +321,15 @@ class nanockup:Object {
 				case BACKUP_RETVAL.NOT_WRITABLE:
 					this.callback.show_message(_("Can't create the folder for this backup. Aborting backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.CANT_CREATE_BASE:
 					this.callback.show_message(_("Can't create the base folders to do backups. Aborting backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.NOT_AVAILABLE:
 					this.callback.show_message(_("Backup device not available. Aborting backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.ALREADY_STARTED:
 					this.callback.show_message(_("Already started a backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.NO_SPC:
 					if ((do_loop!=0)||(false==this.free_bytes(1000000))) {
 						this.callback.show_message(_("Failed to free disk space to start a backup. Aborting backup.\n"));

@@ -589,41 +589,44 @@ class cp_callback : GLib.Object, callbacks {
 	
 	public int write_configuration() {
 
-		FileOutputStream file_write;
-	
-		var home=Environment.get_home_dir();
-	
-		var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
-	
 		try {
-			file_write=config_file.replace(null,false,0,null);
-		} catch {
-			return -2;
-		}
+			FileOutputStream file_write;
 	
-		var out_stream = new DataOutputStream (file_write);
+			var home=Environment.get_home_dir();
+	
+			var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
+	
+			try {
+				file_write=config_file.replace(null,false,0,null);
+			} catch {
+				return -2;
+			}
+	
+			var out_stream = new DataOutputStream (file_write);
 		
-		if (this.skip_hiden_at_home==false) {
-			out_stream.put_string("backup_hiden_at_home\n",null);
-		}
+			if (this.skip_hiden_at_home==false) {
+				out_stream.put_string("backup_hiden_at_home\n",null);
+			}
 		
-		if (this._active==true) {
-			out_stream.put_string("active\n",null);
-		}
+			if (this._active==true) {
+				out_stream.put_string("active\n",null);
+			}
 		
-		if (this.backup_path!="") {
-			out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
-		}
+			if (this.backup_path!="") {
+				out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
+			}
 		
-		out_stream.put_string("backup_period %d\n".printf((int)this.new_period));
+			out_stream.put_string("backup_period %d\n".printf((int)this.new_period));
 		
-		foreach (string str in this.origin_path_list) {
-			out_stream.put_string("add_directory %s\n".printf(str),null);
-		}
-		foreach (string str in this.exclude_path_list) {
-			out_stream.put_string("exclude_directory %s\n".printf(str),null);
-		}
+			foreach (string str in this.origin_path_list) {
+				out_stream.put_string("add_directory %s\n".printf(str),null);
+			}
+			foreach (string str in this.exclude_path_list) {
+				out_stream.put_string("exclude_directory %s\n".printf(str),null);
+			}
+		} catch (IOError e) {
 		
+		}		
 		return 0;
 	}
 	
@@ -709,10 +712,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 			
 			if (line.has_prefix("backup_period ")) {
-			try {
-				this.new_period=line.substring(14).strip().to_int();
-			} catch {
-			}
+				this.new_period=int.parse(line.substring(14).strip());
 				continue;
 			}
 			

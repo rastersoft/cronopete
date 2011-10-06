@@ -48,8 +48,6 @@ class c_format : GLib.Object {
 	private string? ioerror;
 	private string? label;
 	private Dialog format_window;
-	private uint check_timer;
-	private unowned Thread <void *> b_thread;
 
 	private void show_error(string msg) {
 	

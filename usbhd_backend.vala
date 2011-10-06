@@ -20,26 +20,6 @@ using GLib;
 using Posix;
 using Gee;
 
-class iconbrowser_backend: Object,FilelistIcons.IconBrowser_Backend {
-
-	private string basepath;
-	private time_t current_backup;
-	private backends backup_backend;	
-	
-	public iconbrowser_backend(backends p_be,time_t backup) {
-	
-		this.current_backup=backup;
-		this.backup_backend=p_be;
-	}
-	
-	public bool get_filelist(string current_path, out Gee.List<FilelistIcons.FileInfo ?> files, out string title) {
-		
-		return(this.backup_backend.get_filelist(current_path, this.current_backup, out files, out title));
-
-	}
-	
-}
-
 
 class usbhd_backend: Object, backends {
 
@@ -338,7 +318,7 @@ class usbhd_backend: Object, backends {
 		var newfile = Path.build_filename(this.cbackup_path,path);
 		try {
 			File.new_for_path(Path.build_filename(path)).copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
-		} catch (IOError e) {
+		} catch (Error e) {
 			if (e is IOError.NO_SPACE) {
 				Posix.unlink(newfile);
 				return BACKUP_RETVAL.NO_SPC;
