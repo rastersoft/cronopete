@@ -42,10 +42,10 @@ class restore_iface : GLib.Object {
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
-		if(a>b) {
+		if(a<b) {
 			return 1;
 		}
-		if(a<b) {
+		if(a>b) {
 			return -1;
 		}
 		return 0;
@@ -97,16 +97,14 @@ class restore_iface : GLib.Object {
 
 	private bool on_scroll(Gdk.EventScroll event) {
 	
-		if ((event.direction==ScrollDirection.DOWN)&&(this.pos>0)) {
+		if ((event.direction==ScrollDirection.UP)&&(this.pos>0)) {
 			this.pos--;
 			this.browser.set_backup_time(this.backups[this.pos]);
 		}
-		if ((event.direction==ScrollDirection.UP)&&(this.pos<(this.backups.size-1))) {
+		if ((event.direction==ScrollDirection.DOWN)&&(this.pos<(this.backups.size-1))) {
 			this.pos++;
 			this.browser.set_backup_time(this.backups[this.pos]);
 		}
-		
-		GLib.stdout.printf("Instante: %lld\n",this.backups[this.pos]);
 		
 		return true;
 	
