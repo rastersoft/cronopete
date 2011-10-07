@@ -22,7 +22,8 @@ install:
 	cp po/gl.mo $(PREFIX2)/share/locale/gl/LC_MESSAGES/cronopete.mo
 
 clean:
-	rm cronopete
+	rm -f cronopete
+	rm -f *.c
 
 launch:
 	killall -q cronopete || cd
