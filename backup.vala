@@ -44,9 +44,9 @@ interface backends : GLib.Object {
 	public abstract bool delete_backup(time_t backup_date);
 	public abstract BACKUP_RETVAL start_backup(out int64 last_backup_time);
 	public abstract BACKUP_RETVAL end_backup();
-	public abstract BACKUP_RETVAL create_folder(string path);
-	public abstract BACKUP_RETVAL copy_file(string path);
-	public abstract BACKUP_RETVAL link_file(string path);
+	public abstract BACKUP_RETVAL create_folder(string path, time_t mod_time);
+	public abstract BACKUP_RETVAL copy_file(string path, time_t mod_time);
+	public abstract BACKUP_RETVAL link_file(string path, time_t mod_time);
 	public abstract BACKUP_RETVAL abort_backup();
 	public abstract bool get_free_space(out uint64 total_space, out uint64 free_space);
 	
@@ -63,9 +63,11 @@ class path_node:Object {
 	public path_node? next;
 	public weak path_node? prev;
 	public string path;
+	public time_t modified_time;
 
-	public path_node(string path) {
+	public path_node(string path, time_t mtime) {
 		this.path=path;
+		this.modified_time=mtime;
 		this.prev=null;
 		this.next=null;
 	}
@@ -138,11 +140,12 @@ class path_list:Object {
 		this.iterator=null;
 	}
 	
-	public string? next_iterator() {
+	public string? next_iterator(out time_t mod_time) {
 		
 		// This method returns the next element in the list
 		
 		if (this.iterator==this.last) {
+			mod_time=0;
 			return null;
 		}		
 
@@ -152,14 +155,15 @@ class path_list:Object {
 			this.iterator=this.iterator.next;
 		}
 		
+		mod_time=this.iterator.modified_time;
 		return this.iterator.path;
 	}
 	
-	public void add(string path) {
+	public void add(string path, time_t mtime) {
 	
 		// Adds a node at the end of the list
 	
-		path_node new_node=new path_node(path);
+		path_node new_node=new path_node(path,mtime);
 		
 		if (this.first==null) {
 			this.first=new_node;
@@ -268,7 +272,7 @@ class nanockup:Object {
 		this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
 	
 		foreach (string tmp in origin_path) {
-			this.origin_path_list.add(tmp);
+			this.origin_path_list.add(tmp,0);
 		}
 		foreach (string tmp in exclude_path) {
 			this.exclude_path_list.add(tmp);
@@ -301,6 +305,7 @@ class nanockup:Object {
 	
 		int retval,tmp;
 		string? directory=null;
+		time_t mod_time;
 		
 		this.abort=false;
 		
@@ -351,7 +356,7 @@ class nanockup:Object {
 
 		// backup all the directories
 		this.origin_path_list.start_iterator();
-		while (null!=(directory=this.origin_path_list.next_iterator())) {
+		while (null!=(directory=this.origin_path_list.next_iterator(out mod_time))) {
 			if (this.abort) {
 				this.callback.show_message(_("Backup aborted\n"));
 				this.backend.abort_backup();
@@ -362,7 +367,7 @@ class nanockup:Object {
 				}
 			}
 			this.callback.backup_folder(directory);
-			tmp=this.copy_dir(directory);
+			tmp=this.copy_dir(directory,mod_time);
 			switch (tmp) {
 			case 0:
 			break;
@@ -389,7 +394,7 @@ class nanockup:Object {
 	}
 	
 
-	int copy_dir(string first_path) {
+	int copy_dir(string first_path,time_t dirmod_time) {
 	
 		/*****************************************************************************************************
 		 * This method takes the first directory in the list and copies the files in it to the destination   *
@@ -403,7 +408,7 @@ class nanockup:Object {
 		 *****************************************************************************************************/
 	
 		FileInfo info_file;
-		TimeVal result;
+		TimeVal mod_time;
 		FileEnumerator enumerator;
 		string full_path;
 		string initial_path;
@@ -416,7 +421,7 @@ class nanockup:Object {
 		
 		retval=0;
 		
-		if ((this.backend.create_folder(first_path))==BACKUP_RETVAL.CANT_CREATE_FOLDER) {
+		if ((this.backend.create_folder(first_path,dirmod_time))==BACKUP_RETVAL.CANT_CREATE_FOLDER) {
 			this.callback.error_create_directory(first_path);
 			return -1;
 		}
@@ -440,6 +445,8 @@ class nanockup:Object {
 
 			full_path=Path.build_filename(first_path,info_file.get_name());
 			typeinfo=info_file.get_file_type();
+
+			info_file.get_modification_time(out mod_time);
 			
 			// Add the directories to the list, to continue deep in the directory tree
 			if (typeinfo==FileType.DIRECTORY) {
@@ -455,7 +462,7 @@ class nanockup:Object {
 					continue;
 				}
 
-				this.origin_path_list.add(full_path);
+				this.origin_path_list.add(full_path,mod_time.tv_sec);
 				continue;
 			}
 			
@@ -466,10 +473,9 @@ class nanockup:Object {
 				}
 				
 				// If the modification time is before the last backup time, just link; if not, copy to the directory
-				info_file.get_modification_time(out result);
-				if (result.tv_sec < ((long)this.last_backup_time)) {
+				if (mod_time.tv_sec < ((long)this.last_backup_time)) {
 					this.callback.backup_link_file(full_path);
-					rv = this.backend.link_file(full_path);
+					rv = this.backend.link_file(full_path,mod_time.tv_sec);
 					switch (rv) {
 					case BACKUP_RETVAL.CANT_LINK:
 						verror=-1;
@@ -481,7 +487,7 @@ class nanockup:Object {
 						if (false==this.free_bytes(1000000)) {
 							verror=-3;
 						}
-						if (this.backend.link_file(full_path)==BACKUP_RETVAL.OK) {
+						if (this.backend.link_file(full_path,mod_time.tv_sec)==BACKUP_RETVAL.OK) {
 							verror=0;
 						} else {
 							verror=1;
@@ -500,7 +506,7 @@ class nanockup:Object {
 				// If the file modification time is bigger than the last backup time, or the link failed, we must copy the file
 				if (verror!=0) {
 					this.callback.backup_file(full_path);
-					rv = this.backend.copy_file(full_path);
+					rv = this.backend.copy_file(full_path,mod_time.tv_sec);
 					switch (rv) {
 					case BACKUP_RETVAL.CANT_COPY:
 						this.callback.error_copy_file(full_path);
@@ -511,7 +517,7 @@ class nanockup:Object {
 							retval=-3;
 						}
 						int rv2;
-						rv2 = this.backend.copy_file(full_path);
+						rv2 = this.backend.copy_file(full_path,mod_time.tv_sec);
 						if (rv2==BACKUP_RETVAL.NO_SPC) {
 							this.abort=true;
 							retval=-3;

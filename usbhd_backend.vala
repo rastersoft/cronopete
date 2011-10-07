@@ -266,11 +266,13 @@ class usbhd_backend: Object, backends {
 		return BACKUP_RETVAL.OK;
 	}
 
-	public BACKUP_RETVAL copy_file(string path) {
+	public BACKUP_RETVAL copy_file(string path, time_t mod_time) {
 	
 		var newfile = Path.build_filename(this.cbackup_path,path);
+		File destination;
 		try {
-			File.new_for_path(Path.build_filename(path)).copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
+			destination=File.new_for_path(Path.build_filename(path));
+			destination.copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
 		} catch (IOError e) {
 			if (e is IOError.NO_SPACE) {
 				Posix.unlink(newfile);
@@ -279,10 +281,11 @@ class usbhd_backend: Object, backends {
 				return BACKUP_RETVAL.CANT_COPY;
 			}
 		}
+		destination.set_attribute_int64(FILE_ATTRIBUTE_TIME_MODIFIED,mod_time,0,null);
 		return BACKUP_RETVAL.OK;	
 	}
 	
-	public BACKUP_RETVAL link_file(string path) {
+	public BACKUP_RETVAL link_file(string path,time_t mod_time) {
 		
 		//GLib.stdout.printf("Linkando %s a %s\n",Path.build_filename(this.last_backup,path),Path.build_filename(this.cbackup_path,path));
 		
@@ -298,7 +301,7 @@ class usbhd_backend: Object, backends {
 		return BACKUP_RETVAL.OK;
 	}
 
-	public BACKUP_RETVAL create_folder(string path) {
+	public BACKUP_RETVAL create_folder(string path,time_t mod_time) {
 	
 		try {
 			var dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
