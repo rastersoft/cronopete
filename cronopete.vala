@@ -698,10 +698,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 			
 			if (line.has_prefix("backup_period ")) {
-			try {
-				this.new_period=line.substring(14).strip().to_int();
-			} catch {
-			}
+				this.new_period=int.parse(line.substring(14).strip());
 				continue;
 			}
 			

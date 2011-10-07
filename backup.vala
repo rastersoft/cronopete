@@ -47,6 +47,7 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL create_folder(string path, time_t mod_time);
 	public abstract BACKUP_RETVAL copy_file(string path, time_t mod_time);
 	public abstract BACKUP_RETVAL link_file(string path, time_t mod_time);
+	public abstract BACKUP_RETVAL set_modtime(string path, time_t mod_time);
 	public abstract BACKUP_RETVAL abort_backup();
 	public abstract bool get_free_space(out uint64 total_space, out uint64 free_space);
 	
@@ -186,6 +187,9 @@ class nanockup:Object {
 	// Contains the paths to backup
 	private path_list origin_path_list;
 	
+	// Contains the paths backed up, to set the modification time in folders
+	private path_list done_backup;
+	
 	// Contains a list of directory paths which must NOT be backed up
 	private HashSet<string> exclude_path_list;
 
@@ -311,6 +315,8 @@ class nanockup:Object {
 		
 		int do_loop=0;
 		
+		this.done_backup=new path_list();
+		
 		if (this.backend.get_backup_id()==null) { // system not configured
 			this.callback.show_message("User didn't specified a device where to store the backups. Aborting backup.\n"); 
 			return -2; // the class isn't configured (don't know where to store the backups)
@@ -324,19 +330,15 @@ class nanockup:Object {
 				case BACKUP_RETVAL.NOT_WRITABLE:
 					this.callback.show_message(_("Can't create the folder for this backup. Aborting backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.CANT_CREATE_BASE:
 					this.callback.show_message(_("Can't create the base folders to do backups. Aborting backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.NOT_AVAILABLE:
 					this.callback.show_message(_("Backup device not available. Aborting backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.ALREADY_STARTED:
 					this.callback.show_message(_("Already started a backup.\n"));
 					return -3;
-				break;
 				case BACKUP_RETVAL.NO_SPC:
 					if ((do_loop!=0)||(false==this.free_bytes(1000000))) {
 						this.callback.show_message(_("Failed to free disk space to start a backup. Aborting backup.\n"));
@@ -379,6 +381,11 @@ class nanockup:Object {
 				retval=-1;
 			break;
 			}
+		}
+
+		this.done_backup.start_iterator();
+		while (null!=(directory=this.done_backup.next_iterator(out mod_time))) {
+			this.backend.set_modtime(directory,mod_time);
 		}
 
 		this.callback.show_message(_("Syncing disk\n"));
@@ -425,6 +432,8 @@ class nanockup:Object {
 			this.callback.error_create_directory(first_path);
 			return -1;
 		}
+		
+		this.done_backup.add(first_path,dirmod_time);
 		
 		try {
 			 enumerator = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
