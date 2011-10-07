@@ -37,7 +37,6 @@ class c_main_menu : GLib.Object {
 	private Image img;
 	private TextMark mark;
 	private TextView log_view;
-	private bool status;
 	private string last_status;
 	private Switch_Widget my_widget;
 	

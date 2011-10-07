@@ -1,6 +1,13 @@
-<html><head><title>Cronopete 1.1.0</title></head>
+<html>
+  <head>
+    <title>Cronopete 1.1.0</title>
+    <style type="text/css" media="all">
+      .menu { background-color: #dddbd8; }
+      .filename { color: green; }
+    </style>
+  </head>
 <body>
-<div align="center"><h1>CRONOPETE 1.1.0</h1></div>
+<div align="center"><h1>CRONOPETE 1.2.0</h1></div>
 
 <p>The Apple's TimeMachine clone for Linux</p>
 
@@ -42,11 +49,10 @@ it's easily deleted.</li>
 
 <p>Currently, it only can do backups to local hard disks; in a near future I hope to add support for remote disks.</p>
 
-<p>Version 1.1.0 still doesn't have an interface to restore files, so you have to do it manually using your favorite file manager. In a near future I
-
+<p>Version 1.2.0 still doesn't have an interface to restore files, so you have to do it manually using your favorite file manager. In a near future I
 hope to build an interface, using clutter, which mimics the apple's one.</p>
 
-<p>Cronopete creates in the external disk a folder, called <b>cronopete</b>, and inside it creates one folder for each user using it. The name of these
+<p>Cronopete creates in the external disk a folder, called <strong>cronopete</strong>, and inside it creates one folder for each user using it. The name of these
 folders are the user login name.</p>
 <p>Then, inside each user folder, cronopete creates one folder for each backup. The name of that folder follows the format:</p>
 <div align="center"><p>YYYY_MM_DD_hh:mm:ss_unixtime</p></div>
@@ -60,19 +66,28 @@ a temporal backup (one that is still being made).</p>
 <p><ul>
 <li>A recent version of Vala (0.12 or later)</li>
 <li>GSL library</li>
+<li>Gee library</li>
 <li>GTK+ 2.20 or later</li>
 <li>(Optional) ReiserFS tools (for Reiser 3.0)</li>
 </ul></p>
 
-<p>If your Vala version is too old (maybe because you are using Ubuntu 11.04 or older), you can add the Vala team PPA, just typing in a terminal
-<i>sudo apt-add-repository ppa:vala-team/ppa</i>, followed by <i>sudo apt-get update</i>.</p>
+<p>If your Vala version is too old (maybe because you are using Ubuntu 11.04 or older), you can add the Vala team PPA, just typing in a terminal:</p>
+<pre>sudo apt-add-repository ppa:vala-team/ppa</pre>
+<p>followed by:</p>
+<pre>sudo apt-get update</pre>
 
-<p>After installing all the dependencies, you can type <i>make && sudo make install</i>, and cronopete will be installed in your system, and configured to
-be automagically launched each time you log into your session. You can define the <b>PREFIX</b> variable in Make to choose where to install it (i.e. to
-install it into <i>/usr</i> instead of <i>/usr/local</i>, just use <i>make install -D PREFIX=/</i>; to install it in <i>/tmp/package</i>, just use
-<i>make install -D /tmp/package</i>).</p>
-<p>Now, launch it with <i>make launch</i> and, after a delay of 2 seconds, you will see this orange icon in your toolbar:</p>
-
+<p>After installing all the dependencies, you can type this to install cronopete in your system and get it ready to be automatically launched each time
+you log into your session:</p>
+<pre>make && sudo make install</pre>
+<p>You can define the <strong>PREFIX</strong> variable in Make to choose where to install it. This is, to
+install it into <i>/usr</i> instead of <i>/usr/local</i>, just use:</p>
+<pre>make install -D PREFIX=/</pre>
+<p>And to install it in <i>/tmp/package</i>, just use:</p>
+<pre>make install -D /tmp/package</pre>
+<p>Now, in order yo run it, just type</p>
+<pre>make launch</pre>
+<h2>Using Cronopete</h2>
+<p>After a delay of 2 seconds, you will see this orange icon in your system tray:</p>
 <div align="center"><img src="cronopete1.png" /></div>
 <p>This icon shows the current status of Cronopete. If it's red, then there's a critical problem that prevents backups to be done (like if there's no external
 disk configured or connected, or the backups are disabled). If it's orange, then there was some problem during backup (like when one file wouldn't be backed
@@ -80,31 +95,31 @@ up, or can't access into a folder). If it's green or white, all is working fine.
 <p>When cronopete is doing a backup, the icon is animated, like a backward-moving clock. When it stops, the backup ended.</p>
 <p>Now it's time to configure cronopete. If you click on the icon, you will see this menu:</p>
 <div align="center"><img src="cronopete2.png" /></div>
-<p>By clicking on <b>Open cronopete preferences...</b> you will see the main window:</p>
+<p>By clicking on <span class="menu">Open cronopete preferences...</span> you will see the main window:</p>
 <div align="center"><img src="cronopete3.png" /></div>
-<p>Here are two tabs: the main, with all the configuration options, and the <b>log</b> tab, where you can check if a backup ended fine, or there were errors.</p>
-<p>The first thing to do is to choose the external hard disk to use to do the backups. By clicking the <b>change disk</b> button a windows with the currently
+<p>Here are two tabs: the main, with all the configuration options, and the <span class="menu">Log</span> tab, where you can check if a backup ended fine, or there were errors.</p>
+<p>The first thing to do is to choose the external hard disk to use to do the backups. By clicking the <span class="menu">Change disk</span> button a windows with the currently
 mounted USB hard disks will be shown:</p>
 <div align="center"><img src="cronopete4.png" /></div>
 <p>If we choose the MSDOS/FAT formatted disk, a new window will be shown:</p>
 <div align="center"><img src="cronopete6.png" /></div>
 <p>The best file system to use is ReiserFS because it supports <a href="http://en.wikipedia.org/wiki/Tail_packing">tail packing</a>, which allows to optimize
 the disk usage; but EXT3/EXT4 is also allowed. BTRFS is not allowed because it still has bugs which prevents it to be reliabely used with cronopete.</p>
-<p>If you click the <b>Format disk</b> button, cronopete will try to format the disk in ReiserFS format; if it fails (let's say, because reiserfstools are not
+<p>If you click the <span class="menu">Format disk</span> button, cronopete will try to format the disk in ReiserFS format; if it fails (let's say, because reiserfstools are not
 installed in the system), then it will try to format it in EXT4 format. Of course, this operation will erase all the data in the external disk.</p>
 <p>When the disk is ready, cronopete will show its main window like this:</p>
 <div align="center"><img src="cronopete7.png" /></div>
 <p>Now we can see the currently active disk, the available disk space, when the first and last backups were made and when will be done the next backup, the
-current status, and, in the switch under the <b>anaCRONOPETE</b> name, the ON/OFF status of cronopete.</p>
-<p>Now it's time to set up the folders to backup. By clicking the <b>Options</b> button, this window will be shown:</p>
+current status, and, in the switch under the <strong>anaCRONOPETE</strong> name, the ON/OFF status of cronopete.</p>
+<p>Now it's time to set up the folders to backup. By clicking the <span class="menu">Options</span> button, this window will be shown:</p>
 <div align="center"><img src="cronopete5.png" /></div>
 <p>The first list contains the folders to be backed up. By default it backs up the HOME folder only, but you can add other folders if you like.</p>
-<p>The second list contains the folders to be skip. By default is empty (but, internally, cronopete automatically refuses to backup the <b>.gvfs</b> folder
-in your HOME directory, for obvious reasons). You can add here folders like <i>aMule's Incoming</i> folder, or similar. The first list takes precedence over
+<p>The second list contains the folders to be skip. By default is empty (but, internally, cronopete automatically refuses to backup the <span class="filename">.gvfs</span> folder
+in your HOME directory, for obvious reasons). You can add here folders like <span class="filename">aMule's Incoming</span> folder, or similar. The first list takes precedence over
 this, so if a folder is in both lists, it will be backed up.</p>
 <p>Then, the checkbutton at the bottom allows you to avoid to back up the hidden files and folders in your HOME directory. By unchecking it, cronopete
 will not backup them (but hidden files/folders in other folders will be copied). Again, the first list takes precedence over this, so you can uncheck it
-to save disk space, but add your <i>HOME/.mozilla-thunderbird</i> folder in the first list to backup all your local mail.</p>
+to save disk space, but add your <span class="filename">HOME/.mozilla-thunderbird</span> folder in the first list to backup all your local mail.</p>
 <p>Finally, you can choose the time interval between backups. By default it is one hour, but you can set it to up 12 hours (but I strongly recommend to keep
 it to one backup each hour).</p>
 <p>Here is an example of this:</p>
@@ -116,6 +131,10 @@ is as easy as opening the external disk and copy the desired files back to the m
 <p>To uninstall cronopete, just use <i>make uninstall</i>.</p>
 <h2>History of versions</h2>
 <ul>
+<li>Version 1.2.0 (2011/10/07)</li>
+<ul>
+<li>Now keeps the modified date and time of the folders in the backups</li>
+</ul>
 <li>Version 1.1.0 (2011/09/17)</li>
 <ul>
 <li>Allows to set the time interval between backups</li>
@@ -131,7 +150,7 @@ is as easy as opening the external disk and copy the desired files back to the m
 </ul>
 <h2>Contacting the author</h2>
 <p>Sergio Costas Rodriguez<br/>
-raster@rastersoft.com<br/>
+<a href="mailto:raster@rastersoft.com">raster@rastersoft.com</a><br/>
 <a href="http://www.rastersoft.com">www.rastersoft.com</a></p>
 
 </body></html>

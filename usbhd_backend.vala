@@ -313,12 +313,15 @@ class usbhd_backend: Object, backends {
 		return BACKUP_RETVAL.OK;
 	}
 
-	public BACKUP_RETVAL copy_file(string path) {
+	public BACKUP_RETVAL copy_file(string path, time_t mod_time) {
 	
 		var newfile = Path.build_filename(this.cbackup_path,path);
+		File destination;
+		
 		try {
-			File.new_for_path(Path.build_filename(path)).copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
-		} catch (Error e) {
+			destination=File.new_for_path(Path.build_filename(path));
+			destination.copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
+		} catch (IOError e) {
 			if (e is IOError.NO_SPACE) {
 				Posix.unlink(newfile);
 				return BACKUP_RETVAL.NO_SPC;
@@ -329,11 +332,12 @@ class usbhd_backend: Object, backends {
 		return BACKUP_RETVAL.OK;	
 	}
 	
-	public BACKUP_RETVAL link_file(string path) {
+	public BACKUP_RETVAL link_file(string path,time_t mod_time) {
 		
 		//GLib.stdout.printf("Linkando %s a %s\n",Path.build_filename(this.last_backup,path),Path.build_filename(this.cbackup_path,path));
 		
-		var retval=link(Path.build_filename(this.last_backup,path),Path.build_filename(this.cbackup_path,path));
+		var dest_path=Path.build_filename(this.cbackup_path,path);
+		var retval=link(Path.build_filename(this.last_backup,path),dest_path);
 		
 		if (retval!=0) {
 			if (retval==Posix.ENOSPC) {
@@ -345,10 +349,12 @@ class usbhd_backend: Object, backends {
 		return BACKUP_RETVAL.OK;
 	}
 
-	public BACKUP_RETVAL create_folder(string path) {
+	public BACKUP_RETVAL create_folder(string path,time_t mod_time) {
+	
+		File dir2;
 	
 		try {
-			var dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
+			dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
 			dir2.make_directory_with_parents(null);
 		} catch (IOError e) {
 			if (e is IOError.NO_SPACE) {
@@ -357,6 +363,26 @@ class usbhd_backend: Object, backends {
 				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
 			}
 		}
+		
+		return BACKUP_RETVAL.OK;
+	}
+
+	public BACKUP_RETVAL set_modtime(string path, time_t mod_time) {
+		
+		File dir2;
+	
+		try {
+			dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
+		} catch (IOError e) {
+			if (e is IOError.NO_SPACE) {
+				return BACKUP_RETVAL.NO_SPC;
+			} else {
+				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
+			}
+		}
+		
+		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_MODIFIED,mod_time,0,null);
+		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_ACCESS,mod_time,0,null);
 		return BACKUP_RETVAL.OK;
 	}
 
