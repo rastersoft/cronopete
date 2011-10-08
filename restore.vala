@@ -39,6 +39,9 @@ class restore_iface : GLib.Object {
 	private Gtk.Window mywindow;
 	private int pos;
 	
+	private Button restore;
+	private Button do_exit;
+	
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
@@ -59,11 +62,12 @@ class restore_iface : GLib.Object {
 
 		this.base_layout = new Fixed();
 		this.box = new EventBox();
-		this.box.add_events (Gdk.EventMask.SCROLL_MASK);
+		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK);
 		this.box.add(this.base_layout);
 		this.mywindow.add(box);
 		
 		this.box.scroll_event.connect(this.on_scroll);
+		this.box.button_release_event.connect(this.on_click);
 		
 		this.box.sensitive=true;
 		
@@ -85,14 +89,26 @@ class restore_iface : GLib.Object {
 		this.base_layout.add(this.browser);
 		this.browser.width_request=scr_w*4/5;
 		this.browser.height_request=scr_h*4/5;
-		this.base_layout.move(this.browser,scr_w*1/10,scr_h*1/10);
+		this.base_layout.move(this.browser,scr_w*1/10,scr_h*3/20);
+
+		this.do_exit=new Button();
+		this.do_exit.set_label("Exit");
+		this.do_exit.clicked.connect(this.exit_restore);
+		this.base_layout.add(this.do_exit);
 
 		this.mywindow.show_all();
 		
-		this.divisor=50.0;
+		this.divisor=30.0;
 		this.counter=0.0;
 		this.timer=Timeout.add(20,this.timer_show);
 
+	}
+
+	private bool on_click(Gdk.EventButton event) {
+		
+		GLib.stdout.printf("Click\n");
+		return false;
+		
 	}
 
 	private bool on_scroll(Gdk.EventScroll event) {
@@ -110,6 +126,13 @@ class restore_iface : GLib.Object {
 	
 	}
 
+	private void exit_restore() {
+		
+		this.divisor=30.0;
+		this.counter=30.0;
+		this.timer=Timeout.add(20,this.timer_hide);
+		
+	}
 
 	public bool timer_show() {
 	
@@ -122,5 +145,15 @@ class restore_iface : GLib.Object {
 		}
 	}
 
-
+	public bool timer_hide() {
+		
+		if (this.counter>0) {
+			this.counter-=1.0;
+			this.mywindow.opacity=this.counter/this.divisor;
+			return true;
+		} else {
+			this.mywindow.destroy();
+			return false;
+		}
+	}
 }
