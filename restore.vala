@@ -21,6 +21,11 @@ using Gee;
 using Gtk;
 using Gdk;
 
+struct path_filename {
+	string original_file;
+	string restored_file;
+}
+
 class restore_iface : GLib.Object {
 
 	
@@ -42,6 +47,8 @@ class restore_iface : GLib.Object {
 	private Button restore;
 	private Button do_exit;
 	
+	private Gee.List<path_filename ?> restore_files;
+	private Gee.List<path_filename ?> restore_folders;
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
@@ -57,6 +64,10 @@ class restore_iface : GLib.Object {
 	public restore_iface(backends p_backend) {
 	
 		this.backend=p_backend;
+		this.backend.restore_ended.connect(this.restoring_ended);
+
+		this.restore_files = new Gee.ArrayList<path_filename ?>();
+		this.restore_folders = new Gee.ArrayList<path_filename ?>();
 
 		this.mywindow = new Gtk.Window();
 
@@ -91,14 +102,18 @@ class restore_iface : GLib.Object {
 		this.browser.height_request=scr_h*4/5;
 		this.base_layout.move(this.browser,scr_w*1/10,scr_h*3/20);
 
-		this.do_exit=new Button();
-		this.do_exit.set_label("Exit");
+		this.do_exit=new Button.with_label("Exit");
 		this.do_exit.clicked.connect(this.exit_restore);
 		this.base_layout.add(this.do_exit);
 
+		this.restore=new Button.with_label("Restore");
+		this.restore.clicked.connect(this.do_restore);
+		this.base_layout.add(this.restore);
+		this.base_layout.move(this.restore,500,0);
+
 		this.mywindow.show_all();
 		
-		this.divisor=30.0;
+		this.divisor=25.0;
 		this.counter=0.0;
 		this.timer=Timeout.add(20,this.timer_show);
 
@@ -128,10 +143,115 @@ class restore_iface : GLib.Object {
 
 	private void exit_restore() {
 		
-		this.divisor=30.0;
-		this.counter=30.0;
-		this.timer=Timeout.add(20,this.timer_hide);
+		if (this.timer==0) {
+			this.divisor=25.0;
+			this.counter=25.0;
+			this.timer=Timeout.add(20,this.timer_hide);
+		}
+	}
+	
+	private string get_restored_filename(string path, string filename) {
 		
+		string newfilename="%s.restored".printf(filename);
+		int counter=1;
+		File fs;
+		
+		while(true) {
+			fs = File.new_for_path(Path.build_filename(path,newfilename));
+			if (fs.query_exists()) {
+				newfilename="%s.restored.%d".printf(filename,counter);
+				counter++;
+			} else {
+				break;
+			}
+		}
+		
+		return newfilename;
+	}
+	
+	public void restoring_ended(backends b, string file_ended, BACKUP_RETVAL rv) {
+		
+		if (file_ended!="") {
+		
+			GLib.stdout.printf("Terminado %s\n",file_ended);
+			var current_time=time_t();
+			var f=File.new_for_path(file_ended);
+			f.set_attribute_uint64(FILE_ATTRIBUTE_TIME_MODIFIED,current_time,0,null);
+			f.set_attribute_uint64(FILE_ATTRIBUTE_TIME_ACCESS,current_time,0,null);
+		}
+		
+		if (this.restore_files.is_empty) {
+			return;
+		}
+		
+		var filename = this.restore_files.get(0);
+		this.restore_files.remove_at(0);
+		this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file);
+		
+	}
+	
+	private void do_restore() {
+		
+		Gee.List<string> files;
+		Gee.List<string> folders;
+		
+		this.mywindow.hide();
+		
+		var path=this.browser.get_current_path();
+		
+		this.browser.get_selected_items(out files, out folders);
+		foreach (string f in files) {
+			var element = new path_filename();
+			element.original_file=Path.build_filename(path,f);
+			element.restored_file=Path.build_filename(path,this.get_restored_filename(path,f));
+			this.restore_files.add(element);
+		}
+		
+		
+  		foreach (string v in folders) {
+		  	var restored_folder = Path.build_filename(path,this.get_restored_filename(path,v));
+			this.add_folder_to_restore(Path.build_filename(path,v),restored_folder);
+		}
+		
+		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+		
+	}
+
+	private BACKUP_RETVAL add_folder_to_restore(string o_path, string f_path) {
+		
+		Gee.List<FilelistIcons.file_info ?> files;
+		string date;
+		string new_opath;
+		string new_rpath;
+		
+		try {
+			var dir2 = File.new_for_path(Path.build_filename(f_path));
+			dir2.make_directory_with_parents(null);
+		} catch (IOError e) {
+			if (e is IOError.NO_SPACE) {
+				return BACKUP_RETVAL.NO_SPC;
+			} else {
+				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
+			}
+		}
+		
+		if (false==this.backend.get_filelist(o_path,this.backups[this.pos],out files,out date)) {
+			return BACKUP_RETVAL.NOT_AVAILABLE;
+		}
+
+		foreach (var v in files) {
+			if (v.isdir) {
+				new_opath = Path.build_filename(o_path,v.name);
+				new_rpath = Path.build_filename(f_path,v.name);
+				this.add_folder_to_restore(new_opath,new_rpath);
+			} else {
+				var element = new path_filename();
+				element.original_file=Path.build_filename(o_path,v.name);
+				element.restored_file=Path.build_filename(f_path,v.name);
+				this.restore_files.add(element);
+			}
+		}
+		return BACKUP_RETVAL.OK;
 	}
 
 	public bool timer_show() {
@@ -141,6 +261,7 @@ class restore_iface : GLib.Object {
 			this.mywindow.opacity=this.counter/this.divisor;
 			return true;
 		} else {
+			this.timer=0;
 			return false;
 		}
 	}

@@ -23,7 +23,7 @@ using Gdk;
 
 namespace FilelistIcons {
 
-	struct FileInfo {
+	struct file_info {
 	
 		string name;
 		bool isdir;
@@ -148,6 +148,12 @@ namespace FilelistIcons {
 			}
 		}
 
+		public string get_current_path() {
+			
+			return (this.current_path);
+			
+		}
+
 		private void refresh_path_list() {
 	
 			foreach (ToggleButton b in this.path_list) {
@@ -206,7 +212,7 @@ namespace FilelistIcons {
 			this.set_scroll_top();
 		}
 
-		public static int mysort_files(FileInfo? a, FileInfo? b) {
+		public static int mysort_files(file_info? a, file_info? b) {
 		
 			if (a.name>b.name) {
 				return 1;
@@ -221,7 +227,7 @@ namespace FilelistIcons {
 		private void refresh_icons() {
 	
 			TreeIter iter;
-			Gee.List<FileInfo?> files;
+			Gee.List<file_info?> files;
 			string title;
 	
 			this.path_model.clear();
@@ -236,7 +242,7 @@ namespace FilelistIcons {
 		
 			var pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
 		
-			foreach (FileInfo f in files) {
+			foreach (file_info f in files) {
 
 				if (f.isdir) {
 					this.path_model.append (out iter);
@@ -249,7 +255,7 @@ namespace FilelistIcons {
 
 			pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
 
-			foreach (FileInfo f in files) {
+			foreach (file_info f in files) {
 			
 				if (f.isdir) {
 					continue;

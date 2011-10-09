@@ -37,6 +37,50 @@ class usbhd_backend: Object, backends {
 		}
 	}
 	private int last_msg;
+
+	private string get_backup_path(time_t backup) {
+		
+		var ctime = GLib.Time.local(backup);
+		var basepath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup);
+		return basepath;
+		
+	}
+	
+	public BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename) {
+	
+		var origin_path = Path.build_filename(this.backup_path,this.get_backup_path(backup),filename);
+
+		File origin;
+		
+		GLib.stdout.printf("restaurando %s como %s\n",origin_path,output_filename);
+		
+		try {
+			origin=File.new_for_path(origin_path);
+			origin.copy_async.begin(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,null, (obj,res) => {
+				try {
+					origin.copy_async.end(res);
+					this.restore_ended(this,output_filename,BACKUP_RETVAL.OK);
+				} catch (IOError e2) {
+					GLib.stdout.printf("Error2 %s\n",e2.message);
+					if (e2 is IOError.NO_SPACE) {
+						Posix.unlink(output_filename);
+						this.restore_ended(this,output_filename,BACKUP_RETVAL.NO_SPC);
+					} else {
+						this.restore_ended(this,output_filename,BACKUP_RETVAL.CANT_COPY);
+					}
+				}
+			});
+		} catch (IOError e) {
+			GLib.stdout.printf("Error %s\n",e.message);
+			if (e is IOError.NO_SPACE) {
+				Posix.unlink(output_filename);
+				return BACKUP_RETVAL.NO_SPC;
+			} else {
+				return BACKUP_RETVAL.CANT_COPY;
+			}
+		}
+		return BACKUP_RETVAL.IN_PROCCESS;
+	}
 	
 	public usbhd_backend(string bpath) {
 	
@@ -57,20 +101,19 @@ class usbhd_backend: Object, backends {
 		
 	}
 
-	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.FileInfo ?> files, out string date) {
+
+	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date) {
 	
 		FileInfo info_file;
 		FileType typeinfo;
 
 		try {
 		
-			files = new Gee.ArrayList<FilelistIcons.FileInfo ?>();
+			files = new Gee.ArrayList<FilelistIcons.file_info ?>();
 		
-			var ctime = GLib.Time.local(backup);
+			var basepath=this.get_backup_path(backup);
 
-			var basepath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup);
-
-			date=ctime.to_string().dup();
+			date=basepath.dup();
 	
 			var finalpath = Path.build_filename(this.backup_path,basepath,current_path);
 	
@@ -79,7 +122,7 @@ class usbhd_backend: Object, backends {
 		
 			while ((info_file = listfile.next_file(null)) != null) {
 
-				var tmpinfo = FilelistIcons.FileInfo();
+				var tmpinfo = FilelistIcons.file_info();
 
 				typeinfo=info_file.get_file_type();
 				tmpinfo.name=info_file.get_name().dup();
@@ -199,8 +242,7 @@ class usbhd_backend: Object, backends {
 	
 	public bool delete_backup(time_t backup_date) {
 	
-		var ctime = GLib.Time.local((time_t)backup_date);
-		var tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%lld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup_date);
+		var tmppath=this.get_backup_path(backup_date);
 		var final_path=Path.build_filename(this.backup_path,tmppath);
 		
 		Process.spawn_command_line_sync("rm -rf "+final_path);
@@ -244,10 +286,7 @@ class usbhd_backend: Object, backends {
 			return BACKUP_RETVAL.NOT_AVAILABLE;
 		}
 		
-		var timestamp=time_t();
-		var ctime = GLib.Time.local(timestamp);
-
-		var tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,timestamp);
+		var tmppath=this.get_backup_path(time_t());
 		this.cbackup_path=Path.build_filename(this.backup_path,"B"+tmppath);
 		this.cfinal_path=tmppath;
 		
@@ -316,11 +355,11 @@ class usbhd_backend: Object, backends {
 	public BACKUP_RETVAL copy_file(string path, time_t mod_time) {
 	
 		var newfile = Path.build_filename(this.cbackup_path,path);
-		File destination;
+		File origin;
 		
 		try {
-			destination=File.new_for_path(Path.build_filename(path));
-			destination.copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
+			origin=File.new_for_path(Path.build_filename(path));
+			origin.copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
 		} catch (IOError e) {
 			if (e is IOError.NO_SPACE) {
 				Posix.unlink(newfile);
@@ -371,15 +410,7 @@ class usbhd_backend: Object, backends {
 		
 		File dir2;
 	
-		try {
-			dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
-		} catch (IOError e) {
-			if (e is IOError.NO_SPACE) {
-				return BACKUP_RETVAL.NO_SPC;
-			} else {
-				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
-			}
-		}
+		dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
 		
 		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_MODIFIED,mod_time,0,null);
 		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_ACCESS,mod_time,0,null);

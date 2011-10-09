@@ -35,7 +35,7 @@ interface callbacks : GLib.Object {
 }
 
 enum BACKUP_RETVAL { OK, CANT_COPY, CANT_LINK, NO_STARTED, CANT_CREATE_FOLDER, ALREADY_STARTED,
-	NOT_AVAILABLE, NOT_WRITABLE, NO_SPC, CANT_CREATE_BASE, ERROR }
+	NOT_AVAILABLE, NOT_WRITABLE, NO_SPC, CANT_CREATE_BASE, NOT_EXISTS, IN_PROCCESS, ERROR }
 
 interface backends : GLib.Object {
 
@@ -54,7 +54,9 @@ interface backends : GLib.Object {
 	public abstract bool available {get;}
 	public signal void status(usbhd_backend b);
 
-	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.FileInfo ?> files, out string date);
+	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date);
+	public abstract BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename);
+	public signal void restore_ended(backends b, string file_ended, BACKUP_RETVAL status);
 
 }
 
