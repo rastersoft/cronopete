@@ -479,7 +479,7 @@ class cp_callback : GLib.Object, callbacks {
 	
 	public void enter_clicked() {
 	
-		this.restore_w=new restore_iface(this.backend);
+		this.restore_w=new restore_iface(this.backend,this.basepath);
 	
 	}
 	

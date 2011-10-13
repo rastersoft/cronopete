@@ -52,33 +52,22 @@ class usbhd_backend: Object, backends {
 
 		File origin;
 		
-		GLib.stdout.printf("restaurando %s como %s\n",origin_path,output_filename);
-		
-		try {
-			origin=File.new_for_path(origin_path);
-			origin.copy_async.begin(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,null, (obj,res) => {
-				try {
-					origin.copy_async.end(res);
-					this.restore_ended(this,output_filename,BACKUP_RETVAL.OK);
-				} catch (IOError e2) {
-					GLib.stdout.printf("Error2 %s\n",e2.message);
-					if (e2 is IOError.NO_SPACE) {
-						Posix.unlink(output_filename);
-						this.restore_ended(this,output_filename,BACKUP_RETVAL.NO_SPC);
-					} else {
-						this.restore_ended(this,output_filename,BACKUP_RETVAL.CANT_COPY);
-					}
+		origin=File.new_for_path(origin_path);
+		origin.copy_async.begin(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,null, (obj,res) => {
+			try {
+				origin.copy_async.end(res);
+				this.restore_ended(this,output_filename,BACKUP_RETVAL.OK);
+			} catch (IOError e2) {
+				GLib.stdout.printf("Error2 %s\n",e2.message);
+				if (e2 is IOError.NO_SPACE) {
+					Posix.unlink(output_filename);
+					this.restore_ended(this,output_filename,BACKUP_RETVAL.NO_SPC);
+				} else {
+					this.restore_ended(this,output_filename,BACKUP_RETVAL.CANT_COPY);
 				}
-			});
-		} catch (IOError e) {
-			GLib.stdout.printf("Error %s\n",e.message);
-			if (e is IOError.NO_SPACE) {
-				Posix.unlink(output_filename);
-				return BACKUP_RETVAL.NO_SPC;
-			} else {
-				return BACKUP_RETVAL.CANT_COPY;
 			}
-		}
+		});
+		
 		return BACKUP_RETVAL.IN_PROCCESS;
 	}
 	
