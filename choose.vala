@@ -125,7 +125,7 @@ class c_format : GLib.Object {
 	}
 
 	private void format_drive(string format) {
-	
+
 		if (this.device==null) {
 			final_path=null;
 			return;

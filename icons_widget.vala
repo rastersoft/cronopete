@@ -46,6 +46,7 @@ namespace FilelistIcons {
 		private EventBox background_eb;
 		private time_t current_backup;
 		private backends backend;
+		private uint timer_refresh;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -53,6 +54,7 @@ namespace FilelistIcons {
 			this.current_path=p_current_path;
 		
 			this.main_container=new VBox(false,2);
+			this.timer_refresh=0;
 			
 			this.main_title=new Label("");
 			this.main_container.pack_start(this.main_title,false,true,0);
@@ -96,8 +98,18 @@ namespace FilelistIcons {
 		public void set_backup_time(time_t backup) {
 			
 			this.current_backup=backup;
+			this.path_model.clear();
+			if (this.timer_refresh!=0) {
+				Source.remove(this.timer_refresh);
+			}
+			this.timer_refresh=Timeout.add(50,this.timer_f);
+					
+		}
+
+		public bool timer_f() {
+
 			this.refresh_icons();
-			
+			return false;
 		}
 
 		public bool selection_made(EventButton event) {

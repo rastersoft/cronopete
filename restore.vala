@@ -86,8 +86,8 @@ class restore_iface : GLib.Object {
 		var scr=this.mywindow.get_screen();
 		this.scr_w=scr.get_width();
 		this.scr_h=scr.get_height();
-		this.scr_w=800;
-		this.scr_h=600;
+		//this.scr_w=1024;
+		//this.scr_h=600;
 
 		this.base_layout = new Fixed();
 
@@ -121,8 +121,8 @@ class restore_iface : GLib.Object {
 		
 		this.base_layout.add(this.browser);
 		this.browser.width_request=scr_w*4/5;
-		this.browser.height_request=scr_h-30-this.nixie_h;
-		this.base_layout.move(this.browser,scr_w*1/10,20+this.nixie_h);
+		this.browser.height_request=scr_h-3*this.nixie_h;
+		this.base_layout.move(this.browser,scr_w*1/10,5*this.nixie_h/3);
 
 		this.do_exit=new Button.with_label("Exit");
 		this.do_exit.clicked.connect(this.exit_restore);
@@ -239,7 +239,7 @@ class restore_iface : GLib.Object {
 		var ctime = GLib.Time.local(this.backups[this.pos]);
 		var basepath="%04d/%02d/%02d %02d:%02d".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute);
 		var sf = this.print_nixies(basepath,out width);
-		ctx.set_source_surface(sf,(this.scr_w-width)/2.0,10.0);
+		ctx.set_source_surface(sf,(this.scr_w-width)/2.0,(double)(this.nixie_h/3));
 		ctx.paint();
 	}
 
@@ -280,11 +280,12 @@ class restore_iface : GLib.Object {
 		var dx = rnd.next_double();
 		var dy = rnd.next_double();
 		
-		double v1=10.0;
-		double v2=5.0;
-		double v3=v1/2;
-		double v4=2*v1+2*v3;
-		double v5=2*v2;
+		double v1=5.0;
+		double v2=v1/2.0;
+		double v31=v1/2;
+		double v32=v1*0.866;
+		double v4=2*v1+2*v31;
+		double v5=2*v32;
 
 		dx*=v1;
 		dy*=v2;
@@ -295,16 +296,15 @@ class restore_iface : GLib.Object {
 			for (double y=-dy;y<oh;y+=v5) {
 				ctx.move_to(x+ox,y);
 				ctx.rel_line_to(v1,0);
-				ctx.rel_line_to(v3,v3);
+				ctx.rel_line_to(v31,v32);
 				ctx.rel_line_to(v1,0);
-				ctx.rel_line_to(v3,-v3);
-				ctx.rel_line_to(-v3,-v3);
+				ctx.rel_line_to(v31,-v32);
+				ctx.rel_line_to(-v31,-v32);
 				ctx.move_to(x+ox+v1,y);
-				ctx.rel_line_to(v3,-v3);
+				ctx.rel_line_to(v31,-v32);
 				ctx.stroke();
 			}
-		}
-		
+		}	
 	}
 
 	private Cairo.ImageSurface print_nixies(string date, out double width) {
@@ -331,6 +331,7 @@ class restore_iface : GLib.Object {
 			ctx.rel_line_to(-this.nixies_w[element],0.0);
 			ctx.rel_line_to(0,-this.nixie_h);
 			ctx.clip();
+			ctx.new_path();
 			ctx.set_source_surface(this.nixies[element],pos,0.0);
 			//ctx.clip();
 			ctx.paint();

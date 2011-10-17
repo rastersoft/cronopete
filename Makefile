@@ -14,8 +14,9 @@ install:
 	install -d $(PREFIX2)/bin/
 	cp cronopete $(PREFIX2)/bin
 	install -d $(PREFIX2)/share/cronopete
-	cp interface/*.ui $(PREFIX2)/share/cronopete
-	cp interface/*.svg $(PREFIX2)/share/cronopete
+	cp interface/*.ui $(PREFIX2)/share/cronopete/
+	cp interface/*.svg $(PREFIX2)/share/cronopete/
+	cp interface/*.png $(PREFIX2)/share/cronopete/
 	install -d $(PREFIX)/etc/xdg/autostart/
 	cp cronopete.desktop $(PREFIX)/etc/xdg/autostart/
 	install  -d $(PREFIX2)/share/locale/es/LC_MESSAGES
