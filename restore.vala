@@ -360,6 +360,14 @@ class restore_iface : GLib.Object {
 		int element;
 		for (int c=0;c<date.length;c++) {
 			element=this.get_nixie_pos(date[c]);
+			ctx.reset_clip();
+			ctx.move_to(pos,0.0);
+			ctx.rel_line_to(this.nixies_w[element],0.0);
+			ctx.rel_line_to(0,this.nixie_h);
+			ctx.rel_line_to(-this.nixies_w[element],0.0);
+			ctx.rel_line_to(0,-this.nixie_h);
+			ctx.clip();
+			ctx.new_path();
 			ctx.set_source_surface(this.nixies[element],pos,0.0);
 			ctx.paint();
 			if (repaint_grid) {
@@ -375,6 +383,7 @@ class restore_iface : GLib.Object {
 			}
 			pos+=this.nixies_w[element];
 		}
+		ctx.reset_clip();
 		ctx.set_source_surface(this.grid,0.0,0.0);
 		ctx.paint();
 		return surface;
