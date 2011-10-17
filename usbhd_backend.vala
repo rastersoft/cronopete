@@ -264,7 +264,9 @@ class usbhd_backend: Object, backends {
 	}
 
 	public BACKUP_RETVAL start_backup(out int64 last_backup_time) {
-	
+
+		last_backup_time = 0;
+		
 		if (this.cfinal_path!=null) {
 			return BACKUP_RETVAL.ALREADY_STARTED;
 		}
@@ -282,7 +284,7 @@ class usbhd_backend: Object, backends {
 		string tmp_directory="";
 		string tmp_date="";
 		string last_date="";
-
+		
 		try {
 			var myenum = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME, 0, null);
 			FileInfo file_info;
