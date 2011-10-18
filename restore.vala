@@ -41,6 +41,11 @@ class restore_iface : GLib.Object {
 	
 	private EventBox box;
 	private FilelistIcons.IconBrowser browser;
+	private double browser_x;
+	private double browser_y;
+	private double browser_w;
+	private double browser_h;
+	
 	private Gee.List<time_t?>? backups;
 	private Fixed base_layout;
 	private Gtk.Window mywindow;
@@ -126,9 +131,13 @@ class restore_iface : GLib.Object {
 		this.create_cairo_layouts();
 		
 		this.base_layout.add(this.browser);
-		this.browser.width_request=scr_w*4/5;
-		this.browser.height_request=scr_h-3*this.nixie_h;
-		this.base_layout.move(this.browser,scr_w*1/10,5*this.nixie_h/3);
+		this.browser_x=scr_w*1/10;
+		this.browser_y=5*this.nixie_h/3;
+		this.browser_w=scr_w*4/5;
+		this.browser_h=scr_h-3*this.nixie_h;
+		this.browser.width_request=(int)this.browser_w;
+		this.browser.height_request=(int)this.browser_h;
+		this.base_layout.move(this.browser,(int)this.browser_x,(int)this.browser_y);
 
 		this.do_exit=new Button.with_label("Exit");
 		this.do_exit.clicked.connect(this.exit_restore);
@@ -237,6 +246,21 @@ class restore_iface : GLib.Object {
 		}
 	}
 
+	private void paint_border(Cairo.Context ctx, double mx, double my, double mw, double mh, double margin) {
+
+		ctx.set_source_rgba(0,0,0,0.3);
+		ctx.set_line_width(3.0);
+		ctx.move_to(mx-margin,my+mh+margin);
+		ctx.rel_line_to(0,-mh-2*margin);
+		ctx.rel_line_to(mw+2*margin,0);
+		ctx.stroke();
+		ctx.set_source_rgba(1,1,1,0.3);
+		ctx.move_to(mx-margin,my+mh+margin);
+		ctx.rel_line_to(mw+2*margin,0);
+		ctx.rel_line_to(0,-mh-2*margin);
+		ctx.stroke();
+	}
+	
 	private void paint_window() {
 		
 		double width;
@@ -247,8 +271,14 @@ class restore_iface : GLib.Object {
 		var ctime = GLib.Time.local(this.backups[this.pos]);
 		var basepath="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
 		var sf = this.print_nixies(basepath,out width);
-		ctx.set_source_surface(sf,(this.scr_w-width)/2.0,(double)(this.nixie_h/3));
+		double mx=(this.scr_w-width)/2.0;
+		double my=(double)(this.nixie_h/3);
+		double mh=(double)(this.nixie_h);
+		ctx.set_source_surface(sf,mx,my);
 		ctx.paint();
+		this.paint_border (ctx,mx,my,width,mh,1.5);
+		this.paint_border (ctx,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0);
+		this.paint_button (ctx,10,10,60,40,1.0,0.0,0.0);
 
 		if (this.finish_surface) {
 			var screw1 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw1.png"));
@@ -268,6 +298,33 @@ class restore_iface : GLib.Object {
 		}
 	}
 
+
+	private void paint_button(Cairo.Context ctx, double x, double y, double w, double h, double r, double g, double b) {
+
+		ctx.set_source_rgb(r,g,b);
+		ctx.set_line_width(5.0);
+		ctx.set_line_cap(LineCap.ROUND);
+		ctx.move_to(x,y);
+		ctx.rel_line_to(w,0);
+		ctx.rel_line_to(0,h);
+		ctx.rel_line_to(-w,0);
+		ctx.close_path();
+		ctx.fill();
+		
+		var pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
+		
+		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.3);
+		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.3);
+
+		ctx.set_source(pattern);
+		ctx.move_to(x+2.5,y+2.5);
+		ctx.rel_line_to(w-5,0);
+		ctx.rel_line_to(0,h-5.0);
+		ctx.rel_line_to(-w+5,0);
+		ctx.close_path();
+		ctx.stroke();
+	}
+	
 
 	private bool repaint_draw(EventExpose ev) {
 
@@ -358,6 +415,7 @@ class restore_iface : GLib.Object {
 		var ctx2 = new Cairo.Context(this.grid);
 		
 		int element;
+		ctx.set_line_width(0.0);
 		for (int c=0;c<date.length;c++) {
 			element=this.get_nixie_pos(date[c]);
 			ctx.reset_clip();

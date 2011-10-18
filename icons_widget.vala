@@ -53,7 +53,7 @@ namespace FilelistIcons {
 			this.backend=p_backend;
 			this.current_path=p_current_path;
 		
-			this.main_container=new VBox(false,2);
+			this.main_container=new VBox(false,0);
 			this.timer_refresh=0;
 			
 			this.main_title=new Label("");
