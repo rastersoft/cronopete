@@ -45,14 +45,21 @@ class restore_iface : GLib.Object {
 	private double browser_y;
 	private double browser_w;
 	private double browser_h;
+
+	private double restore_x;
+	private double restore_y;
+	private double restore_w;
+	private double restore_h;
+
+	private double exit_x;
+	private double exit_y;
+	private double exit_w;
+	private double exit_h;
 	
 	private Gee.List<time_t?>? backups;
 	private Fixed base_layout;
 	private Gtk.Window mywindow;
 	private int pos;
-	
-	private Button restore;
-	private Button do_exit;
 	
 	private Gee.List<path_filename ?> restore_files;
 	private Gee.List<path_filename ?> restore_folders;
@@ -62,7 +69,6 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface final_surface;
 	private Cairo.ImageSurface nixies[13];
 	private Cairo.ImageSurface grid;
-	private bool finish_surface;
 	private int grid_w;
 	private int grid_h;
 	private int nixies_w[13];
@@ -127,27 +133,13 @@ class restore_iface : GLib.Object {
 		this.browser=new FilelistIcons.IconBrowser(this.backend,Environment.get_home_dir());
 		this.pos=0;
 		this.browser.set_backup_time(this.backups[0]);
-		
+
 		this.create_cairo_layouts();
 		
 		this.base_layout.add(this.browser);
-		this.browser_x=scr_w*1/10;
-		this.browser_y=5*this.nixie_h/3;
-		this.browser_w=scr_w*4/5;
-		this.browser_h=scr_h-3*this.nixie_h;
 		this.browser.width_request=(int)this.browser_w;
 		this.browser.height_request=(int)this.browser_h;
 		this.base_layout.move(this.browser,(int)this.browser_x,(int)this.browser_y);
-
-		this.do_exit=new Button.with_label("Exit");
-		this.do_exit.clicked.connect(this.exit_restore);
-		this.base_layout.add(this.do_exit);
-		this.base_layout.move(this.do_exit,300,0);
-
-		this.restore=new Button.with_label("Restore");
-		this.restore.clicked.connect(this.do_restore);
-		this.base_layout.add(this.restore);
-		this.base_layout.move(this.restore,500,0);
 
 		this.paint_window();
 
@@ -160,8 +152,6 @@ class restore_iface : GLib.Object {
 	}
 
 	private void create_cairo_layouts() {
-
-		this.finish_surface=true;
 		
 		this.base_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
 		this.final_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
@@ -244,6 +234,44 @@ class restore_iface : GLib.Object {
 				ctx.stroke();
 			}
 		}
+		c_base.restore();
+
+		double width;
+		this.print_nixies(0, out width);
+	
+		double mx=(this.scr_w-width)/2.0;
+		double my=(double)(this.nixie_h/3);
+		double mh=(double)(this.nixie_h);
+
+		this.browser_x=scr_w*0.1;
+		this.browser_y=5*this.nixie_h/3;
+		this.browser_w=scr_w*4/5;
+		this.browser_h=scr_h-3*this.nixie_h;
+		
+		this.paint_border (c_base,mx,my,width,mh,1.5);
+		this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0);
+
+		c_base.save();
+		scale=this.scr_w/2800.0;
+		c_base.scale(scale,scale);
+		c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-60,((double)(this.nixie_h/3))/scale+60.0);
+		c_base.paint();
+		c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+10,((double)(this.nixie_h/3))/scale+60.0);
+		c_base.paint();
+		c_base.restore();
+
+		this.exit_w=this.nixie_h*16/18;
+		this.exit_h=this.nixie_h*16/18;
+		this.exit_x=this.browser_x+this.browser_w-this.exit_w;
+		this.exit_y=this.scr_h-20*this.nixie_h/19;
+		this.paint_button (c_base,this.exit_x,this.exit_y,this.exit_w,this.exit_h,0.1,1.0,0.0,0.0,_("Exit"),false);
+
+		this.restore_w=this.nixie_h*16/18;
+		this.restore_h=this.nixie_h*16/18;
+		this.restore_x=this.browser_x;
+		this.restore_y=this.scr_h-20*this.nixie_h/19;
+		this.paint_button (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,0.6,0.0,1.0,0.0,_("Restore files"),true);
+		
 	}
 
 	private void paint_border(Cairo.Context ctx, double mx, double my, double mw, double mh, double margin) {
@@ -268,38 +296,16 @@ class restore_iface : GLib.Object {
 		var ctx = new Cairo.Context(this.final_surface);
 		ctx.set_source_surface(this.base_surface,0,0);
 		ctx.paint();
-		var ctime = GLib.Time.local(this.backups[this.pos]);
-		var basepath="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
-		var sf = this.print_nixies(basepath,out width);
+		
+		var sf = this.print_nixies(this.backups[this.pos],out width);
 		double mx=(this.scr_w-width)/2.0;
 		double my=(double)(this.nixie_h/3);
-		double mh=(double)(this.nixie_h);
 		ctx.set_source_surface(sf,mx,my);
 		ctx.paint();
-		this.paint_border (ctx,mx,my,width,mh,1.5);
-		this.paint_border (ctx,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0);
-		this.paint_button (ctx,10,10,160,140,0.4,1.0,0.0,0.0);
-
-		if (this.finish_surface) {
-			var screw1 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw1.png"));
-			var screw2 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw2.png"));
-			
-			var c_base = new Cairo.Context(this.base_surface);
-			c_base.save();
-			var scale=this.scr_w/2800.0;
-			c_base.scale(scale,scale);
-			c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-60,((double)(this.nixie_h/3))/scale+60.0);
-			c_base.paint();
-			c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+10,((double)(this.nixie_h/3))/scale+60.0);
-			c_base.paint();
-			c_base.restore();
-			this.finish_surface=false;
-			this.paint_window ();
-		}
 	}
 
 
-	private void paint_button(Cairo.Context ctx, double x, double y, double w, double h, double angle, double r, double g, double b) {
+	private void paint_button(Cairo.Context ctx, double x, double y, double w, double h, double angle, double r, double g, double b, string text, bool at_end) {
 
 		double radius;
 		double radius2;
@@ -329,6 +335,7 @@ class restore_iface : GLib.Object {
 		ctx.rel_line_to(-radius,0);
 		ctx.rel_line_to(-hex1,hex2);
 		ctx.clip();
+		ctx.rotate(-angle);
 		ctx.set_source_rgb(0.6,0.6,0.6);
 		ctx.rectangle(-radius,-radius,radius2,radius2);
 		ctx.fill();
@@ -389,6 +396,38 @@ class restore_iface : GLib.Object {
 		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
 		ctx.stroke();
 		ctx.reset_clip();
+		ctx.set_source_rgb(0,0,0);
+		ctx.select_font_face("Serif",FontSlant.ITALIC,FontWeight.NORMAL);
+		ctx.set_font_size(radius2*0.8);
+		TextExtents extents;
+
+		ctx.text_extents(text, out extents);
+
+		//GLib.stdout.printf("%s %f %f %f\n",text,extents.height,extents.y_bearing,extents.y_advance);
+		
+		double nx;
+		double ny;
+		
+		if (at_end) {
+			nx=x+(w+radius2)/2+3;
+		} else {
+			nx=x+(w-radius2)/2-extents.width-3;
+		}
+
+		double fh;
+		if (extents.y_bearing>=0) {
+			fh=extents.y_bearing;
+		} else {
+			fh=-extents.y_bearing;
+		}
+		ny=y+(h+fh)/2;
+		ctx.move_to(nx,ny);
+		ctx.show_text(text);
+
+		/*ctx.set_line_width(1);
+		ctx.move_to(nx,ny);
+		ctx.rel_line_to(extents.width,0);
+		ctx.stroke();*/
 	}
 	
 
@@ -455,8 +494,11 @@ class restore_iface : GLib.Object {
 		}	
 	}
 
-	private Cairo.ImageSurface print_nixies(string date, out double width) {
+	private Cairo.ImageSurface print_nixies(time_t backup_date, out double width) {
 
+		var ctime = GLib.Time.local(backup_date);
+		var date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+		
 		bool repaint_grid;
 		double size=0;
 		double pos=0;
@@ -514,14 +556,27 @@ class restore_iface : GLib.Object {
 	}
 
 	private bool on_click(Gdk.EventButton event) {
+
+		if ((event.x_root>=this.exit_x)&&(event.x_root<(this.exit_x+this.exit_w))&&(event.y_root>=this.exit_y)&&(event.y_root<(this.exit_y+this.exit_h))) {
+			this.exit_restore ();
+			return true;
+		}
+
+		if ((event.x_root>=this.restore_x)&&(event.x_root<(this.restore_x+this.restore_w))&&(event.y_root>=this.restore_y)&&(event.y_root<(this.restore_y+this.restore_h))) {
+			this.do_restore();
+			return true;
+		}
 		
-		GLib.stdout.printf("Click\n");
 		return false;
 		
 	}
 
 	private bool on_scroll(Gdk.EventScroll event) {
-	
+
+		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)this.browser_y))&&(event.y_root<((int)(this.browser_y+this.browser_h)))) {
+			return true;
+		}
+		
 		if ((event.direction==ScrollDirection.UP)&&(this.pos>0)) {
 			this.pos--;
 			this.browser.set_backup_time(this.backups[this.pos]);
@@ -592,8 +647,6 @@ class restore_iface : GLib.Object {
 		
 		Gee.List<string> files;
 		Gee.List<string> folders;
-		
-		this.mywindow.hide();
 		
 		var path=this.browser.get_current_path();
 		
