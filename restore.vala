@@ -278,7 +278,7 @@ class restore_iface : GLib.Object {
 		ctx.paint();
 		this.paint_border (ctx,mx,my,width,mh,1.5);
 		this.paint_border (ctx,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0);
-		this.paint_button (ctx,10,10,60,40,1.0,0.0,0.0);
+		this.paint_button (ctx,10,10,160,140,0.4,1.0,0.0,0.0);
 
 		if (this.finish_surface) {
 			var screw1 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw1.png"));
@@ -299,30 +299,96 @@ class restore_iface : GLib.Object {
 	}
 
 
-	private void paint_button(Cairo.Context ctx, double x, double y, double w, double h, double r, double g, double b) {
+	private void paint_button(Cairo.Context ctx, double x, double y, double w, double h, double angle, double r, double g, double b) {
 
-		ctx.set_source_rgb(r,g,b);
-		ctx.set_line_width(5.0);
-		ctx.set_line_cap(LineCap.ROUND);
-		ctx.move_to(x,y);
-		ctx.rel_line_to(w,0);
-		ctx.rel_line_to(0,h);
-		ctx.rel_line_to(-w,0);
-		ctx.close_path();
+		double radius;
+		double radius2;
+		Cairo.Pattern pattern;
+		
+		if (w>h) {
+			radius=h/2;
+			radius2=h;
+		} else {
+			radius=w/2;
+			radius2=w;
+		}
+		double hex1;
+		double hex2;
+		hex1=radius*0.5;
+		hex2=radius*0.886;
+
+		ctx.save();
+		ctx.reset_clip();
+		ctx.translate(x+w/2,y+h/2);
+		ctx.rotate(angle);
+		ctx.move_to(-radius,0);
+		ctx.rel_line_to(hex1,hex2);
+		ctx.rel_line_to(radius,0);
+		ctx.rel_line_to(hex1,-hex2);
+		ctx.rel_line_to(-hex1,-hex2);
+		ctx.rel_line_to(-radius,0);
+		ctx.rel_line_to(-hex1,hex2);
+		ctx.clip();
+		ctx.set_source_rgb(0.6,0.6,0.6);
+		ctx.rectangle(-radius,-radius,radius2,radius2);
 		ctx.fill();
-		
-		var pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
-		
+		pattern = new Cairo.Pattern.linear(-radius,-radius,radius2,radius2);
+		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.6);
+		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.6);
+		ctx.set_source(pattern);
+		ctx.rectangle(-radius,-radius,radius2,radius2);
+		ctx.fill();
+		ctx.reset_clip();
+		ctx.restore();
+
+		radius*=0.84;
+
+		ctx.set_source_rgb(0.5,0.5,0.5);
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.fill();
+		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
 		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.3);
 		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.3);
-
 		ctx.set_source(pattern);
-		ctx.move_to(x+2.5,y+2.5);
-		ctx.rel_line_to(w-5,0);
-		ctx.rel_line_to(0,h-5.0);
-		ctx.rel_line_to(-w+5,0);
-		ctx.close_path();
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.fill();
+
+		radius*=0.85;
+		
+		ctx.set_source_rgb(0,0,0);
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.fill();
+		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
+		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.3);
+		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.3);
+		ctx.set_source(pattern);
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.fill();
+
+		ctx.reset_clip();
+		radius*=0.85;
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.clip();
+		
+		ctx.set_source_rgb(r,g,b);
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.fill();
+
+		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
+		pattern.add_color_stop_rgba(0.0,0.0,0.0,0.0,0.2);
+		pattern.add_color_stop_rgba(1.0,1.0,1.0,1.0,0.2);
+		ctx.set_source(pattern);
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
+		ctx.fill();
+		
+		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
+		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.4);
+		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.4);
+		ctx.set_source(pattern);
+		ctx.set_line_width(radius*0.25);
+		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
 		ctx.stroke();
+		ctx.reset_clip();
 	}
 	
 
