@@ -277,13 +277,13 @@ class restore_iface : GLib.Object {
 		this.exit_h=this.nixie_h*16/18;
 		this.exit_x=this.browser_x+this.browser_w-this.exit_w;
 		this.exit_y=this.scr_h-20*this.nixie_h/19;
-		this.paint_button (c_base,this.exit_x,this.exit_y,this.exit_w,this.exit_h,0.1,1.0,0.0,0.0,_("Exit"),false);
+		this.paint_button (c_base,ref this.exit_x,ref this.exit_y,ref this.exit_w,ref this.exit_h,0.1,1.0,0.0,0.0,_("Exit"),false);
 
 		this.restore_w=this.nixie_h*16/18;
 		this.restore_h=this.nixie_h*16/18;
 		this.restore_x=this.browser_x;
 		this.restore_y=this.scr_h-20*this.nixie_h/19;
-		this.paint_button (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,0.6,0.0,1.0,0.0,_("Restore files"),true);
+		this.paint_button (c_base,ref this.restore_x,ref this.restore_y,ref this.restore_w,ref this.restore_h,0.6,0.0,1.0,0.0,_("Restore files"),true);
 
 		this.scale_x=this.scr_w/30;
 		this.scale_y=this.scr_h/16;
@@ -361,7 +361,7 @@ class restore_iface : GLib.Object {
 	}
 
 
-	private void paint_button(Cairo.Context ctx, double x, double y, double w, double h, double angle, double r, double g, double b, string text, bool at_end) {
+	private void paint_button(Cairo.Context ctx, ref double x, ref double y, ref double w, ref double h, double angle, double r, double g, double b, string text, bool at_end) {
 
 		double radius;
 		double radius2;

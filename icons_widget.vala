@@ -40,7 +40,7 @@ namespace FilelistIcons {
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
-		private Label main_title;
+		//private Label main_title;
 		private string current_path;
 		private Gee.List<ToggleButton> path_list;
 		private EventBox background_eb;
@@ -56,8 +56,8 @@ namespace FilelistIcons {
 			this.main_container=new VBox(false,0);
 			this.timer_refresh=0;
 			
-			this.main_title=new Label("");
-			this.main_container.pack_start(this.main_title,false,true,0);
+			/*this.main_title=new Label("");
+			this.main_container.pack_start(this.main_title,false,true,0);*/
 			
 			this.buttons_path=new HBox(false,0);
 			this.buttons_path.homogeneous=false;
@@ -248,7 +248,7 @@ namespace FilelistIcons {
 				return;
 			}
 			
-			this.main_title.label=title;
+			//this.main_title.label=title;
 			
 			files.sort(mysort_files);
 		
