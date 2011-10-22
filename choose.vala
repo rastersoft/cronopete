@@ -50,7 +50,9 @@ class c_format : GLib.Object {
 	private Dialog format_window;
 
 	private void show_error(string msg) {
-	
+
+		GLib.stdout.printf("Error: %s\n",msg);
+		
 		var builder=new Builder();
 		builder.add_from_file(Path.build_filename(this.uipath,"format_error.ui"));
 		var label = (Label) builder.get_object("msg_error");
@@ -152,6 +154,9 @@ class c_format : GLib.Object {
 			options = new string[2];
 		} else {
 			options = new string[3];
+			if (this.label.length>16) {
+				this.label=this.label.substring(0,16);
+			}
 			options[2]="label=%s".printf(this.label);
 		}			
 		options[0]="take_ownership_uid=%d".printf((int)Posix.getuid());
@@ -194,7 +199,7 @@ class c_format : GLib.Object {
 
 		var label = (Label) builder.get_object("label_text");
 		label.set_label(message);
-		
+				
 		var window = (Dialog) builder.get_object("dialog_format");
 		
 		window.show_all();
@@ -303,6 +308,7 @@ class c_choose_disk : GLib.Object {
 					break;
 				}
 				this.choose_w.hide();
+
 				var w = new c_format(this.basepath,fstype,final_path);
 				if (w.retval==0) {
 					this.parent.p_backup_path=w.final_path;
@@ -357,6 +363,10 @@ class c_choose_disk : GLib.Object {
 			
 			if (fsystem=="isofs") {
 				continue;
+			}
+
+			if (fsystem==null) {
+				fsystem=_("Unknown FS");
 			}
 			
 			path = root.get_path();
