@@ -286,9 +286,9 @@ class restore_iface : GLib.Object {
 		this.paint_button (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,0.6,0.0,1.0,0.0,_("Restore files"),true);
 
 		this.scale_x=this.scr_w/30;
-		this.scale_y=this.scr_h/12;
+		this.scale_y=this.scr_h/16;
 		this.scale_w=this.scr_w/28;
-		this.scale_h=this.scr_h*10/12;
+		this.scale_h=this.scr_h*14/16;
 		this.paint_border(c_base,this.scale_x,this.scale_y,this.scale_w,this.scale_h,2);
 
 		var pattern = new Cairo.Pattern.linear(this.scale_x,this.scale_y,this.scale_x+this.scale_w,this.scale_y+this.scale_h);
