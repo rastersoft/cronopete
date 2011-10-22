@@ -29,10 +29,10 @@ struct path_filename {
 
 class restore_iface : GLib.Object {
 
-	
 	private backends backend;
 	private double opacity;
 	private uint timer;
+	private uint timer2;
 	private double divisor;
 	private double counter;
 	private int scr_w;
@@ -55,8 +55,18 @@ class restore_iface : GLib.Object {
 	private double exit_y;
 	private double exit_w;
 	private double exit_h;
+
+	private double scale_x;
+	private double scale_y;
+	private double scale_w;
+	private double scale_h;
+	private double scale_current_value;
+	private double scale_desired_value;
 	
 	private Gee.List<time_t?>? backups;
+	private time_t last_time;
+	private time_t current_instant;
+	private double scale_factor;
 	private Fixed base_layout;
 	private Gtk.Window mywindow;
 	private int pos;
@@ -92,6 +102,8 @@ class restore_iface : GLib.Object {
 		this.backend=p_backend;
 		this.basepath=paths;
 		this.backend.restore_ended.connect(this.restoring_ended);
+
+		this.scale_current_value=-1;
 
 		this.restore_files = new Gee.ArrayList<path_filename ?>();
 		this.restore_folders = new Gee.ArrayList<path_filename ?>();
@@ -147,6 +159,7 @@ class restore_iface : GLib.Object {
 		
 		this.divisor=25.0;
 		this.counter=0.0;
+		this.timer2=0;
 		this.timer=Timeout.add(20,this.timer_show);
 
 	}
@@ -271,6 +284,43 @@ class restore_iface : GLib.Object {
 		this.restore_x=this.browser_x;
 		this.restore_y=this.scr_h-20*this.nixie_h/19;
 		this.paint_button (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,0.6,0.0,1.0,0.0,_("Restore files"),true);
+
+		this.scale_x=this.scr_w/30;
+		this.scale_y=this.scr_h/12;
+		this.scale_w=this.scr_w/28;
+		this.scale_h=this.scr_h*10/12;
+		this.paint_border(c_base,this.scale_x,this.scale_y,this.scale_w,this.scale_h,2);
+
+		var pattern = new Cairo.Pattern.linear(this.scale_x,this.scale_y,this.scale_x+this.scale_w,this.scale_y+this.scale_h);
+		pattern.add_color_stop_rgba(1.0,0.9,0.9,0.7,1);
+		pattern.add_color_stop_rgba(0.0,1.0,1.0,0.8,1);
+		c_base.set_source(pattern);
+		c_base.rectangle(this.scale_x,this.scale_y,this.scale_w,this.scale_h);
+		c_base.fill();
+
+		this.last_time=this.backups[this.backups.size-1];
+		this.scale_factor=this.scale_h/(this.backups[0]-this.last_time);
+
+		double last_pos_y=-1;
+		double pos_y=this.scale_y+this.scale_h;
+		double new_y;
+		
+		c_base.set_source_rgb(0,0,0);
+		c_base.set_line_width(1);
+		
+		double incval = this.scale_w/5;
+		double nw = this.scale_w*3/5;
+		
+		for(var i=0;i<this.backups.size;i++) {
+			new_y = pos_y-this.scale_factor*(this.backups[i]-this.last_time);
+			if (new_y-last_pos_y<2) {
+				continue;
+			}
+			last_pos_y=new_y;
+			c_base.move_to(this.scale_x+incval,new_y);
+			c_base.rel_line_to(nw,0);
+			c_base.stroke();
+		}
 		
 	}
 
@@ -292,16 +342,22 @@ class restore_iface : GLib.Object {
 	private void paint_window() {
 		
 		double width;
+
+		this.current_instant=this.backups[this.pos];
 		
 		var ctx = new Cairo.Context(this.final_surface);
 		ctx.set_source_surface(this.base_surface,0,0);
 		ctx.paint();
 		
-		var sf = this.print_nixies(this.backups[this.pos],out width);
+		var sf = this.print_nixies(this.current_instant,out width);
 		double mx=(this.scr_w-width)/2.0;
 		double my=(double)(this.nixie_h/3);
 		ctx.set_source_surface(sf,mx,my);
 		ctx.paint();
+		this.scale_desired_value = this.scale_y+this.scale_h-this.scale_factor * (this.current_instant-this.last_time);
+		if (this.scale_current_value==-1) {
+			this.scale_current_value=this.scale_desired_value;
+		}
 	}
 
 
@@ -433,15 +489,20 @@ class restore_iface : GLib.Object {
 
 	private bool repaint_draw(EventExpose ev) {
 
-		return this.repaint_draw2();
+		this.repaint_draw2();
+		return true;
 
 	}
-	private bool repaint_draw2() {
+	private void repaint_draw2() {
 
 		var ctx = Gdk.cairo_create(this.drawing.window);		
 		ctx.set_source_surface(this.final_surface,0,0);
 		ctx.paint();
-		return true;
+		ctx.set_source_rgb(1,0,0);
+		ctx.set_line_width(3);
+		ctx.move_to(this.scale_x,this.scale_current_value);
+		ctx.rel_line_to(this.scale_w,0);
+		ctx.stroke();
 	}
 
 	private int get_nixie_pos(char v) {
@@ -586,9 +647,33 @@ class restore_iface : GLib.Object {
 			this.browser.set_backup_time(this.backups[this.pos]);
 		}
 		this.paint_window();
+		if (this.timer2==0) {
+			this.timer2=Timeout.add(40,this.timer_move);
+		}
+		return true;
+	}
+
+	private bool timer_move() {
+
+		if (this.scale_current_value==this.scale_desired_value) {
+			this.timer2=0;
+			return false;
+		}
+
+		double diff;
+
+		if (this.scale_current_value>this.scale_desired_value) {
+			diff=this.scale_current_value-this.scale_desired_value;
+			this.scale_current_value-=(diff/4);
+		} else {
+			diff=this.scale_desired_value-this.scale_current_value;
+			this.scale_current_value+=(diff/4);
+		}
+		if (diff<2) {
+			this.scale_current_value=this.scale_desired_value;
+		}
 		this.repaint_draw2();
 		return true;
-	
 	}
 
 	private void exit_restore() {
