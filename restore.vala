@@ -677,6 +677,10 @@ class restore_iface : GLib.Object {
 	}
 
 	private void exit_restore() {
+
+		if (this.timer2!=0) {
+			Source.remove(this.timer2);
+		}
 		
 		if (this.timer==0) {
 			this.divisor=25.0;
