@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 22:55+0200\n"
+"POT-Creation-Date: 2011-10-23 01:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,25 +19,25 @@ msgstr ""
 
 #. This string shows the current status of Cronopete. It could be
 #. Status: idle, or Status: copying file...
-#: ../menu.vala:83
+#: ../menu.vala:82
 #, c-format
 msgid "Status: %s"
 msgstr ""
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:113 ../cronopete.vala:189 ../cronopete.vala:200
+#: ../menu.vala:112 ../cronopete.vala:189 ../cronopete.vala:200
 #, c-format
 msgid "None"
 msgstr ""
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:163 ../cronopete.vala:183
+#: ../menu.vala:162 ../cronopete.vala:183
 #, c-format
 msgid "Not defined"
 msgstr ""
 
 #. This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
-#: ../menu.vala:171
+#: ../menu.vala:170
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr ""
@@ -47,50 +47,50 @@ msgstr ""
 msgid "Backup hiden files and folders in %s"
 msgstr ""
 
-#: ../backup.vala:320
+#: ../backup.vala:331
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:324
+#: ../backup.vala:334
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:328
+#: ../backup.vala:337
 msgid "Backup device not available. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:332
+#: ../backup.vala:340
 msgid "Already started a backup.\n"
 msgstr ""
 
-#: ../backup.vala:337
+#: ../backup.vala:344
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:356
+#: ../backup.vala:363
 msgid "Backup aborted\n"
 msgstr ""
 
-#: ../backup.vala:370
+#: ../backup.vala:377
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
 msgstr ""
 
-#: ../backup.vala:379
+#: ../backup.vala:391
 msgid "Syncing disk\n"
 msgstr ""
 
-#: ../backup.vala:381
+#: ../backup.vala:393
 msgid "Can't close the backup. Aborting.\n"
 msgstr ""
 
-#: ../backup.vala:387
+#: ../backup.vala:399
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr ""
 
-#: ../choose.vala:190
+#: ../choose.vala:193
 #, c-format
 msgid ""
 "The file system %s is not valid for Cronopete because, currently, it has "
@@ -101,7 +101,7 @@ msgid ""
 "<b>All the data in the drive will be erased</b>."
 msgstr ""
 
-#: ../choose.vala:193
+#: ../choose.vala:196
 #, c-format
 msgid ""
 "The file system %s is not valid for Cronopete. The optimal file system is "
@@ -109,6 +109,10 @@ msgid ""
 "\n"
 "To change the file format in the disk, click the <i>Format disk</i> button. "
 "<b>All the data in the drive will be erased</b>."
+msgstr ""
+
+#: ../choose.vala:369
+msgid "Unknown FS"
 msgstr ""
 
 #: ../cronopete.vala:171 ../cronopete.vala:274 ../cronopete.vala:302
@@ -181,7 +185,7 @@ msgstr ""
 msgid "Can't do backup"
 msgstr ""
 
-#: ../cronopete.vala:722
+#: ../cronopete.vala:719
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr ""
