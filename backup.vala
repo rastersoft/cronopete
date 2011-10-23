@@ -58,6 +58,8 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename);
 	public signal void restore_ended(backends b, string file_ended, BACKUP_RETVAL status);
 
+	public abstract void lock_delete_backup(bool lock_in);
+
 }
 
 class path_node:Object {

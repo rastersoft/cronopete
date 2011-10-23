@@ -37,7 +37,78 @@ class usbhd_backend: Object, backends {
 		}
 	}
 	private int last_msg;
+	private bool locked;
+	private bool tried_to_lock;
+	private GLib.Mutex lock_delete;
+	private time_t deleting;
 
+	public usbhd_backend(string bpath) {
+	
+		var tmpid=bpath.split("/");
+		foreach (string v in tmpid) {
+			this.id=v;
+		}
+		this.locked=false;
+		this.tried_to_lock=false;
+		this.deleting=0;
+		this.lock_delete = new GLib.Mutex();
+		this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
+		this.cbackup_path=null;
+		this.cfinal_path=null;
+		this.drive_path=bpath;
+		
+		this.monitor = VolumeMonitor.get();
+		this.monitor.mount_added.connect_after(this.refresh_connect);
+		this.monitor.mount_removed.connect_after(this.refresh_connect);
+		this.last_msg=0;
+		this.refresh_connect();
+		
+	}
+
+	public void lock_delete_backup (bool lock_in) {
+
+		lock (this.locked) {
+			if (lock_in) {
+				this.locked=this.lock_delete.trylock();
+				/*if (this.locked) {
+					GLib.stdout.printf("Consigo bloquear en lock\n");
+				} else {
+					GLib.stdout.printf("No consigo bloquear en lock\n");
+				}*/
+				this.tried_to_lock=true;
+			} else {
+				if (this.locked) {
+					this.lock_delete.unlock();
+					//GLib.stdout.printf("Desbloqueo en lock\n");
+				}/* else {
+					GLib.stdout.printf("No desbloqueo en lock\n");
+				}*/
+				this.tried_to_lock=false;
+			}
+		}
+	}
+
+	public bool delete_backup(time_t backup_date) {
+
+		this.lock_delete.lock();
+		this.deleting=backup_date;
+		var tmppath=this.get_backup_path(backup_date);
+		var final_path=Path.build_filename(this.backup_path,tmppath);
+
+		Process.spawn_command_line_sync("rm -rf "+final_path);
+		lock(this.locked) {
+			if (this.tried_to_lock) {
+				this.locked=true;
+				//GLib.stdout.printf("No desbloqueo en delete\n");
+			} else {
+				this.lock_delete.unlock();
+				//GLib.stdout.printf("Desbloqueo en delete\n");
+				this.locked=false;
+			}
+		}
+		return true;
+	}
+	
 	private string get_backup_path(time_t backup) {
 		
 		var ctime = GLib.Time.local(backup);
@@ -71,25 +142,6 @@ class usbhd_backend: Object, backends {
 		return BACKUP_RETVAL.IN_PROCCESS;
 	}
 	
-	public usbhd_backend(string bpath) {
-	
-		var tmpid=bpath.split("/");
-		foreach (string v in tmpid) {
-			this.id=v;
-		}
-		this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
-		this.cbackup_path=null;
-		this.cfinal_path=null;
-		this.drive_path=bpath;
-		
-		this.monitor = VolumeMonitor.get();
-		this.monitor.mount_added.connect_after(this.refresh_connect);
-		this.monitor.mount_removed.connect_after(this.refresh_connect);
-		this.last_msg=0;
-		this.refresh_connect();
-		
-	}
-
 
 	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date) {
 	
@@ -196,6 +248,7 @@ class usbhd_backend: Object, backends {
 	
 		var blist = new Gee.ArrayList<time_t?>();
 		string dirname;
+		time_t backup_time;
 		
 		var directory = File.new_for_path(this.backup_path);
 
@@ -213,7 +266,10 @@ class usbhd_backend: Object, backends {
 				
 				dirname=file_info.get_name();
 				if (dirname[0]!='B') {
-					blist.add(long.parse(dirname.substring(20)));
+					backup_time=long.parse(dirname.substring(20));
+					if (backup_time!=this.deleting) {
+						blist.add(backup_time);
+					}
 				}
 			}
 		} catch (Error e) {
@@ -226,18 +282,8 @@ class usbhd_backend: Object, backends {
 			}
 		}
 		return blist;
-
 	}
 	
-	public bool delete_backup(time_t backup_date) {
-	
-		var tmppath=this.get_backup_path(backup_date);
-		var final_path=Path.build_filename(this.backup_path,tmppath);
-		
-		Process.spawn_command_line_sync("rm -rf "+final_path);
-		return true;
-	}
-
 
 	public BACKUP_RETVAL end_backup() {
 	

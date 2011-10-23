@@ -100,6 +100,7 @@ class restore_iface : GLib.Object {
 	public restore_iface(backends p_backend,string paths) {
 	
 		this.backend=p_backend;
+		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
 		this.backend.restore_ended.connect(this.restoring_ended);
 
@@ -366,6 +367,11 @@ class restore_iface : GLib.Object {
 		double radius;
 		double radius2;
 		Cairo.Pattern pattern;
+
+		double minx;
+		double maxx;
+		double miny;
+		double maxy;
 		
 		if (w>h) {
 			radius=h/2;
@@ -374,6 +380,12 @@ class restore_iface : GLib.Object {
 			radius=w/2;
 			radius2=w;
 		}
+
+		minx=x+w/2-radius;
+		maxx=x+w/2+radius;
+		miny=y+h/2-radius;
+		maxy=y+h/2+radius;
+		
 		double hex1;
 		double hex2;
 		hex1=radius*0.5;
@@ -466,8 +478,10 @@ class restore_iface : GLib.Object {
 		
 		if (at_end) {
 			nx=x+(w+radius2)/2+3;
+			maxx+=3+extents.width;
 		} else {
 			nx=x+(w-radius2)/2-extents.width-3;
+			minx-=3+extents.width;
 		}
 
 		double fh;
@@ -480,10 +494,11 @@ class restore_iface : GLib.Object {
 		ctx.move_to(nx,ny);
 		ctx.show_text(text);
 
-		/*ctx.set_line_width(1);
-		ctx.move_to(nx,ny);
-		ctx.rel_line_to(extents.width,0);
-		ctx.stroke();*/
+		x=minx;
+		y=miny;
+		w=maxx-minx+1;
+		h=maxy-miny+1;
+
 	}
 	
 
@@ -814,6 +829,7 @@ class restore_iface : GLib.Object {
 			return true;
 		} else {
 			this.mywindow.destroy();
+			this.backend.lock_delete_backup(false);
 			return false;
 		}
 	}
