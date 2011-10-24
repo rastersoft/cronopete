@@ -73,6 +73,7 @@ class restore_iface : GLib.Object {
 	
 	private Gee.List<path_filename ?> restore_files;
 	private Gee.List<path_filename ?> restore_folders;
+	private double total_to_restore;
 	
 	private DrawingArea drawing;
 	private Cairo.ImageSurface base_surface;
@@ -86,6 +87,11 @@ class restore_iface : GLib.Object {
 	private int nixie_h;
 	private int margin_nixie;
 	private bool date_format;
+
+	private Gtk.Window restore_window;
+	private Gtk.Label restore_label;
+	private Gtk.ProgressBar restore_bar;
+	private bool cancel_restoring;
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
@@ -745,8 +751,6 @@ class restore_iface : GLib.Object {
 	public void restoring_ended(backends b, string file_ended, BACKUP_RETVAL rv) {
 		
 		if (file_ended!="") {
-	
-			GLib.stdout.printf("Terminado %s\n",file_ended);
 			var current_time=time_t();
 			var f=File.new_for_path(file_ended);
 			try {
@@ -757,11 +761,21 @@ class restore_iface : GLib.Object {
 		}
 		
 		if (this.restore_files.is_empty) {
+			this.restore_window.destroy();
+			return;
+		}
+
+		if (this.cancel_restoring) {
+			this.restore_files.clear();
+			this.restore_window.destroy();
 			return;
 		}
 		
 		var filename = this.restore_files.get(0);
 		this.restore_files.remove_at(0);
+		this.restore_label.label=_("Restoring file:\n\n%s").printf(filename.restored_file);
+		this.restore_bar.fraction=1.0-(((double)this.restore_files.size)/this.total_to_restore);
+		
 		this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file);
 		
 	}
@@ -786,6 +800,19 @@ class restore_iface : GLib.Object {
 		  	var restored_folder = GLib.Path.build_filename(path,this.get_restored_filename(path,v));
 			this.add_folder_to_restore(GLib.Path.build_filename(path,v),restored_folder);
 		}
+
+		var w = new Builder();
+		
+		w.add_from_file(GLib.Path.build_filename(this.basepath,"restoring.ui"));
+		w.connect_signals(this);
+
+		this.restore_window = (Gtk.Window)w.get_object("restore_status");
+		this.restore_bar = (Gtk.ProgressBar)w.get_object("restore_progressbar");
+		this.restore_label = (Gtk.Label)w.get_object("restoring_file");
+
+		this.total_to_restore=(double)this.restore_files.size;
+		this.cancel_restoring=false;
+		this.restore_window.show_all();
 		
 		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
 		
@@ -851,5 +878,18 @@ class restore_iface : GLib.Object {
 			this.backend.lock_delete_backup(false);
 			return false;
 		}
+	}
+
+	[CCode (instance_pos = -1)]
+	public void on_cancel_clicked(Button source) {
+
+		this.cancel_restoring=true;
+		
+	}
+
+	[CCode (instance_pos = -1)]
+	public bool on_delete_event(Event event) {
+
+		return true;
 	}
 }
