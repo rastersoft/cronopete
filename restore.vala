@@ -85,6 +85,7 @@ class restore_iface : GLib.Object {
 	private int nixie_w;
 	private int nixie_h;
 	private int margin_nixie;
+	private bool date_format;
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
@@ -106,6 +107,19 @@ class restore_iface : GLib.Object {
 
 		this.scale_current_value=-1;
 
+		// An ugly way of know if the current locale defines the date as MM/DD/YY or DD/MM/YY
+		GLib.Time timeval = new GLib.Time();
+		timeval.day=1;
+		timeval.month=2;
+		timeval.year=2005;
+		char mystr[9];
+		timeval.strftime(mystr,"%x");
+		if (mystr[1]=='1') {
+			this.date_format=true; // European style
+		} else {
+			this.date_format=false; // USA style
+		}
+		
 		this.restore_files = new Gee.ArrayList<path_filename ?>();
 		this.restore_folders = new Gee.ArrayList<path_filename ?>();
 
@@ -573,7 +587,12 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface print_nixies(time_t backup_date, out double width) {
 
 		var ctime = GLib.Time.local(backup_date);
-		var date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+		string date;
+		if (this.date_format) {
+			date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+		} else {
+			date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.month+1,ctime.day,1900+ctime.year);
+		}
 		
 		bool repaint_grid;
 		double size=0;
