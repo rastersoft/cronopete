@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-23 01:56+0200\n"
+"POT-Creation-Date: 2011-10-25 11:24+0200\n"
 "PO-Revision-Date: 2011-10-23 01:57+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
@@ -28,13 +28,13 @@ msgid "Status: %s"
 msgstr "Estado: %s"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:112 ../cronopete.vala:189 ../cronopete.vala:200
+#: ../menu.vala:112 ../cronopete.vala:191 ../cronopete.vala:202
 #, c-format
 msgid "None"
 msgstr "Ningunha"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:162 ../cronopete.vala:183
+#: ../menu.vala:162 ../cronopete.vala:185
 #, c-format
 msgid "Not defined"
 msgstr "Non definida"
@@ -50,34 +50,34 @@ msgstr "%lld GB de %lld GB"
 msgid "Backup hiden files and folders in %s"
 msgstr "Copiar ficheiros e cartafoles agochados en %s"
 
-#: ../backup.vala:331
+#: ../backup.vala:337
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr "Non foi posíbel crear o cartafol para esta copia. Interrompendo.\n"
 
-#: ../backup.vala:334
+#: ../backup.vala:340
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 "Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
 
-#: ../backup.vala:337
+#: ../backup.vala:343
 msgid "Backup device not available. Aborting backup.\n"
 msgstr "Non está dispoñíbel o disco externo para as copias. Interrompendo.\n"
 
-#: ../backup.vala:340
+#: ../backup.vala:346
 msgid "Already started a backup.\n"
 msgstr "Xa está a facerse unha copia.\n"
 
-#: ../backup.vala:344
+#: ../backup.vala:350
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: ../backup.vala:363
+#: ../backup.vala:369
 msgid "Backup aborted\n"
 msgstr "Copia cancelada.\n"
 
-#: ../backup.vala:377
+#: ../backup.vala:383
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -85,15 +85,15 @@ msgstr ""
 "O disco é demasiado pequeno para poder copiar todo.\n"
 "Axuste a lista de cartafoles a copiar e a excluír.\n"
 
-#: ../backup.vala:391
+#: ../backup.vala:397
 msgid "Syncing disk\n"
 msgstr "Sincronizando o disco\n"
 
-#: ../backup.vala:393
+#: ../backup.vala:399
 msgid "Can't close the backup. Aborting.\n"
 msgstr "Non foi posíbel pechar a copia. Interrompendo.\n"
 
-#: ../backup.vala:399
+#: ../backup.vala:405
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Copia rematada. levou %ld segundos.\n"
@@ -134,80 +134,101 @@ msgstr ""
 msgid "Unknown FS"
 msgstr "FS descoñecido"
 
-#: ../cronopete.vala:171 ../cronopete.vala:274 ../cronopete.vala:302
+#: ../cronopete.vala:173 ../cronopete.vala:276 ../cronopete.vala:304
 msgid "Idle"
 msgstr "En repouso"
 
-#: ../cronopete.vala:183 ../cronopete.vala:189 ../cronopete.vala:200
-#: ../cronopete.vala:204
+#: ../cronopete.vala:185 ../cronopete.vala:191 ../cronopete.vala:202
+#: ../cronopete.vala:206
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
 
-#: ../cronopete.vala:299
+#: ../cronopete.vala:301
 msgid "Storage not available"
 msgstr "O almacenamento non está dispoñíbel "
 
-#: ../cronopete.vala:304
+#: ../cronopete.vala:306
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../cronopete.vala:402
+#: ../cronopete.vala:404
 msgid "Back Up Now"
 msgstr "Copiar agora"
 
-#: ../cronopete.vala:406
+#: ../cronopete.vala:407
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: ../cronopete.vala:416
+#: ../cronopete.vala:414
+#, fuzzy
+msgid "Enter Cronopete"
+msgstr "cronopete"
+
+#: ../cronopete.vala:421
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir as preferencias de Cronopete..."
 
-#: ../cronopete.vala:486
+#: ../cronopete.vala:497
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../cronopete.vala:505
+#: ../cronopete.vala:516
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../cronopete.vala:510
+#: ../cronopete.vala:521
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../cronopete.vala:515
+#: ../cronopete.vala:526
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../cronopete.vala:534
+#: ../cronopete.vala:545
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../cronopete.vala:551
+#: ../cronopete.vala:562
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../cronopete.vala:563
+#: ../cronopete.vala:574
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:567
+#: ../cronopete.vala:578
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../cronopete.vala:571
+#: ../cronopete.vala:582
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../cronopete.vala:719
+#: ../cronopete.vala:733
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
+
+#: ../restore.vala:301
+msgid "Exit"
+msgstr ""
+
+#: ../restore.vala:307
+msgid "Restore files"
+msgstr ""
+
+#: ../restore.vala:776
+#, c-format
+msgid ""
+"Restoring file:\n"
+"\n"
+"%s"
+msgstr ""
 
 #: ../interface/about.ui.h:1
 msgid "An Apple's Time Machine clone for Linux"
@@ -351,6 +372,10 @@ msgstr "Cartafoles a copiar"
 #: ../interface/options.ui.h:5
 msgid "Time interval between backups (in hours):"
 msgstr "Tempo entre copias (en horas):"
+
+#: ../interface/restoring.ui.h:1
+msgid "Restoring files"
+msgstr ""
 
 #~ msgid "Error reading configuration"
 #~ msgstr "Produciuse un erro ao ler a configuración"

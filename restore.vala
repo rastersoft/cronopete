@@ -113,6 +113,8 @@ class restore_iface : GLib.Object {
 
 		this.scale_current_value=-1;
 
+		this.backend.status.connect(this.refresh_status);
+		
 		// An ugly way of know if the current locale defines the date as MM/DD/YY or DD/MM/YY
 		GLib.Time timeval = new GLib.Time();
 		timeval.day=1;
@@ -185,6 +187,13 @@ class restore_iface : GLib.Object {
 
 	}
 
+	public void refresh_status(usbhd_backend? b) {
+
+		if (b.available==false) {
+			this.exit_restore ();
+		}
+	}
+	
 	private void create_cairo_layouts() {
 		
 		this.base_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);

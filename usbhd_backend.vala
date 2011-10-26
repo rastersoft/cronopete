@@ -118,7 +118,7 @@ class usbhd_backend: Object, backends {
 	}
 	
 	public BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename) {
-	
+
 		var origin_path = Path.build_filename(this.backup_path,this.get_backup_path(backup),filename);
 
 		File origin;
@@ -144,7 +144,7 @@ class usbhd_backend: Object, backends {
 	
 
 	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date) {
-	
+
 		FileInfo info_file;
 		FileType typeinfo;
 

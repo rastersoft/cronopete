@@ -414,6 +414,7 @@ class cp_callback : GLib.Object, callbacks {
 		var menuEnter = new MenuItem.with_label(_("Enter Cronopete"));
 		menuEnter.activate.connect(enter_clicked);
 		menuSystem.append(menuEnter);
+		menuEnter.sensitive=this.backend.available;
 		
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
@@ -478,9 +479,10 @@ class cp_callback : GLib.Object, callbacks {
 	}
 	
 	public void enter_clicked() {
-	
-		this.restore_w=new restore_iface(this.backend,this.basepath);
-	
+
+		if (this.backend.available) {
+			this.restore_w=new restore_iface(this.backend,this.basepath);
+		}
 	}
 	
 	public void main_clicked() {

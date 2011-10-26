@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-23 01:56+0200\n"
+"POT-Creation-Date: 2011-10-25 11:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,13 +25,13 @@ msgid "Status: %s"
 msgstr ""
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:112 ../cronopete.vala:189 ../cronopete.vala:200
+#: ../menu.vala:112 ../cronopete.vala:191 ../cronopete.vala:202
 #, c-format
 msgid "None"
 msgstr ""
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:162 ../cronopete.vala:183
+#: ../menu.vala:162 ../cronopete.vala:185
 #, c-format
 msgid "Not defined"
 msgstr ""
@@ -47,45 +47,45 @@ msgstr ""
 msgid "Backup hiden files and folders in %s"
 msgstr ""
 
-#: ../backup.vala:331
+#: ../backup.vala:337
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:334
+#: ../backup.vala:340
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:337
+#: ../backup.vala:343
 msgid "Backup device not available. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:340
+#: ../backup.vala:346
 msgid "Already started a backup.\n"
 msgstr ""
 
-#: ../backup.vala:344
+#: ../backup.vala:350
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:363
+#: ../backup.vala:369
 msgid "Backup aborted\n"
 msgstr ""
 
-#: ../backup.vala:377
+#: ../backup.vala:383
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
 msgstr ""
 
-#: ../backup.vala:391
+#: ../backup.vala:397
 msgid "Syncing disk\n"
 msgstr ""
 
-#: ../backup.vala:393
+#: ../backup.vala:399
 msgid "Can't close the backup. Aborting.\n"
 msgstr ""
 
-#: ../backup.vala:399
+#: ../backup.vala:405
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr ""
@@ -115,79 +115,99 @@ msgstr ""
 msgid "Unknown FS"
 msgstr ""
 
-#: ../cronopete.vala:171 ../cronopete.vala:274 ../cronopete.vala:302
+#: ../cronopete.vala:173 ../cronopete.vala:276 ../cronopete.vala:304
 msgid "Idle"
 msgstr ""
 
-#: ../cronopete.vala:183 ../cronopete.vala:189 ../cronopete.vala:200
-#: ../cronopete.vala:204
+#: ../cronopete.vala:185 ../cronopete.vala:191 ../cronopete.vala:202
+#: ../cronopete.vala:206
 #, c-format
 msgid "Latest backup: %s"
 msgstr ""
 
-#: ../cronopete.vala:299
+#: ../cronopete.vala:301
 msgid "Storage not available"
 msgstr ""
 
-#: ../cronopete.vala:304
+#: ../cronopete.vala:306
 msgid "Backup disabled"
 msgstr ""
 
-#: ../cronopete.vala:402
+#: ../cronopete.vala:404
 msgid "Back Up Now"
 msgstr ""
 
-#: ../cronopete.vala:406
+#: ../cronopete.vala:407
 msgid "Stop Backing Up"
 msgstr ""
 
-#: ../cronopete.vala:416
+#: ../cronopete.vala:414
+msgid "Enter Cronopete"
+msgstr ""
+
+#: ../cronopete.vala:421
 msgid "Open Cronopete Preferences..."
 msgstr ""
 
-#: ../cronopete.vala:486
+#: ../cronopete.vala:497
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr ""
 
-#: ../cronopete.vala:505
+#: ../cronopete.vala:516
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr ""
 
-#: ../cronopete.vala:510
+#: ../cronopete.vala:521
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr ""
 
-#: ../cronopete.vala:515
+#: ../cronopete.vala:526
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr ""
 
-#: ../cronopete.vala:534
+#: ../cronopete.vala:545
 msgid "Starting backup\n"
 msgstr ""
 
-#: ../cronopete.vala:551
+#: ../cronopete.vala:562
 msgid "Erasing old backups"
 msgstr ""
 
-#: ../cronopete.vala:563
+#: ../cronopete.vala:574
 msgid "Backup aborted"
 msgstr ""
 
-#: ../cronopete.vala:567
+#: ../cronopete.vala:578
 msgid "Can't do backup; disk is too small"
 msgstr ""
 
-#: ../cronopete.vala:571
+#: ../cronopete.vala:582
 msgid "Can't do backup"
 msgstr ""
 
-#: ../cronopete.vala:719
+#: ../cronopete.vala:733
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
+msgstr ""
+
+#: ../restore.vala:301
+msgid "Exit"
+msgstr ""
+
+#: ../restore.vala:307
+msgid "Restore files"
+msgstr ""
+
+#: ../restore.vala:776
+#, c-format
+msgid ""
+"Restoring file:\n"
+"\n"
+"%s"
 msgstr ""
 
 #: ../interface/about.ui.h:1
@@ -311,4 +331,8 @@ msgstr ""
 
 #: ../interface/options.ui.h:5
 msgid "Time interval between backups (in hours):"
+msgstr ""
+
+#: ../interface/restoring.ui.h:1
+msgid "Restoring files"
 msgstr ""

@@ -5,6 +5,8 @@ usbhd_backend.vala
 backup.vala
 choose.vala
 cronopete.vala
+restore.vala
+icons_widget.vala
 [type: gettext/glade]interface/about.ui
 [type: gettext/glade]interface/chooser.ui
 [type: gettext/glade]interface/folder_selector.ui
@@ -13,3 +15,4 @@ cronopete.vala
 [type: gettext/glade]interface/formatting.ui
 [type: gettext/glade]interface/main.ui
 [type: gettext/glade]interface/options.ui
+[type: gettext/glade]interface/restoring.ui
