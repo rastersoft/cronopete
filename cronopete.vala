@@ -411,7 +411,7 @@ class cp_callback : GLib.Object, callbacks {
 
 		menuBUnow.sensitive=this.backend.available;
 
-		var menuEnter = new MenuItem.with_label(_("Enter Cronopete"));
+		var menuEnter = new MenuItem.with_label(_("Restore files"));
 		menuEnter.activate.connect(enter_clicked);
 		menuSystem.append(menuEnter);
 		menuEnter.sensitive=this.backend.available;

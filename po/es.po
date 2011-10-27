@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-25 11:24+0200\n"
-"PO-Revision-Date: 2011-10-23 01:57+0200\n"
+"POT-Creation-Date: 2011-10-28 00:57+0200\n"
+"PO-Revision-Date: 2011-10-28 00:59+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
 "Language: \n"
@@ -158,75 +158,99 @@ msgstr "Copiar ahora"
 msgid "Stop Backing Up"
 msgstr "Detener la copia"
 
-#: ../cronopete.vala:414
-#, fuzzy
-msgid "Enter Cronopete"
-msgstr "cronopete"
+#: ../cronopete.vala:414 ../restore.vala:319
+msgid "Restore files"
+msgstr "Restaurar archivos"
 
-#: ../cronopete.vala:421
+#: ../cronopete.vala:422
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir las preferencias de Cronopete..."
 
-#: ../cronopete.vala:497
+#: ../cronopete.vala:499
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando la carpeta %s\n"
 
-#: ../cronopete.vala:516
+#: ../cronopete.vala:518
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Se produjo un fallo al copiar el fichero %s\n"
 
-#: ../cronopete.vala:521
+#: ../cronopete.vala:523
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Se produjo un fallo al acceder a la carpeta %s\n"
 
-#: ../cronopete.vala:526
+#: ../cronopete.vala:528
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Se produjo un fallo al crear la carpeta %s\n"
 
-#: ../cronopete.vala:545
+#: ../cronopete.vala:547
 msgid "Starting backup\n"
 msgstr "Comenzando la copia\n"
 
-#: ../cronopete.vala:562
+#: ../cronopete.vala:564
 msgid "Erasing old backups"
 msgstr "Borrando copias antiguas"
 
-#: ../cronopete.vala:574
+#: ../cronopete.vala:576
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:578
+#: ../cronopete.vala:580
 msgid "Can't do backup; disk is too small"
 msgstr "Se produjo un fallo al hacer la copia; el disco es demasiado pequeño"
 
-#: ../cronopete.vala:582
+#: ../cronopete.vala:584
 msgid "Can't do backup"
 msgstr "Se produjo un fallo al hacer la copia"
 
-#: ../cronopete.vala:733
+#: ../cronopete.vala:735
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
 
-#: ../restore.vala:301
+#: ../restore.vala:313
 msgid "Exit"
-msgstr ""
+msgstr "Salir"
 
-#: ../restore.vala:307
-msgid "Restore files"
+#: ../restore.vala:768
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s\n"
+"\n"
+"There's not enought free space"
 msgstr ""
+"No se ha podido restaurar el archivo\n"
+"\n"
+"%s\n"
+"\n"
+"No hay suficiente espacio libre"
 
-#: ../restore.vala:776
+#: ../restore.vala:770
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s"
+msgstr ""
+"No se ha podido restaurar el archivo\n"
+"\n"
+"%s"
+
+#: ../restore.vala:808
 #, c-format
 msgid ""
 "Restoring file:\n"
 "\n"
 "%s"
 msgstr ""
+"Restaurando el archivo\n"
+"\n"
+"%s"
 
 #: ../interface/about.ui.h:1
 msgid "An Apple's Time Machine clone for Linux"
@@ -374,7 +398,11 @@ msgstr "Tiempo entre copias (en horas):"
 
 #: ../interface/restoring.ui.h:1
 msgid "Restoring files"
-msgstr ""
+msgstr "Restaurando archivos"
+
+#, fuzzy
+#~ msgid "Enter Cronopete"
+#~ msgstr "cronopete"
 
 #~ msgid "Error reading configuration"
 #~ msgstr "Se produjo un fallo al leer la configuración"

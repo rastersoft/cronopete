@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-25 11:24+0200\n"
+"POT-Creation-Date: 2011-10-28 00:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,68 +141,82 @@ msgstr ""
 msgid "Stop Backing Up"
 msgstr ""
 
-#: ../cronopete.vala:414
-msgid "Enter Cronopete"
+#: ../cronopete.vala:414 ../restore.vala:319
+msgid "Restore files"
 msgstr ""
 
-#: ../cronopete.vala:421
+#: ../cronopete.vala:422
 msgid "Open Cronopete Preferences..."
 msgstr ""
 
-#: ../cronopete.vala:497
+#: ../cronopete.vala:499
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr ""
 
-#: ../cronopete.vala:516
+#: ../cronopete.vala:518
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr ""
 
-#: ../cronopete.vala:521
+#: ../cronopete.vala:523
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr ""
 
-#: ../cronopete.vala:526
+#: ../cronopete.vala:528
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr ""
 
-#: ../cronopete.vala:545
+#: ../cronopete.vala:547
 msgid "Starting backup\n"
 msgstr ""
 
-#: ../cronopete.vala:562
+#: ../cronopete.vala:564
 msgid "Erasing old backups"
 msgstr ""
 
-#: ../cronopete.vala:574
+#: ../cronopete.vala:576
 msgid "Backup aborted"
 msgstr ""
 
-#: ../cronopete.vala:578
+#: ../cronopete.vala:580
 msgid "Can't do backup; disk is too small"
 msgstr ""
 
-#: ../cronopete.vala:582
+#: ../cronopete.vala:584
 msgid "Can't do backup"
 msgstr ""
 
-#: ../cronopete.vala:733
+#: ../cronopete.vala:735
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr ""
 
-#: ../restore.vala:301
+#: ../restore.vala:313
 msgid "Exit"
 msgstr ""
 
-#: ../restore.vala:307
-msgid "Restore files"
+#: ../restore.vala:768
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s\n"
+"\n"
+"There's not enought free space"
 msgstr ""
 
-#: ../restore.vala:776
+#: ../restore.vala:770
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../restore.vala:808
 #, c-format
 msgid ""
 "Restoring file:\n"
