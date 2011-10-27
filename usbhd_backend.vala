@@ -129,7 +129,6 @@ class usbhd_backend: Object, backends {
 				origin.copy_async.end(res);
 				this.restore_ended(this,output_filename,BACKUP_RETVAL.OK);
 			} catch (IOError e2) {
-				GLib.stdout.printf("Error2 %s\n",e2.message);
 				if (e2 is IOError.NO_SPACE) {
 					Posix.unlink(output_filename);
 					this.restore_ended(this,output_filename,BACKUP_RETVAL.NO_SPC);

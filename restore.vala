@@ -92,6 +92,9 @@ class restore_iface : GLib.Object {
 	private Gtk.Label restore_label;
 	private Gtk.ProgressBar restore_bar;
 	private bool cancel_restoring;
+	private bool ignore_restoring_all;
+
+	private Gtk.Window error_window;
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
@@ -759,6 +762,26 @@ class restore_iface : GLib.Object {
 	
 	public void restoring_ended(backends b, string file_ended, BACKUP_RETVAL rv) {
 		
+		if ((rv!=BACKUP_RETVAL.OK)&&(this.ignore_restoring_all==false)) {
+			string error_msg;
+			if (rv==BACKUP_RETVAL.NO_SPC) {
+				error_msg=_("Failed to restore file\n\n%s\n\nThere's not enought free space").printf(file_ended);
+			} else {
+				error_msg=_("Failed to restore file\n\n%s").printf(file_ended);
+			}
+
+			var w2 = new Builder();
+			
+			w2.add_from_file(GLib.Path.build_filename(this.basepath,"restore_error.ui"));
+			w2.connect_signals(this);
+			this.error_window = (Gtk.Window)w2.get_object("restore_error");
+			var error_label = (Gtk.Label)w2.get_object("error_msg");
+			error_label.label=error_msg;
+			
+			error_window.show_all();
+			return;
+		}
+		
 		if (file_ended!="") {
 			var current_time=time_t();
 			var f=File.new_for_path(file_ended);
@@ -793,6 +816,8 @@ class restore_iface : GLib.Object {
 		
 		Gee.List<string> files;
 		Gee.List<string> folders;
+
+		this.ignore_restoring_all=false;
 		
 		var path=this.browser.get_current_path();
 		
@@ -891,11 +916,30 @@ class restore_iface : GLib.Object {
 
 	[CCode (instance_pos = -1)]
 	public void on_cancel_clicked(Button source) {
-
 		this.cancel_restoring=true;
-		
 	}
 
+	[CCode (instance_pos = -1)]
+	public void on_cancel_restore_error_clicked(Button source) {
+
+		this.error_window.destroy();
+		this.cancel_restoring=true;
+		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+	}
+
+	[CCode (instance_pos = -1)]
+	public void on_ignore_restore_error_clicked(Button source) {
+		this.error_window.destroy();
+		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+	}
+
+	[CCode (instance_pos = -1)]
+	public void on_ignore_all_restore_error_clicked(Button source) {
+		this.ignore_restoring_all=true;
+		this.error_window.destroy();
+		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+	}
+	
 	[CCode (instance_pos = -1)]
 	public bool on_delete_event(Event event) {
 
