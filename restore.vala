@@ -712,6 +712,9 @@ class restore_iface : GLib.Object {
 		if ((event.keyval==0xFF54)&&((event.state&Gdk.ModifierType.CONTROL_MASK)!=0)) { // DOWN key
 			this.move_timeline(true);
 		}
+		if (event.keyval=='r') {
+			this.do_restore ();
+		}
 		return true;
 	}
 
