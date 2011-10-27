@@ -151,7 +151,7 @@ class restore_iface : GLib.Object {
 		this.base_layout.add(this.drawing);
 		
 		this.box = new EventBox();
-		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK);
+		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.KEY_RELEASE_MASK);
 		this.box.add(this.base_layout);
 		this.drawing.width_request=this.scr_w;
 		this.drawing.height_request=this.scr_h;
@@ -159,6 +159,7 @@ class restore_iface : GLib.Object {
 		
 		this.box.scroll_event.connect(this.on_scroll);
 		this.box.button_release_event.connect(this.on_click);
+		this.box.key_release_event.connect(this.on_key);
 		
 		this.box.sensitive=true;
 		
@@ -690,21 +691,53 @@ class restore_iface : GLib.Object {
 			return true;
 		}
 		
-		if ((event.direction==ScrollDirection.UP)&&(this.pos>0)) {
-			this.pos--;
-			this.browser.set_backup_time(this.backups[this.pos]);
+		if (event.direction==ScrollDirection.UP) {
+			this.move_timeline(false);
 		}
-		if ((event.direction==ScrollDirection.DOWN)&&(this.pos<(this.backups.size-1))) {
-			this.pos++;
-			this.browser.set_backup_time(this.backups[this.pos]);
-		}
-		this.paint_window();
-		if (this.timer2==0) {
-			this.timer2=Timeout.add(40,this.timer_move);
+		if (event.direction==ScrollDirection.DOWN) {
+			this.move_timeline(true);
 		}
 		return true;
 	}
 
+	private bool on_key(Gdk.EventKey event) {
+
+		if (event.keyval==0xFF1B) { // ESC key
+			this.exit_restore ();
+			return true;
+		}
+		if ((event.keyval==0xFF52)&&((event.state&Gdk.ModifierType.CONTROL_MASK)!=0)) { // UP key
+			this.move_timeline(false);
+		}
+		if ((event.keyval==0xFF54)&&((event.state&Gdk.ModifierType.CONTROL_MASK)!=0)) { // DOWN key
+			this.move_timeline(true);
+		}
+		return true;
+	}
+
+	private void move_timeline(bool increase) {
+
+		if (increase) {
+			if (this.pos>=(this.backups.size-1)) {
+				return;
+			} else {
+				this.pos++;
+			}
+		} else {
+			if (this.pos==0) {
+				return;
+			} else {
+				this.pos--;
+			}
+		}
+		
+		this.browser.set_backup_time(this.backups[this.pos]);
+		this.paint_window();
+		if (this.timer2==0) {
+			this.timer2=Timeout.add(40,this.timer_move);
+		}
+	}
+	
 	private bool timer_move() {
 
 		if (this.scale_current_value==this.scale_desired_value) {
