@@ -119,7 +119,7 @@ class restore_iface : GLib.Object {
 		this.backend.status.connect(this.refresh_status);
 		
 		// An ugly way of know if the current locale defines the date as MM/DD/YY or DD/MM/YY
-		GLib.Time timeval = new GLib.Time();
+		GLib.Time timeval = GLib.Time();
 		timeval.day=1;
 		timeval.month=2;
 		timeval.year=2005;
@@ -205,20 +205,20 @@ class restore_iface : GLib.Object {
 		var brass = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"brass.png"));
 		var screw1 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw1.png"));
 		var screw2 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw2.png"));
-		var screw3 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw3.png"));
+		//var screw3 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw3.png"));
+
 		double w;
 		w=(this.scr_w);
 		double h;
 		h=(this.scr_h);
 		double scale;
-		
 		var c_base = new Cairo.Context(this.base_surface);
-		c_base.set_source_surface(brass,0,0);
+		c_base.set_source_rgb(0,0,0);
 		c_base.paint();
 		
-		c_base.save();
+		// Border screws
 		scale=w/2800.0;
-		c_base.scale(scale,scale);
+		/*c_base.scale(scale,scale);
 		c_base.set_source_surface(screw1,20/scale,20/scale);
 		c_base.paint();
 		c_base.set_source_surface(screw1,(this.scr_w-20)/scale-50,(this.scr_h-20)/scale-50);
@@ -230,8 +230,9 @@ class restore_iface : GLib.Object {
 		
 		
 		c_base.restore();
-		c_base.save();
-		
+		c_base.save();*/
+
+		// Generate nixies
 		double scale2=(w-60.0-100.0*scale)/2175.0;
 		this.nixie_w=(int)(145.0*scale2);
 		this.nixie_h=(int)(150.0*scale2);
@@ -281,56 +282,85 @@ class restore_iface : GLib.Object {
 				ctx.stroke();
 			}
 		}
-		c_base.restore();
 
 		double width;
 		this.print_nixies(0, out width);
-	
-		double mx=(this.scr_w-width)/2.0;
-		double my=(double)(this.nixie_h/3);
-		double mh=(double)(this.nixie_h);
+		scale=this.scr_w/2800.0;
+		
+		// Paint base surface
+		double mh=((double)(this.nixie_h))*4.0/3.0;
+		double mx=(this.scr_w-width)/2.0-80.0*scale;
+		double my=(double)(this.nixie_h/6);
+		double mw=width+160*scale;
+		
+		c_base.set_source_surface(brass,0,0);
+		c_base.rectangle(mx-mh,my,mw+2.0*mh,mh);
+		c_base.fill();
+		this.paint_border (c_base,mx,my,mw,mh,-1.5,true);
 
+		c_base.save();
+		c_base.scale(scale2,scale2);
+		double button_border = (mh/scale2-150.0)/2;
+		// Restore button
+		var restore_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"restore.png"));
+		c_base.set_source_surface(restore_pic,(mx-mh)/scale2+button_border,my/scale2+button_border);
+		c_base.paint();
+		// Exit button
+		var exit_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"exit.png"));
+		c_base.set_source_surface(exit_pic,(mx+mw)/scale2+button_border,my/scale2+button_border);
+		c_base.paint();
+		c_base.restore();
+
+		// Exit button coords
+		this.exit_w=mh;
+		this.exit_h=mh;
+		this.exit_x=mx+mw;
+		this.exit_y=my;
+		this.paint_border (c_base,this.exit_x,this.exit_y,this.exit_w,this.exit_h,-1.5,true);
+
+		// Restore button coords
+		this.restore_w=mh;
+		this.restore_h=mh;
+		this.restore_x=mx-mh;
+		this.restore_y=my;
+		this.paint_border (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,-1.5,true);
+			
+		// Nixies border
+		mx=(this.scr_w-width)/2.0;
+		my=(double)(this.nixie_h/3);
+		mh=(double)(this.nixie_h);
+		
+		this.paint_border (c_base,mx,my,width,mh,1.5,false);
+
+		// Nixies screws
+		c_base.save();
+		c_base.scale(scale,scale);
+		c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-65,((double)(this.nixie_h/3))/scale+60.0);
+		c_base.paint();
+		c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+15,((double)(this.nixie_h/3))/scale+60.0);
+		c_base.paint();
+		c_base.restore();
+
+		// Browser border
 		this.browser_x=scr_w*0.1;
 		this.browser_y=5*this.nixie_h/3;
 		this.browser_w=scr_w*4/5;
 		this.browser_h=scr_h-3*this.nixie_h;
-		
-		this.paint_border (c_base,mx,my,width,mh,1.5);
-		this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0);
+		this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 
-		c_base.save();
-		scale=this.scr_w/2800.0;
-		c_base.scale(scale,scale);
-		c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-60,((double)(this.nixie_h/3))/scale+60.0);
-		c_base.paint();
-		c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+10,((double)(this.nixie_h/3))/scale+60.0);
-		c_base.paint();
-		c_base.restore();
-
-		this.exit_w=this.nixie_h*16/18;
-		this.exit_h=this.nixie_h*16/18;
-		this.exit_x=this.browser_x+this.browser_w-this.exit_w;
-		this.exit_y=this.scr_h-20*this.nixie_h/19;
-		this.paint_button (c_base,ref this.exit_x,ref this.exit_y,ref this.exit_w,ref this.exit_h,0.1,1.0,0.0,0.0,_("Exit"),false);
-
-		this.restore_w=this.nixie_h*16/18;
-		this.restore_h=this.nixie_h*16/18;
-		this.restore_x=this.browser_x;
-		this.restore_y=this.scr_h-20*this.nixie_h/19;
-		this.paint_button (c_base,ref this.restore_x,ref this.restore_y,ref this.restore_w,ref this.restore_h,0.6,0.0,1.0,0.0,_("Restore files"),true);
-
-		this.scale_x=this.scr_w/30;
-		this.scale_y=this.scr_h/16;
+		// timeline
+		this.scale_x=this.restore_x;
+		this.scale_y=this.browser_y;
 		this.scale_w=this.scr_w/28;
-		this.scale_h=this.scr_h*14/16;
-		this.paint_border(c_base,this.scale_x,this.scale_y,this.scale_w,this.scale_h,2);
+		this.scale_h=this.scr_h-this.scale_y-5;
+		//this.paint_border(c_base,this.scale_x,this.scale_y,this.scale_w,this.scale_h,0.0,true);
 
-		var pattern = new Cairo.Pattern.linear(this.scale_x,this.scale_y,this.scale_x+this.scale_w,this.scale_y+this.scale_h);
+		/*var pattern = new Cairo.Pattern.linear(this.scale_x,this.scale_y,this.scale_x+this.scale_w,this.scale_y+this.scale_h);
 		pattern.add_color_stop_rgba(1.0,0.9,0.9,0.7,1);
 		pattern.add_color_stop_rgba(0.0,1.0,1.0,0.8,1);
 		c_base.set_source(pattern);
 		c_base.rectangle(this.scale_x,this.scale_y,this.scale_w,this.scale_h);
-		c_base.fill();
+		c_base.fill();*/
 
 		this.last_time=this.backups[this.backups.size-1];
 		this.scale_factor=this.scale_h/(this.backups[0]-this.last_time);
@@ -339,12 +369,12 @@ class restore_iface : GLib.Object {
 		double pos_y=this.scale_y+this.scale_h;
 		double new_y;
 		
-		c_base.set_source_rgb(0,0,0);
+		c_base.set_source_rgb(1,1,1);
 		c_base.set_line_width(1);
 		
 		double incval = this.scale_w/5;
 		double nw = this.scale_w*3/5;
-		
+
 		for(var i=0;i<this.backups.size;i++) {
 			new_y = pos_y-this.scale_factor*(this.backups[i]-this.last_time);
 			if (new_y-last_pos_y<2) {
@@ -358,18 +388,26 @@ class restore_iface : GLib.Object {
 		
 	}
 
-	private void paint_border(Cairo.Context ctx, double mx, double my, double mw, double mh, double margin) {
+	private void paint_border(Cairo.Context ctx, double mx, double my, double mw, double mh, double margin,bool reversed) {
 
-		ctx.set_source_rgba(0,0,0,0.3);
+		if (reversed) {
+			ctx.set_source_rgba(0,0,0,0.3);
+		} else {
+			ctx.set_source_rgba(1,1,1,0.3);
+		}
 		ctx.set_line_width(3.0);
-		ctx.move_to(mx-margin,my+mh+margin);
-		ctx.rel_line_to(0,-mh-2*margin);
+		ctx.move_to(mx-margin,my-margin);
 		ctx.rel_line_to(mw+2*margin,0);
+		ctx.rel_line_to(0,mh+2*margin);
 		ctx.stroke();
-		ctx.set_source_rgba(1,1,1,0.3);
-		ctx.move_to(mx-margin,my+mh+margin);
+		if (reversed) {
+			ctx.set_source_rgba(1,1,1,0.3);
+		} else {
+			ctx.set_source_rgba(0,0,0,0.3);
+		}
+		ctx.move_to(mx-margin,my-margin);
+		ctx.rel_line_to(0,mh+2*margin);
 		ctx.rel_line_to(mw+2*margin,0);
-		ctx.rel_line_to(0,-mh-2*margin);
 		ctx.stroke();
 	}
 	
@@ -393,147 +431,6 @@ class restore_iface : GLib.Object {
 			this.scale_current_value=this.scale_desired_value;
 		}
 	}
-
-
-	private void paint_button(Cairo.Context ctx, ref double x, ref double y, ref double w, ref double h, double angle, double r, double g, double b, string text, bool at_end) {
-
-		double radius;
-		double radius2;
-		Cairo.Pattern pattern;
-
-		double minx;
-		double maxx;
-		double miny;
-		double maxy;
-		
-		if (w>h) {
-			radius=h/2;
-			radius2=h;
-		} else {
-			radius=w/2;
-			radius2=w;
-		}
-
-		minx=x+w/2-radius;
-		maxx=x+w/2+radius;
-		miny=y+h/2-radius;
-		maxy=y+h/2+radius;
-		
-		double hex1;
-		double hex2;
-		hex1=radius*0.5;
-		hex2=radius*0.886;
-
-		ctx.save();
-		ctx.reset_clip();
-		ctx.translate(x+w/2,y+h/2);
-		ctx.rotate(angle);
-		ctx.move_to(-radius,0);
-		ctx.rel_line_to(hex1,hex2);
-		ctx.rel_line_to(radius,0);
-		ctx.rel_line_to(hex1,-hex2);
-		ctx.rel_line_to(-hex1,-hex2);
-		ctx.rel_line_to(-radius,0);
-		ctx.rel_line_to(-hex1,hex2);
-		ctx.clip();
-		ctx.rotate(-angle);
-		ctx.set_source_rgb(0.6,0.6,0.6);
-		ctx.rectangle(-radius,-radius,radius2,radius2);
-		ctx.fill();
-		pattern = new Cairo.Pattern.linear(-radius,-radius,radius2,radius2);
-		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.6);
-		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.6);
-		ctx.set_source(pattern);
-		ctx.rectangle(-radius,-radius,radius2,radius2);
-		ctx.fill();
-		ctx.reset_clip();
-		ctx.restore();
-
-		radius*=0.84;
-
-		ctx.set_source_rgb(0.5,0.5,0.5);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.fill();
-		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
-		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.3);
-		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.3);
-		ctx.set_source(pattern);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.fill();
-
-		radius*=0.85;
-		
-		ctx.set_source_rgb(0,0,0);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.fill();
-		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
-		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.3);
-		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.3);
-		ctx.set_source(pattern);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.fill();
-
-		ctx.reset_clip();
-		radius*=0.85;
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.clip();
-		
-		ctx.set_source_rgb(r,g,b);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.fill();
-
-		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
-		pattern.add_color_stop_rgba(0.0,0.0,0.0,0.0,0.2);
-		pattern.add_color_stop_rgba(1.0,1.0,1.0,1.0,0.2);
-		ctx.set_source(pattern);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.fill();
-		
-		pattern = new Cairo.Pattern.linear(x,y,x+w,y+h);
-		pattern.add_color_stop_rgba(1.0,0.0,0.0,0.0,0.4);
-		pattern.add_color_stop_rgba(0.0,1.0,1.0,1.0,0.4);
-		ctx.set_source(pattern);
-		ctx.set_line_width(radius*0.25);
-		ctx.arc(x+w/2,y+h/2,radius,0,6.283184);
-		ctx.stroke();
-		ctx.reset_clip();
-		ctx.set_source_rgb(0,0,0);
-		ctx.select_font_face("Serif",FontSlant.ITALIC,FontWeight.NORMAL);
-		ctx.set_font_size(radius2*0.8);
-		TextExtents extents;
-
-		ctx.text_extents(text, out extents);
-
-		//GLib.stdout.printf("%s %f %f %f\n",text,extents.height,extents.y_bearing,extents.y_advance);
-		
-		double nx;
-		double ny;
-		
-		if (at_end) {
-			nx=x+(w+radius2)/2+3;
-			maxx+=3+extents.width;
-		} else {
-			nx=x+(w-radius2)/2-extents.width-3;
-			minx-=3+extents.width;
-		}
-
-		double fh;
-		if (extents.y_bearing>=0) {
-			fh=extents.y_bearing;
-		} else {
-			fh=-extents.y_bearing;
-		}
-		ny=y+(h+fh)/2;
-		ctx.move_to(nx,ny);
-		ctx.show_text(text);
-
-		x=minx;
-		y=miny;
-		w=maxx-minx+1;
-		h=maxy-miny+1;
-
-	}
-	
 
 	private bool repaint_draw(EventExpose ev) {
 
@@ -706,10 +603,10 @@ class restore_iface : GLib.Object {
 			this.exit_restore ();
 			return true;
 		}
-		if ((event.keyval==0xFF52)&&((event.state&Gdk.ModifierType.CONTROL_MASK)!=0)) { // UP key
+		if (event.keyval==0xFF55) { // PG UP key
 			this.move_timeline(false);
 		}
-		if ((event.keyval==0xFF54)&&((event.state&Gdk.ModifierType.CONTROL_MASK)!=0)) { // DOWN key
+		if (event.keyval==0xFF56) { // PG DOWN key
 			this.move_timeline(true);
 		}
 		if (event.keyval=='r') {
