@@ -32,7 +32,6 @@ namespace FilelistIcons {
 	
 	}
 
-
 	class IconBrowser : Frame {
 
 		private VBox main_container;
@@ -48,6 +47,9 @@ namespace FilelistIcons {
 		private uint timer_refresh;
 		private Menu menu;
 		private bool show_hiden;
+		private Gee.List<string> bookmarks;
+		private Gtk.TreeView bookmark_view;
+		private ListStore bookmark_model;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -62,12 +64,37 @@ namespace FilelistIcons {
 			this.buttons_path=new HBox(false,0);
 			this.buttons_path.homogeneous=false;
 			this.main_container.pack_start(this.buttons_path,false,false,0);
-		
+
+			var container2 = new Gtk.HBox(false,0);
+			var scroll2= new ScrolledWindow(null,null);
+			scroll2.hscrollbar_policy=PolicyType.NEVER;
+			this.bookmark_model=new ListStore(3,typeof(string),typeof(string),typeof(string));
+			this.bookmark_view=new Gtk.TreeView.with_model(this.bookmark_model);
+			var crpb = new CellRendererPixbuf();
+			crpb.stock_size = IconSize.SMALL_TOOLBAR;
+			this.bookmark_view.insert_column_with_attributes (-1, "", crpb , "icon_name", 0);
+			this.bookmark_view.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 1);
+			this.bookmark_view.enable_grid_lines=TreeViewGridLines.NONE;
+			this.bookmark_view.headers_visible=false;
+			this.read_bookmarks();
+			this.bookmark_view.show();
+			Gtk.Requisition req;
+			this.bookmark_view.size_request(out req);
+			this.bookmark_view.cursor_changed.connect(this.bookmark_selected);
+
+			scroll2.add(this.bookmark_view);
+			scroll2.hscrollbar_policy=PolicyType.AUTOMATIC;
+			scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
+			scroll2.set_size_request(req.width+40,-1);
+			container2.pack_start(scroll2,false,true,0);
+			
 			this.scroll = new ScrolledWindow(null,null);
-			this.main_container.pack_start(this.scroll,true,true,0);
 			this.scroll.hscrollbar_policy=PolicyType.AUTOMATIC;
 			this.scroll.vscrollbar_policy=PolicyType.AUTOMATIC;
+			container2.pack_start(this.scroll,true,true,0);
 
+			this.main_container.pack_start(container2,true,true,0);
+			
 			/* path_model stores the data for each file/folder:
 				 - file name (string)
 				 - icon (string)
@@ -97,6 +124,90 @@ namespace FilelistIcons {
 		
 		}
 
+		private bool read_bookmarks() {
+
+			TreeIter iter;
+
+			this.bookmarks = new Gee.ArrayList<string>();
+
+			string home=Environment.get_home_dir();
+
+			this.bookmarks.add(home);
+			
+			var config_file = File.new_for_path (GLib.Path.build_filename(home,".config","user-dirs.dirs"));
+			
+			if (config_file.query_exists (null)) {
+				try {
+					var file_read=config_file.read(null);
+					var in_stream = new DataInputStream (file_read);
+					string line;
+					string folder;
+					int pos;
+					int len;
+
+					while ((line = in_stream.read_line (null, null)) != null) {
+						if (line.has_prefix("XDG_")) {
+							pos=line.index_of_char('=');
+							folder=line.substring(pos+1);
+							len=folder.length;
+							if ((folder[0]=='"')&&(len>=2)) {
+								folder=folder.substring(1,len-2);
+							}
+							if (folder.has_prefix("$HOME")) {
+								folder=GLib.Path.build_filename(home,folder.substring(6));
+							}
+							this.bookmarks.add(folder);
+						}
+					}
+				} catch {
+				}
+			}
+
+			config_file = File.new_for_path (GLib.Path.build_filename(home,".gtk-bookmarks"));
+			
+			if (config_file.query_exists (null)) {
+				try {
+					var file_read=config_file.read(null);
+					var in_stream = new DataInputStream (file_read);
+					string line;
+					string folder;
+					while ((line = in_stream.read_line (null, null)) != null) {
+						if (line.has_prefix("file://")) {
+							folder=line.substring(7);
+							this.bookmarks.add(folder);
+						}
+					}
+				} catch {
+				}
+			}
+			foreach(var folder in this.bookmarks) {
+				this.bookmark_model.append (out iter);
+				this.bookmark_model.set(iter,0,Stock.DIRECTORY);
+				this.bookmark_model.set(iter,1,GLib.Path.get_basename(folder));
+				this.bookmark_model.set(iter,2,folder);
+
+			}
+			
+			return true;
+		}
+
+		private void bookmark_selected() {
+
+			var selected = this.bookmark_view.get_selection();
+			if (selected.count_selected_rows()!=0) {
+				TreeModel model;
+				TreeIter iter;
+				selected.get_selected(out model, out iter);
+				GLib.Value spath;
+				model.get_value(iter,2,out spath);
+				var final_path = spath.get_string();
+				this.current_path=final_path;
+				this.refresh_icons();
+				this.refresh_path_list();
+				this.set_scroll_top();
+			}
+		}
+		
 		private bool on_click(Gdk.EventButton event) {
 
 			if (event.button!=3) {

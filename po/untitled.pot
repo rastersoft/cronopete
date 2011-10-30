@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-28 00:57+0200\n"
+"POT-Creation-Date: 2011-10-30 17:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,7 @@ msgstr ""
 msgid "Stop Backing Up"
 msgstr ""
 
-#: ../cronopete.vala:414 ../restore.vala:319
+#: ../cronopete.vala:414
 msgid "Restore files"
 msgstr ""
 
@@ -194,11 +194,7 @@ msgstr ""
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr ""
 
-#: ../restore.vala:313
-msgid "Exit"
-msgstr ""
-
-#: ../restore.vala:768
+#: ../restore.vala:788
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -208,7 +204,7 @@ msgid ""
 "There's not enought free space"
 msgstr ""
 
-#: ../restore.vala:770
+#: ../restore.vala:790
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -216,12 +212,20 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../restore.vala:808
+#: ../restore.vala:828
 #, c-format
 msgid ""
 "Restoring file:\n"
 "\n"
 "%s"
+msgstr ""
+
+#: ../icons_widget.vala:109
+msgid "Don't show hiden files"
+msgstr ""
+
+#: ../icons_widget.vala:111
+msgid "Show hiden files"
 msgstr ""
 
 #: ../interface/about.ui.h:1
