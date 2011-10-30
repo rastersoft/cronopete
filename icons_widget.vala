@@ -40,13 +40,14 @@ namespace FilelistIcons {
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
-		//private Label main_title;
 		private string current_path;
 		private Gee.List<ToggleButton> path_list;
 		private EventBox background_eb;
 		private time_t current_backup;
 		private backends backend;
 		private uint timer_refresh;
+		private Menu menu;
+		private bool show_hiden;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -56,8 +57,7 @@ namespace FilelistIcons {
 			this.main_container=new VBox(false,0);
 			this.timer_refresh=0;
 			
-			/*this.main_title=new Label("");
-			this.main_container.pack_start(this.main_title,false,true,0);*/
+			this.show_hiden=false;
 			
 			this.buttons_path=new HBox(false,0);
 			this.buttons_path.homogeneous=false;
@@ -75,6 +75,8 @@ namespace FilelistIcons {
 			*/
 			this.path_model=new ListStore(3,typeof(string),typeof(Pixbuf),typeof(bool));
 			this.path_view=new IconView.with_model(this.path_model);
+			this.path_view.add_events (Gdk.EventMask.BUTTON_RELEASE_MASK);
+			this.path_view.button_release_event.connect(this.on_click);
 			this.path_view.columns=-1;
 			this.path_view.set_pixbuf_column(1);
 			this.path_view.set_text_column(0);
@@ -95,6 +97,34 @@ namespace FilelistIcons {
 		
 		}
 
+		private bool on_click(Gdk.EventButton event) {
+
+			if (event.button!=3) {
+				return false;
+			}
+			this.menu=new Menu();
+			
+			MenuItem item1;
+			if (this.show_hiden) {
+				item1 = new MenuItem.with_label(_("Don't show hiden files"));
+			} else {
+				item1 = new MenuItem.with_label(_("Show hiden files"));
+			}
+			item1.activate.connect(this.toggle_show_hide);
+			this.menu.append(item1);
+
+			this.menu.show_all();
+			this.menu.popup(null,null,null,2,Gtk.get_current_event_time());
+			return true;
+		}
+
+		private void toggle_show_hide() {
+
+			this.show_hiden = this.show_hiden ? false : true;
+			
+			this.refresh_icons ();
+		}
+		
 		public void set_backup_time(time_t backup) {
 			
 			this.current_backup=backup;
@@ -248,14 +278,16 @@ namespace FilelistIcons {
 				return;
 			}
 			
-			//this.main_title.label=title;
-			
 			files.sort(mysort_files);
 		
 			var pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
 		
 			foreach (file_info f in files) {
 
+				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
+					continue;
+				}
+				
 				if (f.isdir) {
 					this.path_model.append (out iter);
 					this.path_model.set (iter,0,f.name);
@@ -268,7 +300,11 @@ namespace FilelistIcons {
 			pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
 
 			foreach (file_info f in files) {
-			
+
+				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
+					continue;
+				}
+				
 				if (f.isdir) {
 					continue;
 				}

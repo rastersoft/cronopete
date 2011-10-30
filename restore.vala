@@ -616,6 +616,10 @@ class restore_iface : GLib.Object {
 
 	private bool on_click(Gdk.EventButton event) {
 
+		if(event.button!=1) {
+			return false;
+		}
+
 		if ((event.x_root>=this.exit_x)&&(event.x_root<(this.exit_x+this.exit_w))&&(event.y_root>=this.exit_y)&&(event.y_root<(this.exit_y+this.exit_h))) {
 			this.exit_restore ();
 			return true;
@@ -628,9 +632,11 @@ class restore_iface : GLib.Object {
 
 		if ((event.x_root>=this.arrows_x)&&(event.x_root<(this.arrows_x+(this.arrows_w/2)))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
 			this.move_timeline(false);
+			return true;
 		}
 		if ((event.x_root>=(this.arrows_x+(this.arrows_w/2)))&&(event.x_root<(this.arrows_x+this.arrows_w))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
 			this.move_timeline(true);
+			return true;
 		}
 		return false;
 		
