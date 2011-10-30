@@ -479,6 +479,9 @@ class restore_iface : GLib.Object {
 			ctx.rectangle(ox,oy,ow,oh);
 			ctx.stroke();
 		}
+		ctx.set_source_rgb(0.2,0.2,0.2);
+		ctx.rectangle(this.browser_x,this.browser_y,this.browser_w,this.browser_h);
+		ctx.stroke();
 		var ctx2 = Gdk.cairo_create(this.drawing.window);
 		ctx2.set_source_surface(this.animation_surface,0,0);
 		ctx2.paint();
