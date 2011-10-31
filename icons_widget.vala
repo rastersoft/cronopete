@@ -81,6 +81,8 @@ namespace FilelistIcons {
 			this.btn_next=new Button();
 			var pic2 = new Gtk.Image.from_icon_name("forward",IconSize.SMALL_TOOLBAR);
 			this.btn_next.add(pic2);
+			this.btn_prev.clicked.connect(this.path_prev);
+			this.btn_next.clicked.connect(this.path_next);
 			buttons_container.pack_start(this.btn_prev,false,false,0);
 			buttons_container.pack_start(this.buttons_scroll,false,false,0);
 			buttons_container.pack_start(this.btn_next,false,false,0);
@@ -142,6 +144,7 @@ namespace FilelistIcons {
 		
 			this.refresh_icons();
 			this.refresh_path_list();
+			this.show.connect_after(this.refresh_path_list);
 		
 		}
 
@@ -395,7 +398,7 @@ namespace FilelistIcons {
 				this.buttons_path.pack_start(btn,false,false,0);
 				this.path_list.add(btn);
 			}
-		
+			this.buttons_path.show_all();
 			btn.active=true;
 			btn.has_focus=true;
 			Gtk.Requisition req;
@@ -405,15 +408,42 @@ namespace FilelistIcons {
 			if (req.width>=req2.width) {
 				this.btn_prev.show();
 				this.btn_next.show();
-				this.btn_prev.size_request(out req);
-				this.buttons_path.width_request=req2.width-2*req.width-10;
+				Gtk.Requisition req3;
+				this.btn_prev.size_request(out req3);
+				var newwidth = req2.width-2*req3.width-10;
+				this.buttons_scroll.width_request=newwidth;
+				this.buttons_scroll.hadjustment.upper=req.width-newwidth;
+				this.buttons_scroll.hadjustment.value=req.width-newwidth;
 			} else {
+				this.buttons_scroll.width_request=req2.width;
 				this.btn_prev.hide();
 				this.btn_next.hide();
 			}
 	
 		}
-	
+
+		private void path_prev() {
+
+			var v=this.buttons_scroll.hadjustment.value;
+			v-=30;
+			this.buttons_scroll.hadjustment.value=v;
+
+		}
+
+		private void path_next() {
+			var v=this.buttons_scroll.hadjustment.value;
+			v+=30;
+			Gtk.Requisition req;
+			this.buttons_path.size_request(out req);
+			Gtk.Requisition req2;
+			this.buttons_scroll.size_request(out req2);
+			var max = req.width-req2.width;
+			if (v>max) {
+				v=max;
+			}
+			this.buttons_scroll.hadjustment.value=v;
+		}
+		
 		private void set_scroll_top() {
 	
 			this.scroll.hadjustment.value=this.scroll.hadjustment.lower;
