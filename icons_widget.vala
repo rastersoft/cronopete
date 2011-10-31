@@ -25,6 +25,7 @@ namespace FilelistIcons {
 
 	struct file_info {
 		string name;
+		string mime_type;
 		bool isdir;
 		TimeVal mod_time;
 		int64 size;
@@ -187,7 +188,6 @@ namespace FilelistIcons {
 								folder=GLib.Path.build_filename(home,folder.substring(6));
 							}
 							val = bookmark_str();
-							GLib.stdout.printf("fodler %s\n",folder);
 							val.name = folder.dup();
 							switch (type) {
 							case "DESKTOP":
@@ -311,7 +311,7 @@ namespace FilelistIcons {
 			if (this.timer_refresh!=0) {
 				Source.remove(this.timer_refresh);
 			}
-			this.timer_refresh=Timeout.add(50,this.timer_f);
+			this.timer_refresh=Timeout.add(250,this.timer_f);
 					
 		}
 
@@ -411,9 +411,11 @@ namespace FilelistIcons {
 				Gtk.Requisition req3;
 				this.btn_prev.size_request(out req3);
 				var newwidth = req2.width-2*req3.width-10;
-				this.buttons_scroll.width_request=newwidth;
-				this.buttons_scroll.hadjustment.upper=req.width-newwidth;
-				this.buttons_scroll.hadjustment.value=req.width-newwidth;
+				if (newwidth>0) {
+					this.buttons_scroll.width_request=newwidth;
+					this.buttons_scroll.hadjustment.upper=req.width-newwidth;
+					this.buttons_scroll.hadjustment.value=req.width-newwidth;
+				}
 			} else {
 				this.buttons_scroll.width_request=req2.width;
 				this.btn_prev.hide();

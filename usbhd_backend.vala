@@ -158,7 +158,7 @@ class usbhd_backend: Object, backends {
 			var finalpath = Path.build_filename(this.backup_path,basepath,current_path);
 	
 			var directory = File.new_for_path(finalpath);
-			var listfile = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
+			var listfile = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE+","+FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
 		
 			while ((info_file = listfile.next_file(null)) != null) {
 
@@ -175,6 +175,7 @@ class usbhd_backend: Object, backends {
 				
 				info_file.get_modification_time(out tmpinfo.mod_time);
 				tmpinfo.size = info_file.get_size();
+				tmpinfo.mime_type = info_file.get_content_type().dup();
 				
 				files.add(tmpinfo);
 				
