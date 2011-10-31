@@ -25,7 +25,7 @@ namespace FilelistIcons {
 
 	struct file_info {
 		string name;
-		string mime_type;
+		GLib.ThemedIcon icon;
 		bool isdir;
 		TimeVal mod_time;
 		int64 size;
@@ -92,7 +92,7 @@ namespace FilelistIcons {
 			var container2 = new Gtk.HBox(false,0);
 			var scroll2= new ScrolledWindow(null,null);
 			scroll2.hscrollbar_policy=PolicyType.NEVER;
-			this.bookmark_model=new ListStore(3,typeof(Icon),typeof(string),typeof(string));
+			this.bookmark_model=new ListStore(3,typeof(GLib.Icon),typeof(string),typeof(string));
 			this.bookmark_view=new Gtk.TreeView.with_model(this.bookmark_model);
 			var crpb = new CellRendererPixbuf();
 			crpb.stock_size = IconSize.SMALL_TOOLBAR;
@@ -124,7 +124,7 @@ namespace FilelistIcons {
 				 - icon (string)
 				 - is_folder (boolean)
 			*/
-			this.path_model=new ListStore(3,typeof(string),typeof(Pixbuf),typeof(bool));
+			this.path_model=new ListStore(3,typeof(string),typeof(Gdk.Pixbuf),typeof(bool));
 			this.path_view=new IconView.with_model(this.path_model);
 			this.path_view.add_events (Gdk.EventMask.BUTTON_RELEASE_MASK);
 			this.path_view.button_release_event.connect(this.on_click);
@@ -501,25 +501,32 @@ namespace FilelistIcons {
 			
 			files.sort(mysort_files);
 		
-			var pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
-		
+			var theme = Gtk.IconTheme.get_default();
+
+			Gdk.Pixbuf pbuf=null;
+			
 			foreach (file_info f in files) {
 
 				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
 					continue;
 				}
 				
-				if (f.isdir) {
-					this.path_model.append (out iter);
-					this.path_model.set (iter,0,f.name);
-					this.path_model.set (iter,1,pbuf);
-					this.path_model.set (iter,2,true);
+				if (!f.isdir) {
+					continue;
 				}
 
+				try {
+					pbuf = theme.lookup_by_gicon(f.icon,48,0).load_icon();
+				} catch {
+					pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
+				}
+				
+				this.path_model.append (out iter);
+				this.path_model.set (iter,0,f.name);
+				this.path_model.set (iter,1,pbuf);
+				this.path_model.set (iter,2,true);
 			}
-
-			pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
-
+			
 			foreach (file_info f in files) {
 
 				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
@@ -530,13 +537,17 @@ namespace FilelistIcons {
 					continue;
 				}
 
+				try {
+					pbuf = theme.lookup_by_gicon(f.icon,48,0).load_icon();
+				} catch {
+					pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
+				}
+				
 				this.path_model.append (out iter);
 				this.path_model.set (iter,0,f.name);
 				this.path_model.set (iter,1,pbuf);
 				this.path_model.set (iter,2,false);
-
 			}
-
 		}
 
 	}
