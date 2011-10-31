@@ -150,8 +150,8 @@ class restore_iface : GLib.Object {
 		var scr=this.mywindow.get_screen();
 		this.scr_w=scr.get_width();
 		this.scr_h=scr.get_height();
-		//this.scr_w=1024;
-		//this.scr_h=600;
+		this.scr_w=640;
+		this.scr_h=480;
 		this.grid_h=0;
 		this.grid_w=0;
 		

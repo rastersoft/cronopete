@@ -260,11 +260,11 @@ class c_choose_disk : GLib.Object {
 		this.disk_list = (TreeView) this.builder.get_object("disk_list");
 		this.ok_button = (Button) this.builder.get_object("ok_button");
 	
-		this.disk_listmodel = new ListStore (5, typeof(string), typeof (string), typeof (string), typeof (string), typeof (string));
+		this.disk_listmodel = new ListStore (5, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string));
 		this.disk_list.set_model(this.disk_listmodel);
 		var crpb = new CellRendererPixbuf();
 		crpb.stock_size = IconSize.DIALOG;
-		this.disk_list.insert_column_with_attributes (-1, "", crpb , "icon_name", 0);
+		this.disk_list.insert_column_with_attributes (-1, "", crpb , "gicon", 0);
 		this.disk_list.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 1);
 		this.disk_list.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 2);
 		this.disk_list.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 3);
@@ -336,7 +336,7 @@ class c_choose_disk : GLib.Object {
 	private void refresh_list() {
 
 		TreeIter iter;
-		string tmp;
+		//string tmp;
 		Mount mnt;
 		File root;
 		string path;
@@ -374,9 +374,7 @@ class c_choose_disk : GLib.Object {
 
 			this.disk_listmodel.append (out iter);
 			
-			tmp="";
-			
-			
+			/*tmp="";
 			foreach (string s in v.get_icon().to_string().split(" ")) {
 
 				if (s=="GThemedIcon") {
@@ -387,7 +385,9 @@ class c_choose_disk : GLib.Object {
 				}
 				tmp=s;
 				break;
-			}
+			}*/
+
+			var tmp = new ThemedIcon.from_names(v.get_icon().to_string().split(" "));
 			
 			this.disk_listmodel.set (iter,0,tmp);
 			this.disk_listmodel.set (iter,1,bpath);

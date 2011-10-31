@@ -24,18 +24,22 @@ using Gdk;
 namespace FilelistIcons {
 
 	struct file_info {
-	
 		string name;
 		bool isdir;
 		TimeVal mod_time;
 		int64 size;
-	
+	}
+
+	struct bookmark_str {
+		string name;
+		string icon;
 	}
 
 	class IconBrowser : Frame {
 
 		private VBox main_container;
 		private HBox buttons_path;
+		private ScrolledWindow buttons_scroll;
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
@@ -47,9 +51,11 @@ namespace FilelistIcons {
 		private uint timer_refresh;
 		private Menu menu;
 		private bool show_hiden;
-		private Gee.List<string> bookmarks;
+		private Gee.List<bookmark_str ?> bookmarks;
 		private Gtk.TreeView bookmark_view;
 		private ListStore bookmark_model;
+		private Gtk.Button btn_prev;
+		private Gtk.Button btn_next;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -60,19 +66,34 @@ namespace FilelistIcons {
 			this.timer_refresh=0;
 			
 			this.show_hiden=false;
-			
+
+			this.buttons_scroll=new Gtk.ScrolledWindow(null,null);
+			this.buttons_scroll.hscrollbar_policy=PolicyType.NEVER;
+			this.buttons_scroll.vscrollbar_policy=PolicyType.NEVER;
 			this.buttons_path=new HBox(false,0);
 			this.buttons_path.homogeneous=false;
-			this.main_container.pack_start(this.buttons_path,false,false,0);
+			this.buttons_scroll.add_with_viewport(this.buttons_path);
+
+			var buttons_container = new HBox(false,0);
+			this.btn_prev=new Button();
+			var pic1 = new Gtk.Image.from_icon_name("back",IconSize.SMALL_TOOLBAR);
+			this.btn_prev.add(pic1);
+			this.btn_next=new Button();
+			var pic2 = new Gtk.Image.from_icon_name("forward",IconSize.SMALL_TOOLBAR);
+			this.btn_next.add(pic2);
+			buttons_container.pack_start(this.btn_prev,false,false,0);
+			buttons_container.pack_start(this.buttons_scroll,false,false,0);
+			buttons_container.pack_start(this.btn_next,false,false,0);
+			this.main_container.pack_start(buttons_container,false,false,0);
 
 			var container2 = new Gtk.HBox(false,0);
 			var scroll2= new ScrolledWindow(null,null);
 			scroll2.hscrollbar_policy=PolicyType.NEVER;
-			this.bookmark_model=new ListStore(3,typeof(string),typeof(string),typeof(string));
+			this.bookmark_model=new ListStore(3,typeof(Icon),typeof(string),typeof(string));
 			this.bookmark_view=new Gtk.TreeView.with_model(this.bookmark_model);
 			var crpb = new CellRendererPixbuf();
 			crpb.stock_size = IconSize.SMALL_TOOLBAR;
-			this.bookmark_view.insert_column_with_attributes (-1, "", crpb , "icon_name", 0);
+			this.bookmark_view.insert_column_with_attributes (-1, "", crpb , "gicon", 0);
 			this.bookmark_view.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 1);
 			this.bookmark_view.enable_grid_lines=TreeViewGridLines.NONE;
 			this.bookmark_view.headers_visible=false;
@@ -128,11 +149,14 @@ namespace FilelistIcons {
 
 			TreeIter iter;
 
-			this.bookmarks = new Gee.ArrayList<string>();
+			this.bookmarks = new Gee.ArrayList<bookmark_str ?>();
 
 			string home=Environment.get_home_dir();
 
-			this.bookmarks.add(home);
+			bookmark_str val = bookmark_str();
+			val.name=home.dup();
+			val.icon="user-home folder-home";
+			this.bookmarks.add(val);
 			
 			var config_file = File.new_for_path (GLib.Path.build_filename(home,".config","user-dirs.dirs"));
 			
@@ -142,11 +166,14 @@ namespace FilelistIcons {
 					var in_stream = new DataInputStream (file_read);
 					string line;
 					string folder;
+					string type;
 					int pos;
 					int len;
 
 					while ((line = in_stream.read_line (null, null)) != null) {
 						if (line.has_prefix("XDG_")) {
+							pos=line.index_of_char('_',4);
+							type=line.substring(4,pos-4);
 							pos=line.index_of_char('=');
 							folder=line.substring(pos+1);
 							len=folder.length;
@@ -156,7 +183,39 @@ namespace FilelistIcons {
 							if (folder.has_prefix("$HOME")) {
 								folder=GLib.Path.build_filename(home,folder.substring(6));
 							}
-							this.bookmarks.add(folder);
+							val = bookmark_str();
+							GLib.stdout.printf("fodler %s\n",folder);
+							val.name = folder.dup();
+							switch (type) {
+							case "DESKTOP":
+								val.icon="user-desktop";
+							break;
+							case "DOWNLOAD":
+								val.icon="user-download folder-download folder-downloads";
+							break;
+							case "TEMPLATES":
+								val.icon="user-templates folder-templates";
+							break;
+							case "PUBLICSHARE":
+								val.icon="user-publicshare folder-publicshare";
+							break;
+							case "DOCUMENTS":
+								val.icon="user-documents folder-documents";
+							break;
+							case "MUSIC":
+								val.icon="user-music folder-music";
+							break;
+							case "PICTURES":
+								val.icon="user-pictures folder-pictures";
+							break;
+							case "VIDEOS":
+								val.icon="user-videos folder-videos";
+							break;
+							default:
+								val.icon="folder";
+							break;
+							}
+							this.bookmarks.add(val);
 						}
 					}
 				} catch {
@@ -174,17 +233,23 @@ namespace FilelistIcons {
 					while ((line = in_stream.read_line (null, null)) != null) {
 						if (line.has_prefix("file://")) {
 							folder=line.substring(7);
-							this.bookmarks.add(folder);
+						    val = bookmark_str();
+							val.name = folder.dup();
+							val.icon=Gtk.Stock.DIRECTORY;
+							this.bookmarks.add(val);
 						}
 					}
 				} catch {
 				}
 			}
+			string icons;
 			foreach(var folder in this.bookmarks) {
+				icons="%s %s".printf(folder.icon,Gtk.Stock.DIRECTORY);
+				var tmp = new ThemedIcon.from_names(icons.split(" "));
 				this.bookmark_model.append (out iter);
-				this.bookmark_model.set(iter,0,Stock.DIRECTORY);
-				this.bookmark_model.set(iter,1,GLib.Path.get_basename(folder));
-				this.bookmark_model.set(iter,2,folder);
+				this.bookmark_model.set(iter,0,tmp);
+				this.bookmark_model.set(iter,1,GLib.Path.get_basename(folder.name));
+				this.bookmark_model.set(iter,2,folder.name);
 
 			}
 			
@@ -333,6 +398,19 @@ namespace FilelistIcons {
 		
 			btn.active=true;
 			btn.has_focus=true;
+			Gtk.Requisition req;
+			this.buttons_path.size_request(out req);
+			Gtk.Requisition req2;
+			this.size_request(out req2);
+			if (req.width>=req2.width) {
+				this.btn_prev.show();
+				this.btn_next.show();
+				this.btn_prev.size_request(out req);
+				this.buttons_path.width_request=req2.width-2*req.width-10;
+			} else {
+				this.btn_prev.hide();
+				this.btn_next.hide();
+			}
 	
 		}
 	
