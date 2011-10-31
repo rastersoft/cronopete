@@ -311,8 +311,7 @@ namespace FilelistIcons {
 			if (this.timer_refresh!=0) {
 				Source.remove(this.timer_refresh);
 			}
-			this.timer_refresh=Timeout.add(250,this.timer_f);
-					
+			this.timer_refresh=Timeout.add(100,this.timer_f);
 		}
 
 		public bool timer_f() {
