@@ -244,7 +244,7 @@ namespace FilelistIcons {
 			}
 			string icons;
 			foreach(var folder in this.bookmarks) {
-				icons="%s %s".printf(folder.icon,Gtk.Stock.DIRECTORY);
+				icons="%s folder".printf(folder.icon);
 				var tmp = new ThemedIcon.from_names(icons.split(" "));
 				this.bookmark_model.append (out iter);
 				this.bookmark_model.set(iter,0,tmp);
