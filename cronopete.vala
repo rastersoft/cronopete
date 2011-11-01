@@ -414,7 +414,16 @@ class cp_callback : GLib.Object, callbacks {
 		var menuEnter = new MenuItem.with_label(_("Restore files"));
 		menuEnter.activate.connect(enter_clicked);
 		menuSystem.append(menuEnter);
-		menuEnter.sensitive=this.backend.available;
+		if (this.backend.available) {
+			var list = this.backend.get_backup_list ();
+			if ((list==null)||(list.size<=0)) {
+				menuEnter.sensitive=false;
+			} else {
+				menuEnter.sensitive=true;
+			}
+		} else {
+			menuEnter.sensitive=false;
+		}
 		
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
@@ -548,17 +557,6 @@ class cp_callback : GLib.Object, callbacks {
 		this.main_menu.insert_log(this.messages.str,true);
 		
 		this.current_status=BackupStatus.ALLFINE;
-		/*if (this.configuration_read==false) {
-			if (0!=this.read_configuration()) {
-				this.current_status = BackupStatus.ERROR;
-				this.backup_running = SystemStatus.ENDED;
-				this.set_tooltip(_("Error reading configuration"));
-				this.basedir=null;
-				return null;
-			} else {
-				this.configuration_read = true;
-			}
-		}*/
 		
 		basedir.set_config(this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
 		this.set_tooltip(_("Erasing old backups"));
