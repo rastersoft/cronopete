@@ -639,14 +639,21 @@ namespace FilelistIcons {
 			
 			return mysort_files(a,b,true,e_sort_by.SIZE);
 		}
+		public static int mysort_files_bytype(file_info? a, file_info? b) {
 
+			return mysort_files(a,b,false,e_sort_by.TYPE);
+		}
+		public static int mysort_files_bytype_r(file_info? a, file_info? b) {
+
+			return mysort_files(a,b,true,e_sort_by.TYPE);
+		}
 		
 		public static int mysort_files(file_info? a, file_info? b, bool reverse, e_sort_by mode) {
 
+			// Folders always first
 			if (a.isdir && (!b.isdir)) {
 				return -1;
 			}
-
 			if ((!a.isdir) && b.isdir) {
 				return 1;
 			}
@@ -685,16 +692,53 @@ namespace FilelistIcons {
 				}
 			}
 			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
+			string name1;
+			string name2;
 			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
+			if (a.name[0]=='.') {
+				name1=a.name.substring(1);
+			} else {
+				name1=a.name.dup();
 			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
+			if (b.name[0]=='.') {
+				name2=b.name.substring(1);
+			} else {
+				name2=b.name.dup();
 			}
 
+			if ((mode==e_sort_by.TYPE)&&(!a.isdir)) {
+				var posa=name1.last_index_of_char('.');
+				var posb=name2.last_index_of_char('.');
+
+				if ((posa*posb)<0) { // one has extension, the other not
+					if (posa<0) { // files without extension go first
+						if (reverse) {
+							return 1;
+						} else {
+							return -1;
+						}
+					} else {
+						if (reverse) {
+							return -1;
+						} else {
+							return 1;
+						}
+					}
+				}
+				
+				if (posa>=0) {
+					var exta=name1.substring(posa);
+					var extb=name2.substring(posb);
+					exta=exta.casefold();
+					extb=extb.casefold();
+					if (reverse) {
+						return (extb.collate(exta));
+					} else {
+						return (exta.collate(extb));
+					}
+				}
+			}
+			
 			name1=name1.casefold();
 			name2=name2.casefold();
 			if (reverse) {
@@ -703,117 +747,6 @@ namespace FilelistIcons {
 				return name1.collate(name2);
 			}
 		}
-
-		public static int mysort_files_bytype(file_info? a, file_info? b) {
-
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			int r1;
-
-			if (!a.isdir) {
-				var posa=name1.last_index_of_char('.');
-				var posb=name2.last_index_of_char('.');
-
-				if ((posa*posb)<0) { // one has extension, the other not
-					if (posa<0) { // files without extension go first
-						return -1;
-					} else {
-						return 1;
-					}
-				}
-				
-				if (posa>=0) {
-					var exta=name1.substring(posa);
-					var extb=name2.substring(posb);
-					exta=exta.casefold();
-					extb=extb.casefold();
-					r1=exta.collate(extb);
-				} else {
-					r1=0;
-				}
-			} else {
-				r1=0;
-			}
-
-			if (r1==0) {
-				name1=name1.casefold();
-				name2=name2.casefold();
-				return name1.collate(name2);
-			} else {
-				return r1;
-			}
-		}
-
-		public static int mysort_files_bytype_r(file_info? a, file_info? b) {
-
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			int r1;
-
-			if (!a.isdir) {
-				var posa=name1.last_index_of_char('.');
-				var posb=name2.last_index_of_char('.');
-
-				if ((posa*posb)<0) { // one has extension, the other not
-					if (posa<0) { // files without extension go first
-						return -1;
-					} else {
-						return 1;
-					}
-				}
-				
-				if (posa>=0) {
-					var exta=name1.substring(posa);
-					var extb=name2.substring(posb);
-					exta=exta.casefold();
-					extb=extb.casefold();
-					r1=extb.collate(exta);
-				} else {
-					r1=0;
-				}
-			} else {
-				r1=0;
-			}
-
-			if (r1==0) {
-				name1=name1.casefold();
-				name2=name2.casefold();
-				return name2.collate(name1);
-			} else {
-				return r1;
-			}
-		}
-		
 
 		private void refresh_icons() {
 	
