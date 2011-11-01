@@ -36,6 +36,8 @@ namespace FilelistIcons {
 		string icon;
 	}
 
+	enum e_sort_by {NAME, TYPE, DATE, SIZE}
+	
 	class IconBrowser : Frame {
 
 		private VBox main_container;
@@ -51,12 +53,15 @@ namespace FilelistIcons {
 		private backends backend;
 		private uint timer_refresh;
 		private Menu menu;
-		private bool show_hiden;
 		private Gee.List<bookmark_str ?> bookmarks;
 		private Gtk.TreeView bookmark_view;
 		private ListStore bookmark_model;
 		private Gtk.Button btn_prev;
 		private Gtk.Button btn_next;
+
+		private e_sort_by sort_by;
+		private bool reverse_sort;
+		private bool show_hiden;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -67,6 +72,7 @@ namespace FilelistIcons {
 			this.timer_refresh=0;
 			
 			this.show_hiden=false;
+			this.sort_by=e_sort_by.NAME;
 
 			this.buttons_scroll=new Gtk.ScrolledWindow(null,null);
 			this.buttons_scroll.hscrollbar_policy=PolicyType.NEVER;
@@ -283,24 +289,85 @@ namespace FilelistIcons {
 			}
 			this.menu=new Menu();
 			
-			MenuItem item1;
-			if (this.show_hiden) {
-				item1 = new MenuItem.with_label(_("Don't show hiden files"));
-			} else {
-				item1 = new MenuItem.with_label(_("Show hiden files"));
-			}
+			var item1 = new CheckMenuItem.with_label(_("Show hiden files"));
+			item1.active=this.show_hiden;
 			item1.activate.connect(this.toggle_show_hide);
 			this.menu.append(item1);
 
+			var item2 = new SeparatorMenuItem();
+			this.menu.append(item2);
+
+			var item3 = new CheckMenuItem.with_label(_("Reverse order"));
+			item3.active=this.reverse_sort;
+			item3.activate.connect(this.toggle_reverse_sort);
+			this.menu.append(item3);
+
+			var item4 = new SeparatorMenuItem();
+			this.menu.append(item4);
+
+			var item5 = new CheckMenuItem.with_label(_("Sort by name"));
+			item5.activate.connect(this.set_sort_by_name);
+			this.menu.append(item5);
+
+			var item6 = new CheckMenuItem.with_label(_("Sort by type"));
+			item6.activate.connect(this.set_sort_by_type);
+			this.menu.append(item6);
+
+			var item7 = new CheckMenuItem.with_label(_("Sort by size"));
+			item7.activate.connect(this.set_sort_by_size);
+			this.menu.append(item7);
+
+			var item8 = new CheckMenuItem.with_label(_("Sort by date"));
+			item8.activate.connect(this.set_sort_by_date);
+			this.menu.append(item8);
+
+			switch(this.sort_by) {
+			case e_sort_by.NAME:
+				item5.active=true;
+			break;
+			case e_sort_by.TYPE:
+				item6.active=true;
+			break;
+			case e_sort_by.SIZE:
+				item7.active=true;
+			break;
+			case e_sort_by.DATE:
+				item8.active=true;
+			break;
+			}
+			
 			this.menu.show_all();
 			this.menu.popup(null,null,null,2,Gtk.get_current_event_time());
 			return true;
 		}
 
-		private void toggle_show_hide() {
+		private void set_sort_by_name() {
+			this.sort_by=e_sort_by.NAME;
+			this.refresh_icons ();
+		}
 
+		private void set_sort_by_type() {
+			this.sort_by=e_sort_by.TYPE;
+			this.refresh_icons ();
+		}
+
+		private void set_sort_by_size() {
+			this.sort_by=e_sort_by.SIZE;
+			this.refresh_icons ();
+		}
+
+		private void set_sort_by_date() {
+			this.sort_by=e_sort_by.DATE;
+			this.refresh_icons ();
+		}
+		
+		private void toggle_show_hide() {
 			this.show_hiden = this.show_hiden ? false : true;
-			
+			this.refresh_icons ();
+		}
+
+		private void toggle_reverse_sort() {
+			this.reverse_sort = this.reverse_sort ? false : true;
 			this.refresh_icons ();
 		}
 		
@@ -474,18 +541,296 @@ namespace FilelistIcons {
 			this.set_scroll_top();
 		}
 
-		public static int mysort_files(file_info? a, file_info? b) {
-		
-			if (a.name>b.name) {
-				return 1;
-			}
-		
-			if (a.name<b.name) {
+		public static int mysort_files_byname(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
 				return -1;
 			}
-			return 0;
+
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			name1=name1.casefold();
+			name2=name2.casefold();
+
+			return name1.collate(name2);
 		}
 
+		public static int mysort_files_byname_r(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			name1=name1.casefold();
+			name2=name2.casefold();
+
+			return name2.collate(name1);		
+		}
+
+		public static int mysort_files_bydate(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+
+			if (a.mod_time.tv_sec>b.mod_time.tv_sec) {
+				return 1;
+			}
+			if (a.mod_time.tv_sec<b.mod_time.tv_sec) {
+				return -1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			name1=name1.casefold();
+			name2=name2.casefold();
+
+			return name1.collate(name2);
+		}
+
+		public static int mysort_files_bydate_r(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+
+			if (a.mod_time.tv_sec>b.mod_time.tv_sec) {
+				return -1;
+			}
+			if (a.mod_time.tv_sec<b.mod_time.tv_sec) {
+				return 1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			name1=name1.casefold();
+			name2=name2.casefold();
+
+			return name2.collate(name1);
+		}
+
+		public static int mysort_files_bytype(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			int r1;
+
+			if (!a.isdir) {
+				var posa=name1.last_index_of_char('.');
+				var posb=name2.last_index_of_char('.');
+
+				if ((posa*posb)<0) { // one has extension, the other not
+					if (posa<0) { // files without extension go first
+						return -1;
+					} else {
+						return 1;
+					}
+				}
+				
+				if (posa>=0) {
+					var exta=name1.substring(posa);
+					var extb=name2.substring(posb);
+					exta=exta.casefold();
+					extb=extb.casefold();
+					r1=exta.collate(extb);
+				} else {
+					r1=0;
+				}
+			} else {
+				r1=0;
+			}
+
+			if (r1==0) {
+				name1=name1.casefold();
+				name2=name2.casefold();
+				return name1.collate(name2);
+			} else {
+				return r1;
+			}
+		}
+
+		public static int mysort_files_bytype_r(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			int r1;
+
+			if (!a.isdir) {
+				var posa=name1.last_index_of_char('.');
+				var posb=name2.last_index_of_char('.');
+
+				if ((posa*posb)<0) { // one has extension, the other not
+					if (posa<0) { // files without extension go first
+						return -1;
+					} else {
+						return 1;
+					}
+				}
+				
+				if (posa>=0) {
+					var exta=name1.substring(posa);
+					var extb=name2.substring(posb);
+					exta=exta.casefold();
+					extb=extb.casefold();
+					r1=extb.collate(exta);
+				} else {
+					r1=0;
+				}
+			} else {
+				r1=0;
+			}
+
+			if (r1==0) {
+				name1=name1.casefold();
+				name2=name2.casefold();
+				return name2.collate(name1);
+			} else {
+				return r1;
+			}
+		}
+		
+		public static int mysort_files_bysize(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+
+			if (a.size>b.size) {
+				return 1;
+			}
+			if (a.size<b.size) {
+				return -1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			name1=name1.casefold();
+			name2=name2.casefold();
+
+			return name1.collate(name2);
+		}
+
+		public static int mysort_files_bysize_r(file_info? a, file_info? b) {
+
+			if (a.isdir && (!b.isdir)) {
+				return -1;
+			}
+			if ((!a.isdir) && b.isdir) {
+				return 1;
+			}
+
+			if (a.size>b.size) {
+				return -1;
+			}
+			if (a.size<b.size) {
+				return 1;
+			}
+			
+			string name1=a.name.dup();
+			string name2=b.name.dup();
+			
+			if (name1[0]=='.') {
+				name1=name1.substring(1);
+			}
+			if (name2[0]=='.') {
+				name2=name2.substring(1);
+			}
+
+			name1=name1.casefold();
+			name2=name2.casefold();
+
+			return name2.collate(name1);
+		}
+		
 		private void refresh_icons() {
 	
 			TreeIter iter;
@@ -497,8 +842,37 @@ namespace FilelistIcons {
 			if (false==this.backend.get_filelist(this.current_path,this.current_backup, out files, out title)) {
 				return;
 			}
-			
-			files.sort(mysort_files);
+
+			switch(this.sort_by) {
+			case e_sort_by.NAME:
+				if (this.reverse_sort) {
+					files.sort(mysort_files_byname_r);
+				} else {
+					files.sort(mysort_files_byname);
+				}
+			break;
+			case e_sort_by.TYPE:
+				if (this.reverse_sort) {
+					files.sort(mysort_files_bytype_r);
+				} else {
+					files.sort(mysort_files_bytype);
+				}
+			break;
+			case e_sort_by.SIZE:
+				if (this.reverse_sort) {
+					files.sort(mysort_files_bysize_r);
+				} else {
+					files.sort(mysort_files_bysize);
+				}
+			break;
+			case e_sort_by.DATE:
+				if (this.reverse_sort) {
+					files.sort(mysort_files_bydate_r);
+				} else {
+					files.sort(mysort_files_bydate);
+				}
+			break;
+			}
 		
 			var theme = Gtk.IconTheme.get_default();
 
@@ -510,42 +884,20 @@ namespace FilelistIcons {
 					continue;
 				}
 				
-				if (!f.isdir) {
-					continue;
-				}
-
 				try {
 					pbuf = theme.lookup_by_gicon(f.icon,48,0).load_icon();
 				} catch {
-					pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
+					if (f.isdir) {
+						pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
+					} else {
+						pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
+					}
 				}
 				
 				this.path_model.append (out iter);
 				this.path_model.set (iter,0,f.name);
 				this.path_model.set (iter,1,pbuf);
 				this.path_model.set (iter,2,true);
-			}
-			
-			foreach (file_info f in files) {
-
-				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
-					continue;
-				}
-				
-				if (f.isdir) {
-					continue;
-				}
-
-				try {
-					pbuf = theme.lookup_by_gicon(f.icon,48,0).load_icon();
-				} catch {
-					pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
-				}
-				
-				this.path_model.append (out iter);
-				this.path_model.set (iter,0,f.name);
-				this.path_model.set (iter,1,pbuf);
-				this.path_model.set (iter,2,false);
 			}
 		}
 

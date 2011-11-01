@@ -814,7 +814,7 @@ int main(string[] args) {
 	Gtk.init(ref args);
 
 	var callbacks = new cp_callback(basepath);
-	
+
 	Gdk.threads_enter();
 	Gtk.main();
 
