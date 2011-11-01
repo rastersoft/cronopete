@@ -691,24 +691,10 @@ namespace FilelistIcons {
 					}
 				}
 			}
-			
-			string name1;
-			string name2;
-			
-			if (a.name[0]=='.') {
-				name1=a.name.substring(1);
-			} else {
-				name1=a.name.dup();
-			}
-			if (b.name[0]=='.') {
-				name2=b.name.substring(1);
-			} else {
-				name2=b.name.dup();
-			}
 
 			if ((mode==e_sort_by.TYPE)&&(!a.isdir)) {
-				var posa=name1.last_index_of_char('.');
-				var posb=name2.last_index_of_char('.');
+				var posa=a.name.last_index_of_char('.');
+				var posb=b.name.last_index_of_char('.');
 
 				if ((posa*posb)<0) { // one has extension, the other not
 					if (posa<0) { // files without extension go first
@@ -726,17 +712,37 @@ namespace FilelistIcons {
 					}
 				}
 				
+				int r1;
 				if (posa>=0) {
-					var exta=name1.substring(posa);
-					var extb=name2.substring(posb);
+					var exta=a.name.substring(posa);
+					var extb=b.name.substring(posb);
 					exta=exta.casefold();
 					extb=extb.casefold();
 					if (reverse) {
-						return (extb.collate(exta));
+						r1=extb.collate(exta);
 					} else {
-						return (exta.collate(extb));
+						r1=exta.collate(extb);
+					}
+					if (r1!=0) {
+						return (r1);
 					}
 				}
+			}
+
+			// If both names are equal in the desired comparison mode, then sort by name
+			
+			string name1;
+			string name2;
+			
+			if (a.name[0]=='.') {
+				name1=a.name.substring(1);
+			} else {
+				name1=a.name.dup();
+			}
+			if (b.name[0]=='.') {
+				name2=b.name.substring(1);
+			} else {
+				name2=b.name.dup();
 			}
 			
 			name1=name1.casefold();
