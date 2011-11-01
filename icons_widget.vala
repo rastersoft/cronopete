@@ -66,6 +66,8 @@ namespace FilelistIcons {
 		private bool reverse_sort;
 		private bool show_hiden;
 		private bool view_as_icons;
+
+		private Gtk.Paned paned;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -100,6 +102,7 @@ namespace FilelistIcons {
 			buttons_container.pack_start(this.btn_next,false,false,0);
 			this.main_container.pack_start(buttons_container,false,false,0);
 
+			this.paned = new HPaned();
 			var container2 = new Gtk.HBox(false,0);
 			var scroll2= new ScrolledWindow(null,null);
 			scroll2.hscrollbar_policy=PolicyType.NEVER;
@@ -112,16 +115,12 @@ namespace FilelistIcons {
 			this.bookmark_view.enable_grid_lines=TreeViewGridLines.NONE;
 			this.bookmark_view.headers_visible=false;
 			this.read_bookmarks();
-			this.bookmark_view.show();
-			Gtk.Requisition req;
-			this.bookmark_view.size_request(out req);
 			this.bookmark_view.cursor_changed.connect(this.bookmark_selected);
 
 			scroll2.add(this.bookmark_view);
-			scroll2.hscrollbar_policy=PolicyType.AUTOMATIC;
 			scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
-			scroll2.set_size_request(req.width+40,-1);
-			container2.pack_start(scroll2,false,true,0);
+			this.paned.add1(scroll2);
+			this.paned.add2(container2);
 			
 			this.scroll = new ScrolledWindow(null,null);
 			this.scroll.hscrollbar_policy=PolicyType.AUTOMATIC;
@@ -133,7 +132,7 @@ namespace FilelistIcons {
 			this.scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
 			container2.pack_start(this.scroll2,true,true,0);
 			
-			this.main_container.pack_start(container2,true,true,0);
+			this.main_container.pack_start(this.paned,true,true,0);
 			
 			/* path_model stores the data for each file/folder:
 				 - file name (string)
@@ -159,12 +158,15 @@ namespace FilelistIcons {
 			var crpb2 = new CellRendererPixbuf();
 			crpb2.stock_size = IconSize.SMALL_TOOLBAR;
 			this.path_view2.insert_column_with_attributes (-1, "", crpb2 , "gicon", 3);
-			this.path_view2.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 0);
+			this.path_view2.insert_column_with_attributes (-1, _("Name"), new CellRendererText (), "text", 0);
 			var renderdate = new CellRendererText();
 			renderdate.xalign=1;
-			this.path_view2.insert_column_with_attributes (-1, "", renderdate, "text", 4);
-			this.path_view2.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 5);
+			this.path_view2.insert_column_with_attributes (-1, _("Size"), renderdate, "text", 4);
+			this.path_view2.insert_column_with_attributes (-1, _("Modification date"), new CellRendererText (), "text", 5);
 			this.path_view2.get_selection().set_mode(SelectionMode.MULTIPLE);
+			var column=this.path_view2.get_column(1);
+			column.resizable=true;
+			
 			this.path_view2.button_press_event.connect(this.selection_made);
 			this.scroll2.add_with_viewport(this.path_view2);
 			
@@ -175,7 +177,7 @@ namespace FilelistIcons {
 			this.path_view.item_width=175;
 		
 			this.path_list=new Gee.ArrayList<ToggleButton>();
-		
+
 			this.refresh_icons();
 			this.refresh_path_list();
 			this.show.connect_after(this.refresh_path_list);
@@ -514,7 +516,7 @@ namespace FilelistIcons {
 				this.scroll2.show();
 				this.scroll.hide();
 			}
-			
+
 			foreach (ToggleButton b in this.path_list) {
 				b.destroy();
 			}
@@ -539,6 +541,7 @@ namespace FilelistIcons {
 			this.buttons_path.show_all();
 			btn.active=true;
 			btn.has_focus=true;
+
 			Gtk.Requisition req;
 			this.buttons_path.size_request(out req);
 			Gtk.Requisition req2;
@@ -559,7 +562,6 @@ namespace FilelistIcons {
 				this.btn_prev.hide();
 				this.btn_next.hide();
 			}
-	
 		}
 
 		private void path_prev() {

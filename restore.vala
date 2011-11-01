@@ -105,6 +105,10 @@ class restore_iface : GLib.Object {
 
 	private Gtk.Window error_window;
 
+	private unowned Thread <void *> c_thread;
+
+	private uint timer_bar;
+
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -823,38 +827,18 @@ class restore_iface : GLib.Object {
 			return;
 		}
 		
+		var percent=1.0-(((double)this.restore_files.size)/this.total_to_restore);
 		var filename = this.restore_files.get(0);
 		this.restore_files.remove_at(0);
 		this.restore_label.label=_("Restoring file:\n\n%s").printf(filename.restored_file);
-		this.restore_bar.fraction=1.0-(((double)this.restore_files.size)/this.total_to_restore);
-		
+		this.restore_bar.fraction=percent;
 		this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file);
 		
 	}
 	
 	private void do_restore() {
-		
-		Gee.List<string> files;
-		Gee.List<string> folders;
 
 		this.ignore_restoring_all=false;
-		
-		var path=this.browser.get_current_path();
-		
-		this.browser.get_selected_items(out files, out folders);
-		foreach (string f in files) {
-			var element = path_filename();
-			element.original_file=GLib.Path.build_filename(path,f);
-			element.restored_file=GLib.Path.build_filename(path,this.get_restored_filename(path,f));
-			this.restore_files.add(element);
-		}
-		
-		
-  		foreach (string v in folders) {
-		  	var restored_folder = GLib.Path.build_filename(path,this.get_restored_filename(path,v));
-			this.add_folder_to_restore(GLib.Path.build_filename(path,v),restored_folder);
-		}
-
 		var w = new Builder();
 		
 		w.add_from_file(GLib.Path.build_filename(this.basepath,"restoring.ui"));
@@ -864,14 +848,68 @@ class restore_iface : GLib.Object {
 		this.restore_bar = (Gtk.ProgressBar)w.get_object("restore_progressbar");
 		this.restore_label = (Gtk.Label)w.get_object("restoring_file");
 
-		this.total_to_restore=(double)this.restore_files.size;
 		this.cancel_restoring=false;
+		this.restore_label.label=_("Preparing folders to restore");
 		this.restore_window.show_all();
+		this.timer_bar=Timeout.add(250,this.timer_bar_f);
 		
-		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
-		
+		this.launch_fill_restore_list.begin( (obj,res) => {
+			this.launch_fill_restore_list.end(res);
+			Source.remove(this.timer_bar);
+			if (!this.cancel_restoring) {
+				this.total_to_restore=(double)this.restore_files.size;
+				this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+			} else {
+				this.restore_files.clear();
+				this.restore_window.destroy();
+			}
+		});
 	}
 
+	public bool timer_bar_f() {
+		this.restore_bar.pulse();
+		return true;
+	}
+	
+	private async void launch_fill_restore_list() {
+
+		SourceFunc callback = launch_fill_restore_list.callback;
+		
+		ThreadFunc<void *> run = () => {
+
+			Gee.List<string> files;
+			Gee.List<string> folders;
+			
+			var path=this.browser.get_current_path();
+			
+			this.browser.get_selected_items(out files, out folders);
+			foreach (string f in files) {
+				if (this.cancel_restoring) {
+					Idle.add((owned)callback);
+					return null;
+				}
+				var element = path_filename();
+				element.original_file=GLib.Path.build_filename(path,f);
+				element.restored_file=GLib.Path.build_filename(path,this.get_restored_filename(path,f));
+				this.restore_files.add(element);
+			}
+
+			foreach (string v in folders) {
+				if (this.cancel_restoring) {
+					Idle.add((owned)callback);
+					return null;
+				}
+				var restored_folder = GLib.Path.build_filename(path,this.get_restored_filename(path,v));
+				this.add_folder_to_restore(GLib.Path.build_filename(path,v),restored_folder);
+			}
+			Idle.add((owned)callback);
+			return null;
+		};
+
+		c_thread=Thread.create <void *>(run, false);
+		yield;
+	}
+	
 	private BACKUP_RETVAL add_folder_to_restore(string o_path, string f_path) {
 		
 		Gee.List<FilelistIcons.file_info ?> files;
@@ -895,6 +933,9 @@ class restore_iface : GLib.Object {
 		}
 
 		foreach (var v in files) {
+			if (this.cancel_restoring) {
+				return BACKUP_RETVAL.ABORTED;
+			}
 			if (v.isdir) {
 				new_opath = GLib.Path.build_filename(o_path,v.name);
 				new_rpath = GLib.Path.build_filename(f_path,v.name);
