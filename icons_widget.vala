@@ -588,6 +588,8 @@ namespace FilelistIcons {
 	
 			this.scroll.hadjustment.value=this.scroll.hadjustment.lower;
 			this.scroll.vadjustment.value=this.scroll.vadjustment.lower;
+			this.scroll2.hadjustment.value=this.scroll.hadjustment.lower;
+			this.scroll2.vadjustment.value=this.scroll.vadjustment.lower;
 	
 		}
 
@@ -615,102 +617,72 @@ namespace FilelistIcons {
 
 		public static int mysort_files_byname(file_info? a, file_info? b) {
 
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			name1=name1.casefold();
-			name2=name2.casefold();
-
-			return name1.collate(name2);
+			return mysort_files(a,b,false,e_sort_by.NAME);
 		}
-
 		public static int mysort_files_byname_r(file_info? a, file_info? b) {
 
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			name1=name1.casefold();
-			name2=name2.casefold();
-
-			return name2.collate(name1);		
+			return mysort_files(a,b,true,e_sort_by.NAME);
 		}
-
 		public static int mysort_files_bydate(file_info? a, file_info? b) {
 
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-
-			if (a.mod_time.tv_sec>b.mod_time.tv_sec) {
-				return 1;
-			}
-			if (a.mod_time.tv_sec<b.mod_time.tv_sec) {
-				return -1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			name1=name1.casefold();
-			name2=name2.casefold();
-
-			return name1.collate(name2);
+			return mysort_files(a,b,false,e_sort_by.DATE);
 		}
-
 		public static int mysort_files_bydate_r(file_info? a, file_info? b) {
 
+			return mysort_files(a,b,true,e_sort_by.DATE);
+		}
+		public static int mysort_files_bysize(file_info? a, file_info? b) {
+
+			return mysort_files(a,b,false,e_sort_by.SIZE);
+		}
+		public static int mysort_files_bysize_r(file_info? a, file_info? b) {
+			
+			return mysort_files(a,b,true,e_sort_by.SIZE);
+		}
+
+		
+		public static int mysort_files(file_info? a, file_info? b, bool reverse, e_sort_by mode) {
+
 			if (a.isdir && (!b.isdir)) {
 				return -1;
 			}
+
 			if ((!a.isdir) && b.isdir) {
 				return 1;
 			}
 
-			if (a.mod_time.tv_sec>b.mod_time.tv_sec) {
-				return -1;
+			if (mode==e_sort_by.DATE) {
+				if (a.mod_time.tv_sec>b.mod_time.tv_sec) {
+					if (reverse) {
+						return -1;
+					} else {
+						return 1;
+					}
+				}
+				if (a.mod_time.tv_sec<b.mod_time.tv_sec) {
+					if (reverse) {
+						return 1;
+					} else {
+						return -1;
+					}
+				}
 			}
-			if (a.mod_time.tv_sec<b.mod_time.tv_sec) {
-				return 1;
+
+			if (mode==e_sort_by.SIZE) {
+				if (a.size>b.size) {
+					if (reverse) {
+						return -1;
+					} else {
+						return 1;
+					}
+				}
+				if (a.size<b.size) {
+					if (reverse) {
+						return 1;
+					} else {
+						return -1;
+					}
+				}
 			}
 			
 			string name1=a.name.dup();
@@ -725,8 +697,11 @@ namespace FilelistIcons {
 
 			name1=name1.casefold();
 			name2=name2.casefold();
-
-			return name2.collate(name1);
+			if (reverse) {
+				return name2.collate(name1);
+			} else {
+				return name1.collate(name2);
+			}
 		}
 
 		public static int mysort_files_bytype(file_info? a, file_info? b) {
@@ -839,69 +814,6 @@ namespace FilelistIcons {
 			}
 		}
 		
-		public static int mysort_files_bysize(file_info? a, file_info? b) {
-
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-
-			if (a.size>b.size) {
-				return 1;
-			}
-			if (a.size<b.size) {
-				return -1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			name1=name1.casefold();
-			name2=name2.casefold();
-
-			return name1.collate(name2);
-		}
-
-		public static int mysort_files_bysize_r(file_info? a, file_info? b) {
-
-			if (a.isdir && (!b.isdir)) {
-				return -1;
-			}
-			if ((!a.isdir) && b.isdir) {
-				return 1;
-			}
-
-			if (a.size>b.size) {
-				return -1;
-			}
-			if (a.size<b.size) {
-				return 1;
-			}
-			
-			string name1=a.name.dup();
-			string name2=b.name.dup();
-			
-			if (name1[0]=='.') {
-				name1=name1.substring(1);
-			}
-			if (name2[0]=='.') {
-				name2=name2.substring(1);
-			}
-
-			name1=name1.casefold();
-			name2=name2.casefold();
-
-			return name2.collate(name1);
-		}
 
 		private void refresh_icons() {
 	
