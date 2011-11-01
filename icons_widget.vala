@@ -46,6 +46,9 @@ namespace FilelistIcons {
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
+		private Gtk.TreeView path_view2;
+		private ScrolledWindow scroll2;
+		
 		private string current_path;
 		private Gee.List<ToggleButton> path_list;
 		private EventBox background_eb;
@@ -62,6 +65,7 @@ namespace FilelistIcons {
 		private e_sort_by sort_by;
 		private bool reverse_sort;
 		private bool show_hiden;
+		private bool view_as_icons;
 	
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
@@ -72,6 +76,7 @@ namespace FilelistIcons {
 			this.timer_refresh=0;
 			
 			this.show_hiden=false;
+			this.view_as_icons=true;
 			this.sort_by=e_sort_by.NAME;
 
 			this.buttons_scroll=new Gtk.ScrolledWindow(null,null);
@@ -123,6 +128,11 @@ namespace FilelistIcons {
 			this.scroll.vscrollbar_policy=PolicyType.AUTOMATIC;
 			container2.pack_start(this.scroll,true,true,0);
 
+			this.scroll2 = new ScrolledWindow(null,null);
+			this.scroll2.hscrollbar_policy=PolicyType.AUTOMATIC;
+			this.scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
+			container2.pack_start(this.scroll2,true,true,0);
+			
 			this.main_container.pack_start(container2,true,true,0);
 			
 			/* path_model stores the data for each file/folder:
@@ -130,10 +140,10 @@ namespace FilelistIcons {
 				 - icon (string)
 				 - is_folder (boolean)
 			*/
-			this.path_model=new ListStore(3,typeof(string),typeof(Gdk.Pixbuf),typeof(bool));
+			this.path_model=new ListStore(6,typeof(string),typeof(Gdk.Pixbuf),typeof(bool),typeof(Gdk.Pixbuf),typeof(string),typeof(string));
 			this.path_view=new IconView.with_model(this.path_model);
-			this.path_view.add_events (Gdk.EventMask.BUTTON_RELEASE_MASK);
-			this.path_view.button_release_event.connect(this.on_click);
+			this.path_view.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
+			this.path_view.button_press_event.connect(this.on_click);
 			this.path_view.columns=-1;
 			this.path_view.set_pixbuf_column(1);
 			this.path_view.set_text_column(0);
@@ -141,6 +151,23 @@ namespace FilelistIcons {
 			this.path_view.button_press_event.connect(this.selection_made);
 			this.path_view.orientation=Orientation.VERTICAL;
 			this.scroll.add_with_viewport(this.path_view);
+
+			// View for list
+			this.path_view2=new Gtk.TreeView.with_model(this.path_model);
+			this.path_view2.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
+			this.path_view2.button_press_event.connect(this.on_click);
+			var crpb2 = new CellRendererPixbuf();
+			crpb2.stock_size = IconSize.SMALL_TOOLBAR;
+			this.path_view2.insert_column_with_attributes (-1, "", crpb2 , "gicon", 3);
+			this.path_view2.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 0);
+			var renderdate = new CellRendererText();
+			renderdate.xalign=1;
+			this.path_view2.insert_column_with_attributes (-1, "", renderdate, "text", 4);
+			this.path_view2.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 5);
+			this.path_view2.get_selection().set_mode(SelectionMode.MULTIPLE);
+			this.path_view2.button_press_event.connect(this.selection_made);
+			this.scroll2.add_with_viewport(this.path_view2);
+			
 			this.background_eb = new EventBox();
 			this.background_eb.add(this.main_container);
 			this.add(this.background_eb);
@@ -335,12 +362,41 @@ namespace FilelistIcons {
 				item8.active=true;
 			break;
 			}
+
+			var item9 = new SeparatorMenuItem();
+			this.menu.append(item9);
+
+			var item10 = new CheckMenuItem.with_label(_("View as icons"));
+			item10.activate.connect(this.set_view_as_icons);
+			this.menu.append(item10);
+
+			var item11 = new CheckMenuItem.with_label(_("View as list"));
+			item11.activate.connect(this.set_view_as_list);
+			this.menu.append(item11);
+
+			if (this.view_as_icons) {
+				item10.active=true;
+			} else {
+				item11.active=true;
+			}
 			
 			this.menu.show_all();
 			this.menu.popup(null,null,null,2,Gtk.get_current_event_time());
 			return true;
 		}
 
+		private void set_view_as_icons() {
+			this.view_as_icons=true;
+			this.refresh_icons ();
+			this.refresh_path_list ();
+		}
+
+		private void set_view_as_list() {
+			this.view_as_icons=false;
+			this.refresh_icons ();
+			this.refresh_path_list ();
+		}
+		
 		private void set_sort_by_name() {
 			this.sort_by=e_sort_by.NAME;
 			this.refresh_icons ();
@@ -410,12 +466,20 @@ namespace FilelistIcons {
 			}
 			return false;
 		}
-
+		
 		public void get_selected_items(out Gee.ArrayList<string> files_selected, out Gee.ArrayList<string> folders_selected) {
-	
-			var selection = this.path_view.get_selected_items();
+
+			GLib.List<TreePath> selection;
+			TreeModel model;
+			
+			if (this.view_as_icons) {
+				selection = this.path_view.get_selected_items();
+				model = this.path_view.model;
+			} else {
+				selection = this.path_view2.get_selection().get_selected_rows(out model);
+			}
+
 			TreeIter iter;
-			var model = this.path_view.model;
 			GLib.Value path;
 			GLib.Value isfolder;
 
@@ -442,7 +506,15 @@ namespace FilelistIcons {
 		}
 
 		private void refresh_path_list() {
-	
+
+			if (this.view_as_icons) {
+				this.scroll.show();
+				this.scroll2.hide();
+			} else {
+				this.scroll2.show();
+				this.scroll.hide();
+			}
+			
 			foreach (ToggleButton b in this.path_list) {
 				b.destroy();
 			}
@@ -830,7 +902,7 @@ namespace FilelistIcons {
 
 			return name2.collate(name1);
 		}
-		
+
 		private void refresh_icons() {
 	
 			TreeIter iter;
@@ -877,6 +949,7 @@ namespace FilelistIcons {
 			var theme = Gtk.IconTheme.get_default();
 
 			Gdk.Pixbuf pbuf=null;
+			Gdk.Pixbuf pbuf2=null;
 			
 			foreach (file_info f in files) {
 
@@ -886,18 +959,37 @@ namespace FilelistIcons {
 				
 				try {
 					pbuf = theme.lookup_by_gicon(f.icon,48,0).load_icon();
+					pbuf2= theme.lookup_by_gicon(f.icon,24,0).load_icon();
 				} catch {
 					if (f.isdir) {
 						pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
+						pbuf2= this.path_view.render_icon(Stock.DIRECTORY,IconSize.SMALL_TOOLBAR,"");
 					} else {
 						pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
+						pbuf2= this.path_view.render_icon(Stock.FILE,IconSize.SMALL_TOOLBAR,"");
 					}
 				}
 				
 				this.path_model.append (out iter);
 				this.path_model.set (iter,0,f.name);
 				this.path_model.set (iter,1,pbuf);
-				this.path_model.set (iter,2,true);
+				this.path_model.set (iter,2,f.isdir);
+				this.path_model.set (iter,3,pbuf2);
+				float fsize=(float)f.size;
+				string fssize;
+				if (fsize<1024.0) {
+					fssize="%01.0f bytes".printf(fsize);
+				} else if (fsize<1048576.0) {
+					fssize="%01.1f KB".printf(fsize/1024.0);
+				} else if (fsize<1073741824.0) {
+					fssize="%01.1f MB".printf(fsize/1048576.0);
+				} else {
+					fssize="%01.1f GB".printf(fsize/1073741824.0);
+				}
+				this.path_model.set (iter,4,fssize);
+				GLib.DateTime timeval = new GLib.DateTime.from_timeval_utc(f.mod_time);
+				this.path_model.set (iter,5,timeval.format("%c"));
+				
 			}
 		}
 

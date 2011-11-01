@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 17:41+0100\n"
-"PO-Revision-Date: 2011-10-30 17:41+0100\n"
+"POT-Creation-Date: 2011-11-01 17:04+0100\n"
+"PO-Revision-Date: 2011-11-01 17:05+0100\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
 "Language: \n"
@@ -162,51 +162,51 @@ msgstr "Detener la copia"
 msgid "Restore files"
 msgstr "Restaurar archivos"
 
-#: ../cronopete.vala:422
+#: ../cronopete.vala:431
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir las preferencias de Cronopete..."
 
-#: ../cronopete.vala:499
+#: ../cronopete.vala:508
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando la carpeta %s\n"
 
-#: ../cronopete.vala:518
+#: ../cronopete.vala:527
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Se produjo un fallo al copiar el fichero %s\n"
 
-#: ../cronopete.vala:523
+#: ../cronopete.vala:532
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Se produjo un fallo al acceder a la carpeta %s\n"
 
-#: ../cronopete.vala:528
+#: ../cronopete.vala:537
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Se produjo un fallo al crear la carpeta %s\n"
 
-#: ../cronopete.vala:547
+#: ../cronopete.vala:556
 msgid "Starting backup\n"
 msgstr "Comenzando la copia\n"
 
-#: ../cronopete.vala:564
+#: ../cronopete.vala:562
 msgid "Erasing old backups"
 msgstr "Borrando copias antiguas"
 
-#: ../cronopete.vala:576
+#: ../cronopete.vala:574
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:580
+#: ../cronopete.vala:578
 msgid "Can't do backup; disk is too small"
 msgstr "Se produjo un fallo al hacer la copia; el disco es demasiado pequeño"
 
-#: ../cronopete.vala:584
+#: ../cronopete.vala:582
 msgid "Can't do backup"
 msgstr "Se produjo un fallo al hacer la copia"
 
-#: ../cronopete.vala:735
+#: ../cronopete.vala:733
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
@@ -248,13 +248,37 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../icons_widget.vala:109
-msgid "Don't show hiden files"
-msgstr "No mostrar ficheros ocultos"
-
-#: ../icons_widget.vala:111
+#: ../icons_widget.vala:319
 msgid "Show hiden files"
 msgstr "Mostrar ficheros ocultos"
+
+#: ../icons_widget.vala:327
+msgid "Reverse order"
+msgstr "Invertir orden"
+
+#: ../icons_widget.vala:335
+msgid "Sort by name"
+msgstr "Ordenar por nombre"
+
+#: ../icons_widget.vala:339
+msgid "Sort by type"
+msgstr "Ordenar por tipo"
+
+#: ../icons_widget.vala:343
+msgid "Sort by size"
+msgstr "Ordenar por tamaño"
+
+#: ../icons_widget.vala:347
+msgid "Sort by date"
+msgstr "Ordenar por fecha"
+
+#: ../icons_widget.vala:369
+msgid "View as icons"
+msgstr "Mostrar como iconos"
+
+#: ../icons_widget.vala:373
+msgid "View as list"
+msgstr "Mostrar como lista"
 
 #: ../interface/about.ui.h:1
 msgid "An Apple's Time Machine clone for Linux"
@@ -403,6 +427,9 @@ msgstr "Tiempo entre copias (en horas):"
 #: ../interface/restoring.ui.h:1
 msgid "Restoring files"
 msgstr "Restaurando archivos"
+
+#~ msgid "Don't show hiden files"
+#~ msgstr "No mostrar ficheros ocultos"
 
 #~ msgid "Exit"
 #~ msgstr "Salir"

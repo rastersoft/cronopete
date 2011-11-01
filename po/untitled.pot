@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-30 17:41+0100\n"
+"POT-Creation-Date: 2011-11-01 17:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,51 +145,51 @@ msgstr ""
 msgid "Restore files"
 msgstr ""
 
-#: ../cronopete.vala:422
+#: ../cronopete.vala:431
 msgid "Open Cronopete Preferences..."
 msgstr ""
 
-#: ../cronopete.vala:499
+#: ../cronopete.vala:508
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr ""
 
-#: ../cronopete.vala:518
+#: ../cronopete.vala:527
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr ""
 
-#: ../cronopete.vala:523
+#: ../cronopete.vala:532
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr ""
 
-#: ../cronopete.vala:528
+#: ../cronopete.vala:537
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr ""
 
-#: ../cronopete.vala:547
+#: ../cronopete.vala:556
 msgid "Starting backup\n"
 msgstr ""
 
-#: ../cronopete.vala:564
+#: ../cronopete.vala:562
 msgid "Erasing old backups"
 msgstr ""
 
-#: ../cronopete.vala:576
+#: ../cronopete.vala:574
 msgid "Backup aborted"
 msgstr ""
 
-#: ../cronopete.vala:580
+#: ../cronopete.vala:578
 msgid "Can't do backup; disk is too small"
 msgstr ""
 
-#: ../cronopete.vala:584
+#: ../cronopete.vala:582
 msgid "Can't do backup"
 msgstr ""
 
-#: ../cronopete.vala:735
+#: ../cronopete.vala:733
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr ""
@@ -220,12 +220,36 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../icons_widget.vala:109
-msgid "Don't show hiden files"
+#: ../icons_widget.vala:319
+msgid "Show hiden files"
 msgstr ""
 
-#: ../icons_widget.vala:111
-msgid "Show hiden files"
+#: ../icons_widget.vala:327
+msgid "Reverse order"
+msgstr ""
+
+#: ../icons_widget.vala:335
+msgid "Sort by name"
+msgstr ""
+
+#: ../icons_widget.vala:339
+msgid "Sort by type"
+msgstr ""
+
+#: ../icons_widget.vala:343
+msgid "Sort by size"
+msgstr ""
+
+#: ../icons_widget.vala:347
+msgid "Sort by date"
+msgstr ""
+
+#: ../icons_widget.vala:369
+msgid "View as icons"
+msgstr ""
+
+#: ../icons_widget.vala:373
+msgid "View as list"
 msgstr ""
 
 #: ../interface/about.ui.h:1
