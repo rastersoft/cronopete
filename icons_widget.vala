@@ -148,6 +148,7 @@ namespace FilelistIcons {
 			this.path_view.set_text_column(0);
 			this.path_view.selection_mode=SelectionMode.MULTIPLE;
 			this.path_view.button_press_event.connect(this.selection_made);
+			this.path_view.item_activated.connect(this.activated);
 			this.path_view.orientation=Orientation.VERTICAL;
 			this.scroll.add_with_viewport(this.path_view);
 
@@ -184,6 +185,12 @@ namespace FilelistIcons {
 		
 		}
 
+		public void activated(TreePath path) {
+
+			this.selection_made2();
+
+		}
+		
 		private bool read_bookmarks() {
 
 			TreeIter iter;
@@ -449,24 +456,29 @@ namespace FilelistIcons {
 	
 			if (event.type==EventType.2BUTTON_PRESS) {
 		
-				Gee.ArrayList<string> files;
-				Gee.ArrayList<string> folders;
-		
-				get_selected_items(out files,out folders);
-			
-				if ((files.size!=0)||(folders.size!=1)) {
-					return false;
-				}
-			
-				var newfolder=folders.get(0);
-			
-				this.current_path=Path.build_filename(this.current_path,newfolder);
-				this.refresh_icons();
-				this.refresh_path_list();
-				this.set_scroll_top();
+				return this.selection_made2 ();
 			
 			}
 			return false;
+		}
+
+		public bool selection_made2() {
+
+			Gee.ArrayList<string> files;
+			Gee.ArrayList<string> folders;
+			get_selected_items(out files,out folders);
+		
+			if ((files.size!=0)||(folders.size!=1)) {
+				return false;
+			}
+			
+			var newfolder=folders.get(0);
+		
+			this.current_path=Path.build_filename(this.current_path,newfolder);
+			this.refresh_icons();
+			this.refresh_path_list();
+			this.set_scroll_top();
+			return true;
 		}
 		
 		public void get_selected_items(out Gee.ArrayList<string> files_selected, out Gee.ArrayList<string> folders_selected) {
