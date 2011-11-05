@@ -818,11 +818,13 @@ class restore_iface : GLib.Object {
 		}
 		
 		if (this.restore_files.is_empty) {
+			this.mywindow.window.set_cursor(null);
 			this.restore_window.destroy();
 			return;
 		}
 
 		if (this.cancel_restoring) {
+			this.mywindow.window.set_cursor(null);
 			this.restore_files.clear();
 			this.restore_window.destroy();
 			return;
@@ -853,6 +855,9 @@ class restore_iface : GLib.Object {
 		this.restore_label.label=_("Preparing folders to restore");
 		this.restore_window.show_all();
 		this.timer_bar=Timeout.add(250,this.timer_bar_f);
+
+		var cursor_working = new Gdk.Cursor(Gdk.CursorType.WATCH);
+		this.mywindow.window.set_cursor(cursor_working);
 		
 		this.launch_fill_restore_list.begin( (obj,res) => {
 			this.launch_fill_restore_list.end(res);
@@ -863,6 +868,7 @@ class restore_iface : GLib.Object {
 			} else {
 				this.restore_files.clear();
 				this.restore_window.destroy();
+				this.mywindow.window.set_cursor(null);
 			}
 		});
 	}
