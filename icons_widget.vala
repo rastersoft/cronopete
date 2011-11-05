@@ -169,6 +169,7 @@ namespace FilelistIcons {
 			column.resizable=true;
 			
 			this.path_view2.button_press_event.connect(this.selection_made);
+			this.path_view2.row_activated.connect(this.activated2);
 			this.scroll2.add_with_viewport(this.path_view2);
 			
 			this.background_eb = new EventBox();
@@ -183,6 +184,12 @@ namespace FilelistIcons {
 			this.refresh_path_list();
 			this.show.connect_after(this.refresh_path_list);
 		
+		}
+
+		public void activated2(TreePath path, TreeViewColumn column) {
+			
+			this.selection_made2();
+
 		}
 
 		public void activated(TreePath path) {
@@ -478,6 +485,13 @@ namespace FilelistIcons {
 			this.refresh_icons();
 			this.refresh_path_list();
 			this.set_scroll_top();
+
+			if (this.view_as_icons) {
+				this.path_view.has_focus=true;
+			} else {
+				this.path_view2.has_focus=true;
+			}
+			
 			return true;
 		}
 		
