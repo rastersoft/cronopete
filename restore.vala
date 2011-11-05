@@ -649,7 +649,7 @@ class restore_iface : GLib.Object {
 	private bool on_scroll(Gdk.EventScroll event) {
 
 		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)this.browser_y))&&(event.y_root<((int)(this.browser_y+this.browser_h)))) {
-			return true;
+			return false;
 		}
 		
 		if (event.direction==ScrollDirection.UP) {
@@ -664,12 +664,12 @@ class restore_iface : GLib.Object {
 	private bool on_key_press(Gdk.EventKey event) {
 
 		if (event.keyval==0xFF55) { // PG UP key
-			this.move_timeline(false);
+			this.move_timeline(true);
 		}
 		if (event.keyval==0xFF56) { // PG DOWN key
 			this.move_timeline(true);
 		}
-		return true;
+		return false;
 	}
 
 	private bool on_key_release(Gdk.EventKey event) {
@@ -680,8 +680,9 @@ class restore_iface : GLib.Object {
 		}
 		if (event.keyval=='r') {
 			this.do_restore ();
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private void move_timeline(bool increase) {

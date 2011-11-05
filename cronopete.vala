@@ -479,7 +479,7 @@ class cp_callback : GLib.Object, callbacks {
 		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
 
 		var about_w = (Dialog)w.get_object("aboutdialog1");
-		
+
 		about_w.show();
 		about_w.run();
 		about_w.hide();
@@ -814,6 +814,7 @@ int main(string[] args) {
 	var callbacks = new cp_callback(basepath);
 
 	Gdk.threads_enter();
+	
 	Gtk.main();
 
 	Gdk.threads_leave();

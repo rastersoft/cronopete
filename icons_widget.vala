@@ -50,7 +50,7 @@ namespace FilelistIcons {
 		private ScrolledWindow scroll2;
 		
 		private string current_path;
-		private Gee.List<ToggleButton> path_list;
+		private Gee.List<Button> path_list;
 		private EventBox background_eb;
 		private time_t current_backup;
 		private backends backend;
@@ -68,7 +68,7 @@ namespace FilelistIcons {
 		private bool view_as_icons;
 
 		private Gtk.Paned paned;
-	
+
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
 			this.backend=p_backend;
@@ -177,7 +177,7 @@ namespace FilelistIcons {
 			this.path_view.item_width=175;
 		
 			this.path_list=new Gee.ArrayList<ToggleButton>();
-
+			
 			this.refresh_icons();
 			this.refresh_path_list();
 			this.show.connect_after(this.refresh_path_list);
@@ -517,29 +517,29 @@ namespace FilelistIcons {
 				this.scroll.hide();
 			}
 
-			foreach (ToggleButton b in this.path_list) {
+			foreach (Button b in this.path_list) {
 				b.destroy();
 			}
 
-			var btn = new ToggleButton.with_label("/");
+			var btn = new Button.with_label("/");
 			btn.show();
-			btn.released.connect(this.change_path);
+			btn.clicked.connect(this.change_path);
 			this.buttons_path.pack_start(btn,false,false,0);
 			this.path_list.add(btn);
-		
+
 			var elements=this.current_path.split("/");
 			foreach (string s in elements) {
 				if (s=="") {
 					continue;
 				}
-				btn = new ToggleButton.with_label(s);
+				btn = new Button.with_label(s);
 				btn.show();
-				btn.released.connect(this.change_path);
+				btn.clicked.connect(this.change_path);
+				btn.focus_on_click=true;
 				this.buttons_path.pack_start(btn,false,false,0);
 				this.path_list.add(btn);
 			}
 			this.buttons_path.show_all();
-			btn.active=true;
 			btn.has_focus=true;
 
 			Gtk.Requisition req;
@@ -601,14 +601,17 @@ namespace FilelistIcons {
 			bool found;
 	
 			found = false;
-			foreach (ToggleButton b in this.path_list) {
+
+			Button btn2=(Button)btn;
+			
+			foreach (Button b in this.path_list) {
 		
 				if (!found) {
 					fpath = Path.build_filename(fpath,b.label);
-				}
-				if (b!=btn) {
-					b.active=false;
 				} else {
+					b.destroy();
+				}
+				if (b==btn2) {
 					found=true;
 				}
 			}

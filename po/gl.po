@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-01 17:57+0100\n"
+"POT-Creation-Date: 2011-11-04 12:58+0100\n"
 "PO-Revision-Date: 2011-10-23 01:57+0200\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
@@ -168,52 +168,52 @@ msgstr ""
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir as preferencias de Cronopete..."
 
-#: ../cronopete.vala:508
+#: ../cronopete.vala:517
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../cronopete.vala:527
+#: ../cronopete.vala:536
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../cronopete.vala:532
+#: ../cronopete.vala:541
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../cronopete.vala:537
+#: ../cronopete.vala:546
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../cronopete.vala:556
+#: ../cronopete.vala:565
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../cronopete.vala:562
+#: ../cronopete.vala:571
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../cronopete.vala:574
+#: ../cronopete.vala:583
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:578
+#: ../cronopete.vala:587
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../cronopete.vala:582
+#: ../cronopete.vala:591
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../cronopete.vala:733
+#: ../cronopete.vala:742
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
 
-#: ../restore.vala:788
+#: ../restore.vala:792
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -223,7 +223,7 @@ msgid ""
 "There's not enought free space"
 msgstr ""
 
-#: ../restore.vala:790
+#: ../restore.vala:794
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -231,7 +231,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../restore.vala:828
+#: ../restore.vala:833
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -239,35 +239,51 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../icons_widget.vala:319
+#: ../restore.vala:852
+msgid "Preparing folders to restore"
+msgstr ""
+
+#: ../icons_widget.vala:161
+msgid "Name"
+msgstr ""
+
+#: ../icons_widget.vala:164
+msgid "Size"
+msgstr ""
+
+#: ../icons_widget.vala:165
+msgid "Modification date"
+msgstr ""
+
+#: ../icons_widget.vala:321
 msgid "Show hiden files"
 msgstr ""
 
-#: ../icons_widget.vala:327
+#: ../icons_widget.vala:329
 msgid "Reverse order"
 msgstr ""
 
-#: ../icons_widget.vala:335
+#: ../icons_widget.vala:337
 msgid "Sort by name"
 msgstr ""
 
-#: ../icons_widget.vala:339
+#: ../icons_widget.vala:341
 msgid "Sort by type"
 msgstr ""
 
-#: ../icons_widget.vala:343
+#: ../icons_widget.vala:345
 msgid "Sort by size"
 msgstr ""
 
-#: ../icons_widget.vala:347
+#: ../icons_widget.vala:349
 msgid "Sort by date"
 msgstr ""
 
-#: ../icons_widget.vala:369
+#: ../icons_widget.vala:371
 msgid "View as icons"
 msgstr ""
 
-#: ../icons_widget.vala:373
+#: ../icons_widget.vala:375
 msgid "View as list"
 msgstr ""
 
