@@ -9,16 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-04 12:58+0100\n"
-"PO-Revision-Date: 2011-10-23 01:57+0200\n"
-"Last-Translator: Sergio <raster@rastersoft.com>\n"
-"Language-Team:  <raster@rastersoft.com>\n"
+"POT-Creation-Date: 2011-11-06 16:37+0100\n"
+"PO-Revision-Date: 2011-11-06 16:56+0100\n"
+"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Galician\n"
-"Plural-Forms: \n"
 
 #. This string shows the current status of Cronopete. It could be
 #. Status: idle, or Status: copying file...
@@ -28,13 +27,16 @@ msgid "Status: %s"
 msgstr "Estado: %s"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:112 ../cronopete.vala:191 ../cronopete.vala:202
+#: ../menu.vala:112
+#: ../cronopete.vala:191
+#: ../cronopete.vala:202
 #, c-format
 msgid "None"
 msgstr "Ningunha"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:162 ../cronopete.vala:185
+#: ../menu.vala:162
+#: ../cronopete.vala:185
 #, c-format
 msgid "Not defined"
 msgstr "Non definida"
@@ -56,8 +58,7 @@ msgstr "Non foi posíbel crear o cartafol para esta copia. Interrompendo.\n"
 
 #: ../backup.vala:340
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
-msgstr ""
-"Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
+msgstr "Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
 
 #: ../backup.vala:343
 msgid "Backup device not available. Aborting backup.\n"
@@ -69,9 +70,7 @@ msgstr "Xa está a facerse unha copia.\n"
 
 #: ../backup.vala:350
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
-msgstr ""
-"Non foi posíbel liberar espazo no disco para comezar unha copia. "
-"Interrompendo.\n"
+msgstr "Non foi posíbel liberar espazo no disco para comezar unha copia. Interrompendo.\n"
 
 #: ../backup.vala:369
 msgid "Backup aborted\n"
@@ -101,44 +100,38 @@ msgstr "Copia rematada. levou %ld segundos.\n"
 #: ../choose.vala:193
 #, c-format
 msgid ""
-"The file system %s is not valid for Cronopete because, currently, it has "
-"several bugs that can put in risk your backups. The optimal file system is "
-"ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
 "\n"
-"To change the file format in the disk, click the <i>Format disk</i> button. "
-"<b>All the data in the drive will be erased</b>."
+"To change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>."
 msgstr ""
-"Non é posíbel empregar o sistema de ficheiros %s con Cronopete xa que, "
-"actualmente, ten erros que poden pór en risco as copias. O sistema de "
-"ficheiros óptimo é ReiserFS, mais tamén é posíbel empregar Ext3/Ext4.\n"
+"Non é posíbel empregar o sistema de ficheiros %s con Cronopete xa que, actualmente, ten erros que poden pór en risco as copias. O sistema de ficheiros óptimo é ReiserFS, mais tamén é posíbel empregar Ext3/Ext4.\n"
 "\n"
-"Para cambiar o sistema de ficheiros do disco, prema o botón <i>Formatar o "
-"disco</i>. <b>Perderanse todos os datos contidos no disco</b>."
+"Para cambiar o sistema de ficheiros do disco, prema o botón <i>Formatar o disco</i>. <b>Perderanse todos os datos contidos no disco</b>."
 
 #: ../choose.vala:196
 #, c-format
 msgid ""
-"The file system %s is not valid for Cronopete. The optimal file system is "
-"ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
 "\n"
-"To change the file format in the disk, click the <i>Format disk</i> button. "
-"<b>All the data in the drive will be erased</b>."
+"To change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>."
 msgstr ""
-"Non é posíbel empregar o sistema de ficheiros %s con Cronopete. O sistema de "
-"ficheiros óptimo é ReiserFS, mais tamén é posíbel empregar Ext3/Ext4.\n"
+"Non é posíbel empregar o sistema de ficheiros %s con Cronopete. O sistema de ficheiros óptimo é ReiserFS, mais tamén é posíbel empregar Ext3/Ext4.\n"
 "\n"
-"Para cambiar o sistema de ficheiros do disco, prema o botón <i>Formatar o "
-"disco</i>. <b>Perderanse todos os datos contidos no disco</b>."
+"Para cambiar o sistema de ficheiros do disco, prema o botón <i>Formatar o disco</i>. <b>Perderanse todos os datos contidos no disco</b>."
 
 #: ../choose.vala:369
 msgid "Unknown FS"
 msgstr "FS descoñecido"
 
-#: ../cronopete.vala:173 ../cronopete.vala:276 ../cronopete.vala:304
+#: ../cronopete.vala:173
+#: ../cronopete.vala:276
+#: ../cronopete.vala:304
 msgid "Idle"
 msgstr "En repouso"
 
-#: ../cronopete.vala:185 ../cronopete.vala:191 ../cronopete.vala:202
+#: ../cronopete.vala:185
+#: ../cronopete.vala:191
+#: ../cronopete.vala:202
 #: ../cronopete.vala:206
 #, c-format
 msgid "Latest backup: %s"
@@ -162,58 +155,58 @@ msgstr "Deter a copia"
 
 #: ../cronopete.vala:414
 msgid "Restore files"
-msgstr ""
+msgstr "Restaurar ficheiros"
 
 #: ../cronopete.vala:431
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir as preferencias de Cronopete..."
 
-#: ../cronopete.vala:517
+#: ../cronopete.vala:508
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../cronopete.vala:536
+#: ../cronopete.vala:527
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../cronopete.vala:541
+#: ../cronopete.vala:532
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../cronopete.vala:546
+#: ../cronopete.vala:537
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../cronopete.vala:565
+#: ../cronopete.vala:556
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../cronopete.vala:571
+#: ../cronopete.vala:562
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../cronopete.vala:583
+#: ../cronopete.vala:574
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:587
+#: ../cronopete.vala:578
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../cronopete.vala:591
+#: ../cronopete.vala:582
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../cronopete.vala:742
+#: ../cronopete.vala:733
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
 
-#: ../restore.vala:792
+#: ../restore.vala:888
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -222,70 +215,81 @@ msgid ""
 "\n"
 "There's not enought free space"
 msgstr ""
+"Non foi posíbel restaurar o ficheiro\n"
+"\n"
+"%s\n"
+"\n"
+"Non hai espazo baleiro abondo"
 
-#: ../restore.vala:794
+#: ../restore.vala:890
 #, c-format
 msgid ""
 "Failed to restore file\n"
 "\n"
 "%s"
 msgstr ""
+"Non foi posíbel restaurar o ficheiro\n"
+"\n"
+"%s"
 
-#: ../restore.vala:833
+#: ../restore.vala:931
 #, c-format
 msgid ""
 "Restoring file:\n"
 "\n"
 "%s"
 msgstr ""
+"Restaurando o ficheiro:\n"
+"\n"
+"%s"
 
-#: ../restore.vala:852
+#: ../restore.vala:953
 msgid "Preparing folders to restore"
-msgstr ""
+msgstr "Preparando os cartafois para restaurar"
 
-#: ../icons_widget.vala:161
+#: ../icons_widget.vala:162
 msgid "Name"
-msgstr ""
-
-#: ../icons_widget.vala:164
-msgid "Size"
-msgstr ""
+msgstr "Nome"
 
 #: ../icons_widget.vala:165
+msgid "Size"
+msgstr "Tamaño"
+
+#: ../icons_widget.vala:166
 msgid "Modification date"
-msgstr ""
+msgstr "Data de modiicación"
 
-#: ../icons_widget.vala:321
+#: ../icons_widget.vala:335
 msgid "Show hiden files"
-msgstr ""
+msgstr "Mostrar ficheiros agochados"
 
-#: ../icons_widget.vala:329
+#: ../icons_widget.vala:343
 msgid "Reverse order"
-msgstr ""
+msgstr "Inverter a orden"
 
-#: ../icons_widget.vala:337
+#: ../icons_widget.vala:351
 msgid "Sort by name"
-msgstr ""
+msgstr "Ordenar por nome"
 
-#: ../icons_widget.vala:341
+#: ../icons_widget.vala:355
 msgid "Sort by type"
-msgstr ""
+msgstr "Ordenar por tipo"
 
-#: ../icons_widget.vala:345
+#: ../icons_widget.vala:359
 msgid "Sort by size"
-msgstr ""
+msgstr "Ordenar por tamaño"
 
-#: ../icons_widget.vala:349
+#: ../icons_widget.vala:363
 msgid "Sort by date"
-msgstr ""
+msgstr "Ordenar por data"
 
-#: ../icons_widget.vala:371
+#: ../icons_widget.vala:385
 msgid "View as icons"
-msgstr ""
+msgstr "Ver como iconas"
 
-#: ../icons_widget.vala:375
+#: ../icons_widget.vala:389
 msgid "View as list"
-msgstr ""
+msgstr "Ver como lista"
 
 #: ../interface/about.ui.h:1
 msgid "An Apple's Time Machine clone for Linux"
@@ -293,32 +297,21 @@ msgstr "Un clon para Linux do «Time Machine» de Apple"
 
 #: ../interface/about.ui.h:2
 msgid ""
-"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
-"the first novel with a time-travel machine.\n"
+"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years the first novel with a time-travel machine.\n"
 "\n"
-"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
-"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
-"first novel to feature a machine that allows to \"fly against time\".\n"
+"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El anacronópete</b>, a novel in the format of a zarzuela, which is the truly first novel to feature a machine that allows to \"fly against time\".\n"
 "\n"
-"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
-"Leopard. Several simmilar programs for Linux surged.\n"
+"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X Leopard. Several simmilar programs for Linux surged.\n"
 "\n"
-"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
-"Linux."
+"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for Linux."
 msgstr ""
-"No 1895, H.G. Wells publicou <b>A máquina do tempo</b>, considerada durante "
-"anos como a primeira novela cunha máquina capaz de viaxar no tempo.\n"
+"No 1895, H.G. Wells publicou <b>A máquina do tempo</b>, considerada durante anos como a primeira novela cunha máquina capaz de viaxar no tempo.\n"
 "\n"
-"Mais en 1887, oito anos antes, Enrique Gaspar y Rimbau tiña publicado <b>El "
-"anacronópete</b>, unha novela en formato de zarzuela que é realmente a "
-"primeira en incorporar unha máquina que permite «voar a través do tempo».\n"
+"Mais en 1887, oito anos antes, Enrique Gaspar y Rimbau tiña publicado <b>El anacronópete</b>, unha novela en formato de zarzuela que é realmente a primeira en incorporar unha máquina que permite «voar a través do tempo».\n"
 "\n"
-"En 2007, Apple publicou <b>Time Machine</b>, un programa de copia de "
-"seguranza para MacOS X Leopard. Pronto xurdiron varios programas semellantes "
-"para Linux.\n"
+"En 2007, Apple publicou <b>Time Machine</b>, un programa de copia de seguranza para MacOS X Leopard. Pronto xurdiron varios programas semellantes para Linux.\n"
 "\n"
-"En 2011 chega ana<b>CRONOPETE</b>, O clon para Linux do «Time Machine» de "
-"Apple."
+"En 2011 chega ana<b>CRONOPETE</b>, O clon para Linux do «Time Machine» de Apple."
 
 #: ../interface/about.ui.h:9
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
@@ -390,7 +383,8 @@ msgstr "Próxima copia:"
 msgid "Oldest backup:"
 msgstr "Primeira copia:"
 
-#: ../interface/main.ui.h:13 ../interface/options.ui.h:4
+#: ../interface/main.ui.h:13
+#: ../interface/options.ui.h:4
 msgid "Options"
 msgstr "Opcións"
 
@@ -432,11 +426,11 @@ msgstr "Tempo entre copias (en horas):"
 
 #: ../interface/restoring.ui.h:1
 msgid "Restoring files"
-msgstr ""
+msgstr "Restaurando ficheiros"
 
 #, fuzzy
 #~ msgid "Enter Cronopete"
 #~ msgstr "cronopete"
-
 #~ msgid "Error reading configuration"
 #~ msgstr "Produciuse un erro ao ler a configuración"
+
