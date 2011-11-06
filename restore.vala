@@ -664,10 +664,12 @@ class restore_iface : GLib.Object {
 	private bool on_key_press(Gdk.EventKey event) {
 
 		if (event.keyval==0xFF55) { // PG UP key
-			this.move_timeline(true);
+			this.move_timeline(false);
+			return true;
 		}
 		if (event.keyval==0xFF56) { // PG DOWN key
 			this.move_timeline(true);
+			return true;
 		}
 		return false;
 	}
