@@ -708,15 +708,15 @@ class restore_iface : GLib.Object {
 			this.move_timeline(true);
 			return true;
 		}
+		if (event.keyval==0xFF1B) { // ESC key
+			this.exit_restore ();
+			return true;
+		}
 		return false;
 	}
 
 	private bool on_key_release(Gdk.EventKey event) {
 
-		if (event.keyval==0xFF1B) { // ESC key
-			this.exit_restore ();
-			return true;
-		}
 		if (event.keyval=='r') {
 			this.do_restore ();
 			return true;

@@ -69,6 +69,8 @@ namespace FilelistIcons {
 
 		private Gtk.Paned paned;
 
+		private bool showing_menu;
+
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
 			this.backend=p_backend;
@@ -76,6 +78,7 @@ namespace FilelistIcons {
 		
 			this.main_container=new VBox(false,0);
 			this.timer_refresh=0;
+			this.showing_menu=false;
 			
 			this.show_hiden=false;
 			this.view_as_icons=true;
@@ -151,7 +154,7 @@ namespace FilelistIcons {
 			this.path_view.item_activated.connect(this.activated);
 			this.path_view.orientation=Orientation.VERTICAL;
 			this.scroll.add_with_viewport(this.path_view);
-
+			
 			// View for list
 			this.path_view2=new Gtk.TreeView.with_model(this.path_model);
 			this.path_view2.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
@@ -182,10 +185,25 @@ namespace FilelistIcons {
 			
 			this.refresh_icons();
 			this.refresh_path_list();
+			this.key_press_event.connect(this.on_key_press);
 			this.show.connect_after(this.refresh_path_list);
 		
 		}
 
+		private bool on_key_press(Gdk.EventKey event) {
+
+			if (event.keyval==0xFF67) { // MENU key
+				this.show_menu();
+				return true;
+			}
+
+			if ((event.keyval==0xFF1B) && (this.showing_menu)) {
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public void activated2(TreePath path, TreeViewColumn column) {
 			
 			this.selection_made2();
@@ -330,7 +348,23 @@ namespace FilelistIcons {
 			if (event.button!=3) {
 				return false;
 			}
+
+			this.show_menu();
+			
+			return true;
+		}
+
+		private void hide_menu() {
+
+			this.showing_menu=false;
+			
+		}
+		
+		private void show_menu() {
+
+			this.showing_menu=true;
 			this.menu=new Menu();
+			this.menu.hide.connect(this.hide_menu);
 			
 			var item1 = new CheckMenuItem.with_label(_("Show hiden files"));
 			item1.active=this.show_hiden;
@@ -398,9 +432,9 @@ namespace FilelistIcons {
 			
 			this.menu.show_all();
 			this.menu.popup(null,null,null,2,Gtk.get_current_event_time());
-			return true;
-		}
 
+		}
+		
 		private void set_view_as_icons() {
 			this.view_as_icons=true;
 			this.refresh_icons ();
