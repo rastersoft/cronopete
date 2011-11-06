@@ -104,8 +104,17 @@ class restore_iface : GLib.Object {
 	private Gtk.Window error_window;
 
 	private unowned Thread <void *> c_thread;
-
 	private uint timer_bar;
+
+	private double icon_scale;
+	private double icon_x_restore;
+	private double icon_y_restore;
+	private double icon_x_exit;
+	private double icon_y_exit;
+	private double icon_restore_scale;
+	private double icon_exit_scale;
+	private Cairo.ImageSurface restore_pic;
+	private Cairo.ImageSurface exit_pic;
 
 	public static int mysort_64(time_t? a, time_t? b) {
 
@@ -128,6 +137,9 @@ class restore_iface : GLib.Object {
 		this.scale_current_value=-1;
 		this.windows_current_value=-1;
 		this.zmul=1000;
+
+		this.icon_restore_scale=0.0;
+		this.icon_exit_scale=0.0;
 
 		this.backend.status.connect(this.refresh_status);
 		
@@ -307,15 +319,21 @@ class restore_iface : GLib.Object {
 		
 		c_base.save();
 		c_base.scale(scale2,scale2);
+		this.icon_scale=scale2;
 		double button_border = (mh/scale2-150.0)/2;
 		// Restore button
-		var restore_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"restore.png"));
-		c_base.set_source_surface(restore_pic,(mx-mh)/scale2+button_border,my/scale2+button_border);
+		this.icon_x_restore=(mx-mh)/scale2+button_border;
+		this.icon_y_restore=my/scale2+button_border;
+		this.restore_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"restore.png"));
+		c_base.set_source_surface(restore_pic,this.icon_x_restore,this.icon_y_restore);
 		c_base.paint();
 		// Exit button
-		var exit_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"exit.png"));
-		c_base.set_source_surface(exit_pic,(mx+mw)/scale2+button_border,my/scale2+button_border);
+		this.icon_x_exit=(mx+mw)/scale2+button_border;
+		this.icon_y_exit=my/scale2+button_border;
+		this.exit_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"exit.png"));
+		c_base.set_source_surface(exit_pic,this.icon_x_exit,this.icon_y_exit);
 		c_base.paint();
+		
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
@@ -482,6 +500,29 @@ class restore_iface : GLib.Object {
 		ctx.set_source_rgb(0.2,0.2,0.2);
 		ctx.rectangle(this.browser_x,this.browser_y,this.browser_w,this.browser_h);
 		ctx.stroke();
+
+		// paint buttons
+
+		if (this.icon_restore_scale!=0.0) {
+			ctx.save();
+			ctx.scale(this.icon_restore_scale,this.icon_restore_scale);
+			var factor=(this.icon_restore_scale/this.icon_scale-1);
+			var dif_factor=this.restore_pic.get_width()*factor/(this.icon_restore_scale*3);
+			ctx.set_source_surface(this.restore_pic,this.icon_x_restore*this.icon_scale/this.icon_restore_scale-dif_factor,this.icon_y_restore*this.icon_scale/this.icon_restore_scale-dif_factor);
+			ctx.paint_with_alpha(2.0-(this.icon_restore_scale/this.icon_scale));
+			ctx.restore();
+		}
+
+		if (this.icon_exit_scale!=0.0) {
+			ctx.save();
+			ctx.scale(this.icon_exit_scale,this.icon_exit_scale);
+			var factor=(this.icon_exit_scale/this.icon_scale-1);
+			var dif_factor=this.exit_pic.get_width()*factor/(this.icon_exit_scale*3);
+			ctx.set_source_surface(this.exit_pic,this.icon_x_exit*this.icon_scale/this.icon_exit_scale-dif_factor,this.icon_y_exit*this.icon_scale/this.icon_exit_scale-dif_factor);
+			ctx.paint_with_alpha(2.0-(this.icon_exit_scale/this.icon_scale));
+			ctx.restore();
+		}
+		
 		var ctx2 = Gdk.cairo_create(this.drawing.window);
 		ctx2.set_source_surface(this.animation_surface,0,0);
 		ctx2.paint();
@@ -749,8 +790,35 @@ class restore_iface : GLib.Object {
 			do_repaint=true;
 		}
 
+		if (this.icon_restore_scale!=0.0) {
+			do_repaint=true;
+			var final_value = this.icon_scale*2;
+			double diff=((final_value-this.icon_restore_scale)/4);
+			if (this.icon_restore_scale>=final_value*0.95) {
+				this.icon_restore_scale=0.0;
+			} else {
+				this.icon_restore_scale+=diff;
+				end_animation=false;
+			}
+		}	
+
+		if (this.icon_exit_scale!=0.0) {
+			do_repaint=true;
+			var final_value = this.icon_scale*2;
+			double diff=((final_value-this.icon_exit_scale)/4);
+			if (this.icon_exit_scale>=final_value*0.95) {
+				this.icon_exit_scale=0.0;
+			} else {
+				this.icon_exit_scale+=diff;
+				end_animation=false;
+			}
+		}	
+		
+		if (do_repaint) {
+			this.repaint_draw2();
+		}
+		
 		if (this.desired_alpha!=this.current_alpha) {
-			end_animation=false;
 			double diff;
 			if (this.desired_alpha>this.current_alpha) {
 				diff=this.desired_alpha-this.current_alpha;
@@ -770,27 +838,27 @@ class restore_iface : GLib.Object {
 				end_animation=true;
 			} else {
 				this.mywindow.opacity=this.current_alpha;
+				end_animation=false;
 			}
 		}
-
+		
 		if (end_animation) {
 			this.timer=0;
 			return false;
 		} else {
-			if (do_repaint) {
-				this.repaint_draw2();
-			}
 			return true;
 		}
 	}
 
 	private void exit_restore() {
 
+		this.icon_exit_scale=this.icon_scale;
+		this.launch_animation ();
+		
 		this.desired_alpha=0.0;
 		
-		if (this.timer==0) {
-			this.timer=Timeout.add(20,this.timer_move);
-		}
+		this.launch_animation ();
+		
 	}
 	
 	private string get_restored_filename(string path, string filename) {
@@ -868,6 +936,9 @@ class restore_iface : GLib.Object {
 	
 	private void do_restore() {
 
+		this.icon_restore_scale=this.icon_scale;
+		this.launch_animation ();
+		
 		this.ignore_restoring_all=false;
 		var w = new Builder();
 		
