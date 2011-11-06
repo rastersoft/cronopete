@@ -30,11 +30,9 @@ struct path_filename {
 class restore_iface : GLib.Object {
 
 	private backends backend;
-	private double opacity;
 	private uint timer;
-	private uint timer2;
-	private double divisor;
-	private double counter;
+	private double current_alpha;
+	private double desired_alpha;
 	private int scr_w;
 	private int scr_h;
 	private string basepath;
@@ -179,8 +177,8 @@ class restore_iface : GLib.Object {
 		
 		this.box.sensitive=true;
 		
-		this.opacity=0.0;
-		this.mywindow.opacity=this.opacity;
+		this.current_alpha=0.0;
+		this.mywindow.opacity=this.current_alpha;
 		
 		this.backups=p_backend.get_backup_list();
 		this.backups.sort((CompareFunc)mysort_64);
@@ -200,10 +198,8 @@ class restore_iface : GLib.Object {
 
 		this.mywindow.show_all();
 		
-		this.divisor=25.0;
-		this.counter=0.0;
-		this.timer2=0;
-		this.timer=Timeout.add(20,this.timer_show);
+		this.desired_alpha=1.0;
+		this.launch_animation ();
 
 	}
 
@@ -705,18 +701,23 @@ class restore_iface : GLib.Object {
 
 		this.browser.set_backup_time(this.backups[this.pos]);
 		this.paint_window();
-		if (this.timer2==0) {
-			this.timer2=Timeout.add(40,this.timer_move);
+		this.launch_animation();
+	}
+
+	private void launch_animation() {
+		if (this.timer==0) {
+			this.timer=Timeout.add(40,this.timer_move);
 		}
 	}
 	
 	private bool timer_move() {
 
-		bool equal=true;
+		bool end_animation=true;
+		bool do_repaint=false;
 
 		if (this.scale_current_value!=this.scale_desired_value) {
 			double diff;
-			equal=false;
+			end_animation=false;
 			if (this.scale_current_value>this.scale_desired_value) {
 				diff=this.scale_current_value-this.scale_desired_value;
 				this.scale_current_value-=(diff/4);
@@ -727,13 +728,14 @@ class restore_iface : GLib.Object {
 			if (diff<2) {
 				this.scale_current_value=this.scale_desired_value;
 			}
+			do_repaint=true;
 		}
 
 		int windows_desired_value=this.pos*this.zmul;
 		
 		if (this.windows_current_value!=windows_desired_value) {
 			int diff2;
-			equal=false;
+			end_animation=false;
 			if (this.windows_current_value>windows_desired_value) {
 				diff2=this.windows_current_value-windows_desired_value;
 				this.windows_current_value-=(diff2/4);
@@ -744,27 +746,50 @@ class restore_iface : GLib.Object {
 			if (diff2<12) {
 				this.windows_current_value=windows_desired_value;
 			}
+			do_repaint=true;
 		}
 
-		if (equal) {
-			this.timer2=0;
+		if (this.desired_alpha!=this.current_alpha) {
+			end_animation=false;
+			double diff;
+			if (this.desired_alpha>this.current_alpha) {
+				diff=this.desired_alpha-this.current_alpha;
+				this.current_alpha+=(diff/6);
+			} else {
+				diff=this.current_alpha-this.desired_alpha;
+				this.current_alpha-=(diff/6);
+			}
+			if (diff<0.05) {
+				this.current_alpha=this.desired_alpha;
+			}
+			
+			if (this.current_alpha==0.0) {
+				this.mywindow.hide();
+				this.mywindow.destroy();
+				this.backend.lock_delete_backup(false);
+				end_animation=true;
+			} else {
+				this.mywindow.opacity=this.current_alpha;
+			}
+		}
+
+		if (end_animation) {
+			this.timer=0;
 			return false;
 		} else {
-			this.repaint_draw2();
+			if (do_repaint) {
+				this.repaint_draw2();
+			}
 			return true;
 		}
 	}
 
 	private void exit_restore() {
 
-		if (this.timer2!=0) {
-			Source.remove(this.timer2);
-		}
+		this.desired_alpha=0.0;
 		
 		if (this.timer==0) {
-			this.divisor=25.0;
-			this.counter=25.0;
-			this.timer=Timeout.add(20,this.timer_hide);
+			this.timer=Timeout.add(20,this.timer_move);
 		}
 	}
 	
@@ -957,31 +982,6 @@ class restore_iface : GLib.Object {
 			}
 		}
 		return BACKUP_RETVAL.OK;
-	}
-
-	public bool timer_show() {
-	
-		if (this.counter<this.divisor) {
-			this.counter+=1.0;
-			this.mywindow.opacity=this.counter/this.divisor;
-			return true;
-		} else {
-			this.timer=0;
-			return false;
-		}
-	}
-
-	public bool timer_hide() {
-		
-		if (this.counter>0) {
-			this.counter-=1.0;
-			this.mywindow.opacity=this.counter/this.divisor;
-			return true;
-		} else {
-			this.mywindow.destroy();
-			this.backend.lock_delete_backup(false);
-			return false;
-		}
 	}
 
 	[CCode (instance_pos = -1)]
