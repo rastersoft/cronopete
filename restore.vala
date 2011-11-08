@@ -198,6 +198,7 @@ class restore_iface : GLib.Object {
 		this.browser=new FilelistIcons.IconBrowser(this.backend,Environment.get_home_dir());
 		this.pos=0;
 		this.browser.set_backup_time(this.backups[0]);
+		this.browser.do_refresh_icons ();
 
 		this.create_cairo_layouts();
 		
@@ -764,12 +765,12 @@ class restore_iface : GLib.Object {
 			end_animation=false;
 			if (this.scale_current_value>this.scale_desired_value) {
 				diff=this.scale_current_value-this.scale_desired_value;
-				this.scale_current_value-=(diff/4);
+				this.scale_current_value-=(diff/3);
 			} else {
 				diff=this.scale_desired_value-this.scale_current_value;
-				this.scale_current_value+=(diff/4);
+				this.scale_current_value+=(diff/3);
 			}
-			if (diff<4) {
+			if (diff<2) {
 				this.scale_current_value=this.scale_desired_value;
 			}
 			do_repaint=true;
@@ -782,10 +783,10 @@ class restore_iface : GLib.Object {
 			end_animation=false;
 			if (this.windows_current_value>windows_desired_value) {
 				diff2=this.windows_current_value-windows_desired_value;
-				this.windows_current_value-=(diff2/4);
+				this.windows_current_value-=(diff2/3);
 			} else {
 				diff2=windows_desired_value-this.windows_current_value;
-				this.windows_current_value+=(diff2/4);
+				this.windows_current_value+=(diff2/3);
 			}
 			if (diff2<(this.zmul/10)) {
 				this.windows_current_value=windows_desired_value;
