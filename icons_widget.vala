@@ -71,10 +71,14 @@ namespace FilelistIcons {
 
 		private bool showing_menu;
 
+		private bool to_refresh;
+
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
 			this.backend=p_backend;
 			this.current_path=p_current_path;
+
+			this.to_refresh=false;
 		
 			this.main_container=new VBox(false,0);
 			this.timer_refresh=0;
@@ -497,17 +501,27 @@ namespace FilelistIcons {
 			
 			this.current_backup=backup;
 			this.path_model.clear();
-			if (this.timer_refresh!=0) {
+			this.to_refresh=true;
+			/*if (this.timer_refresh!=0) {
 				Source.remove(this.timer_refresh);
 			}
-			this.timer_refresh=Timeout.add(100,this.timer_f);
+			this.timer_refresh=Timeout.add(100,this.timer_f);*/
 		}
 
-		public bool timer_f() {
+		public void do_refresh_icons() {
+
+			if (this.to_refresh) {
+				this.to_refresh=false;
+				this.refresh_icons();
+			}
+			
+		}
+		
+		/*public bool timer_f() {
 
 			this.refresh_icons();
 			return false;
-		}
+		}*/
 
 		public bool selection_made(EventButton event) {
 	
@@ -890,9 +904,19 @@ namespace FilelistIcons {
 				}
 				
 				try {
-					pbuf = theme.lookup_by_gicon(f.icon,48,0).load_icon();
-					pbuf2= theme.lookup_by_gicon(f.icon,24,0).load_icon();
+					var tmp1=theme.lookup_by_gicon(f.icon,48,0);
+					if (tmp1!=null) {
+						var tmp2=theme.lookup_by_gicon(f.icon,24,0);
+						pbuf = tmp1.load_icon();
+						pbuf2= tmp2.load_icon();
+					} else {
+						pbuf=null;
+					}
 				} catch {
+					pbuf=null;
+				}
+
+				if (pbuf==null) {
 					if (f.isdir) {
 						pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
 						pbuf2= this.path_view.render_icon(Stock.DIRECTORY,IconSize.SMALL_TOOLBAR,"");

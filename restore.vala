@@ -315,7 +315,7 @@ class restore_iface : GLib.Object {
 		this.browser_y=5*this.nixie_h/3;
 		this.browser_w=scr_w*4/5;
 		this.browser_h=scr_h-3*this.nixie_h;
-		this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
+		//this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 		
 		c_base.save();
 		c_base.scale(scale2,scale2);
@@ -490,16 +490,17 @@ class restore_iface : GLib.Object {
 				continue;
 			}
 			this.transform_coords (z,out ox, out oy, out ow, out oh);
-			ctx.set_source_rgb(0.7,0.7,0.7);
+			ctx.set_source_rgb(1,1,1);
+			//ctx.set_source_rgb(0.7,0.7,0.7);
 			ctx.rectangle(ox,oy,ow,oh);
 			ctx.fill();
 			ctx.set_source_rgb(0.2,0.2,0.2);
 			ctx.rectangle(ox,oy,ow,oh);
 			ctx.stroke();
 		}
-		ctx.set_source_rgb(0.2,0.2,0.2);
+		/*ctx.set_source_rgb(0.2,0.2,0.2);
 		ctx.rectangle(this.browser_x,this.browser_y,this.browser_w,this.browser_h);
-		ctx.stroke();
+		ctx.stroke();*/
 
 		// paint buttons
 
@@ -730,12 +731,14 @@ class restore_iface : GLib.Object {
 			if (this.pos>=(this.backups.size-1)) {
 				return;
 			} else {
+				this.browser.hide();
 				this.pos++;
 			}
 		} else {
 			if (this.pos==0) {
 				return;
 			} else {
+				this.browser.hide();
 				this.pos--;
 			}
 		}
@@ -766,7 +769,7 @@ class restore_iface : GLib.Object {
 				diff=this.scale_desired_value-this.scale_current_value;
 				this.scale_current_value+=(diff/4);
 			}
-			if (diff<2) {
+			if (diff<4) {
 				this.scale_current_value=this.scale_desired_value;
 			}
 			do_repaint=true;
@@ -784,7 +787,7 @@ class restore_iface : GLib.Object {
 				diff2=windows_desired_value-this.windows_current_value;
 				this.windows_current_value+=(diff2/4);
 			}
-			if (diff2<12) {
+			if (diff2<(this.zmul/10)) {
 				this.windows_current_value=windows_desired_value;
 			}
 			do_repaint=true;
@@ -844,6 +847,8 @@ class restore_iface : GLib.Object {
 		
 		if (end_animation) {
 			this.timer=0;
+			this.browser.do_refresh_icons ();
+			this.browser.show();
 			return false;
 		} else {
 			return true;
