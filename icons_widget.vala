@@ -302,9 +302,25 @@ namespace FilelistIcons {
 					string folder;
 					while ((line = in_stream.read_line (null, null)) != null) {
 						if (line.has_prefix("file://")) {
-							folder=line.substring(7);
+							var pos = line.index_of_char(' ',7);
+							if (pos>7) {
+								folder=line.substring(7,pos-7);
+							} else {
+								folder=line.substring(7);
+							}
+						    var folder2 = GLib.Uri.unescape_string(folder);
+						    bool found=false;
+						    foreach (var l in this.bookmarks) {
+								if (l.name==folder2) {
+									found=true;
+									break;
+								}
+							}
+						    if (found) {
+								continue;
+							}
 						    val = bookmark_str();
-							val.name = folder.dup();
+							val.name = folder2;
 							val.icon=Gtk.Stock.DIRECTORY;
 							this.bookmarks.add(val);
 						}

@@ -1,13 +1,13 @@
 <html>
   <head>
-    <title>Cronopete 1.3.0</title>
+    <title>Cronopete 2.0.0</title>
     <style type="text/css" media="all">
       .menu { background-color: #dddbd8; }
       .filename { color: green; }
     </style>
   </head>
 <body>
-<div align="center"><h1>CRONOPETE 1.3.0</h1></div>
+<div align="center"><h1>CRONOPETE 2.0.0</h1></div>
 
 <p>The Apple's TimeMachine clone for Linux</p>
 
@@ -49,13 +49,12 @@ it's easily deleted.</li>
 
 <p>Currently, it only can do backups to local hard disks; in a near future I hope to add support for remote disks.</p>
 
-<p>Version 1.2.0 still doesn't have an interface to restore files, so you have to do it manually using your favorite file manager. In a near future I
-hope to build an interface, using clutter, which mimics the apple's one.</p>
-
 <p>Cronopete creates in the external disk a folder, called <strong>cronopete</strong>, and inside it creates one folder for each user using it. The name of these
 folders are the user login name.</p>
+
 <p>Then, inside each user folder, cronopete creates one folder for each backup. The name of that folder follows the format:</p>
 <div align="center"><p>YYYY_MM_DD_hh:mm:ss_unixtime</p></div>
+
 <p>Being <em>YYYY</em> the year, <em>MM</em> the month, <em>DD</em> the day, <em>hh</em> the hour, <em>mm</em> the minutes, <em>ss</em> the seconds, all
 of them in local time; and <em>unixtime</em> the UTC time in UNIX format (seconds since Jan, 1, 1970). If the folder begins with a <em>B</em> letter, is
 a temporal backup (one that is still being made).</p>
@@ -92,7 +91,7 @@ install it into <i>/usr</i> instead of <i>/usr/local</i>, just use:</p>
 <p>This icon shows the current status of Cronopete. If it's red, then there's a critical problem that prevents backups to be done (like if there's no external
 disk configured or connected, or the backups are disabled). If it's orange, then there was some problem during backup (like when one file wouldn't be backed
 up, or can't access into a folder). If it's green or white, all is working fine.</p>
-<p>When cronopete is doing a backup, the icon is animated, like a backward-moving clock. When it stops, the backup ended.</p>
+<p>When cronopete is doing a backup, the icon is animated, like a green backward-moving clock. When it stops, the backup ended.</p>
 <p>Now it's time to configure cronopete. If you click on the icon, you will see this menu:</p>
 <div align="center"><img src="cronopete2.png" /></div>
 <p>By clicking on <span class="menu">Open cronopete preferences...</span> you will see the main window:</p>
@@ -125,12 +124,27 @@ it to one backup each hour).</p>
 <p>Here is an example of this:</p>
 <div align="center"><img src="cronopete8.png" /></div>
 <h2>Restoring files</h2>
-<p>Currently there is no specific interface for restoring files, so it has to be done manually. But since files are stored "as is", without compression,
-is as easy as opening the external disk and copy the desired files back to the main disk.</p>
+<p>To restore a file from your backups, just click on cronopete's icon and choose <span class="menu">Restore files</span>. You will see this interface:</p>
+<div align="center"><img src="cronopete9.png" /></div>
+<p>Now you can navigate through the folders as usual, until you reach the place where the file you want to restore is/was. You can also go back and forward through time, so you
+can restore a file from any of the currently available backups.</p>
+<p>Let's say that you erased a file two weeks ago, and now you need
+it: just go to the folder where it was, and then, using the mouse wheel, go back in time two weeks (checking the time/date in the upper clock), until the desired file appears.
+Then, click on it to mark it, and then click on the <strong>Restore</strong> button. You can mark several files and folders also, restoring all of them in one single step.</p>
+<p>The file/s and folder/s will be restored to your hard disk with a <strong>.restored</strong> suffix added, to avoid overwritting currently existing files (if there's already a
+file/folder with that name and suffix, cronopete will add .1, .2, and so on, when needed, so you also can restore the same file from several dates).</p>
+<p>The timeline at the left of the screen allows to know where we are relative to the first and last backup, and also shows the granularity of the backups. It clearly shows that
+the most recent backups are kept for 24 hours (top); then it jumps to one backup per day during a month (middle); finally it stores only one backup per week (bottom).</p>
 <h2>Uninstalling cronopete</h2>
 <p>To uninstall cronopete, just use <i>make uninstall</i>.</p>
 <h2>History of versions</h2>
 <ul>
+
+<li>Version 2.0.0 (2011/11/8)</li>
+<ul>
+<li>Added an interface to restore files from the backups.</li>
+</ul>
+
 <li>Version 1.3.0 (2011/10/23)</li>
 <ul>
 <li>Cronopete closes when trying to format a NTFS-formated external drive. Fixed.</li>
@@ -155,6 +169,6 @@ is as easy as opening the external disk and copy the desired files back to the m
 <h2>Contacting the author</h2>
 <p>Sergio Costas Rodriguez<br/>
 <a href="mailto:raster@rastersoft.com">raster@rastersoft.com</a><br/>
-<a href="http://www.rastersoft.com">www.rastersoft.com</a></p>
+<a href="http://www.rastersoft.com">http://www.rastersoft.com</a></p>
 
 </body></html>
