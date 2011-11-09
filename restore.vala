@@ -120,6 +120,12 @@ class restore_iface : GLib.Object {
 	private bool capture_done;
 	private bool browserhide;
 
+	private double mx;
+	private double my;
+	private double mw;
+	private double mh;
+	
+
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -165,12 +171,12 @@ class restore_iface : GLib.Object {
 		this.restore_folders = new Gee.ArrayList<path_filename ?>();
 
 		this.mywindow = new Gtk.Window();
-		//this.mywindow.fullscreen();
+		this.mywindow.fullscreen();
 		var scr=this.mywindow.get_screen();
 		this.scr_w=scr.get_width();
 		this.scr_h=scr.get_height();
-		this.scr_w=800;
-		this.scr_h=600;
+		//this.scr_w=800;
+		//this.scr_h=600;
 		this.grid_h=0;
 		this.grid_w=0;
 		
@@ -224,7 +230,6 @@ class restore_iface : GLib.Object {
 
 	public void changed_path_list() {
 
-		GLib.stdout.printf("Refresco\n");
 		this.capture_done=false;
 		this.launch_animation ();
 		
@@ -238,6 +243,8 @@ class restore_iface : GLib.Object {
 			this.browser.do_refresh_icons ();
 			this.browserhide=true;
 			this.capture_done=true;
+			this.repaint_draw2 ();
+			this.paint_window ();
 		}
 	}
 
@@ -326,21 +333,21 @@ class restore_iface : GLib.Object {
 		scale=this.scr_w/2800.0;
 		
 		// Paint base surface
-		double mh=((double)(this.nixie_h))*4.0/3.0;
-		double mx=(this.scr_w-width)/2.0-80.0*scale;
-		double my=(double)(this.nixie_h/6);
-		double mw=width+160*scale;
+		this.mh=((double)(this.nixie_h))*4.0/3.0;
+		this.mx=(this.scr_w-width)/2.0-80.0*scale;
+		this.my=(this.scr_h)-(mh+(double)(this.nixie_h/6));
+		this.mw=width+160*scale;
 		
-		c_base.set_source_surface(brass,0,0);
-		c_base.rectangle(mx-mh,my,mw+2.0*mh,mh);
+		c_base.set_source_surface(brass,0,this.my);
+		c_base.rectangle(this.mx-this.mh,this.my,this.mw+2.0*this.mh,this.mh);
 		c_base.fill();
-		this.paint_border (c_base,mx,my,mw,mh,-1.5,true);
+		this.paint_border (c_base,this.mx,this.my,this.mw,this.mh,-1.5,true);
 
 		// Browser border
 		this.browser_x=scr_w*0.1;
-		this.browser_y=5*this.nixie_h/3;
+		this.browser_y=this.scr_h/8;
 		this.browser_w=scr_w*4/5;
-		this.browser_h=scr_h-3*this.nixie_h;
+		this.browser_h=this.my-this.browser_y-this.nixie_h/6;
 		this.capture = new Gdk.Pixbuf(Gdk.Colorspace.RGB,false, 8,(int)this.browser_w,(int)this.browser_h);
 		//this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 		
@@ -348,15 +355,16 @@ class restore_iface : GLib.Object {
 		c_base.scale(scale2,scale2);
 		this.icon_scale=scale2;
 		double button_border = (mh/scale2-150.0)/2;
+		
 		// Restore button
-		this.icon_x_restore=(mx-mh)/scale2+button_border;
-		this.icon_y_restore=my/scale2+button_border;
+		this.icon_x_restore=(this.mx-this.mh)/scale2+button_border;
+		this.icon_y_restore=this.my/scale2+button_border;
 		this.restore_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"restore.png"));
 		c_base.set_source_surface(restore_pic,this.icon_x_restore,this.icon_y_restore);
 		c_base.paint();
 		// Exit button
-		this.icon_x_exit=(mx+mw)/scale2+button_border;
-		this.icon_y_exit=my/scale2+button_border;
+		this.icon_x_exit=(this.mx+this.mw)/scale2+button_border;
+		this.icon_y_exit=this.my/scale2+button_border;
 		this.exit_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"exit.png"));
 		c_base.set_source_surface(exit_pic,this.icon_x_exit,this.icon_y_exit);
 		c_base.paint();
@@ -364,7 +372,7 @@ class restore_iface : GLib.Object {
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
-		this.arrows_y=(this.browser_y+this.browser_h+this.scr_h-150*scale2)/2;
+		this.arrows_y=scale2*10.0;
 		this.arrows_w=256*scale2;
 		this.arrows_h=150*scale2;
 		c_base.set_source_surface(arrows_pic,this.arrows_x/scale2,this.arrows_y/scale2);
@@ -372,41 +380,41 @@ class restore_iface : GLib.Object {
 		c_base.restore();
 
 		// Exit button coords
-		this.exit_w=mh;
-		this.exit_h=mh;
-		this.exit_x=mx+mw;
-		this.exit_y=my;
+		this.exit_w=this.mh;
+		this.exit_h=this.mh;
+		this.exit_x=this.mx+this.mw;
+		this.exit_y=this.my;
 		this.paint_border (c_base,this.exit_x,this.exit_y,this.exit_w,this.exit_h,-1.5,true);
 
 		// Restore button coords
-		this.restore_w=mh;
-		this.restore_h=mh;
-		this.restore_x=mx-mh;
-		this.restore_y=my;
+		this.restore_w=this.mh;
+		this.restore_h=this.mh;
+		this.restore_x=this.mx-this.mh;
+		this.restore_y=this.my;
 		this.paint_border (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,-1.5,true);
 			
 		// Nixies border
-		mx=(this.scr_w-width)/2.0;
-		my=(double)(this.nixie_h/3);
-		mh=(double)(this.nixie_h);
+		double mx2=(this.scr_w-width)/2.0;
+		double my2=this.my+(double)(this.nixie_h/6);
+		double mh2=(double)(this.nixie_h);
 		
-		this.paint_border (c_base,mx,my,width,mh,1.5,false);
+		this.paint_border (c_base,mx2,my2,width,mh2,1.5,false);
 
 		// Nixies screws
 		c_base.save();
 		c_base.scale(scale,scale);
-		c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-65,((double)(this.nixie_h/3))/scale+60.0);
+		c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-65,this.my/scale+90.0);
 		c_base.paint();
-		c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+15,((double)(this.nixie_h/3))/scale+60.0);
+		c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+15,this.my/scale+90.0);
 		c_base.paint();
 		c_base.restore();
 
 		// timeline
 		this.scale_x=this.restore_x;
-		this.scale_y=this.browser_y;
+		this.scale_y=5;
 		this.scale_w=this.scr_w/28;
-		this.scale_h=this.scr_h-this.scale_y-5;
-		
+		this.scale_h=this.my-this.scale_y-5;
+				
 		this.last_time=this.backups[this.backups.size-1];
 		this.scale_factor=this.scale_h/(this.backups[0]-this.last_time);
 
@@ -467,9 +475,9 @@ class restore_iface : GLib.Object {
 		ctx.paint();
 		
 		var sf = this.print_nixies(this.current_instant,out width);
-		double mx=(this.scr_w-width)/2.0;
-		double my=(double)(this.nixie_h/3);
-		ctx.set_source_surface(sf,mx,my);
+		double mx2=(this.scr_w-width)/2.0;
+		double my2=this.my+(double)(this.nixie_h/6);
+		ctx.set_source_surface(sf,mx2,my2);
 		ctx.paint();
 		this.scale_desired_value = this.scale_y+this.scale_h-this.scale_factor * (this.current_instant-this.last_time);
 		if (this.scale_current_value==-1) {
@@ -569,7 +577,7 @@ class restore_iface : GLib.Object {
 		double eyedist = 2500.0;
 
 		ox=(this.browser_x*eyedist+(z*((double)this.scr_w)/2))/(z+eyedist);
-		oy=((this.browser_y)*eyedist+z*((double)this.scr_h))/(z+eyedist);
+		oy=((this.browser_y)*eyedist)/(z+eyedist);
 		ow=(this.browser_w*eyedist)/(z+eyedist);
 		oh=(this.browser_h*eyedist)/(z+eyedist);
 	

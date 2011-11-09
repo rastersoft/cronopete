@@ -657,6 +657,7 @@ namespace FilelistIcons {
 			}
 
 			if (send_signal) {
+				this.to_refresh=true;
 				this.path_model.clear();
 				this.changed_path_list();
 			}
