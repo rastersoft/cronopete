@@ -116,6 +116,10 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface restore_pic;
 	private Cairo.ImageSurface exit_pic;
 
+	private Gdk.Pixbuf capture;
+	private bool capture_done;
+	private bool browserhide;
+
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -128,7 +132,7 @@ class restore_iface : GLib.Object {
 	}
 
 	public restore_iface(backends p_backend,string paths) {
-	
+		
 		this.backend=p_backend;
 		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
@@ -137,6 +141,7 @@ class restore_iface : GLib.Object {
 		this.scale_current_value=-1;
 		this.windows_current_value=-1;
 		this.zmul=1000;
+		this.capture_done=false;
 
 		this.icon_restore_scale=0.0;
 		this.icon_exit_scale=0.0;
@@ -160,12 +165,12 @@ class restore_iface : GLib.Object {
 		this.restore_folders = new Gee.ArrayList<path_filename ?>();
 
 		this.mywindow = new Gtk.Window();
-		this.mywindow.fullscreen();
+		//this.mywindow.fullscreen();
 		var scr=this.mywindow.get_screen();
 		this.scr_w=scr.get_width();
 		this.scr_h=scr.get_height();
-		//this.scr_w=640;
-		//this.scr_h=480;
+		this.scr_w=800;
+		this.scr_h=600;
 		this.grid_h=0;
 		this.grid_w=0;
 		
@@ -198,7 +203,7 @@ class restore_iface : GLib.Object {
 		this.browser=new FilelistIcons.IconBrowser(this.backend,Environment.get_home_dir());
 		this.pos=0;
 		this.browser.set_backup_time(this.backups[0]);
-		this.browser.do_refresh_icons ();
+		this.browser.changed_path_list.connect(this.changed_path_list);
 
 		this.create_cairo_layouts();
 		
@@ -213,7 +218,27 @@ class restore_iface : GLib.Object {
 		
 		this.desired_alpha=1.0;
 		this.launch_animation ();
+		
+		//this.browser.show.connect_after(this.do_show);
+	}
 
+	public void changed_path_list() {
+
+		GLib.stdout.printf("Refresco\n");
+		this.capture_done=false;
+		this.launch_animation ();
+		
+	}
+	
+	public void do_show() {
+
+		if (this.capture_done==false) {
+			this.capture.fill(0);
+			Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)this.browser_y,0,0,(int)this.browser_w,(int)this.browser_h);
+			this.browser.do_refresh_icons ();
+			this.browserhide=true;
+			this.capture_done=true;
+		}
 	}
 
 	public void refresh_status(usbhd_backend? b) {
@@ -316,6 +341,7 @@ class restore_iface : GLib.Object {
 		this.browser_y=5*this.nixie_h/3;
 		this.browser_w=scr_w*4/5;
 		this.browser_h=scr_h-3*this.nixie_h;
+		this.capture = new Gdk.Pixbuf(Gdk.Colorspace.RGB,false, 8,(int)this.browser_w,(int)this.browser_h);
 		//this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 		
 		c_base.save();
@@ -484,6 +510,9 @@ class restore_iface : GLib.Object {
 		double oy;
 		double ow;
 		double oh;
+		double scale;
+		ctx.set_line_width(1.5);
+		ctx.set_source_rgb(0.2,0.2,0.2);
 		for(int c=maxval-1;c>=this.pos;c--) {
 			double z;
 			z=this.zmul*c-(this.windows_current_value);
@@ -491,11 +520,16 @@ class restore_iface : GLib.Object {
 				continue;
 			}
 			this.transform_coords (z,out ox, out oy, out ow, out oh);
-			ctx.set_source_rgb(1,1,1);
+			/*ctx.set_source_rgb(1,1,1);
 			//ctx.set_source_rgb(0.7,0.7,0.7);
 			ctx.rectangle(ox,oy,ow,oh);
-			ctx.fill();
-			ctx.set_source_rgb(0.2,0.2,0.2);
+			ctx.fill();*/
+			scale = ow/this.browser_w;
+			ctx.save();
+			ctx.scale(scale,scale);
+			Gdk.cairo_set_source_pixbuf(ctx,this.capture,ox/scale,oy/scale);
+			ctx.paint();
+			ctx.restore();
 			ctx.rectangle(ox,oy,ow,oh);
 			ctx.stroke();
 		}
@@ -723,6 +757,7 @@ class restore_iface : GLib.Object {
 			this.do_restore ();
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -733,6 +768,7 @@ class restore_iface : GLib.Object {
 				return;
 			} else {
 				this.browser.hide();
+				this.browserhide=true;
 				this.pos++;
 			}
 		} else {
@@ -740,6 +776,7 @@ class restore_iface : GLib.Object {
 				return;
 			} else {
 				this.browser.hide();
+				this.browserhide=true;
 				this.pos--;
 			}
 		}
@@ -760,6 +797,8 @@ class restore_iface : GLib.Object {
 		bool end_animation=true;
 		bool do_repaint=false;
 
+		this.do_show ();
+		
 		if (this.scale_current_value!=this.scale_desired_value) {
 			double diff;
 			end_animation=false;
@@ -770,7 +809,7 @@ class restore_iface : GLib.Object {
 				diff=this.scale_desired_value-this.scale_current_value;
 				this.scale_current_value+=(diff/3);
 			}
-			if (diff<2) {
+			if (diff<6) {
 				this.scale_current_value=this.scale_desired_value;
 			}
 			do_repaint=true;
@@ -788,10 +827,16 @@ class restore_iface : GLib.Object {
 				diff2=windows_desired_value-this.windows_current_value;
 				this.windows_current_value+=(diff2/3);
 			}
-			if (diff2<(this.zmul/10)) {
+			if (diff2<(this.zmul/5)) {
 				this.windows_current_value=windows_desired_value;
 			}
 			do_repaint=true;
+		} else {
+			if (this.browserhide) {
+				this.browser.do_refresh_icons();
+				this.browser.show();
+				this.browserhide=false;
+			}
 		}
 
 		if (this.icon_restore_scale!=0.0) {
@@ -848,8 +893,6 @@ class restore_iface : GLib.Object {
 		
 		if (end_animation) {
 			this.timer=0;
-			this.browser.do_refresh_icons ();
-			this.browser.show();
 			return false;
 		} else {
 			return true;

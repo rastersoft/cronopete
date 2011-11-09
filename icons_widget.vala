@@ -73,6 +73,8 @@ namespace FilelistIcons {
 
 		private bool to_refresh;
 
+		public signal void changed_path_list();
+
 		public IconBrowser(backends p_backend,string p_current_path) {
 	
 			this.backend=p_backend;
@@ -186,11 +188,10 @@ namespace FilelistIcons {
 			this.path_view.item_width=175;
 		
 			this.path_list=new Gee.ArrayList<ToggleButton>();
-			
-			this.refresh_icons();
+
 			this.refresh_path_list();
 			this.key_press_event.connect(this.on_key_press);
-			this.show.connect_after(this.refresh_path_list);
+			this.show.connect_after(this.refresh_path_list_show);
 		
 		}
 
@@ -357,7 +358,6 @@ namespace FilelistIcons {
 				model.get_value(iter,2,out spath);
 				var final_path = spath.get_string();
 				this.current_path=final_path;
-				this.refresh_icons();
 				this.refresh_path_list();
 				this.set_scroll_top();
 			}
@@ -457,13 +457,11 @@ namespace FilelistIcons {
 		
 		private void set_view_as_icons() {
 			this.view_as_icons=true;
-			this.refresh_icons ();
 			this.refresh_path_list ();
 		}
 
 		private void set_view_as_list() {
 			this.view_as_icons=false;
-			this.refresh_icons ();
 			this.refresh_path_list ();
 		}
 		
@@ -546,7 +544,6 @@ namespace FilelistIcons {
 			var newfolder=folders.get(0);
 		
 			this.current_path=Path.build_filename(this.current_path,newfolder);
-			this.refresh_icons();
 			this.refresh_path_list();
 			this.set_scroll_top();
 
@@ -597,7 +594,13 @@ namespace FilelistIcons {
 			
 		}
 
-		private void refresh_path_list() {
+		private void refresh_path_list_show() {
+
+			this.refresh_path_list (false);
+			
+		}
+		
+		private void refresh_path_list(bool send_signal=true) {
 
 			if (this.view_as_icons) {
 				this.scroll.show();
@@ -652,6 +655,12 @@ namespace FilelistIcons {
 				this.btn_prev.hide();
 				this.btn_next.hide();
 			}
+
+			if (send_signal) {
+				this.path_model.clear();
+				this.changed_path_list();
+			}
+			
 		}
 
 		private void path_prev() {
@@ -706,7 +715,9 @@ namespace FilelistIcons {
 				}
 			}
 			this.current_path=fpath;
-			this.refresh_icons();
+			//this.refresh_icons();
+			this.path_model.clear();
+			this.changed_path_list();
 			this.set_scroll_top();
 		}
 

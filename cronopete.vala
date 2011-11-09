@@ -782,8 +782,8 @@ class cp_callback : GLib.Object, callbacks {
 
 int main(string[] args) {
 	
-	if (args.length>1) {
-		sleep(3); // To ensure that the menu bar has been loaded
+	if (args.length==1) {
+		sleep(2); // To ensure that the menu bar has been loaded
 	}
 
 	nice(19); // Minimum priority
