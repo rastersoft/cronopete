@@ -717,6 +717,7 @@ namespace FilelistIcons {
 			}
 			this.current_path=fpath;
 			//this.refresh_icons();
+			this.to_refresh=true;
 			this.path_model.clear();
 			this.changed_path_list();
 			this.set_scroll_top();
