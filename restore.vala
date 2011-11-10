@@ -41,6 +41,7 @@ class restore_iface : GLib.Object {
 	private FilelistIcons.IconBrowser browser;
 	private double browser_x;
 	private double browser_y;
+	private double browser_margin;
 	private double browser_w;
 	private double browser_h;
 
@@ -216,7 +217,7 @@ class restore_iface : GLib.Object {
 		this.base_layout.add(this.browser);
 		this.browser.width_request=(int)this.browser_w;
 		this.browser.height_request=(int)this.browser_h;
-		this.base_layout.move(this.browser,(int)this.browser_x,(int)this.browser_y);
+		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
 
 		this.paint_window();
 
@@ -239,7 +240,7 @@ class restore_iface : GLib.Object {
 
 		if (this.capture_done==false) {
 			this.capture.fill(0);
-			Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)this.browser_y,0,0,(int)this.browser_w,(int)this.browser_h);
+			Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)(this.browser_y+this.browser_margin),0,0,(int)this.browser_w,(int)this.browser_h);
 			this.browser.do_refresh_icons ();
 			this.browserhide=true;
 			this.capture_done=true;
@@ -335,7 +336,7 @@ class restore_iface : GLib.Object {
 		// Paint base surface
 		this.mh=((double)(this.nixie_h))*4.0/3.0;
 		this.mx=(this.scr_w-width)/2.0-80.0*scale;
-		this.my=(this.scr_h)-(mh+(double)(this.nixie_h/6));
+		this.my=0;
 		this.mw=width+160*scale;
 		
 		c_base.set_source_surface(brass,0,this.my);
@@ -345,9 +346,10 @@ class restore_iface : GLib.Object {
 
 		// Browser border
 		this.browser_x=scr_w*0.1;
-		this.browser_y=this.scr_h/8;
+		this.browser_y=this.mh+this.nixie_h/6;
+		this.browser_margin=this.scr_h/8;
 		this.browser_w=scr_w*4/5;
-		this.browser_h=this.my-this.browser_y-this.nixie_h/6;
+		this.browser_h=this.scr_h-this.browser_y-this.browser_margin-this.nixie_h/6;
 		this.capture = new Gdk.Pixbuf(Gdk.Colorspace.RGB,false, 8,(int)this.browser_w,(int)this.browser_h);
 		//this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 		
@@ -372,7 +374,7 @@ class restore_iface : GLib.Object {
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
-		this.arrows_y=scale2*10.0;
+		this.arrows_y=this.browser_y;
 		this.arrows_w=256*scale2;
 		this.arrows_h=150*scale2;
 		c_base.set_source_surface(arrows_pic,this.arrows_x/scale2,this.arrows_y/scale2);
@@ -411,9 +413,9 @@ class restore_iface : GLib.Object {
 
 		// timeline
 		this.scale_x=this.restore_x;
-		this.scale_y=5;
+		this.scale_y=this.browser_y;
 		this.scale_w=this.scr_w/28;
-		this.scale_h=this.my-this.scale_y-5;
+		this.scale_h=this.browser_h+this.browser_margin;
 				
 		this.last_time=this.backups[this.backups.size-1];
 		this.scale_factor=this.scale_h/(this.backups[0]-this.last_time);
@@ -577,10 +579,10 @@ class restore_iface : GLib.Object {
 		double eyedist = 2500.0;
 
 		ox=(this.browser_x*eyedist+(z*((double)this.scr_w)/2))/(z+eyedist);
-		oy=((this.browser_y)*eyedist)/(z+eyedist);
+		oy=((this.browser_margin)*eyedist)/(z+eyedist);
 		ow=(this.browser_w*eyedist)/(z+eyedist);
 		oh=(this.browser_h*eyedist)/(z+eyedist);
-	
+		oy+=this.browser_y;
 	}
 	
 	private int get_nixie_pos(char v) {
@@ -729,7 +731,7 @@ class restore_iface : GLib.Object {
 
 	private bool on_scroll(Gdk.EventScroll event) {
 
-		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)this.browser_y))&&(event.y_root<((int)(this.browser_y+this.browser_h)))) {
+		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)(this.browser_y+this.browser_margin)))&&(event.y_root<((int)(this.browser_y+this.browser_margin+this.browser_h)))) {
 			return false;
 		}
 		
