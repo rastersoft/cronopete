@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-06 16:37+0100\n"
+"POT-Creation-Date: 2011-11-11 20:08+0100\n"
 "PO-Revision-Date: 2011-11-04 13:00+0100\n"
 "Last-Translator: Sergio <raster@rastersoft.com>\n"
 "Language-Team:  <raster@rastersoft.com>\n"
@@ -211,7 +211,7 @@ msgstr "Se produjo un fallo al hacer la copia"
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto en el fichero de configuración %s (linea %d)\n"
 
-#: ../restore.vala:888
+#: ../restore.vala:947
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -226,7 +226,7 @@ msgstr ""
 "\n"
 "No hay suficiente espacio libre"
 
-#: ../restore.vala:890
+#: ../restore.vala:949
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -237,7 +237,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../restore.vala:931
+#: ../restore.vala:990
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -248,51 +248,51 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../restore.vala:953
+#: ../restore.vala:1012
 msgid "Preparing folders to restore"
 msgstr "Preparando la restauración de carpetas"
 
-#: ../icons_widget.vala:162
+#: ../icons_widget.vala:171
 msgid "Name"
 msgstr "Nombre"
 
-#: ../icons_widget.vala:165
+#: ../icons_widget.vala:174
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../icons_widget.vala:166
+#: ../icons_widget.vala:175
 msgid "Modification date"
 msgstr "Fecha de modificación"
 
-#: ../icons_widget.vala:335
+#: ../icons_widget.vala:389
 msgid "Show hiden files"
 msgstr "Mostrar ficheros ocultos"
 
-#: ../icons_widget.vala:343
+#: ../icons_widget.vala:397
 msgid "Reverse order"
 msgstr "Invertir orden"
 
-#: ../icons_widget.vala:351
+#: ../icons_widget.vala:405
 msgid "Sort by name"
 msgstr "Ordenar por nombre"
 
-#: ../icons_widget.vala:355
+#: ../icons_widget.vala:409
 msgid "Sort by type"
 msgstr "Ordenar por tipo"
 
-#: ../icons_widget.vala:359
+#: ../icons_widget.vala:413
 msgid "Sort by size"
 msgstr "Ordenar por tamaño"
 
-#: ../icons_widget.vala:363
+#: ../icons_widget.vala:417
 msgid "Sort by date"
 msgstr "Ordenar por fecha"
 
-#: ../icons_widget.vala:385
+#: ../icons_widget.vala:439
 msgid "View as icons"
 msgstr "Mostrar como iconos"
 
-#: ../icons_widget.vala:389
+#: ../icons_widget.vala:443
 msgid "View as list"
 msgstr "Mostrar como lista"
 

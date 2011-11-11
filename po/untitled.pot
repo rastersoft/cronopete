@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-06 16:37+0100\n"
+"POT-Creation-Date: 2011-11-11 20:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,7 +194,7 @@ msgstr ""
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr ""
 
-#: ../restore.vala:888
+#: ../restore.vala:947
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -204,7 +204,7 @@ msgid ""
 "There's not enought free space"
 msgstr ""
 
-#: ../restore.vala:890
+#: ../restore.vala:949
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -212,7 +212,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../restore.vala:931
+#: ../restore.vala:990
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -220,51 +220,51 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../restore.vala:953
+#: ../restore.vala:1012
 msgid "Preparing folders to restore"
 msgstr ""
 
-#: ../icons_widget.vala:162
+#: ../icons_widget.vala:171
 msgid "Name"
 msgstr ""
 
-#: ../icons_widget.vala:165
+#: ../icons_widget.vala:174
 msgid "Size"
 msgstr ""
 
-#: ../icons_widget.vala:166
+#: ../icons_widget.vala:175
 msgid "Modification date"
 msgstr ""
 
-#: ../icons_widget.vala:335
+#: ../icons_widget.vala:389
 msgid "Show hiden files"
 msgstr ""
 
-#: ../icons_widget.vala:343
+#: ../icons_widget.vala:397
 msgid "Reverse order"
 msgstr ""
 
-#: ../icons_widget.vala:351
+#: ../icons_widget.vala:405
 msgid "Sort by name"
 msgstr ""
 
-#: ../icons_widget.vala:355
+#: ../icons_widget.vala:409
 msgid "Sort by type"
 msgstr ""
 
-#: ../icons_widget.vala:359
+#: ../icons_widget.vala:413
 msgid "Sort by size"
 msgstr ""
 
-#: ../icons_widget.vala:363
+#: ../icons_widget.vala:417
 msgid "Sort by date"
 msgstr ""
 
-#: ../icons_widget.vala:385
+#: ../icons_widget.vala:439
 msgid "View as icons"
 msgstr ""
 
-#: ../icons_widget.vala:389
+#: ../icons_widget.vala:443
 msgid "View as list"
 msgstr ""
 
