@@ -52,6 +52,8 @@ class cp_callback : GLib.Object, callbacks {
 	private bool tooltip_changed;
 	private string tooltip_value;
 	
+	public restore_iface restore_w;
+	
 	// Configuration data
 
 	private bool skip_hiden_at_home;
@@ -401,14 +403,27 @@ class cp_callback : GLib.Object, callbacks {
 		if (this.backup_running==SystemStatus.IDLE) {
 			menuBUnow = new MenuItem.with_label(_("Back Up Now"));
 			menuBUnow.activate.connect(backup_now);
-			this.menuSystem.append(menuBUnow);
 		} else {
 			menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
 			menuBUnow.activate.connect(stop_backup);
-			this.menuSystem.append(menuBUnow);
 		}
+		this.menuSystem.append(menuBUnow);
 
 		menuBUnow.sensitive=this.backend.available;
+
+		var menuEnter = new MenuItem.with_label(_("Restore files"));
+		menuEnter.activate.connect(enter_clicked);
+		menuSystem.append(menuEnter);
+		if (this.backend.available) {
+			var list = this.backend.get_backup_list ();
+			if ((list==null)||(list.size<=0)) {
+				menuEnter.sensitive=false;
+			} else {
+				menuEnter.sensitive=true;
+			}
+		} else {
+			menuEnter.sensitive=false;
+		}
 		
 		var menuBar = new MenuItem();
 		menuSystem.append(menuBar);
@@ -464,12 +479,19 @@ class cp_callback : GLib.Object, callbacks {
 		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
 
 		var about_w = (Dialog)w.get_object("aboutdialog1");
-		
+
 		about_w.show();
 		about_w.run();
 		about_w.hide();
 		about_w.destroy();
 		
+	}
+	
+	public void enter_clicked() {
+
+		if (this.backend.available) {
+			this.restore_w=new restore_iface(this.backend,this.basepath);
+		}
 	}
 	
 	public void main_clicked() {
@@ -535,17 +557,6 @@ class cp_callback : GLib.Object, callbacks {
 		this.main_menu.insert_log(this.messages.str,true);
 		
 		this.current_status=BackupStatus.ALLFINE;
-		/*if (this.configuration_read==false) {
-			if (0!=this.read_configuration()) {
-				this.current_status = BackupStatus.ERROR;
-				this.backup_running = SystemStatus.ENDED;
-				this.set_tooltip(_("Error reading configuration"));
-				this.basedir=null;
-				return null;
-			} else {
-				this.configuration_read = true;
-			}
-		}*/
 		
 		basedir.set_config(this.origin_path_list,this.exclude_path_list,this.skip_hiden_at_home);
 		this.set_tooltip(_("Erasing old backups"));
@@ -578,41 +589,44 @@ class cp_callback : GLib.Object, callbacks {
 	
 	public int write_configuration() {
 
-		FileOutputStream file_write;
-	
-		var home=Environment.get_home_dir();
-	
-		var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
-	
 		try {
-			file_write=config_file.replace(null,false,0,null);
-		} catch {
-			return -2;
-		}
+			FileOutputStream file_write;
 	
-		var out_stream = new DataOutputStream (file_write);
+			var home=Environment.get_home_dir();
+	
+			var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
+	
+			try {
+				file_write=config_file.replace(null,false,0,null);
+			} catch {
+				return -2;
+			}
+	
+			var out_stream = new DataOutputStream (file_write);
 		
-		if (this.skip_hiden_at_home==false) {
-			out_stream.put_string("backup_hiden_at_home\n",null);
-		}
+			if (this.skip_hiden_at_home==false) {
+				out_stream.put_string("backup_hiden_at_home\n",null);
+			}
 		
-		if (this._active==true) {
-			out_stream.put_string("active\n",null);
-		}
+			if (this._active==true) {
+				out_stream.put_string("active\n",null);
+			}
 		
-		if (this.backup_path!="") {
-			out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
-		}
+			if (this.backup_path!="") {
+				out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
+			}
 		
-		out_stream.put_string("backup_period %d\n".printf((int)this.new_period));
+			out_stream.put_string("backup_period %d\n".printf((int)this.new_period));
 		
-		foreach (string str in this.origin_path_list) {
-			out_stream.put_string("add_directory %s\n".printf(str),null);
-		}
-		foreach (string str in this.exclude_path_list) {
-			out_stream.put_string("exclude_directory %s\n".printf(str),null);
-		}
+			foreach (string str in this.origin_path_list) {
+				out_stream.put_string("add_directory %s\n".printf(str),null);
+			}
+			foreach (string str in this.exclude_path_list) {
+				out_stream.put_string("exclude_directory %s\n".printf(str),null);
+			}
+		} catch (IOError e) {
 		
+		}		
 		return 0;
 	}
 	
@@ -768,7 +782,10 @@ class cp_callback : GLib.Object, callbacks {
 
 int main(string[] args) {
 	
-	sleep(2); // To ensure that the menu bar has been loaded
+	if (args.length==1) {
+		sleep(2); // To ensure that the menu bar has been loaded
+	}
+
 	nice(19); // Minimum priority
 	string basepath;
 	
@@ -795,8 +812,9 @@ int main(string[] args) {
 	Gtk.init(ref args);
 
 	var callbacks = new cp_callback(basepath);
-	
+
 	Gdk.threads_enter();
+	
 	Gtk.main();
 
 	Gdk.threads_leave();

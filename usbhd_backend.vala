@@ -20,6 +20,7 @@ using GLib;
 using Posix;
 using Gee;
 
+
 class usbhd_backend: Object, backends {
 
 	private string backup_path;
@@ -36,13 +37,21 @@ class usbhd_backend: Object, backends {
 		}
 	}
 	private int last_msg;
-	
+	private bool locked;
+	private bool tried_to_lock;
+	private GLib.Mutex lock_delete;
+	private time_t deleting;
+
 	public usbhd_backend(string bpath) {
 	
 		var tmpid=bpath.split("/");
 		foreach (string v in tmpid) {
 			this.id=v;
 		}
+		this.locked=false;
+		this.tried_to_lock=false;
+		this.deleting=0;
+		this.lock_delete = new GLib.Mutex();
 		this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
 		this.cbackup_path=null;
 		this.cfinal_path=null;
@@ -55,6 +64,128 @@ class usbhd_backend: Object, backends {
 		this.refresh_connect();
 		
 	}
+
+	public void lock_delete_backup (bool lock_in) {
+
+		lock (this.locked) {
+			if (lock_in) {
+				this.locked=this.lock_delete.trylock();
+				/*if (this.locked) {
+					GLib.stdout.printf("Consigo bloquear en lock\n");
+				} else {
+					GLib.stdout.printf("No consigo bloquear en lock\n");
+				}*/
+				this.tried_to_lock=true;
+			} else {
+				if (this.locked) {
+					this.lock_delete.unlock();
+					//GLib.stdout.printf("Desbloqueo en lock\n");
+				}/* else {
+					GLib.stdout.printf("No desbloqueo en lock\n");
+				}*/
+				this.tried_to_lock=false;
+			}
+		}
+	}
+
+	public bool delete_backup(time_t backup_date) {
+
+		this.lock_delete.lock();
+		this.deleting=backup_date;
+		var tmppath=this.get_backup_path(backup_date);
+		var final_path=Path.build_filename(this.backup_path,tmppath);
+
+		Process.spawn_command_line_sync("rm -rf "+final_path);
+		lock(this.locked) {
+			if (this.tried_to_lock) {
+				this.locked=true;
+				//GLib.stdout.printf("No desbloqueo en delete\n");
+			} else {
+				this.lock_delete.unlock();
+				//GLib.stdout.printf("Desbloqueo en delete\n");
+				this.locked=false;
+			}
+		}
+		return true;
+	}
+	
+	private string get_backup_path(time_t backup) {
+		
+		var ctime = GLib.Time.local(backup);
+		var basepath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup);
+		return basepath;
+		
+	}
+	
+	public BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename) {
+
+		var origin_path = Path.build_filename(this.backup_path,this.get_backup_path(backup),filename);
+
+		File origin;
+		
+		origin=File.new_for_path(origin_path);
+		origin.copy_async.begin(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,null, (obj,res) => {
+			try {
+				origin.copy_async.end(res);
+				this.restore_ended(this,output_filename,BACKUP_RETVAL.OK);
+			} catch (IOError e2) {
+				if (e2 is IOError.NO_SPACE) {
+					Posix.unlink(output_filename);
+					this.restore_ended(this,output_filename,BACKUP_RETVAL.NO_SPC);
+				} else {
+					this.restore_ended(this,output_filename,BACKUP_RETVAL.CANT_COPY);
+				}
+			}
+		});
+		
+		return BACKUP_RETVAL.IN_PROCCESS;
+	}
+	
+
+	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date) {
+
+		FileInfo info_file;
+		FileType typeinfo;
+
+		try {
+		
+			files = new Gee.ArrayList<FilelistIcons.file_info ?>();
+		
+			var basepath=this.get_backup_path(backup);
+
+			date=basepath.dup();
+	
+			var finalpath = Path.build_filename(this.backup_path,basepath,current_path);
+	
+			var directory = File.new_for_path(finalpath);
+			var listfile = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE+","+FILE_ATTRIBUTE_STANDARD_ICON,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
+		
+			while ((info_file = listfile.next_file(null)) != null) {
+
+				var tmpinfo = FilelistIcons.file_info();
+
+				typeinfo=info_file.get_file_type();
+				tmpinfo.name=info_file.get_name().dup();
+
+				if (typeinfo==FileType.DIRECTORY) {
+					tmpinfo.isdir=true;
+				} else {
+					tmpinfo.isdir=false;
+				}
+				
+				info_file.get_modification_time(out tmpinfo.mod_time);
+				tmpinfo.size = info_file.get_size();
+				tmpinfo.icon = (GLib.ThemedIcon)info_file.get_icon();
+				
+				files.add(tmpinfo);
+				
+			}
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
 
 	public void refresh_connect() {
 	
@@ -117,6 +248,7 @@ class usbhd_backend: Object, backends {
 	
 		var blist = new Gee.ArrayList<time_t?>();
 		string dirname;
+		time_t backup_time;
 		
 		var directory = File.new_for_path(this.backup_path);
 
@@ -134,7 +266,10 @@ class usbhd_backend: Object, backends {
 				
 				dirname=file_info.get_name();
 				if (dirname[0]!='B') {
-					blist.add(long.parse(dirname.substring(20)));
+					backup_time=long.parse(dirname.substring(20));
+					if (backup_time!=this.deleting) {
+						blist.add(backup_time);
+					}
 				}
 			}
 		} catch (Error e) {
@@ -147,19 +282,8 @@ class usbhd_backend: Object, backends {
 			}
 		}
 		return blist;
-
 	}
 	
-	public bool delete_backup(time_t backup_date) {
-	
-		var ctime = GLib.Time.local((time_t)backup_date);
-		var tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%lld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup_date);
-		var final_path=Path.build_filename(this.backup_path,tmppath);
-		
-		Process.spawn_command_line_sync("rm -rf "+final_path);
-		return true;
-	}
-
 
 	public BACKUP_RETVAL end_backup() {
 	
@@ -186,7 +310,9 @@ class usbhd_backend: Object, backends {
 	}
 
 	public BACKUP_RETVAL start_backup(out int64 last_backup_time) {
-	
+
+		last_backup_time = 0;
+		
 		if (this.cfinal_path!=null) {
 			return BACKUP_RETVAL.ALREADY_STARTED;
 		}
@@ -197,17 +323,14 @@ class usbhd_backend: Object, backends {
 			return BACKUP_RETVAL.NOT_AVAILABLE;
 		}
 		
-		var timestamp=time_t();
-		var ctime = GLib.Time.local(timestamp);
-
-		var tmppath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,timestamp);
+		var tmppath=this.get_backup_path(time_t());
 		this.cbackup_path=Path.build_filename(this.backup_path,"B"+tmppath);
 		this.cfinal_path=tmppath;
 		
 		string tmp_directory="";
 		string tmp_date="";
 		string last_date="";
-
+		
 		try {
 			var myenum = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME, 0, null);
 			FileInfo file_info;
@@ -269,11 +392,11 @@ class usbhd_backend: Object, backends {
 	public BACKUP_RETVAL copy_file(string path, time_t mod_time) {
 	
 		var newfile = Path.build_filename(this.cbackup_path,path);
-		File destination;
+		File origin;
 		
 		try {
-			destination=File.new_for_path(Path.build_filename(path));
-			destination.copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
+			origin=File.new_for_path(Path.build_filename(path));
+			origin.copy(File.new_for_path(newfile),FileCopyFlags.OVERWRITE,null,null);
 		} catch (IOError e) {
 			if (e is IOError.NO_SPACE) {
 				Posix.unlink(newfile);
@@ -324,15 +447,7 @@ class usbhd_backend: Object, backends {
 		
 		File dir2;
 	
-		try {
-			dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
-		} catch (IOError e) {
-			if (e is IOError.NO_SPACE) {
-				return BACKUP_RETVAL.NO_SPC;
-			} else {
-				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
-			}
-		}
+		dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
 		
 		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_MODIFIED,mod_time,0,null);
 		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_ACCESS,mod_time,0,null);

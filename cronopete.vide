@@ -26,6 +26,8 @@ files:
 - path: menu.vala
 - path: options.vala
 - path: choose.vala
+- path: restore.vala
+- path: icons_widget.vala
 packages:
 - name: cairo
 - name: gee-1.0
