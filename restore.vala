@@ -236,17 +236,16 @@ class restore_iface : GLib.Object {
 		
 	}
 	
-	public void do_show() {
+	public bool do_show() {
 
-		if (this.capture_done==false) {
-			this.capture.fill(0);
-			Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)(this.browser_y+this.browser_margin),0,0,(int)this.browser_w,(int)this.browser_h);
-			this.browser.do_refresh_icons ();
-			this.browserhide=true;
-			this.capture_done=true;
-			this.repaint_draw2 ();
-			this.paint_window ();
-		}
+		this.capture.fill(0);
+		Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)(this.browser_y+this.browser_margin),0,0,(int)this.browser_w,(int)this.browser_h);
+		this.browser.do_refresh_icons ();
+		this.browserhide=true;
+		this.capture_done=true;
+		this.repaint_draw2 ();
+		this.paint_window ();
+		return false;
 	}
 
 	public void refresh_status(usbhd_backend? b) {
@@ -807,7 +806,10 @@ class restore_iface : GLib.Object {
 		bool end_animation=true;
 		bool do_repaint=false;
 
-		this.do_show ();
+		if (this.capture_done==false) {
+			GLib.Idle.add(this.do_show);
+			this.capture_done=true;
+		}
 		
 		if (this.scale_current_value!=this.scale_desired_value) {
 			double diff;
