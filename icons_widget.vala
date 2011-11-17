@@ -457,12 +457,12 @@ namespace FilelistIcons {
 		
 		private void set_view_as_icons() {
 			this.view_as_icons=true;
-			this.refresh_path_list ();
+			this.refresh_path_list (false);
 		}
 
 		private void set_view_as_list() {
 			this.view_as_icons=false;
-			this.refresh_path_list ();
+			this.refresh_path_list (false);
 		}
 		
 		private void set_sort_by_name() {

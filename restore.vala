@@ -143,8 +143,7 @@ class restore_iface : GLib.Object {
 		this.backend=p_backend;
 		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
-		this.backend.restore_ended.connect(this.restoring_ended);
-
+		
 		this.scale_current_value=-1;
 		this.windows_current_value=-1;
 		this.zmul=1000;
@@ -153,6 +152,7 @@ class restore_iface : GLib.Object {
 		this.icon_restore_scale=0.0;
 		this.icon_exit_scale=0.0;
 
+		this.backend.restore_ended.connect(this.restoring_ended);
 		this.backend.status.connect(this.refresh_status);
 		
 		// An ugly way of know if the current locale defines the date as MM/DD/YY or DD/MM/YY
@@ -893,6 +893,8 @@ class restore_iface : GLib.Object {
 			}
 			
 			if (this.current_alpha==0.0) {
+				this.backend.restore_ended.disconnect(this.restoring_ended);
+				this.backend.status.disconnect(this.refresh_status);
 				this.mywindow.hide();
 				this.mywindow.destroy();
 				this.backend.lock_delete_backup(false);
