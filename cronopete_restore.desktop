@@ -1,0 +1,15 @@
+[Desktop Entry]
+X-MultipleArgs=false
+Type=Application
+Name=Cronopete
+GenericName=Restore backed up files
+X-GNOME-FullName=Restore backed up files
+X-GNOME-FullName[es]=Restaurar ficheros del backup
+X-GNOME-FullName[gl]=Restaurar ficheiros do backup
+Comment=Allows to restore files from a cronopete's backup
+Comment[es]=Permite restaurar ficheros a partir de una copia de seguridad de Cronopete
+Comment[gl]=Permite restaurar ficheiros a partires dunha copia de seguridade de Cronopete
+TryExec=cronopete_restore
+Exec=cronopete_restore
+Categories=Other;
+Icon=cronopete_restore.svg

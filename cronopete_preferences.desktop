@@ -1,0 +1,15 @@
+[Desktop Entry]
+X-MultipleArgs=false
+Type=Application
+Name=Cronopete preferences
+GenericName=Setup Cronopete
+X-GNOME-FullName=Setup Cronopete
+X-GNOME-FullName[es]=Configurar Cronopete
+X-GNOME-FullName[gl]=Configurar Cronopete
+Comment=Allows to set the preferences for the Cronopete Backup system
+Comment[es]=Permite configurar el programa de backups Cronopete
+Comment[gl]=Permite configurar o programa de backups Cronopete
+TryExec=cronopete_preferences
+Exec=cronopete_preferences
+Categories=Other;
+Icon=cronopete_preferences.svg

@@ -16,11 +16,17 @@ install:
 	cp cronopete_restore $(PREFIX2)/bin
 	cp cronopete_preferences $(PREFIX2)/bin
 	install -d $(PREFIX2)/share/cronopete
+	install -d $(PREFIX2)/share/icons
+	install -d $(PREFIX2)/share/applications
 	cp interface/*.ui $(PREFIX2)/share/cronopete/
-	cp interface/*.svg $(PREFIX2)/share/cronopete/
+	cp interface/anacronopete.svg $(PREFIX2)/share/cronopete/
+	cp interface/cronopete_preferences.svg $(PREFIX2)/share/icons/
+	cp interface/cronopete_restore.svg $(PREFIX2)/share/icons/
 	cp interface/*.png $(PREFIX2)/share/cronopete/
 	install -d $(PREFIX)/etc/xdg/autostart/
 	cp cronopete.desktop $(PREFIX)/etc/xdg/autostart/
+	cp cronopete_restore.desktop $(PREFIX2)/share/applications
+	cp cronopete_preferences.desktop $(PREFIX2)/share/applications
 	install  -d $(PREFIX2)/share/locale/es/LC_MESSAGES
 	cp po/es.mo $(PREFIX2)/share/locale/es/LC_MESSAGES/cronopete.mo
 	install  -d $(PREFIX2)/share/locale/gl/LC_MESSAGES
