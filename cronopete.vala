@@ -855,7 +855,6 @@ public class DetectServer : GLib.Object {
 	}
 
 	public void show_preferences() {
-		GLib.stdout.printf("muestro preferencias\n");
 		callback_object.main_clicked ();
 	}
 

@@ -1,13 +1,14 @@
 <html>
   <head>
-    <title>Cronopete 2.0.0</title>
+    <title>Cronopete 2.3.0</title>
     <style type="text/css" media="all">
       .menu { background-color: #dddbd8; }
       .filename { color: green; }
+      .command {color: #0030FF; }
     </style>
   </head>
 <body>
-<div align="center"><h1>CRONOPETE 2.2.0</h1></div>
+<div align="center"><h1>CRONOPETE 2.3.0</h1></div>
 
 <p>The Apple's TimeMachine clone for Linux</p>
 
@@ -137,8 +138,27 @@ file/folder with that name and suffix, cronopete will add .1, .2, and so on, whe
 the most recent backups are kept for 24 hours (top); then it jumps to one backup per day during a month (middle); finally it stores only one backup per week (bottom).</p>
 <h2>Uninstalling cronopete</h2>
 <p>To uninstall cronopete, just use <i>make uninstall</i>.</p>
+
+<h2>Using Dbus to control Cronopete</h2>
+<p>Dbus remote control can be used to control Cronopete in systems without system tray. It offers the following four methods in com.backup.cronopete,
+path /com/backup/cronopete:</p>
+<ul>
+<li><b>DoBackup</b>: will force a backup now. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.DoBackup</pre></li>
+<li><b>StopBackup</b>: will stop a current backup proccess. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.StopBackup</pre></li>
+<li><b>ShowPreferences</b>: will show the preferences window, to let you configure Cronopete. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.ShowPreferences</pre>,
+or with the program <span class="command">/usr/bin/cronopete_preferences</span></li>
+<li><b>RestoreFiles</b>: will show the restoring files interface. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.RestoreFiles</pre>,
+or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
+</ul>
+
 <h2>History of versions</h2>
 <ul>
+
+<li>Version 2.3.0 (2011/12/01)</li>
+<ul>
+<li>Added Dbus remote control</li>
+<li>Added icon cache to speed up the restoring interface</li>
+</ul>
 
 <li>Version 2.2.0 (2011/11/18)</li>
 <ul>

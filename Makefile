@@ -13,6 +13,8 @@ install:
 	rm -f $(PREFIX2)/bin/cronopete
 	install -d $(PREFIX2)/bin/
 	cp cronopete $(PREFIX2)/bin
+	cp cronopete_restore $(PREFIX2)/bin
+	cp cronopete_preferences $(PREFIX2)/bin
 	install -d $(PREFIX2)/share/cronopete
 	cp interface/*.ui $(PREFIX2)/share/cronopete/
 	cp interface/*.svg $(PREFIX2)/share/cronopete/
@@ -33,7 +35,7 @@ launch:
 	cronopete &	
 
 uninstall:
-	rm $(PREFIX2)/bin/cronopete
+	rm $(PREFIX2)/bin/cronopete*
 	rm -rf $(PREFIX2)/share/cronopete
 	rm $(PREFIX)/etc/xdg/autostart/cronopete.desktop
 	rm $(PREFIX2)/share/locale/es/LC_MESSAGES/cronopete.mo

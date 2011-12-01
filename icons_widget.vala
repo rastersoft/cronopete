@@ -930,7 +930,6 @@ namespace FilelistIcons {
 					element_cache = this.icon_cache.get(f.icon.names[0]);
 					pbuf=element_cache.big;
 					pbuf2=element_cache.small;
-					GLib.stdout.printf("Saco icono %s\n",f.icon.names[0]);
 				} else {
 					try {
 						var tmp1=theme.lookup_by_gicon(f.icon,48,0);
@@ -958,7 +957,6 @@ namespace FilelistIcons {
 					element_cache.big=pbuf;
 					element_cache.small=pbuf2;
 					this.icon_cache.set(f.icon.names[0],element_cache);
-					GLib.stdout.printf("Meto icono %s\n",f.icon.names[0]);
 				}
 				
 				this.path_model.append (out iter);
