@@ -27,6 +27,7 @@ using Gsl;
 enum SystemStatus { IDLE, BACKING_UP, ABORTING, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
+cp_callback callback_object;
 
 class cp_callback : GLib.Object, callbacks {
 
@@ -490,6 +491,10 @@ class cp_callback : GLib.Object, callbacks {
 	public void enter_clicked() {
 
 		if (this.backend.available) {
+			var list = this.backend.get_backup_list ();
+			if ((list==null)||(list.size<=0)) {
+				return;
+			}			
 			this.restore_w=new restore_iface(this.backend,this.basepath);
 		}
 	}
@@ -737,8 +742,7 @@ class cp_callback : GLib.Object, callbacks {
 		return 0;
 	}
 	
-	public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next,
-															out uint64 total_space, out uint64 free_space) {
+	public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next, out uint64 total_space, out uint64 free_space) {
 	
 	
 		this.fill_last_backup();
@@ -777,14 +781,20 @@ class cp_callback : GLib.Object, callbacks {
 			next=0;
 		}
 	}
+	
 }
 
+void on_bus_aquired (DBusConnection conn) {
+    try {
+        conn.register_object ("/com/backup/cronopete", new DetectServer ());
+    } catch (IOError e) {
+        GLib.stderr.printf ("Could not register service\n");
+    }
+}
 
 int main(string[] args) {
-	
-	if (args.length==1) {
-		sleep(2); // To ensure that the menu bar has been loaded
-	}
+
+	// try to connect to the bus
 
 	nice(19); // Minimum priority
 	string basepath;
@@ -811,7 +821,15 @@ int main(string[] args) {
 	Gdk.threads_init();
 	Gtk.init(ref args);
 
-	var callbacks = new cp_callback(basepath);
+	callback_object = new cp_callback(basepath);
+	Bus.own_name (BusType.SESSION, "com.backup.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
+		GLib.stderr.printf ("Cronopete is already running\n");
+		exit(1);
+	});
+
+	if (args.length==1) {
+		sleep(2); // To ensure that the menu bar has been loaded
+	}
 
 	Gdk.threads_enter();
 	
@@ -819,4 +837,29 @@ int main(string[] args) {
 
 	Gdk.threads_leave();
 	return 0;
+}
+
+[DBus (name = "com.backup.cronopete")]
+public class DetectServer : GLib.Object {
+	
+	public bool do_ping() {
+		return true;
+	}
+
+	public void do_backup() {
+		callback_object.backup_now();
+	}
+
+	public void stop_backup() {
+		callback_object.stop_backup();
+	}
+
+	public void show_preferences() {
+		GLib.stdout.printf("muestro preferencias\n");
+		callback_object.main_clicked ();
+	}
+
+	public void restore_files() {
+		callback_object.enter_clicked ();
+	}
 }

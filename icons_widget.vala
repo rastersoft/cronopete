@@ -36,6 +36,11 @@ namespace FilelistIcons {
 		string icon;
 	}
 
+	struct icon_cache_st {
+		Gdk.Pixbuf big;
+		Gdk.Pixbuf small;
+	}
+
 	enum e_sort_by {NAME, TYPE, DATE, SIZE}
 	
 	class IconBrowser : Frame {
@@ -75,8 +80,12 @@ namespace FilelistIcons {
 
 		public signal void changed_path_list();
 
+		private Gee.Map<string, icon_cache_st ?>icon_cache;
+
 		public IconBrowser(backends p_backend,string p_current_path) {
-	
+
+			this.icon_cache=new Gee.TreeMap<string, icon_cache_st ?>();
+
 			this.backend=p_backend;
 			this.current_path=p_current_path;
 
@@ -906,7 +915,8 @@ namespace FilelistIcons {
 			}
 		
 			var theme = Gtk.IconTheme.get_default();
-
+			icon_cache_st element_cache;
+			
 			Gdk.Pixbuf pbuf=null;
 			Gdk.Pixbuf pbuf2=null;
 			
@@ -915,28 +925,40 @@ namespace FilelistIcons {
 				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
 					continue;
 				}
-				
-				try {
-					var tmp1=theme.lookup_by_gicon(f.icon,48,0);
-					if (tmp1!=null) {
-						var tmp2=theme.lookup_by_gicon(f.icon,24,0);
-						pbuf = tmp1.load_icon();
-						pbuf2= tmp2.load_icon();
-					} else {
+
+				if (this.icon_cache.has_key(f.icon.names[0])) {
+					element_cache = this.icon_cache.get(f.icon.names[0]);
+					pbuf=element_cache.big;
+					pbuf2=element_cache.small;
+					GLib.stdout.printf("Saco icono %s\n",f.icon.names[0]);
+				} else {
+					try {
+						var tmp1=theme.lookup_by_gicon(f.icon,48,0);
+						if (tmp1!=null) {
+							var tmp2=theme.lookup_by_gicon(f.icon,24,0);
+							pbuf = tmp1.load_icon();
+							pbuf2= tmp2.load_icon();
+						} else {
+							pbuf=null;
+						}
+					} catch {
 						pbuf=null;
 					}
-				} catch {
-					pbuf=null;
-				}
 
-				if (pbuf==null) {
-					if (f.isdir) {
-						pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
-						pbuf2= this.path_view.render_icon(Stock.DIRECTORY,IconSize.SMALL_TOOLBAR,"");
-					} else {
-						pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
-						pbuf2= this.path_view.render_icon(Stock.FILE,IconSize.SMALL_TOOLBAR,"");
+					if (pbuf==null) {
+						if (f.isdir) {
+							pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
+							pbuf2= this.path_view.render_icon(Stock.DIRECTORY,IconSize.SMALL_TOOLBAR,"");
+						} else {
+							pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
+							pbuf2= this.path_view.render_icon(Stock.FILE,IconSize.SMALL_TOOLBAR,"");
+						}
 					}
+					element_cache= icon_cache_st();
+					element_cache.big=pbuf;
+					element_cache.small=pbuf2;
+					this.icon_cache.set(f.icon.names[0],element_cache);
+					GLib.stdout.printf("Meto icono %s\n",f.icon.names[0]);
 				}
 				
 				this.path_model.append (out iter);
