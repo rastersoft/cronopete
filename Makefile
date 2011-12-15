@@ -9,6 +9,12 @@ cronopete: backup.vala choose.vala cronopete.vala menu.vala options.vala switch_
 	rm -f cronopete
 	valac -q -X -D'GETTEXT_PACKAGE="cronopete"' backup.vala choose.vala cronopete.vala menu.vala options.vala switch_widget.vala usbhd_backend.vala restore.vala icons_widget.vala --pkg gio-2.0 --pkg gtk+-2.0 --pkg posix --pkg gee-1.0 --pkg gsl --pkg gmodule-2.0 -o cronopete
 
+cronopete3: backup.vala choose.vala cronopete.vala menu.vala options.vala switch_widget.vala usbhd_backend.vala
+	rm -f *.c
+	rm -f cronopete3
+	valac -q -X -D'GETTEXT_PACKAGE="cronopete"' -D USE_GTK3 backup.vala choose.vala cronopete.vala menu.vala options.vala switch_widget.vala usbhd_backend.vala --pkg gio-2.0 --pkg gtk+-3.0 --pkg posix --pkg gee-1.0 --pkg gsl --pkg gmodule-2.0 -o cronopete3
+
+
 install:
 	rm -f $(PREFIX2)/bin/cronopete
 	install -d $(PREFIX2)/bin/
