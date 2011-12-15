@@ -54,7 +54,8 @@ interface backends : GLib.Object {
 	public abstract bool available {get;}
 	public signal void status(usbhd_backend b);
 
-	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date);
+	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<file_info ?> files, out string date);
+
 	public abstract BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename);
 	public signal void restore_ended(backends b, string file_ended, BACKUP_RETVAL status);
 

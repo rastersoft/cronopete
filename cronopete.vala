@@ -52,9 +52,9 @@ class cp_callback : GLib.Object, callbacks {
 	private uint new_period;
 	private bool tooltip_changed;
 	private string tooltip_value;
-	
+
 	public restore_iface restore_w;
-	
+
 	// Configuration data
 
 	private bool skip_hiden_at_home;
@@ -309,12 +309,21 @@ class cp_callback : GLib.Object, callbacks {
 		}
 	}
 
-	public bool repaint(int size) {
+	public bool do_first_repaint() {
+		this.repaint(this.size);
+		return false;
+	}
 	
+	public bool repaint(int size) {
+
 		if (size==0) {
 			return false;
 		}
-	
+
+		if (this.size!=size) {
+			GLib.Idle.add(this.do_first_repaint);
+		}
+		
 		this.size = size;
 	
 		var canvas = new Cairo.ImageSurface(Cairo.Format.ARGB32,size,size);
