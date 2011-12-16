@@ -1,0 +1,8 @@
+
+[Desktop Entry]
+Type=Application
+Exec=cronopete3
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Simple backup application
