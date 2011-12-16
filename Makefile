@@ -38,6 +38,29 @@ install:
 	install  -d $(PREFIX2)/share/locale/gl/LC_MESSAGES
 	cp po/gl.mo $(PREFIX2)/share/locale/gl/LC_MESSAGES/cronopete.mo
 
+install3:
+	rm -f $(PREFIX2)/bin/cronopete3
+	install -d $(PREFIX2)/bin/
+	cp cronopete3 $(PREFIX2)/bin/cronopete3
+	cp cronopete_restore $(PREFIX2)/bin
+	cp cronopete_preferences $(PREFIX2)/bin
+	install -d $(PREFIX2)/share/cronopete3
+	install -d $(PREFIX2)/share/icons
+	install -d $(PREFIX2)/share/applications
+	cp interface3/*.ui $(PREFIX2)/share/cronopete3/
+	cp interface/anacronopete.svg $(PREFIX2)/share/cronopete3/
+	cp interface/cronopete_preferences.svg $(PREFIX2)/share/icons/
+	cp interface/cronopete_restore.svg $(PREFIX2)/share/icons/
+	cp interface/*.png $(PREFIX2)/share/cronopete3/
+	install -d $(PREFIX)/etc/xdg/autostart/
+	cp cronopete3.desktop $(PREFIX)/etc/xdg/autostart/cronopete.desktop
+	cp cronopete_restore.desktop $(PREFIX2)/share/applications
+	cp cronopete_preferences.desktop $(PREFIX2)/share/applications
+	install  -d $(PREFIX2)/share/locale/es/LC_MESSAGES
+	cp po/es.mo $(PREFIX2)/share/locale/es/LC_MESSAGES/cronopete.mo
+	install  -d $(PREFIX2)/share/locale/gl/LC_MESSAGES
+	cp po/gl.mo $(PREFIX2)/share/locale/gl/LC_MESSAGES/cronopete.mo
+
 clean:
 	rm -f cronopete
 	rm -f cronopete3
@@ -45,11 +68,18 @@ clean:
 
 launch:
 	killall -q cronopete || cd
+	killall -q cronopete3 || cd
 	cronopete &	
+
+launch3:
+	killall -q cronopete || cd
+	killall -q cronopete3 || cd
+	cronopete3 &	
 
 uninstall:
 	rm $(PREFIX2)/bin/cronopete*
 	rm -rf $(PREFIX2)/share/cronopete
+	rm -rf $(PREFIX2)/share/cronopete3
 	rm $(PREFIX)/etc/xdg/autostart/cronopete.desktop
 	rm $(PREFIX2)/share/locale/es/LC_MESSAGES/cronopete.mo
 	rm $(PREFIX2)/share/locale/gl/LC_MESSAGES/cronopete.mo

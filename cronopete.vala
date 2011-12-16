@@ -435,14 +435,14 @@ class cp_callback : GLib.Object, callbacks {
 			menuEnter.sensitive=false;
 		}
 		
-		var menuBar = new MenuItem();
+		var menuBar = new SeparatorMenuItem();
 		menuSystem.append(menuBar);
 		
 		var menuMain = new MenuItem.with_label(_("Open Cronopete Preferences..."));
 		menuMain.activate.connect(main_clicked);
 		menuSystem.append(menuMain);
 		
-		var menuBar2 = new MenuItem();
+		var menuBar2 = new SeparatorMenuItem();
 		menuSystem.append(menuBar2);
 		
 		var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
@@ -807,7 +807,23 @@ int main(string[] args) {
 
 	nice(19); // Minimum priority
 	string basepath;
-	
+
+#if USE_GTK3
+	var file=File.new_for_path("./interface3/main.ui");
+	if (file.query_exists()) {
+		basepath="./interface3/";
+		Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
+	} else {
+		file=File.new_for_path("/usr/share/cronopete3/main.ui");
+		if (file.query_exists()) {
+			basepath="/usr/share/cronopete3/";
+			Intl.bindtextdomain( "cronopete", "/usr/share/locale");
+		} else {
+			basepath="/usr/local/share/cronopete3/";
+			Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
+		}
+	}
+#else	
 	var file=File.new_for_path("./interface/main.ui");
 	if (file.query_exists()) {
 		basepath="./interface/";
@@ -822,7 +838,7 @@ int main(string[] args) {
 			Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
 		}
 	}
-	
+#endif	
 	//Intl.setlocale (LocaleCategory.ALL, "");
 	Intl.textdomain("cronopete");
 	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
