@@ -71,7 +71,6 @@ class c_main_menu : GLib.Object {
 		var cnt = (VBox) this.builder.get_object("vbox_switch");
 #if USE_GTK3
 		this.my_widget=new Switch();
-		this.my_widget.activate.connect(this.cronopete_is_active_callback);
 		this.my_widget.expand=false;
 		var tmp_w=new HBox(false,0);
 		var tmp_w2=new Label("");
@@ -81,15 +80,15 @@ class c_main_menu : GLib.Object {
 		tmp_w.pack_start(tmp_w3,true,true,0);
 		tmp_w.show();
 		cnt.pack_start(tmp_w,false,true,0);
+		this.my_widget.show();
+		this.my_widget.notify_property("active");
+		this.my_widget.notify.connect(this.cronopete_is_active_callback);
 #else
 		this.my_widget=new Switch_Widget();
 		this.my_widget.toggled.connect(this.cronopete_is_active_callback);
 		cnt.pack_start(this.my_widget,false,true,0);
-#endif
-		
 		this.my_widget.show();
-		
-		//cnt.reorder_child(this.my_widget,1);
+#endif
 
 		this.is_visible = false;
 		
@@ -201,7 +200,11 @@ class c_main_menu : GLib.Object {
 	}
 
 	public void cronopete_is_active_callback() {
-	
+
+		if (this.is_visible==false) {
+			return;
+		}
+
 		if (this.my_widget.active) {
 			this.parent.active=true;
 		} else {
