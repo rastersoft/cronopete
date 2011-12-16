@@ -184,7 +184,11 @@ class restore_iface : GLib.Object {
 		this.base_layout = new Fixed();
 
 		this.drawing = new DrawingArea();
+#if USE_GTK3
+		this.drawing.draw.connect(this.repaint_draw3);
+#else
 		this.drawing.expose_event.connect(this.repaint_draw);
+#endif
 		this.base_layout.add(this.drawing);
 		
 		this.box = new EventBox();
@@ -239,7 +243,11 @@ class restore_iface : GLib.Object {
 	public bool do_show() {
 
 		this.capture.fill(0);
+#if USE_GTK3
+		this.capture=Gdk.pixbuf_get_from_window(this.browser.get_window(),(int)this.browser_x,(int)(this.browser_y+this.browser_margin),(int)this.browser_w,(int)this.browser_h);
+#else
 		Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)(this.browser_y+this.browser_margin),0,0,(int)this.browser_w,(int)this.browser_h);
+#endif
 		this.browser.do_refresh_icons ();
 		this.browserhide=true;
 		this.capture_done=true;
@@ -496,7 +504,12 @@ class restore_iface : GLib.Object {
 	private void repaint_draw2() {
 
 		var ctx = new Cairo.Context(this.animation_surface);
+		this.repaint_draw3 (ctx);
 
+	}
+	
+	private bool repaint_draw3(Context ctx) {
+		
 		// Paint the base image
 		ctx.set_source_surface(this.final_surface,0,0);
 		ctx.paint();
@@ -568,9 +581,10 @@ class restore_iface : GLib.Object {
 			ctx.restore();
 		}
 		
-		var ctx2 = Gdk.cairo_create(this.drawing.window);
+		var ctx2 = Gdk.cairo_create(this.drawing.get_window());
 		ctx2.set_source_surface(this.animation_surface,0,0);
 		ctx2.paint();
+		return true;
 	}
 
 	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh) {
@@ -976,13 +990,13 @@ class restore_iface : GLib.Object {
 		}
 		
 		if (this.restore_files.is_empty) {
-			this.mywindow.window.set_cursor(null);
+			this.mywindow.get_window().set_cursor(null);
 			this.restore_window.destroy();
 			return;
 		}
 
 		if (this.cancel_restoring) {
-			this.mywindow.window.set_cursor(null);
+			this.mywindow.get_window().set_cursor(null);
 			this.restore_files.clear();
 			this.restore_window.destroy();
 			return;
@@ -1018,7 +1032,7 @@ class restore_iface : GLib.Object {
 		this.timer_bar=Timeout.add(250,this.timer_bar_f);
 
 		var cursor_working = new Gdk.Cursor(Gdk.CursorType.WATCH);
-		this.mywindow.window.set_cursor(cursor_working);
+		this.mywindow.get_window().set_cursor(cursor_working);
 		
 		this.launch_fill_restore_list.begin( (obj,res) => {
 			this.launch_fill_restore_list.end(res);
@@ -1029,7 +1043,7 @@ class restore_iface : GLib.Object {
 			} else {
 				this.restore_files.clear();
 				this.restore_window.destroy();
-				this.mywindow.window.set_cursor(null);
+				this.mywindow.get_window().set_cursor(null);
 			}
 		});
 	}
@@ -1080,7 +1094,7 @@ class restore_iface : GLib.Object {
 	
 	private BACKUP_RETVAL add_folder_to_restore(string o_path, string f_path) {
 		
-		Gee.List<FilelistIcons.file_info ?> files;
+		Gee.List<file_info ?> files;
 		string date;
 		string new_opath;
 		string new_rpath;

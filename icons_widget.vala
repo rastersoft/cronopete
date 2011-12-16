@@ -23,14 +23,6 @@ using Gdk;
 
 namespace FilelistIcons {
 
-	struct file_info {
-		string name;
-		GLib.ThemedIcon icon;
-		bool isdir;
-		TimeVal mod_time;
-		int64 size;
-	}
-
 	struct bookmark_str {
 		string name;
 		string icon;
@@ -167,7 +159,11 @@ namespace FilelistIcons {
 			this.path_view.selection_mode=SelectionMode.MULTIPLE;
 			this.path_view.button_press_event.connect(this.selection_made);
 			this.path_view.item_activated.connect(this.activated);
+#if USE_GTK3
+			this.path_view.item_orientation=Orientation.VERTICAL;
+#else
 			this.path_view.orientation=Orientation.VERTICAL;
+#endif
 			this.scroll.add_with_viewport(this.path_view);
 			
 			// View for list
@@ -645,14 +641,23 @@ namespace FilelistIcons {
 			btn.has_focus=true;
 
 			Gtk.Requisition req;
-			this.buttons_path.size_request(out req);
 			Gtk.Requisition req2;
+#if USE_GTK3
+			this.buttons_path.get_child_requisition(out req);
+			this.get_child_requisition(out req2);
+#else
+			this.buttons_path.size_request(out req);
 			this.size_request(out req2);
+#endif
 			if (req.width>=req2.width) {
 				this.btn_prev.show();
 				this.btn_next.show();
 				Gtk.Requisition req3;
-				this.btn_prev.size_request(out req3);
+#if USE_GTK3
+			this.btn_prev.get_child_requisition(out req3);
+#else
+			this.btn_prev.size_request(out req3);
+#endif
 				var newwidth = req2.width-2*req3.width-10;
 				if (newwidth>0) {
 					this.buttons_scroll.width_request=newwidth;
@@ -685,9 +690,14 @@ namespace FilelistIcons {
 			var v=this.buttons_scroll.hadjustment.value;
 			v+=30;
 			Gtk.Requisition req;
-			this.buttons_path.size_request(out req);
 			Gtk.Requisition req2;
+#if USE_GTK3
+			this.buttons_path.get_child_requisition(out req);
+			this.buttons_scroll.get_child_requisition(out req2);
+#else
+			this.buttons_path.size_request(out req);
 			this.buttons_scroll.size_request(out req2);
+#endif
 			var max = req.width-req2.width;
 			if (v>max) {
 				v=max;

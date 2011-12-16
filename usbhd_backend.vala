@@ -20,7 +20,15 @@ using GLib;
 using Posix;
 using Gee;
 
+struct file_info {
+	string name;
+	GLib.ThemedIcon icon;
+	bool isdir;
+	TimeVal mod_time;
+	int64 size;
+}
 
+ 
 class usbhd_backend: Object, backends {
 
 	private string backup_path;
@@ -140,17 +148,15 @@ class usbhd_backend: Object, backends {
 		
 		return BACKUP_RETVAL.IN_PROCCESS;
 	}
-	
 
-	public bool get_filelist(string current_path, time_t backup, out Gee.List<FilelistIcons.file_info ?> files, out string date) {
-
+	public bool get_filelist(string current_path, time_t backup, out Gee.List<file_info ?> files, out string date) {
 		FileInfo info_file;
 		FileType typeinfo;
 
 		try {
-		
-			files = new Gee.ArrayList<FilelistIcons.file_info ?>();
-		
+
+			files = new Gee.ArrayList<file_info ?>();
+
 			var basepath=this.get_backup_path(backup);
 
 			date=basepath.dup();
@@ -162,7 +168,7 @@ class usbhd_backend: Object, backends {
 		
 			while ((info_file = listfile.next_file(null)) != null) {
 
-				var tmpinfo = FilelistIcons.file_info();
+				var tmpinfo = file_info();
 
 				typeinfo=info_file.get_file_type();
 				tmpinfo.name=info_file.get_name().dup();
