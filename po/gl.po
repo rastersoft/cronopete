@@ -2,15 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Miguel Anxo Bouzada <mbouzada@gmail.com, 2011.
 # Sergio <raster@rastersoft.com>, 2011.
+# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-11 20:08+0100\n"
-"PO-Revision-Date: 2011-11-06 16:56+0100\n"
+"POT-Creation-Date: 2011-12-25 19:34+0100\n"
+"PO-Revision-Date: 2011-12-25 19:35+0100\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "Language: \n"
@@ -21,25 +21,25 @@ msgstr ""
 
 #. This string shows the current status of Cronopete. It could be
 #. Status: idle, or Status: copying file...
-#: ../menu.vala:82
+#: ../menu.vala:101
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../menu.vala:112 ../cronopete.vala:191 ../cronopete.vala:202
+#: ../menu.vala:131 ../cronopete.vala:192 ../cronopete.vala:203
 #, c-format
 msgid "None"
 msgstr "Ningunha"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../menu.vala:162 ../cronopete.vala:185
+#: ../menu.vala:181 ../cronopete.vala:186
 #, c-format
 msgid "Not defined"
 msgstr "Non definida"
 
 #. This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
-#: ../menu.vala:170
+#: ../menu.vala:189
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
@@ -49,34 +49,34 @@ msgstr "%lld GB de %lld GB"
 msgid "Backup hiden files and folders in %s"
 msgstr "Copiar ficheiros e cartafoles agochados en %s"
 
-#: ../backup.vala:337
+#: ../backup.vala:338
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr "Non foi posíbel crear o cartafol para esta copia. Interrompendo.\n"
 
-#: ../backup.vala:340
+#: ../backup.vala:341
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 "Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
 
-#: ../backup.vala:343
+#: ../backup.vala:344
 msgid "Backup device not available. Aborting backup.\n"
 msgstr "Non está dispoñíbel o disco externo para as copias. Interrompendo.\n"
 
-#: ../backup.vala:346
+#: ../backup.vala:347
 msgid "Already started a backup.\n"
 msgstr "Xa está a facerse unha copia.\n"
 
-#: ../backup.vala:350
+#: ../backup.vala:351
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: ../backup.vala:369
+#: ../backup.vala:370
 msgid "Backup aborted\n"
 msgstr "Copia cancelada.\n"
 
-#: ../backup.vala:383
+#: ../backup.vala:384
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -84,15 +84,15 @@ msgstr ""
 "O disco é demasiado pequeno para poder copiar todo.\n"
 "Axuste a lista de cartafoles a copiar e a excluír.\n"
 
-#: ../backup.vala:397
+#: ../backup.vala:398
 msgid "Syncing disk\n"
 msgstr "Sincronizando o disco\n"
 
-#: ../backup.vala:399
+#: ../backup.vala:400
 msgid "Can't close the backup. Aborting.\n"
 msgstr "Non foi posíbel pechar a copia. Interrompendo.\n"
 
-#: ../backup.vala:405
+#: ../backup.vala:406
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Copia rematada. levou %ld segundos.\n"
@@ -133,86 +133,86 @@ msgstr ""
 msgid "Unknown FS"
 msgstr "FS descoñecido"
 
-#: ../cronopete.vala:173 ../cronopete.vala:276 ../cronopete.vala:304
+#: ../cronopete.vala:174 ../cronopete.vala:277 ../cronopete.vala:305
 msgid "Idle"
 msgstr "En repouso"
 
-#: ../cronopete.vala:185 ../cronopete.vala:191 ../cronopete.vala:202
-#: ../cronopete.vala:206
+#: ../cronopete.vala:186 ../cronopete.vala:192 ../cronopete.vala:203
+#: ../cronopete.vala:207
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
 
-#: ../cronopete.vala:301
+#: ../cronopete.vala:302
 msgid "Storage not available"
 msgstr "O almacenamento non está dispoñíbel "
 
-#: ../cronopete.vala:306
+#: ../cronopete.vala:307
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../cronopete.vala:404
+#: ../cronopete.vala:414
 msgid "Back Up Now"
 msgstr "Copiar agora"
 
-#: ../cronopete.vala:407
+#: ../cronopete.vala:417
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: ../cronopete.vala:414
+#: ../cronopete.vala:424
 msgid "Restore files"
 msgstr "Restaurar ficheiros"
 
-#: ../cronopete.vala:431
+#: ../cronopete.vala:441
 msgid "Open Cronopete Preferences..."
 msgstr "Abrir as preferencias de Cronopete..."
 
-#: ../cronopete.vala:508
+#: ../cronopete.vala:522
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../cronopete.vala:527
+#: ../cronopete.vala:541
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../cronopete.vala:532
+#: ../cronopete.vala:546
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../cronopete.vala:537
+#: ../cronopete.vala:551
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../cronopete.vala:556
+#: ../cronopete.vala:570
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../cronopete.vala:562
+#: ../cronopete.vala:576
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../cronopete.vala:574
+#: ../cronopete.vala:588
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../cronopete.vala:578
+#: ../cronopete.vala:592
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../cronopete.vala:582
+#: ../cronopete.vala:596
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../cronopete.vala:733
+#: ../cronopete.vala:747
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
 
-#: ../restore.vala:947
+#: ../restore.vala:991
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -227,7 +227,7 @@ msgstr ""
 "\n"
 "Non hai espazo baleiro abondo"
 
-#: ../restore.vala:949
+#: ../restore.vala:993
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -238,7 +238,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../restore.vala:990
+#: ../restore.vala:1034
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -249,51 +249,51 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../restore.vala:1012
+#: ../restore.vala:1056
 msgid "Preparing folders to restore"
 msgstr "Preparando os cartafois para restaurar"
 
-#: ../icons_widget.vala:171
+#: ../icons_widget.vala:176
 msgid "Name"
 msgstr "Nome"
 
-#: ../icons_widget.vala:174
+#: ../icons_widget.vala:179
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../icons_widget.vala:175
+#: ../icons_widget.vala:180
 msgid "Modification date"
 msgstr "Data de modiicación"
 
-#: ../icons_widget.vala:389
+#: ../icons_widget.vala:394
 msgid "Show hiden files"
 msgstr "Mostrar ficheiros agochados"
 
-#: ../icons_widget.vala:397
+#: ../icons_widget.vala:402
 msgid "Reverse order"
 msgstr "Inverter a orden"
 
-#: ../icons_widget.vala:405
+#: ../icons_widget.vala:410
 msgid "Sort by name"
 msgstr "Ordenar por nome"
 
-#: ../icons_widget.vala:409
+#: ../icons_widget.vala:414
 msgid "Sort by type"
 msgstr "Ordenar por tipo"
 
-#: ../icons_widget.vala:413
+#: ../icons_widget.vala:418
 msgid "Sort by size"
 msgstr "Ordenar por tamaño"
 
-#: ../icons_widget.vala:417
+#: ../icons_widget.vala:422
 msgid "Sort by date"
 msgstr "Ordenar por data"
 
-#: ../icons_widget.vala:439
+#: ../icons_widget.vala:444
 msgid "View as icons"
 msgstr "Ver como iconas"
 
-#: ../icons_widget.vala:443
+#: ../icons_widget.vala:448
 msgid "View as list"
 msgstr "Ver como lista"
 
@@ -335,8 +335,8 @@ msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr "Por que <i>ana<b>CRONOPETE</b></i>?"
 
 #: ../interface/about.ui.h:10
-msgid "© 2011 Raster Software Vigo"
-msgstr "© 2011 Raster Software Vigo"
+msgid "©2011 Raster Software Vigo"
+msgstr "©2011 Raster Software Vigo"
 
 #: ../interface/format_error.ui.h:1
 msgid "<b>Error info</b>"
