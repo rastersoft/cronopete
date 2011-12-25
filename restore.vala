@@ -941,24 +941,29 @@ class restore_iface : GLib.Object {
 	private string get_restored_filename(string path, string filename) {
 
 		int pos,pos2;
-
-		pos=-1;
-		pos2=-1;
-		do {
-			pos2=filename.index_of_char('.',pos+1);
-			if (pos2>=0) {
-				pos=pos2;
-			}
-		} while(pos2!=-1);
-
 		string preffix;
 		string suffix;
-		if (pos==-1) {
+
+		if ((filename[0]=='.')&&(-1==filename.index_of_char('.',1))) {
 			preffix=filename;
 			suffix="";
 		} else {
-			preffix=filename.slice(0,pos);
-			suffix=filename.substring(pos);
+			pos=-1;
+			pos2=pos;
+			do {
+				pos2=filename.index_of_char('.',pos+1);
+				if (pos2>=0) {
+					pos=pos2;
+				}
+			} while(pos2!=-1);
+
+			if (pos==-1) {
+				preffix=filename;
+				suffix="";
+			} else {
+				preffix=filename.slice(0,pos);
+				suffix=filename.substring(pos);
+			}
 		}
 		
 		string newfilename="%s.restored%s".printf(preffix,suffix);
