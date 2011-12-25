@@ -4,6 +4,8 @@ else
 	PREFIX2=/usr/local
 endif
 
+all: cronopete cronopete3
+
 cronopete: backup.vala choose.vala cronopete.vala menu.vala options.vala switch_widget.vala usbhd_backend.vala restore.vala icons_widget.vala
 	rm -f *.c
 	rm -f cronopete

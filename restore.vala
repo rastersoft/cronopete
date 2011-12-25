@@ -939,15 +939,36 @@ class restore_iface : GLib.Object {
 	}
 	
 	private string get_restored_filename(string path, string filename) {
+
+		int pos,pos2;
+
+		pos=-1;
+		pos2=-1;
+		do {
+			pos2=filename.index_of_char('.',pos+1);
+			if (pos2>=0) {
+				pos=pos2;
+			}
+		} while(pos2!=-1);
+
+		string preffix;
+		string suffix;
+		if (pos==-1) {
+			preffix=filename;
+			suffix="";
+		} else {
+			preffix=filename.slice(0,pos);
+			suffix=filename.substring(pos);
+		}
 		
-		string newfilename="%s.restored".printf(filename);
+		string newfilename="%s.restored%s".printf(preffix,suffix);
 		int counter=1;
 		File fs;
 		
 		while(true) {
 			fs = File.new_for_path(GLib.Path.build_filename(path,newfilename));
 			if (fs.query_exists()) {
-				newfilename="%s.restored.%d".printf(filename,counter);
+				newfilename="%s.restored.%d%s".printf(preffix,counter,suffix);
 				counter++;
 			} else {
 				break;
