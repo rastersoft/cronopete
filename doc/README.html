@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Cronopete 2.3.0</title>
+    <title>Cronopete 3.0.0</title>
     <style type="text/css" media="all">
       .menu { background-color: #dddbd8; }
       .filename { color: green; }
@@ -78,14 +78,17 @@ a temporal backup (one that is still being made).</p>
 
 <p>After installing all the dependencies, you can type this to install cronopete in your system and get it ready to be automatically launched each time
 you log into your session:</p>
-<pre>make && sudo make install</pre>
-<p>You can define the <strong>PREFIX</strong> variable in Make to choose where to install it. This is, to
+<pre>make cronopete && sudo make install</pre>
+<p>to make the GTK2 version, or</p>
+<pre>make cronopete3 && sudo make install3</pre>
+<p>to make the GTK3 version. You can define the <strong>PREFIX</strong> variable in Make to choose where to install it. This is, to
 install it into <i>/usr</i> instead of <i>/usr/local</i>, just use:</p>
 <pre>make install -D PREFIX=/</pre>
 <p>And to install it in <i>/tmp/package</i>, just use:</p>
 <pre>make install -D /tmp/package</pre>
-<p>Now, in order yo run it, just type</p>
+<p>Now, in order to run it, just type</p>
 <pre>make launch</pre>
+<p>(or make launch3 for GTK3 version, of course).</p>
 <h2>Using Cronopete</h2>
 <p>After a delay of 2 seconds, you should see this orange icon in your system tray:</p>
 <div align="center"><img src="cronopete1.png" /></div>
@@ -160,6 +163,7 @@ or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 <li>Version 3.0.0 (2011/12/18)</li>
 <ul>
 <li>Added support for GTK3</li>
+<li>Now keeps the file extension when restoring a file</li>
 </ul>
 
 <li>Version 2.3.0 (2011/12/02)</li>
