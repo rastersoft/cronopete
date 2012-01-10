@@ -654,9 +654,9 @@ namespace FilelistIcons {
 				this.btn_next.show();
 				Gtk.Requisition req3;
 #if USE_GTK3
-			this.btn_prev.get_child_requisition(out req3);
+				this.btn_prev.get_child_requisition(out req3);
 #else
-			this.btn_prev.size_request(out req3);
+				this.btn_prev.size_request(out req3);
 #endif
 				var newwidth = req2.width-2*req3.width-10;
 				if (newwidth>0) {
