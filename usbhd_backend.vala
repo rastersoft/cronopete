@@ -179,7 +179,7 @@ class usbhd_backend: Object, backends {
 					tmpinfo.isdir=false;
 				}
 				
-				tmpinfo.mod_time=info_file.get_modification_time();
+				info_file.get_modification_time(out tmpinfo.mod_time);
 				tmpinfo.size = info_file.get_size();
 				tmpinfo.icon = (GLib.ThemedIcon)info_file.get_icon();
 				
