@@ -52,7 +52,7 @@ namespace FilelistIcons {
 		private time_t current_backup;
 		private backends backend;
 		private uint timer_refresh;
-		private Menu menu;
+		private Gtk.Menu menu;
 		private Gee.List<bookmark_str ?> bookmarks;
 		private Gtk.TreeView bookmark_view;
 		private ListStore bookmark_model;

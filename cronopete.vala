@@ -41,7 +41,7 @@ class cp_callback : GLib.Object, callbacks {
 	private uint refresh_timer;
 	private StringBuilder messages;
 	private string basepath;
-	private Menu menuSystem;
+	private Gtk.Menu menuSystem;
 	private string last_backup;
 	private nanockup? basedir;
 	private c_main_menu main_menu;
@@ -409,9 +409,9 @@ class cp_callback : GLib.Object, callbacks {
 		menuDate.sensitive=false;
 		menuSystem.append(menuDate);
 		
-		MenuItem menuBUnow;
+		Gtk.MenuItem menuBUnow;
 		if (this.backup_running==SystemStatus.IDLE) {
-			menuBUnow = new MenuItem.with_label(_("Back Up Now"));
+			menuBUnow = new Gtk.MenuItem.with_label(_("Back Up Now"));
 			menuBUnow.activate.connect(backup_now);
 		} else {
 			menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
