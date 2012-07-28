@@ -8,6 +8,7 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
+    <property name="icon">anacronopete.svg</property>
     <property name="type_hint">dialog</property>
     <property name="decorated">False</property>
     <property name="deletable">False</property>

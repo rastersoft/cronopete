@@ -401,10 +401,10 @@ class cp_callback : GLib.Object, callbacks {
 
 	private void menuSystem_popup() {
 	
-		this.menuSystem = new Menu();
+		this.menuSystem = new Gtk.Menu();
 
 		this.fill_last_backup();
-		var menuDate = new MenuItem.with_label(this.last_backup);
+		var menuDate = new Gtk.MenuItem.with_label(this.last_backup);
 
 		menuDate.sensitive=false;
 		menuSystem.append(menuDate);
@@ -414,14 +414,14 @@ class cp_callback : GLib.Object, callbacks {
 			menuBUnow = new Gtk.MenuItem.with_label(_("Back Up Now"));
 			menuBUnow.activate.connect(backup_now);
 		} else {
-			menuBUnow = new MenuItem.with_label(_("Stop Backing Up"));
+			menuBUnow = new Gtk.MenuItem.with_label(_("Stop Backing Up"));
 			menuBUnow.activate.connect(stop_backup);
 		}
 		this.menuSystem.append(menuBUnow);
 
 		menuBUnow.sensitive=this.backend.available;
 
-		var menuEnter = new MenuItem.with_label(_("Restore files"));
+		var menuEnter = new Gtk.MenuItem.with_label(_("Restore files"));
 		menuEnter.activate.connect(enter_clicked);
 		menuSystem.append(menuEnter);
 		if (this.backend.available) {
@@ -435,17 +435,17 @@ class cp_callback : GLib.Object, callbacks {
 			menuEnter.sensitive=false;
 		}
 		
-		var menuBar = new SeparatorMenuItem();
+		var menuBar = new Gtk.SeparatorMenuItem();
 		menuSystem.append(menuBar);
 		
-		var menuMain = new MenuItem.with_label(_("Open Cronopete Preferences..."));
+		var menuMain = new Gtk.MenuItem.with_label(_("Open Cronopete Preferences..."));
 		menuMain.activate.connect(main_clicked);
 		menuSystem.append(menuMain);
 		
-		var menuBar2 = new SeparatorMenuItem();
+		var menuBar2 = new Gtk.SeparatorMenuItem();
 		menuSystem.append(menuBar2);
 		
-		var menuAbout = new ImageMenuItem.from_stock(Stock.ABOUT, null);
+		var menuAbout = new Gtk.ImageMenuItem.from_stock(Stock.ABOUT, null);
 		menuAbout.activate.connect(about_clicked);
 		this.menuSystem.append(menuAbout);
 	

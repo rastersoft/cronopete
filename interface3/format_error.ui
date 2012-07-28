@@ -8,6 +8,7 @@
     <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
+    <property name="icon">anacronopete.svg</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -23,6 +24,7 @@
             <child>
               <object class="GtkButton" id="button1">
                 <property name="label">gtk-ok</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

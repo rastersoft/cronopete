@@ -388,7 +388,7 @@ namespace FilelistIcons {
 		private void show_menu() {
 
 			this.showing_menu=true;
-			this.menu=new Menu();
+			this.menu=new Gtk.Menu();
 			this.menu.hide.connect(this.hide_menu);
 			
 			var item1 = new CheckMenuItem.with_label(_("Show hiden files"));

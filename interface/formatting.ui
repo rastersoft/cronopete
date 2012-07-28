@@ -9,10 +9,10 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
+    <property name="icon">anacronopete.svg</property>
     <property name="type_hint">dialog</property>
     <property name="decorated">False</property>
     <property name="deletable">False</property>
-    <property name="has_resize_grip">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>

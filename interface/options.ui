@@ -17,6 +17,7 @@
     <property name="title" translatable="yes">Options</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
+    <property name="icon">anacronopete.svg</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">

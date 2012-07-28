@@ -1009,8 +1009,8 @@ class restore_iface : GLib.Object {
 			var current_time=time_t();
 			var f=File.new_for_path(file_ended);
 			try {
-				f.set_attribute_uint64(FILE_ATTRIBUTE_TIME_MODIFIED,current_time,0,null);
-				f.set_attribute_uint64(FILE_ATTRIBUTE_TIME_ACCESS,current_time,0,null);
+				f.set_attribute_uint64(FileAttribute.TIME_MODIFIED,current_time,0,null);
+				f.set_attribute_uint64(FileAttribute.TIME_ACCESS,current_time,0,null);
 			} catch (Error e) {
 			}
 		}

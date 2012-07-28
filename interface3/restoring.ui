@@ -10,6 +10,7 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
+    <property name="icon">anacronopete.svg</property>
     <property name="has_resize_grip">False</property>
     <signal name="delete-event" handler="restore_iface_on_delete_event" swapped="no"/>
     <child>
@@ -45,6 +46,7 @@
         <child>
           <object class="GtkButton" id="cancel">
             <property name="label">gtk-cancel</property>
+            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

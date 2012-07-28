@@ -443,7 +443,7 @@ class nanockup:Object {
 		this.done_backup.add(first_path,dirmod_time);
 		
 		try {
-			 enumerator = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
+			 enumerator = directory.enumerate_children(FileAttribute.TIME_MODIFIED+","+FileAttribute.STANDARD_NAME+","+FileAttribute.STANDARD_TYPE+","+FileAttribute.STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
 		} catch (Error e) {
 			this.callback.error_access_directory(initial_path);
 			return -1;
@@ -462,7 +462,7 @@ class nanockup:Object {
 			full_path=Path.build_filename(first_path,info_file.get_name());
 			typeinfo=info_file.get_file_type();
 
-			info_file.get_modification_time(out mod_time);
+			mod_time=info_file.get_modification_time();
 			
 			// Add the directories to the list, to continue deep in the directory tree
 			if (typeinfo==FileType.DIRECTORY) {

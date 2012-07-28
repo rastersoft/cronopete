@@ -164,7 +164,7 @@ class usbhd_backend: Object, backends {
 			var finalpath = Path.build_filename(this.backup_path,basepath,current_path);
 	
 			var directory = File.new_for_path(finalpath);
-			var listfile = directory.enumerate_children(FILE_ATTRIBUTE_TIME_MODIFIED+","+FILE_ATTRIBUTE_STANDARD_NAME+","+FILE_ATTRIBUTE_STANDARD_TYPE+","+FILE_ATTRIBUTE_STANDARD_SIZE+","+FILE_ATTRIBUTE_STANDARD_ICON,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
+			var listfile = directory.enumerate_children(FileAttribute.TIME_MODIFIED+","+FileAttribute.STANDARD_NAME+","+FileAttribute.STANDARD_TYPE+","+FileAttribute.STANDARD_SIZE+","+FileAttribute.STANDARD_ICON,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
 		
 			while ((info_file = listfile.next_file(null)) != null) {
 
@@ -179,7 +179,7 @@ class usbhd_backend: Object, backends {
 					tmpinfo.isdir=false;
 				}
 				
-				info_file.get_modification_time(out tmpinfo.mod_time);
+				tmpinfo.mod_time=info_file.get_modification_time();
 				tmpinfo.size = info_file.get_size();
 				tmpinfo.icon = (GLib.ThemedIcon)info_file.get_icon();
 				
@@ -230,9 +230,9 @@ class usbhd_backend: Object, backends {
 	
 		try {
 			var file = File.new_for_path(this.drive_path);
-			var info = file.query_filesystem_info(FILE_ATTRIBUTE_FILESYSTEM_SIZE+","+FILE_ATTRIBUTE_FILESYSTEM_FREE,null);
-			free_space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_FREE);
-			total_space = info.get_attribute_uint64(FILE_ATTRIBUTE_FILESYSTEM_SIZE);
+			var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE+","+FileAttribute.FILESYSTEM_FREE,null);
+			free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+			total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
 			return true;
 		} catch (Error e) {
 		}
@@ -259,7 +259,7 @@ class usbhd_backend: Object, backends {
 		var directory = File.new_for_path(this.backup_path);
 
 		try {
-			var myenum = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME, 0, null);
+			var myenum = directory.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
 			
 			FileInfo file_info;
 		
@@ -338,7 +338,7 @@ class usbhd_backend: Object, backends {
 		string last_date="";
 		
 		try {
-			var myenum = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME, 0, null);
+			var myenum = directory.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
 			FileInfo file_info;
 		
 			while ((file_info = myenum.next_file (null)) != null) {
@@ -455,8 +455,8 @@ class usbhd_backend: Object, backends {
 	
 		dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
 		
-		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_MODIFIED,mod_time,0,null);
-		dir2.set_attribute_uint64(FILE_ATTRIBUTE_TIME_ACCESS,mod_time,0,null);
+		dir2.set_attribute_uint64(FileAttribute.TIME_MODIFIED,mod_time,0,null);
+		dir2.set_attribute_uint64(FileAttribute.TIME_ACCESS,mod_time,0,null);
 		return BACKUP_RETVAL.OK;
 	}
 

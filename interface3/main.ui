@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">anaCRONOPETE</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <property name="icon">anacronopete.svg</property>
     <signal name="destroy-event" handler="c_main_menu_on_destroy_event" swapped="no"/>
     <signal name="delete-event" handler="c_main_menu_on_delete_event" swapped="no"/>
     <child>
@@ -288,6 +289,7 @@
                     <child>
                       <object class="GtkButton" id="button2">
                         <property name="label" translatable="yes">Change disk...</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -304,6 +306,7 @@
                     <child>
                       <object class="GtkButton" id="button3">
                         <property name="label" translatable="yes">Options</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
