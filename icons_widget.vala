@@ -354,6 +354,10 @@ namespace FilelistIcons {
 
 		private void bookmark_selected() {
 
+			if (!this.visible) {
+				return;
+			}
+
 			var selected = this.bookmark_view.get_selection();
 			if (selected.count_selected_rows()!=0) {
 				TreeModel model;
