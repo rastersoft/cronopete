@@ -910,6 +910,7 @@ class restore_iface : GLib.Object {
 				this.backend.restore_ended.disconnect(this.restoring_ended);
 				this.backend.status.disconnect(this.refresh_status);
 				this.mywindow.hide();
+				this.browser.hide();
 				this.mywindow.destroy();
 				this.backend.lock_delete_backup(false);
 				end_animation=true;
@@ -983,58 +984,55 @@ class restore_iface : GLib.Object {
 		return newfilename;
 	}
 	
-	public void restoring_ended(backends b, string file_ended, BACKUP_RETVAL rv) {
-		
-		if ((rv!=BACKUP_RETVAL.OK)&&(this.ignore_restoring_all==false)) {
-			string error_msg;
-			if (rv==BACKUP_RETVAL.NO_SPC) {
-				error_msg=_("Failed to restore file\n\n%s\n\nThere's not enought free space").printf(file_ended);
+	public async void restoring_ended() {
+
+		BACKUP_RETVAL rv;
+
+		while(!this.restore_files.is_empty) {
+
+			var percent=1.0-(((double)this.restore_files.size)/this.total_to_restore);
+			var filename = this.restore_files.get(0);
+			this.restore_files.remove_at(0);
+			this.restore_label.label=_("Restoring file:\n\n%s").printf(filename.restored_file);
+			this.restore_bar.fraction=percent;
+			rv= yield this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file);
+
+			if (this.cancel_restoring) {
+				this.restore_files.clear();
+
+			} else if ((rv!=BACKUP_RETVAL.OK)&&(this.ignore_restoring_all==false)) {
+
+				string error_msg;
+				if (rv==BACKUP_RETVAL.NO_SPC) {
+					error_msg=_("Failed to restore file\n\n%s\n\nThere's not enought free space").printf(filename.restored_file);
+				} else {
+					error_msg=_("Failed to restore file\n\n%s").printf(filename.restored_file);
+				}
+
+				var w2 = new Builder();
+			
+				w2.add_from_file(GLib.Path.build_filename(this.basepath,"restore_error.ui"));
+				w2.connect_signals(this);
+				this.error_window = (Gtk.Window)w2.get_object("restore_error");
+				var error_label = (Gtk.Label)w2.get_object("error_msg");
+				error_label.label=error_msg;
+			
+				error_window.show_all();
+				this.restore_files.clear();
 			} else {
-				error_msg=_("Failed to restore file\n\n%s").printf(file_ended);
-			}
-
-			var w2 = new Builder();
-			
-			w2.add_from_file(GLib.Path.build_filename(this.basepath,"restore_error.ui"));
-			w2.connect_signals(this);
-			this.error_window = (Gtk.Window)w2.get_object("restore_error");
-			var error_label = (Gtk.Label)w2.get_object("error_msg");
-			error_label.label=error_msg;
-			
-			error_window.show_all();
-			return;
-		}
-		
-		if (file_ended!="") {
-			var current_time=time_t();
-			var f=File.new_for_path(file_ended);
-			try {
-				f.set_attribute_uint64(FileAttribute.TIME_MODIFIED,current_time,0,null);
-				f.set_attribute_uint64(FileAttribute.TIME_ACCESS,current_time,0,null);
-			} catch (Error e) {
+				var current_time=time_t();
+				var f=File.new_for_path(filename.restored_file);
+				try {
+					f.set_attribute_uint64(FileAttribute.TIME_MODIFIED,current_time,0,null);
+					f.set_attribute_uint64(FileAttribute.TIME_ACCESS,current_time,0,null);
+				} catch (Error e) {
+				}
 			}
 		}
-		
-		if (this.restore_files.is_empty) {
-			this.mywindow.get_window().set_cursor(null);
-			this.restore_window.destroy();
-			return;
-		}
 
-		if (this.cancel_restoring) {
-			this.mywindow.get_window().set_cursor(null);
-			this.restore_files.clear();
-			this.restore_window.destroy();
-			return;
-		}
-		
-		var percent=1.0-(((double)this.restore_files.size)/this.total_to_restore);
-		var filename = this.restore_files.get(0);
-		this.restore_files.remove_at(0);
-		this.restore_label.label=_("Restoring file:\n\n%s").printf(filename.restored_file);
-		this.restore_bar.fraction=percent;
-		this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file);
-		
+		this.mywindow.get_window().set_cursor(null);
+		this.restore_window.destroy();
+		return;
 	}
 	
 	private void do_restore() {
@@ -1065,7 +1063,7 @@ class restore_iface : GLib.Object {
 			Source.remove(this.timer_bar);
 			if (!this.cancel_restoring) {
 				this.total_to_restore=(double)this.restore_files.size;
-				this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+				this.restoring_ended.begin();
 			} else {
 				this.restore_files.clear();
 				this.restore_window.destroy();
@@ -1081,44 +1079,38 @@ class restore_iface : GLib.Object {
 	
 	private async void launch_fill_restore_list() {
 
-		SourceFunc callback = launch_fill_restore_list.callback;
-		
-		ThreadFunc<void *> run = () => {
-
-			Gee.List<string> files;
-			Gee.List<string> folders;
+		Gee.List<string> files;
+		Gee.List<string> folders;
 			
-			var path=this.browser.get_current_path();
+		var path=this.browser.get_current_path();
 			
-			this.browser.get_selected_items(out files, out folders);
-			foreach (string f in files) {
-				if (this.cancel_restoring) {
-					Idle.add((owned)callback);
-					return null;
-				}
-				var element = path_filename();
-				element.original_file=GLib.Path.build_filename(path,f);
-				element.restored_file=GLib.Path.build_filename(path,this.get_restored_filename(path,f));
-				this.restore_files.add(element);
+		this.browser.get_selected_items(out files, out folders);
+		foreach (string f in files) {
+			if (this.cancel_restoring) {
+				return;
 			}
+			var element = path_filename();
+			element.original_file=GLib.Path.build_filename(path,f);
+			element.restored_file=GLib.Path.build_filename(path,this.get_restored_filename(path,f));
+			this.restore_files.add(element);
+			Idle.add(launch_fill_restore_list.callback);
+			yield;
+		}
 
-			foreach (string v in folders) {
-				if (this.cancel_restoring) {
-					Idle.add((owned)callback);
-					return null;
-				}
-				var restored_folder = GLib.Path.build_filename(path,this.get_restored_filename(path,v));
-				this.add_folder_to_restore(GLib.Path.build_filename(path,v),restored_folder);
+		foreach (string v in folders) {
+			if (this.cancel_restoring) {
+				return;
 			}
-			Idle.add((owned)callback);
-			return null;
-		};
-
-		c_thread=Thread.create <void *>(run, false);
-		yield;
+			var restored_folder = GLib.Path.build_filename(path,this.get_restored_filename(path,v));
+			var rv=yield this.add_folder_to_restore(GLib.Path.build_filename(path,v),restored_folder);
+			if (rv!=BACKUP_RETVAL.OK) {
+				Idle.add(launch_fill_restore_list.callback);
+				yield;
+			}
+		}
 	}
 	
-	private BACKUP_RETVAL add_folder_to_restore(string o_path, string f_path) {
+	private async BACKUP_RETVAL add_folder_to_restore(string o_path, string f_path) {
 		
 		Gee.List<file_info ?> files;
 		string date;
@@ -1154,6 +1146,8 @@ class restore_iface : GLib.Object {
 				element.restored_file=GLib.Path.build_filename(f_path,v.name);
 				this.restore_files.add(element);
 			}
+			Idle.add(add_folder_to_restore.callback);
+			yield;
 		}
 		return BACKUP_RETVAL.OK;
 	}
@@ -1168,20 +1162,20 @@ class restore_iface : GLib.Object {
 
 		this.error_window.destroy();
 		this.cancel_restoring=true;
-		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+		this.restoring_ended();
 	}
 
 	[CCode (instance_pos = -1)]
 	public void on_ignore_restore_error_clicked(Button source) {
 		this.error_window.destroy();
-		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+		this.restoring_ended();
 	}
 
 	[CCode (instance_pos = -1)]
 	public void on_ignore_all_restore_error_clicked(Button source) {
 		this.ignore_restoring_all=true;
 		this.error_window.destroy();
-		this.restoring_ended(this.backend,"",BACKUP_RETVAL.OK);
+		this.restoring_ended();
 	}
 	
 	[CCode (instance_pos = -1)]

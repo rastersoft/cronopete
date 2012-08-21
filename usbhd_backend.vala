@@ -125,28 +125,27 @@ class usbhd_backend: Object, backends {
 		
 	}
 	
-	public BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename) {
+	public async BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename) {
 
 		var origin_path = Path.build_filename(this.backup_path,this.get_backup_path(backup),filename);
 
 		File origin;
+		BACKUP_RETVAL rv;
 		
 		origin=File.new_for_path(origin_path);
-		origin.copy_async.begin(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,null, (obj,res) => {
-			try {
-				origin.copy_async.end(res);
-				this.restore_ended(this,output_filename,BACKUP_RETVAL.OK);
-			} catch (IOError e2) {
-				if (e2 is IOError.NO_SPACE) {
-					Posix.unlink(output_filename);
-					this.restore_ended(this,output_filename,BACKUP_RETVAL.NO_SPC);
-				} else {
-					this.restore_ended(this,output_filename,BACKUP_RETVAL.CANT_COPY);
-				}
+		try {
+			yield origin.copy_async(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT);
+			rv=BACKUP_RETVAL.OK;
+		} catch (IOError e2) {
+			if (e2 is IOError.NO_SPACE) {
+				Posix.unlink(output_filename);
+				rv=BACKUP_RETVAL.NO_SPC;
+			} else {
+				rv=BACKUP_RETVAL.CANT_COPY;
 			}
-		});
-		
-		return BACKUP_RETVAL.IN_PROCCESS;
+		}
+
+		return (rv);
 	}
 
 	public bool get_filelist(string current_path, time_t backup, out Gee.List<file_info ?> files, out string date) {

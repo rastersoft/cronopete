@@ -67,6 +67,7 @@ clean:
 	rm -f cronopete
 	rm -f cronopete3
 	rm -f *.c
+	rm -f *~
 
 launch:
 	killall -q cronopete || cd
