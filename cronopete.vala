@@ -267,7 +267,7 @@ class cp_callback : GLib.Object, callbacks {
 			if (this.refresh_timer!=0) {
 				Source.remove(this.refresh_timer);
 			}
-			this.refresh_timer=Timeout.add(20,this.timer_f);
+			this.refresh_timer=Timeout.add(50,this.timer_f);
 			
 		} else if (this.backup_running==SystemStatus.ENDED) {
 			this.backup_forced=false;
@@ -287,7 +287,7 @@ class cp_callback : GLib.Object, callbacks {
 		}
 
 		this.repaint(this.size);
-		this.angle-=0.20;
+		this.angle-=0.50;
 		this.angle%=120.0*Gsl.MathConst.M_PI;
 		
 		if (this.backup_running==SystemStatus.ABORTING) {
