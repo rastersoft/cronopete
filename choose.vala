@@ -248,7 +248,7 @@ class c_format : GLib.Object {
 
 		builder.add_from_file(Path.build_filename(path,"format_force.ui"));
 		if (not_writable) {
-			message = _("The file system %s is not writable, so Cronopete will format it. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo format the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
+			message = _("The selected drive is not writable, so Cronopete will format it. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo format the drive, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>."));
 		} else if (filesystem=="btrfs") {
 			message = _("The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
 		} else {

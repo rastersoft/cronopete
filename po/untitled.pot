@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-25 19:34+0100\n"
+"POT-Creation-Date: 2012-08-27 22:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,50 +47,59 @@ msgstr ""
 msgid "Backup hiden files and folders in %s"
 msgstr ""
 
-#: ../backup.vala:338
+#: ../backup.vala:337
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:341
+#: ../backup.vala:340
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:344
+#: ../backup.vala:343
 msgid "Backup device not available. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:347
+#: ../backup.vala:346
 msgid "Already started a backup.\n"
 msgstr ""
 
-#: ../backup.vala:351
+#: ../backup.vala:350
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 
-#: ../backup.vala:370
+#: ../backup.vala:369
 msgid "Backup aborted\n"
 msgstr ""
 
-#: ../backup.vala:384
+#: ../backup.vala:383
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
 msgstr ""
 
-#: ../backup.vala:398
+#: ../backup.vala:397
 msgid "Syncing disk\n"
 msgstr ""
 
-#: ../backup.vala:400
+#: ../backup.vala:399
 msgid "Can't close the backup. Aborting.\n"
 msgstr ""
 
-#: ../backup.vala:406
+#: ../backup.vala:405
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr ""
 
-#: ../choose.vala:193
+#: ../choose.vala:251
+msgid ""
+"The selected drive is not writable, so Cronopete will format it. The optimal "
+"file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+"\n"
+"To format the drive, click the <i>Format disk</i> button. <b>All the data in "
+"the drive will be erased</b>."
+msgstr ""
+
+#: ../choose.vala:253
 #, c-format
 msgid ""
 "The file system %s is not valid for Cronopete because, currently, it has "
@@ -101,7 +110,7 @@ msgid ""
 "<b>All the data in the drive will be erased</b>."
 msgstr ""
 
-#: ../choose.vala:196
+#: ../choose.vala:255
 #, c-format
 msgid ""
 "The file system %s is not valid for Cronopete. The optimal file system is "
@@ -111,7 +120,7 @@ msgid ""
 "<b>All the data in the drive will be erased</b>."
 msgstr ""
 
-#: ../choose.vala:369
+#: ../choose.vala:429
 msgid "Unknown FS"
 msgstr ""
 
@@ -194,7 +203,15 @@ msgstr ""
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr ""
 
-#: ../restore.vala:991
+#: ../restore.vala:996
+#, c-format
+msgid ""
+"Restoring file:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../restore.vala:1007
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -204,7 +221,7 @@ msgid ""
 "There's not enought free space"
 msgstr ""
 
-#: ../restore.vala:993
+#: ../restore.vala:1009
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -212,15 +229,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../restore.vala:1034
-#, c-format
-msgid ""
-"Restoring file:\n"
-"\n"
-"%s"
-msgstr ""
-
-#: ../restore.vala:1056
+#: ../restore.vala:1054
 msgid "Preparing folders to restore"
 msgstr ""
 
@@ -236,43 +245,47 @@ msgstr ""
 msgid "Modification date"
 msgstr ""
 
-#: ../icons_widget.vala:394
+#: ../icons_widget.vala:398
 msgid "Show hiden files"
 msgstr ""
 
-#: ../icons_widget.vala:402
+#: ../icons_widget.vala:406
 msgid "Reverse order"
 msgstr ""
 
-#: ../icons_widget.vala:410
+#: ../icons_widget.vala:414
 msgid "Sort by name"
 msgstr ""
 
-#: ../icons_widget.vala:414
+#: ../icons_widget.vala:418
 msgid "Sort by type"
 msgstr ""
 
-#: ../icons_widget.vala:418
+#: ../icons_widget.vala:422
 msgid "Sort by size"
 msgstr ""
 
-#: ../icons_widget.vala:422
+#: ../icons_widget.vala:426
 msgid "Sort by date"
 msgstr ""
 
-#: ../icons_widget.vala:444
+#: ../icons_widget.vala:448
 msgid "View as icons"
 msgstr ""
 
-#: ../icons_widget.vala:448
+#: ../icons_widget.vala:452
 msgid "View as list"
 msgstr ""
 
 #: ../interface/about.ui.h:1
-msgid "An Apple's Time Machine clone for Linux"
+msgid "©2011-12 Raster Software Vigo"
 msgstr ""
 
 #: ../interface/about.ui.h:2
+msgid "An Apple's Time Machine clone for Linux"
+msgstr ""
+
+#: ../interface/about.ui.h:3
 msgid ""
 "In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
 "the first novel with a time-travel machine.\n"
@@ -288,22 +301,18 @@ msgid ""
 "Linux."
 msgstr ""
 
-#: ../interface/about.ui.h:9
+#: ../interface/about.ui.h:10
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr ""
 
-#: ../interface/about.ui.h:10
-msgid "©2011 Raster Software Vigo"
-msgstr ""
-
 #: ../interface/format_error.ui.h:1
-msgid "<b>Error info</b>"
-msgstr ""
-
-#: ../interface/format_error.ui.h:2
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
+msgstr ""
+
+#: ../interface/format_error.ui.h:3
+msgid "<b>Error info</b>"
 msgstr ""
 
 #: ../interface/format_force.ui.h:1
@@ -315,14 +324,50 @@ msgid "Formating disk. Please, wait."
 msgstr ""
 
 #: ../interface/main.ui.h:1
+msgid "anaCRONOPETE"
+msgstr ""
+
+#. Don't translate this. Is part of the name in the main window
+#: ../interface/main.ui.h:3
+msgid "ana"
+msgstr ""
+
+#. Don't translate this. Is part of the name in the main window.
+#: ../interface/main.ui.h:5
+msgid "cronopete"
+msgstr ""
+
+#: ../interface/main.ui.h:6
+msgid "Device:"
+msgstr ""
+
+#: ../interface/main.ui.h:7
+msgid "Next backup:"
+msgstr ""
+
+#: ../interface/main.ui.h:8
+msgid "Latest backup:"
+msgstr ""
+
+#: ../interface/main.ui.h:9
+msgid "Oldest backup:"
+msgstr ""
+
+#. Refers to the free disk space available in the backup's hard disk
+#: ../interface/main.ui.h:11
+msgctxt "Refers to the free disk space available in the backup's hard disk"
+msgid "Available:"
+msgstr ""
+
+#: ../interface/main.ui.h:12
 msgid "Change disk..."
 msgstr ""
 
-#: ../interface/main.ui.h:2
-msgid "Configuration"
+#: ../interface/main.ui.h:13 ../interface/options.ui.h:1
+msgid "Options"
 msgstr ""
 
-#: ../interface/main.ui.h:3
+#: ../interface/main.ui.h:14
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -331,60 +376,24 @@ msgid ""
 " * Weekely backups until your hard disk is full"
 msgstr ""
 
-#: ../interface/main.ui.h:8
-msgid "Device:"
+#: ../interface/main.ui.h:19
+msgid "Configuration"
 msgstr ""
 
-#: ../interface/main.ui.h:9
-msgid "Latest backup:"
-msgstr ""
-
-#: ../interface/main.ui.h:10
+#: ../interface/main.ui.h:20
 msgid "Log"
 msgstr ""
 
-#: ../interface/main.ui.h:11
-msgid "Next backup:"
-msgstr ""
-
-#: ../interface/main.ui.h:12
-msgid "Oldest backup:"
-msgstr ""
-
-#: ../interface/main.ui.h:13 ../interface/options.ui.h:4
-msgid "Options"
-msgstr ""
-
-#. Refers to the free disk space available in the backup's hard disk
-#: ../interface/main.ui.h:15
-msgctxt "Refers to the free disk space available in the backup's hard disk"
-msgid "Available:"
-msgstr ""
-
-#. Don't translate this. Is part of the name in the main window
-#: ../interface/main.ui.h:17
-msgid "ana"
-msgstr ""
-
-#: ../interface/main.ui.h:18
-msgid "anaCRONOPETE"
-msgstr ""
-
-#. Don't translate this. Is part of the name in the main window.
-#: ../interface/main.ui.h:20
-msgid "cronopete"
-msgstr ""
-
-#: ../interface/options.ui.h:1
-msgid "<b>Backup these folders</b>"
-msgstr ""
-
 #: ../interface/options.ui.h:2
-msgid "<b>Exclude these folders</b>"
+msgid "Folders to backup"
 msgstr ""
 
 #: ../interface/options.ui.h:3
-msgid "Folders to backup"
+msgid "<b>Backup these folders</b>"
+msgstr ""
+
+#: ../interface/options.ui.h:4
+msgid "<b>Exclude these folders</b>"
 msgstr ""
 
 #: ../interface/options.ui.h:5
