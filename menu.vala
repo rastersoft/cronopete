@@ -241,13 +241,14 @@ class c_main_menu : GLib.Object {
 		} else {
 			not_configured=false;
 		}
-		var tmp = new c_choose_disk(this.basepath,this.parent);
-		tmp = null;
-		this.refresh_backup_data();
-
-		if ((this.parent.p_backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
-			this.parent.active=true;
-			this.my_widget.active=true;
-		}
+		var tmp = new c_choose_disk();
+		tmp.run.begin(this.basepath,this.parent,(obj,res) => {
+			tmp.run.end(res);
+			this.refresh_backup_data();
+			if ((this.parent.p_backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
+				this.parent.active=true;
+				this.my_widget.active=true;
+			}
+		});
 	}
 }
