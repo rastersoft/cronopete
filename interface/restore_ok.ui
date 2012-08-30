@@ -10,8 +10,7 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
-    <property name="icon">cronopete.svg</property>
-    <property name="deletable">False</property>
+    <property name="icon">anacronopete.svg</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
