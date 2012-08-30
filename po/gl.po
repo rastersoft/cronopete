@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 22:16+0200\n"
-"PO-Revision-Date: 2012-08-27 22:17+0200\n"
+"POT-Creation-Date: 2012-08-30 23:41+0200\n"
+"PO-Revision-Date: 2012-08-30 23:43+0200\n"
 "Last-Translator: Sergio Costas <raster@rastersoft.com>\n"
 "Language-Team: Español; Castellano <raster@rastersoft.com>\n"
 "Language: \n"
@@ -266,7 +266,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../restore.vala:1054
+#: ../restore.vala:1070
 msgid "Preparing folders to restore"
 msgstr "Preparando os cartafois para restaurar"
 
@@ -460,6 +460,18 @@ msgstr "Tempo entre copias (en horas):"
 #: ../interface/restoring.ui.h:1
 msgid "Restoring files"
 msgstr "Restaurando ficheiros"
+
+#: ../interface/restore_ok.ui.h:1
+msgid "Restore ended succesfully"
+msgstr "Restauración rematada"
+
+#: ../interface/restore_error.ui.h:1
+msgid "Ignore"
+msgstr "Ignorar"
+
+#: ../interface/restore_error.ui.h:2
+msgid "Ignore all"
+msgstr "Ignorar todos"
 
 #, fuzzy
 #~ msgid "Enter Cronopete"

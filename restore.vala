@@ -1032,6 +1032,22 @@ class restore_iface : GLib.Object {
 
 		this.mywindow.get_window().set_cursor(null);
 		this.restore_window.destroy();
+
+		var w = new Builder();
+		w.add_from_file(GLib.Path.build_filename(this.basepath,"restore_ok.ui"));
+		var rok = (Gtk.Window)w.get_object("restore_ok");
+		var button = (Gtk.Button)w.get_object("restore_ok_button");
+		button.clicked.connect(() => {
+			restoring_ended.callback();
+		});
+		rok.delete_event.connect(() => {
+			restoring_ended.callback();
+			return true;
+		});
+		rok.show();
+		yield;
+		rok.hide();
+		rok.destroy();
 		return;
 	}
 	

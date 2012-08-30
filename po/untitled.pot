@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 22:16+0200\n"
+"POT-Creation-Date: 2012-08-30 23:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,7 +229,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../restore.vala:1054
+#: ../restore.vala:1070
 msgid "Preparing folders to restore"
 msgstr ""
 
@@ -402,4 +402,16 @@ msgstr ""
 
 #: ../interface/restoring.ui.h:1
 msgid "Restoring files"
+msgstr ""
+
+#: ../interface/restore_ok.ui.h:1
+msgid "Restore ended succesfully"
+msgstr ""
+
+#: ../interface/restore_error.ui.h:1
+msgid "Ignore"
+msgstr ""
+
+#: ../interface/restore_error.ui.h:2
+msgid "Ignore all"
 msgstr ""

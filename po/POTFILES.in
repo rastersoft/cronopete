@@ -16,3 +16,7 @@ icons_widget.vala
 [type: gettext/glade]interface/main.ui
 [type: gettext/glade]interface/options.ui
 [type: gettext/glade]interface/restoring.ui
+[type: gettext/glade]interface/restore_ok.ui
+[type: gettext/glade]interface/restore_error.ui
+
+
