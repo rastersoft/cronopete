@@ -1044,6 +1044,10 @@ class restore_iface : GLib.Object {
 			restoring_ended.callback();
 			return true;
 		});
+		rok.focus_out_event.connect(() => { // If we click outside the window, destroy it
+			restoring_ended.callback();
+			return false;
+		});
 		rok.show();
 		yield;
 		rok.hide();
