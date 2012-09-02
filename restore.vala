@@ -533,6 +533,7 @@ class restore_iface : GLib.Object {
 		double ow;
 		double oh;
 		double scale;
+		double s_factor;
 		ctx.set_line_width(1.5);
 		ctx.set_source_rgb(0.2,0.2,0.2);
 		for(int c=maxval-1;c>=this.pos;c--) {
@@ -541,19 +542,33 @@ class restore_iface : GLib.Object {
 			if (z<0) {
 				continue;
 			}
-			this.transform_coords (z,out ox, out oy, out ow, out oh);
-			/*ctx.set_source_rgb(1,1,1);
+			this.transform_coords (z,out ox, out oy, out ow, out oh, out s_factor);
+			ctx.set_source_rgb(1,1,1);
 			//ctx.set_source_rgb(0.7,0.7,0.7);
-			ctx.rectangle(ox,oy,ow,oh);
-			ctx.fill();*/
-			scale = ow/this.browser_w;
+			ctx.rectangle(ox,oy-(30.0*s_factor),ow,oh+(30*s_factor));
+			ctx.fill();
+			ctx.set_source_rgb(0.0, 0.0, 0.0);
+			ctx.select_font_face("Sans",FontSlant.NORMAL,FontWeight.BOLD);
+
+			ctx.set_font_size(18.0*s_factor);
+
+			ctx.move_to(ox, oy-(5.0*s_factor));
+			var ctime = GLib.Time.local(this.backups[c]);
+			string date;
+			if (this.date_format) {
+				date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+			} else {
+				date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.month+1,ctime.day,1900+ctime.year);
+			}
+			ctx.show_text(date);
+			/*scale = ow/this.browser_w;
 			ctx.save();
 			ctx.scale(scale,scale);
 			Gdk.cairo_set_source_pixbuf(ctx,this.capture,ox/scale,oy/scale);
 			ctx.paint();
 			ctx.restore();
 			ctx.rectangle(ox,oy,ow,oh);
-			ctx.stroke();
+			ctx.stroke();*/
 		}
 		/*ctx.set_source_rgb(0.2,0.2,0.2);
 		ctx.rectangle(this.browser_x,this.browser_y,this.browser_w,this.browser_h);
@@ -587,7 +602,7 @@ class restore_iface : GLib.Object {
 		return true;
 	}
 
-	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh) {
+	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {
 	
 		double eyedist = 2500.0;
 
@@ -596,6 +611,7 @@ class restore_iface : GLib.Object {
 		ow=(this.browser_w*eyedist)/(z+eyedist);
 		oh=(this.browser_h*eyedist)/(z+eyedist);
 		oy+=this.browser_y;
+		s_factor=eyedist/(z+eyedist);
 	}
 	
 	private int get_nixie_pos(char v) {
