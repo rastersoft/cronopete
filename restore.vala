@@ -117,7 +117,6 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface restore_pic;
 	private Cairo.ImageSurface exit_pic;
 
-	private Gdk.Pixbuf capture;
 	private bool capture_done;
 	private bool browserhide;
 
@@ -230,7 +229,6 @@ class restore_iface : GLib.Object {
 		this.desired_alpha=1.0;
 		this.launch_animation ();
 		
-		//this.browser.show.connect_after(this.do_show);
 	}
 
 	public void changed_path_list() {
@@ -242,12 +240,6 @@ class restore_iface : GLib.Object {
 	
 	public bool do_show() {
 
-		this.capture.fill(0);
-#if USE_GTK3
-		this.capture=Gdk.pixbuf_get_from_window(this.browser.get_window(),(int)this.browser_x,(int)(this.browser_y+this.browser_margin),(int)this.browser_w,(int)this.browser_h);
-#else
-		Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)(this.browser_y+this.browser_margin),0,0,(int)this.browser_w,(int)this.browser_h);
-#endif
 		this.browser.do_refresh_icons ();
 		this.browserhide=true;
 		this.capture_done=true;
@@ -357,8 +349,6 @@ class restore_iface : GLib.Object {
 		this.browser_margin=this.scr_h/8;
 		this.browser_w=scr_w*4/5;
 		this.browser_h=this.scr_h-this.browser_y-this.browser_margin-this.nixie_h/6;
-		this.capture = new Gdk.Pixbuf(Gdk.Colorspace.RGB,false, 8,(int)this.browser_w,(int)this.browser_h);
-		//this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 		
 		c_base.save();
 		c_base.scale(scale2,scale2);
