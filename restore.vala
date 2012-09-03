@@ -542,17 +542,10 @@ class restore_iface : GLib.Object {
 			if (z<0) {
 				continue;
 			}
+
 			this.transform_coords (z,out ox, out oy, out ow, out oh, out s_factor);
-			ctx.set_source_rgb(1,1,1);
-			//ctx.set_source_rgb(0.7,0.7,0.7);
-			ctx.rectangle(ox,oy-(30.0*s_factor),ow,oh+(30*s_factor));
-			ctx.fill();
-			ctx.set_source_rgb(0.0, 0.0, 0.0);
 			ctx.select_font_face("Sans",FontSlant.NORMAL,FontWeight.BOLD);
-
 			ctx.set_font_size(18.0*s_factor);
-
-			ctx.move_to(ox, oy-(5.0*s_factor));
 			var ctime = GLib.Time.local(this.backups[c]);
 			string date;
 			if (this.date_format) {
@@ -560,7 +553,22 @@ class restore_iface : GLib.Object {
 			} else {
 				date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.month+1,ctime.day,1900+ctime.year);
 			}
+
+			Cairo.TextExtents extents;
+			ctx.text_extents(date,out extents);
+			ctx.set_source_rgb(1,1,1);
+
+			double final_add=4.0*s_factor;
+
+			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
+			ctx.fill();
+			ctx.set_source_rgb(0.0, 0.0, 0.0);
+			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
+			ctx.stroke();
+			ctx.move_to(ox+(ow-extents.width+extents.x_bearing)/2, oy-extents.height-extents.y_bearing-final_add);
+
 			ctx.show_text(date);
+
 			/*scale = ow/this.browser_w;
 			ctx.save();
 			ctx.scale(scale,scale);
@@ -846,10 +854,10 @@ class restore_iface : GLib.Object {
 			end_animation=false;
 			if (this.scale_current_value>this.scale_desired_value) {
 				diff=this.scale_current_value-this.scale_desired_value;
-				this.scale_current_value-=(diff/3);
+				this.scale_current_value-=(diff/4);
 			} else {
 				diff=this.scale_desired_value-this.scale_current_value;
-				this.scale_current_value+=(diff/3);
+				this.scale_current_value+=(diff/4);
 			}
 			if (diff<6) {
 				this.scale_current_value=this.scale_desired_value;
