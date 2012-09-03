@@ -117,7 +117,6 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface restore_pic;
 	private Cairo.ImageSurface exit_pic;
 
-	private Gdk.Pixbuf capture;
 	private bool capture_done;
 	private bool browserhide;
 
@@ -230,7 +229,6 @@ class restore_iface : GLib.Object {
 		this.desired_alpha=1.0;
 		this.launch_animation ();
 		
-		//this.browser.show.connect_after(this.do_show);
 	}
 
 	public void changed_path_list() {
@@ -242,12 +240,6 @@ class restore_iface : GLib.Object {
 	
 	public bool do_show() {
 
-		this.capture.fill(0);
-#if USE_GTK3
-		this.capture=Gdk.pixbuf_get_from_window(this.browser.get_window(),(int)this.browser_x,(int)(this.browser_y+this.browser_margin),(int)this.browser_w,(int)this.browser_h);
-#else
-		Gdk.pixbuf_get_from_drawable(this.capture,this.browser.window,null,(int)this.browser_x,(int)(this.browser_y+this.browser_margin),0,0,(int)this.browser_w,(int)this.browser_h);
-#endif
 		this.browser.do_refresh_icons ();
 		this.browserhide=true;
 		this.capture_done=true;
@@ -357,8 +349,6 @@ class restore_iface : GLib.Object {
 		this.browser_margin=this.scr_h/8;
 		this.browser_w=scr_w*4/5;
 		this.browser_h=this.scr_h-this.browser_y-this.browser_margin-this.nixie_h/6;
-		this.capture = new Gdk.Pixbuf(Gdk.Colorspace.RGB,false, 8,(int)this.browser_w,(int)this.browser_h);
-		//this.paint_border (c_base,this.browser_x,this.browser_y,this.browser_w,this.browser_h,0.0,true);
 		
 		c_base.save();
 		c_base.scale(scale2,scale2);
@@ -533,6 +523,7 @@ class restore_iface : GLib.Object {
 		double ow;
 		double oh;
 		double scale;
+		double s_factor;
 		ctx.set_line_width(1.5);
 		ctx.set_source_rgb(0.2,0.2,0.2);
 		for(int c=maxval-1;c>=this.pos;c--) {
@@ -541,19 +532,41 @@ class restore_iface : GLib.Object {
 			if (z<0) {
 				continue;
 			}
-			this.transform_coords (z,out ox, out oy, out ow, out oh);
-			/*ctx.set_source_rgb(1,1,1);
-			//ctx.set_source_rgb(0.7,0.7,0.7);
-			ctx.rectangle(ox,oy,ow,oh);
-			ctx.fill();*/
-			scale = ow/this.browser_w;
+
+			this.transform_coords (z,out ox, out oy, out ow, out oh, out s_factor);
+			ctx.select_font_face("Sans",FontSlant.NORMAL,FontWeight.BOLD);
+			ctx.set_font_size(18.0*s_factor);
+			var ctime = GLib.Time.local(this.backups[c]);
+			string date;
+			if (this.date_format) {
+				date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+			} else {
+				date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.month+1,ctime.day,1900+ctime.year);
+			}
+
+			Cairo.TextExtents extents;
+			ctx.text_extents(date,out extents);
+			ctx.set_source_rgb(1,1,1);
+
+			double final_add=4.0*s_factor;
+
+			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
+			ctx.fill();
+			ctx.set_source_rgb(0.0, 0.0, 0.0);
+			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
+			ctx.stroke();
+			ctx.move_to(ox+(ow-extents.width+extents.x_bearing)/2, oy-extents.height-extents.y_bearing-final_add);
+
+			ctx.show_text(date);
+
+			/*scale = ow/this.browser_w;
 			ctx.save();
 			ctx.scale(scale,scale);
 			Gdk.cairo_set_source_pixbuf(ctx,this.capture,ox/scale,oy/scale);
 			ctx.paint();
 			ctx.restore();
 			ctx.rectangle(ox,oy,ow,oh);
-			ctx.stroke();
+			ctx.stroke();*/
 		}
 		/*ctx.set_source_rgb(0.2,0.2,0.2);
 		ctx.rectangle(this.browser_x,this.browser_y,this.browser_w,this.browser_h);
@@ -587,7 +600,7 @@ class restore_iface : GLib.Object {
 		return true;
 	}
 
-	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh) {
+	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {
 	
 		double eyedist = 2500.0;
 
@@ -596,6 +609,7 @@ class restore_iface : GLib.Object {
 		ow=(this.browser_w*eyedist)/(z+eyedist);
 		oh=(this.browser_h*eyedist)/(z+eyedist);
 		oy+=this.browser_y;
+		s_factor=eyedist/(z+eyedist);
 	}
 	
 	private int get_nixie_pos(char v) {
@@ -830,10 +844,10 @@ class restore_iface : GLib.Object {
 			end_animation=false;
 			if (this.scale_current_value>this.scale_desired_value) {
 				diff=this.scale_current_value-this.scale_desired_value;
-				this.scale_current_value-=(diff/3);
+				this.scale_current_value-=(diff/4);
 			} else {
 				diff=this.scale_desired_value-this.scale_current_value;
-				this.scale_current_value+=(diff/3);
+				this.scale_current_value+=(diff/4);
 			}
 			if (diff<6) {
 				this.scale_current_value=this.scale_desired_value;
