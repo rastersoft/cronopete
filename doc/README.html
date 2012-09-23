@@ -50,8 +50,8 @@ it's easily deleted.</li>
 
 <p>Currently, it only can do backups to local hard disks; in a near future I hope to add support for remote disks.</p>
 
-<p>Cronopete creates in the external disk a folder, called <strong>cronopete</strong>, and inside it creates one folder for each user using it. The name of these
-folders are the user login name.</p>
+<p>Cronopete creates in the external disk a folder, called <strong>cronopete</strong>, and inside it creates one folder for each user using it. The name
+of these folders are the user login name.</p>
 
 <p>Then, inside each user folder, cronopete creates one folder for each backup. The name of that folder follows the format:</p>
 <div align="center"><p>YYYY_MM_DD_hh:mm:ss_unixtime</p></div>
@@ -64,14 +64,14 @@ a temporal backup (one that is still being made).</p>
 
 <p>Cronopete is written in Vala, so you need to install it:</p>
 <p><ul>
-<li>A recent version of Vala (0.12 or later)</li>
+<li>A recent version of Vala (0.16 or later)</li>
 <li>GSL library</li>
 <li>Gee library</li>
 <li>GTK+ 2.20 or later, or GTK+ 3.0 or later</li>
 <li>(Optional) ReiserFS tools (for Reiser 3.0)</li>
 </ul></p>
 
-<p>If your Vala version is too old (maybe because you are using Ubuntu 11.04 or older), you can add the Vala team PPA, just typing in a terminal:</p>
+<p>If your Vala version is too old (maybe because you are using Ubuntu 12.04 or older), you can add the Vala team PPA, just typing in a terminal:</p>
 <pre>sudo apt-add-repository ppa:vala-team/ppa</pre>
 <p>followed by:</p>
 <pre>sudo apt-get update</pre>
@@ -159,6 +159,24 @@ or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 
 <h2>History of versions</h2>
 <ul>
+
+<li>Version 3.2.0 (2012/09/09)</li>
+<ul>
+<li>Now compiles with Vala 0.16 (compatible with Debian)</li>
+<li>Now new disks are formatted right, without returning a false error</li>
+<li>Disks are also formatted when the access rights are incorrect</li>
+<li>Added icons in windows and in window manager</li>
+<li>Now it uses asynchronous calls when restoring files, instead of a thread</li>
+<li>Reduced FPS in clock animation to reduce CPU usage</li>
+<li>Added a "Restored ended successfully" message at the end of file restoration</li>
+<li>Now also shows the date in the windows titlebar during file restoring</li>
+<li>Updated animation during restoring to do it more efficient and smooth when not having GPU acceleration</li>
+</ul>
+
+<li>Version 3.1.0</li>
+<ul>
+<li>Internal version</li>
+</ul>
 
 <li>Version 3.0.0 (2011/12/18)</li>
 <ul>
