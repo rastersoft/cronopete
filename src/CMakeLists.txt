@@ -39,4 +39,15 @@ OPTIONS
 
 add_executable(cronopete ${VALA_C})
 
-install(TARGETS cronopete RUNTIME DESTINATION bin)
+install(TARGETS
+	cronopete
+RUNTIME DESTINATION
+	bin
+)
+
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences
+DESTINATION
+	bin
+)
