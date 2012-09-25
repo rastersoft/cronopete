@@ -3,7 +3,12 @@ configure_file (${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/sr
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
 
 find_package(PkgConfig)
-pkg_check_modules(DEPS REQUIRED gtk+-3.0 gsl gee-1.0)
+
+if(USE_GTK2)
+	pkg_check_modules(DEPS REQUIRED gtk+-2.0 gsl gee-1.0)
+else()
+	pkg_check_modules(DEPS REQUIRED gtk+-3.0 gsl gee-1.0)
+endif()
 
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES})
@@ -15,9 +20,33 @@ ensure_vala_version("0.16.0" MINIMUM)
 
 include(ValaPrecompile)
 
+if(USE_GTK2)
 vala_precompile(VALA_C
 	backup.vala
-	Config.vala
+	${CMAKE_BINARY_DIR}/src/Config.vala
+	icons_widget.vala
+	options.vala
+	choose.vala
+	cronopete.vala
+	menu.vala
+	restore.vala
+	usbhd_backend.vala
+	switch_widget.vala
+PACKAGES
+	gio-2.0
+	gtk+-2.0
+	posix
+	gee-1.0
+	gsl
+	gmodule-2.0
+OPTIONS
+	-X -O2
+	-D USE_GTK2
+)
+else()
+vala_precompile(VALA_C
+	backup.vala
+	${CMAKE_BINARY_DIR}/src/Config.vala
 	icons_widget.vala
 	options.vala
 	choose.vala
@@ -34,8 +63,11 @@ PACKAGES
 	gmodule-2.0
 OPTIONS
 	-X -O2
-	-D USE_GTK3
 )
+
+endif()
+
+
 
 add_executable(cronopete ${VALA_C})
 
@@ -45,9 +77,9 @@ RUNTIME DESTINATION
 	bin
 )
 
-install(FILES
+install(PROGRAMS
 	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences
-	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore
 DESTINATION
 	bin
 )

@@ -38,10 +38,10 @@ class c_main_menu : GLib.Object {
 	private TextMark mark;
 	private TextView log_view;
 	private string last_status;
-#if USE_GTK3
-	private Switch my_widget;
-#else
+#if USE_GTK2
 	private Switch_Widget my_widget;
+#else
+	private Switch my_widget;
 #endif
 	
 	public bool is_visible;
@@ -69,7 +69,13 @@ class c_main_menu : GLib.Object {
 		this.img = (Image) this.builder.get_object("image_disk");
 		
 		var cnt = (VBox) this.builder.get_object("vbox_switch");
-#if USE_GTK3
+
+#if USE_GTK2
+		this.my_widget=new Switch_Widget();
+		this.my_widget.toggled.connect(this.cronopete_is_active_callback);
+		cnt.pack_start(this.my_widget,false,true,0);
+		this.my_widget.show();
+#else
 		this.my_widget=new Switch();
 		this.my_widget.expand=false;
 		var tmp_w=new HBox(false,0);
@@ -83,11 +89,6 @@ class c_main_menu : GLib.Object {
 		this.my_widget.show();
 		this.my_widget.notify_property("active");
 		this.my_widget.notify.connect(this.cronopete_is_active_callback);
-#else
-		this.my_widget=new Switch_Widget();
-		this.my_widget.toggled.connect(this.cronopete_is_active_callback);
-		cnt.pack_start(this.my_widget,false,true,0);
-		this.my_widget.show();
 #endif
 
 		this.is_visible = false;
