@@ -808,40 +808,18 @@ int main(string[] args) {
 	nice(19); // Minimum priority
 	string basepath;
 
-#if USE_GTK3
-	var file=File.new_for_path("./interface3/main.ui");
+	var file=File.new_for_path("/usr/share/cronopete/main.ui");
 	if (file.query_exists()) {
-		basepath="./interface3/";
-		Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
+		basepath="/usr/share/cronopete/";
+		Intl.bindtextdomain("cronopete", "/usr/share/locale");
 	} else {
-		file=File.new_for_path("/usr/share/cronopete3/main.ui");
-		if (file.query_exists()) {
-			basepath="/usr/share/cronopete3/";
-			Intl.bindtextdomain( "cronopete", "/usr/share/locale");
-		} else {
-			basepath="/usr/local/share/cronopete3/";
-			Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
-		}
+		basepath="/usr/local/share/cronopete/";
+		Intl.bindtextdomain("cronopete", "/usr/local/share/locale");
 	}
-#else	
-	var file=File.new_for_path("./interface/main.ui");
-	if (file.query_exists()) {
-		basepath="./interface/";
-		Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
-	} else {
-		file=File.new_for_path("/usr/share/cronopete/main.ui");
-		if (file.query_exists()) {
-			basepath="/usr/share/cronopete/";
-			Intl.bindtextdomain( "cronopete", "/usr/share/locale");
-		} else {
-			basepath="/usr/local/share/cronopete/";
-			Intl.bindtextdomain( "cronopete", "/usr/local/share/locale");
-		}
-	}
-#endif	
+
 	//Intl.setlocale (LocaleCategory.ALL, "");
 	Intl.textdomain("cronopete");
-	Intl.bind_textdomain_codeset( "cronopete", "UTF-8" );
+	Intl.bind_textdomain_codeset("cronopete", "UTF-8" );
 
 	Gdk.threads_init();
 	Gtk.init(ref args);

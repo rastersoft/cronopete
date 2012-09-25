@@ -183,10 +183,11 @@ class restore_iface : GLib.Object {
 		this.base_layout = new Fixed();
 
 		this.drawing = new DrawingArea();
-#if USE_GTK3
-		this.drawing.draw.connect(this.repaint_draw3);
-#else
+
+#if USE_GTK2
 		this.drawing.expose_event.connect(this.repaint_draw);
+#else
+		this.drawing.draw.connect(this.repaint_draw3);
 #endif
 		this.base_layout.add(this.drawing);
 		

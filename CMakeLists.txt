@@ -1,0 +1,26 @@
+project (cronopete)
+
+cmake_minimum_required (VERSION 2.6)
+cmake_policy (VERSION 2.8)
+
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+enable_testing ()
+
+set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+set (PKGDATADIR "${DATADIR}/cronopete")
+set (GETTEXT_PACKAGE "cronopete")
+set (RELEASE_NAME "Cronopete")
+set (VERSION "3.2.0")
+set (VERSION_INFO "Release")
+set (CMAKE_C_FLAGS "")
+set (PREFIX ${CMAKE_INSTALL_PREFIX})
+
+add_subdirectory(src)
+add_subdirectory(po)
+add_subdirectory(data)
+add_subdirectory(data/pixmaps)
+if(USE_GTK2)
+add_subdirectory(data/interface)
+else()
+add_subdirectory(data/interface3)
+endif()

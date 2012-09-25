@@ -1,0 +1,11 @@
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.desktop
+DESTINATION
+	/etc/xdg/autostart/
+)
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.desktop
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.desktop
+DESTINATION
+	share/applications/
+)

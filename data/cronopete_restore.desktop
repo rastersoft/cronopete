@@ -11,5 +11,5 @@ Comment[es]=Permite restaurar ficheros a partir de una copia de seguridad de Cro
 Comment[gl]=Permite restaurar ficheiros a partires dunha copia de seguridade de Cronopete
 TryExec=cronopete_restore
 Exec=cronopete_restore
-Categories=Other;
+Categories=System;
 Icon=cronopete_restore.svg

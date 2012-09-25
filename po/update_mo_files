@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo es
-msgfmt es.po -o es.mo
-echo gl
-msgfmt gl.po -o gl.mo

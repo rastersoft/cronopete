@@ -11,5 +11,5 @@ Comment[es]=Permite configurar el programa de backups Cronopete
 Comment[gl]=Permite configurar o programa de backups Cronopete
 TryExec=cronopete_preferences
 Exec=cronopete_preferences
-Categories=Other;
+Categories=System;
 Icon=cronopete_preferences.svg
