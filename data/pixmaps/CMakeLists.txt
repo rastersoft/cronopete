@@ -1,0 +1,11 @@
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.svg
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.svg
+DESTINATION
+	share/icons/hicolor/scalable/apps
+)
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/anacronopete.svg
+DESTINATION
+	share/cronopete
+)
