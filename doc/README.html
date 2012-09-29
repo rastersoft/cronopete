@@ -69,8 +69,11 @@ a temporal backup (one that is still being made).</p>
 <li>Gee library</li>
 <li>GTK+ 2.20 or later, or GTK+ 3.0 or later</li>
 <li>(Optional) ReiserFS tools (for Reiser 3.0)</li>
+<li>CMake</li>
 </ul></p>
-
+<p>You will also need the last version of the CMake utilities for Vala. You can download with</p>
+<pre>bzr branch lp:~elementary-apps/+junk/cmake-modules</pre>
+<p>After that, you must copy the <em>cmake</em> folder, which is inside the <em>cmake-modules</em> folder, to the <em>cronopete</em> folder.
 <p>If your Vala version is too old (maybe because you are using Ubuntu 12.04 or older), you can add the Vala team PPA, just typing in a terminal:</p>
 <pre>sudo apt-add-repository ppa:vala-team/ppa</pre>
 <p>followed by:</p>
@@ -89,7 +92,7 @@ cd Build
 cmake -DUSE_GTK2=ON ..
 make
 sudo make install</pre>
-<p>to make the GTK2 version.</p>
+<p>to make the GTK2 version. Another option is <em>NO_APPINDICATOR</em>, which will make cronopete without using <em>libappindicator</em>.</p>
 <p>Now, in order to run it, just type</p>
 <pre>cronopete &</pre>
 <h2>Using Cronopete</h2>

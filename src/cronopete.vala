@@ -24,6 +24,10 @@ using Gdk;
 using Cairo;
 using Gsl;
 
+#if USE_APPINDICATOR
+using AppIndicator;
+#endif
+ 
 enum SystemStatus { IDLE, BACKING_UP, ABORTING, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
@@ -31,7 +35,11 @@ cp_callback callback_object;
 
 class cp_callback : GLib.Object, callbacks {
 
+#if USE_APPINDICATOR
+	private Indicator appindicator;
+#else
 	private StatusIcon trayicon;
+#endif
 	private SystemStatus backup_running;
 	private BackupStatus current_status;
 	private double angle;
@@ -52,6 +60,7 @@ class cp_callback : GLib.Object, callbacks {
 	private uint new_period;
 	private bool tooltip_changed;
 	private string tooltip_value;
+	private uint iconpos;
 
 	public restore_iface restore_w;
 
@@ -135,6 +144,9 @@ class cp_callback : GLib.Object, callbacks {
 		this.repaint(this.size);
 		this.status_tooltip();
 		this.main_menu.refresh_backup_data();
+#if USE_APPINDICATOR
+		this.menuSystem_popup();
+#endif
 		if ((this._active) && (this.backend.available) && (this.backup_pending)) {
 			this.timer_f();
 		}
@@ -164,12 +176,17 @@ class cp_callback : GLib.Object, callbacks {
 	
 		this.basedir = null;
 		this.main_menu = new c_main_menu(this.basepath,this);
-	
+#if USE_APPINDICATOR
+		this.appindicator = new Indicator("Cronopete","cronopete_arrow_1_green",IndicatorCategory.APPLICATION_STATUS);
+		this.appindicator.set_status(IndicatorStatus.ACTIVE);
+		this.menuSystem_popup();
+#else
 		this.trayicon = new StatusIcon();
 		this.trayicon.size_changed.connect(this.repaint);
 		this.trayicon.set_visible(true);
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
+#endif
 		this.refresh_status(null);
 		this.set_tooltip (_("Idle"));
 		// wait five minutes after being launched before doing the backup
@@ -226,11 +243,15 @@ class cp_callback : GLib.Object, callbacks {
 		} else {
 			lock (this.tooltip_value) {
 				if (message==null) {
+#if !USE_APPINDICATOR
 					this.trayicon.set_tooltip_text (this.tooltip_value);
+#endif
 					this.main_menu.set_status(this.tooltip_value);
 					this.tooltip_changed=false;
 				} else {
+#if !USE_APPINDICATOR
 					this.trayicon.set_tooltip_text (message);
+#endif
 					this.main_menu.set_status(message);
 				}
 			}
@@ -267,7 +288,10 @@ class cp_callback : GLib.Object, callbacks {
 			if (this.refresh_timer!=0) {
 				Source.remove(this.refresh_timer);
 			}
-			this.refresh_timer=Timeout.add(50,this.timer_f);
+			this.refresh_timer=Timeout.add(500,this.timer_f);
+#if USE_APPINDICATOR
+			this.menuSystem_popup();
+#endif
 			
 		} else if (this.backup_running==SystemStatus.ENDED) {
 			this.backup_forced=false;
@@ -284,11 +308,15 @@ class cp_callback : GLib.Object, callbacks {
 				Source.remove(this.refresh_timer);
 				this.refresh_timer=0;
 			}
+#if USE_APPINDICATOR
+			this.menuSystem_popup();
+#endif
 		}
 
 		this.repaint(this.size);
 		this.angle-=0.50;
 		this.angle%=120.0*Gsl.MathConst.M_PI;
+		this.iconpos++;
 		
 		if (this.backup_running==SystemStatus.ABORTING) {
 			return false;
@@ -313,88 +341,55 @@ class cp_callback : GLib.Object, callbacks {
 		this.repaint(this.size);
 		return false;
 	}
-	
+
+	/* Paints the animated icon in the panel */
 	public bool repaint(int size) {
 
-		if (size==0) {
-			return false;
-		}
+		string icon_name;
 
-		if (this.size!=size) {
-			GLib.Idle.add(this.do_first_repaint);
+		switch(this.iconpos) {
+		default:
+			icon_name="cronopete_arrow_1_";
+			this.iconpos=0;
+		break;
+		case 1:
+			icon_name="cronopete_arrow_2_";
+		break;
+		case 2:
+			icon_name="cronopete_arrow_3_";
+		break;
+		case 3:
+			icon_name="cronopete_arrow_4_";
+		break;
 		}
 		
-		this.size = size;
-	
-		var canvas = new Cairo.ImageSurface(Cairo.Format.ARGB32,size,size);
-		var ctx = new Cairo.Context(canvas);
-		
-		ctx.scale(size,size);
-
 		if (this.backend.available==false) {
-			ctx.set_source_rgb(1,0,0);
+			icon_name+="red"; // There's no disk connected
 		} else {
 			if ((this._active)||(this.backup_forced)) {
 				switch (this.current_status) {
 				case BackupStatus.STOPPED:
-					ctx.set_source_rgb(1,1,1);
+					icon_name+="white"; // Idle
 				break;
 				case BackupStatus.ALLFINE:
-					ctx.set_source_rgb(0,1,0);
+					icon_name+="green"; // Doing backup; everything fine
 				break;
 				case BackupStatus.WARNING:
-					ctx.set_source_rgb(1,0.7,0);
+					icon_name+="yellow";
 				break;
 				case BackupStatus.ERROR:
-					ctx.set_source_rgb(1,0,0);
+					icon_name+="red";
 				break;
 				}
 			} else {
-				ctx.set_source_rgb(1,0.5,0);
+				icon_name+="orange";
 			}
 		}
-		ctx.set_line_width(0.0);
-		ctx.move_to(0.0,0.45);
-		ctx.line_to(0.4,0.45);
-		ctx.line_to(0.2,0.625);
-		ctx.close_path();
-		ctx.fill();
-		ctx.arc(0.54,0.5,0.34,(double)Gsl.MathConst.M_PI,-(double)(Gsl.MathConst.M_PI*6.0/5.0));
-		ctx.set_line_width(0.11);
-		ctx.stroke();
-		ctx.translate(0.54,0.5);
-		ctx.set_line_width(0.08);
-		ctx.save();
-		ctx.rotate(this.angle);
-		ctx.move_to(0,0.02);
-		ctx.line_to(0,-0.25);
-		ctx.stroke();
-		ctx.restore();
-		ctx.save();
-		ctx.rotate(this.angle/15);
-		ctx.move_to(0,0.02);
-		ctx.line_to(0,-0.16);
-		ctx.restore();
-		ctx.stroke();
-		
-		uint8 *data_icon=new uint8[size*size*4];
-		uint8 *p1=data_icon;
-		uint8 *p2=canvas.get_data();
-		int counter;
-		
-		int max=size*size;
-		for(counter=0;counter<max;counter++) {
-			// R and B channels are swapped in Cairo and Pixbuf areas
-			*p1    =*(p2+2);
-			*(p1+1)=*(p2+1);
-			*(p1+2)=*p2;
-			*(p1+3)=*(p2+3);
-			p1+=4;
-			p2+=4;
-		}
-		
-		var pix=new Pixbuf.from_data((uint8[])data_icon,Gdk.Colorspace.RGB,true,8,size,size,size*4,PixbufDestroyNotify);
-		this.trayicon.set_from_pixbuf(pix);
+#if USE_APPINDICATOR
+		this.appindicator.set_icon(icon_name);
+#else
+		this.trayicon.set_from_icon_name(icon_name);
+#endif
 		return true;
 	}
 
@@ -408,7 +403,7 @@ class cp_callback : GLib.Object, callbacks {
 
 		menuDate.sensitive=false;
 		menuSystem.append(menuDate);
-		
+	
 		Gtk.MenuItem menuBUnow;
 		if (this.backup_running==SystemStatus.IDLE) {
 			menuBUnow = new Gtk.MenuItem.with_label(_("Back Up Now"));
@@ -450,9 +445,12 @@ class cp_callback : GLib.Object, callbacks {
 		this.menuSystem.append(menuAbout);
 	
 		menuSystem.show_all();
-	
+#if USE_APPINDICATOR
+		this.appindicator.set_menu(this.menuSystem);
+#else
 		this.menuSystem.popup(null,null,this.trayicon.position_menu,2,Gtk.get_current_event_time());
-	
+#endif
+
 	}
 	
 	

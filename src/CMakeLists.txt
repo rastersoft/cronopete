@@ -4,11 +4,24 @@ add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
 
 find_package(PkgConfig)
 
+set(MODULES_TO_CHECK gsl gee-1.0)
+
 if(USE_GTK2)
-	pkg_check_modules(DEPS REQUIRED gtk+-2.0 gsl gee-1.0)
+	set(MODULES_TO_CHECK ${MODULES_TO_CHECK} gtk+-2.0)
 else()
-	pkg_check_modules(DEPS REQUIRED gtk+-3.0 gsl gee-1.0)
+	set(MODULES_TO_CHECK ${MODULES_TO_CHECK} gtk+-3.0)
 endif()
+
+if(NO_APPINDICATOR)
+else()
+	if(USE_GTK2)
+		set(MODULES_TO_CHECK ${MODULES_TO_CHECK} appindicator-0.1)
+	else()
+		set(MODULES_TO_CHECK ${MODULES_TO_CHECK} appindicator3-0.1)
+	endif()
+endif()
+
+pkg_check_modules(DEPS REQUIRED ${MODULES_TO_CHECK})
 
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES})
@@ -20,9 +33,7 @@ ensure_vala_version("0.16.0" MINIMUM)
 
 include(ValaPrecompile)
 
-if(USE_GTK2)
-vala_precompile(VALA_C
-	backup.vala
+set(SOURCE_FILES 	backup.vala
 	${CMAKE_BINARY_DIR}/src/Config.vala
 	icons_widget.vala
 	options.vala
@@ -30,44 +41,41 @@ vala_precompile(VALA_C
 	cronopete.vala
 	menu.vala
 	restore.vala
-	usbhd_backend.vala
-	switch_widget.vala
-PACKAGES
-	gio-2.0
-	gtk+-2.0
-	posix
-	gee-1.0
-	gsl
-	gmodule-2.0
-OPTIONS
-	-X -O2
-	-D USE_GTK2
-)
-else()
-vala_precompile(VALA_C
-	backup.vala
-	${CMAKE_BINARY_DIR}/src/Config.vala
-	icons_widget.vala
-	options.vala
-	choose.vala
-	cronopete.vala
-	menu.vala
-	restore.vala
-	usbhd_backend.vala
-PACKAGES
-	gio-2.0
-	gtk+-3.0
-	posix
-	gee-1.0
-	gsl
-	gmodule-2.0
-OPTIONS
-	-X -O2
-)
+	usbhd_backend.vala)
 
+set(PACKAGES_VALA gio-2.0
+	posix
+	gee-1.0
+	gsl
+	gmodule-2.0)
+
+set(COMPILE_OPTIONS_VALA -X -O2)
+
+if(USE_GTK2)
+	set(SOURCE_FILES ${SOURCE_FILES} switch_widget.vala)
+	set(PACKAGES_VALA ${PACKAGES_VALA} gtk+-2.0)
+	set(COMPILE_OPTIONS_VALA ${COMPILE_OPTIONS_VALA} -D USE_GTK2)
+else()
+	set(PACKAGES_VALA ${PACKAGES_VALA} gtk+-3.0)
 endif()
 
+if(NO_APPINDICATOR)
+else()
+	set(COMPILE_OPTIONS_VALA ${COMPILE_OPTIONS_VALA} -D USE_APPINDICATOR)
+	if(USE_GTK2)
+		set(PACKAGES_VALA ${PACKAGES_VALA} appindicator-0.1)
+	else()
+		set(PACKAGES_VALA ${PACKAGES_VALA} appindicator3-0.1)
+	endif()
+endif()
 
+vala_precompile(VALA_C
+	${SOURCE_FILES}
+PACKAGES
+	${PACKAGES_VALA}
+OPTIONS
+	${COMPILE_OPTIONS_VALA}
+)
 
 add_executable(cronopete ${VALA_C})
 

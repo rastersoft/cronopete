@@ -7,7 +7,7 @@
     <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="window_position">center-always</property>
-    <property name="icon">anacronopete.svg</property>
+    <property name="icon_name">anacronopete</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">anaCRONOPETE</property>
     <property name="version">3.2.0</property>
