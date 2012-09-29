@@ -1,22 +1,22 @@
-menu.vala
-options.vala
-switch_widget.vala
-usbhd_backend.vala
-backup.vala
-choose.vala
-cronopete.vala
-restore.vala
-icons_widget.vala
-[type: gettext/glade]interface/about.ui
-[type: gettext/glade]interface/chooser.ui
-[type: gettext/glade]interface/folder_selector.ui
-[type: gettext/glade]interface/format_error.ui
-[type: gettext/glade]interface/format_force.ui
-[type: gettext/glade]interface/formatting.ui
-[type: gettext/glade]interface/main.ui
-[type: gettext/glade]interface/options.ui
-[type: gettext/glade]interface/restoring.ui
-[type: gettext/glade]interface/restore_ok.ui
-[type: gettext/glade]interface/restore_error.ui
+src/menu.vala
+src/options.vala
+src/switch_widget.vala
+src/usbhd_backend.vala
+src/backup.vala
+src/choose.vala
+src/cronopete.vala
+src/restore.vala
+src/icons_widget.vala
+[type: gettext/glade]data/interface/about.ui
+[type: gettext/glade]data/interface/chooser.ui
+[type: gettext/glade]data/interface/folder_selector.ui
+[type: gettext/glade]data/interface/format_error.ui
+[type: gettext/glade]data/interface/format_force.ui
+[type: gettext/glade]data/interface/formatting.ui
+[type: gettext/glade]data/interface/main.ui
+[type: gettext/glade]data/interface/options.ui
+[type: gettext/glade]data/interface/restoring.ui
+[type: gettext/glade]data/interface/restore_ok.ui
+[type: gettext/glade]data/interface/restore_error.ui
 
 

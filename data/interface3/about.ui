@@ -6,7 +6,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
-    <property name="window_position">center-always</property>
+    <property name="window_position">center</property>
     <property name="icon_name">anacronopete</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">anaCRONOPETE</property>
@@ -638,6 +638,7 @@ copy of the Program in return for a fee.
                      END OF TERMS AND CONDITIONS</property>
     <property name="authors">Sergio Costas Rodriguez</property>
     <property name="logo">anacronopete.svg</property>
+    <property name="license_type">gpl-3-0</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>

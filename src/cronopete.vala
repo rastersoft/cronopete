@@ -91,6 +91,28 @@ class cp_callback : GLib.Object, callbacks {
 			}
 		}
 	}
+
+	private bool _show_in_bar;
+	public bool show_in_bar {
+		get {
+			return this._show_in_bar;
+		}
+
+		set {
+			this._show_in_bar=value;
+			this.write_configuration ();
+#if USE_APPINDICATOR
+			if (this._show_in_bar) {
+				this.appindicator.set_status(IndicatorStatus.ACTIVE);
+			} else {
+				this.appindicator.set_status(IndicatorStatus.PASSIVE);
+			}
+#else
+			this.trayicon.set_visible(this._show_in_bar);
+#endif
+
+		}
+	}
 	
 	public string p_backup_path {
 	
@@ -153,7 +175,7 @@ class cp_callback : GLib.Object, callbacks {
 	}
 
 	public cp_callback(string path) {
-	
+
 		this.messages = new StringBuilder("");
 		this.backup_running = SystemStatus.IDLE;
 		this.current_status = BackupStatus.STOPPED;
@@ -169,7 +191,6 @@ class cp_callback : GLib.Object, callbacks {
 
 		this.backend=new usbhd_backend(this.backup_path);
 		this.backend.status.connect(this.refresh_status);
-		
 		this.fill_last_backup();
 
 		this.basepath=path;
@@ -178,7 +199,11 @@ class cp_callback : GLib.Object, callbacks {
 		this.main_menu = new c_main_menu(this.basepath,this);
 #if USE_APPINDICATOR
 		this.appindicator = new Indicator("Cronopete","cronopete_arrow_1_green",IndicatorCategory.APPLICATION_STATUS);
-		this.appindicator.set_status(IndicatorStatus.ACTIVE);
+		if (this._show_in_bar) {
+			this.appindicator.set_status(IndicatorStatus.ACTIVE);
+		} else {
+			this.appindicator.set_status(IndicatorStatus.PASSIVE);
+		}
 		this.menuSystem_popup();
 #else
 		this.trayicon = new StatusIcon();
@@ -187,6 +212,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.trayicon.popup_menu.connect(this.menuSystem_popup);
 		this.trayicon.activate.connect(this.menuSystem_popup);
 #endif
+		
 		this.refresh_status(null);
 		this.set_tooltip (_("Idle"));
 		// wait five minutes after being launched before doing the backup
@@ -436,13 +462,6 @@ class cp_callback : GLib.Object, callbacks {
 		var menuMain = new Gtk.MenuItem.with_label(_("Open Cronopete Preferences..."));
 		menuMain.activate.connect(main_clicked);
 		menuSystem.append(menuMain);
-		
-		var menuBar2 = new Gtk.SeparatorMenuItem();
-		menuSystem.append(menuBar2);
-		
-		var menuAbout = new Gtk.ImageMenuItem.from_stock(Stock.ABOUT, null);
-		menuAbout.activate.connect(about_clicked);
-		this.menuSystem.append(menuAbout);
 	
 		menuSystem.show_all();
 #if USE_APPINDICATOR
@@ -452,7 +471,6 @@ class cp_callback : GLib.Object, callbacks {
 #endif
 
 	}
-	
 	
 	public void backup_now() {
 	
@@ -478,21 +496,6 @@ class cp_callback : GLib.Object, callbacks {
 			this.basedir.abort_backup();
 		}
 	
-	}
-	
-	public void about_clicked() {
-		
-		var w = new Builder();
-		
-		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
-
-		var about_w = (Dialog)w.get_object("aboutdialog1");
-
-		about_w.show();
-		about_w.run();
-		about_w.hide();
-		about_w.destroy();
-		
 	}
 	
 	public void enter_clicked() {
@@ -623,6 +626,10 @@ class cp_callback : GLib.Object, callbacks {
 			if (this._active==true) {
 				out_stream.put_string("active\n",null);
 			}
+
+			if (this._show_in_bar==false) {
+				out_stream.put_string("no_show_in_bar\n",null);
+			}
 		
 			if (this.backup_path!="") {
 				out_stream.put_string("backup_directory %s\n".printf(this.backup_path),null);
@@ -659,6 +666,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.backup_path = "";
 		this.skip_hiden_at_home = true;
 		this._active = false;
+		this._show_in_bar=true;
 		this.new_period=3600;
 
 		bool failed=false;
@@ -725,6 +733,11 @@ class cp_callback : GLib.Object, callbacks {
 			
 			if (line.has_prefix("backup_period ")) {
 				this.new_period=int.parse(line.substring(14).strip());
+				continue;
+			}
+
+			if (line=="no_show_in_bar") {
+				this._show_in_bar=false;
 				continue;
 			}
 			

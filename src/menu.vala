@@ -35,6 +35,7 @@ class c_main_menu : GLib.Object {
 	private Label Lspace;
 	private Label text_status;
 	private Image img;
+	private Gtk.ToggleButton show_in_bar_ch;
 	private TextMark mark;
 	private TextView log_view;
 	private string last_status;
@@ -53,7 +54,7 @@ class c_main_menu : GLib.Object {
 		
 		this.builder = new Builder();		
 		this.builder.add_from_file(Path.build_filename(this.basepath,"main.ui"));
-		this.builder.connect_signals(this);		
+				
 		this.main_w = (Window) this.builder.get_object("window1");
 		
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
@@ -67,6 +68,9 @@ class c_main_menu : GLib.Object {
 		this.Lspace = (Label) this.builder.get_object("label_free_space");
 		this.text_status = (Label) this.builder.get_object("status_label");
 		this.img = (Image) this.builder.get_object("image_disk");
+		this.show_in_bar_ch = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
+
+		this.show_in_bar_ch.set_active(this.parent.show_in_bar);
 		
 		var cnt = (VBox) this.builder.get_object("vbox_switch");
 
@@ -92,7 +96,7 @@ class c_main_menu : GLib.Object {
 #endif
 
 		this.is_visible = false;
-		
+		this.builder.connect_signals(this);
 	}
 
 	public void set_status(string msg) {
@@ -251,5 +255,25 @@ class c_main_menu : GLib.Object {
 				this.my_widget.active=true;
 			}
 		});
+	}
+
+	[CCode (instance_pos = -1)]
+	public void cronopete_about_clicked(Button source) {
+		
+		var w = new Builder();
+		
+		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
+
+		var about_w = (Dialog)w.get_object("aboutdialog1");
+
+		about_w.show();
+		about_w.run();
+		about_w.hide();
+		about_w.destroy();
+	}
+
+	[CCode (instance_pos = -1)]
+	public void cronopete_show_in_bar_callback(Gtk.CheckButton source) {
+		this.parent.show_in_bar=this.show_in_bar_ch.active;
 	}
 }
