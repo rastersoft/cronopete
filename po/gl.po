@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-01 00:54+0200\n"
-"PO-Revision-Date: 2012-10-01 00:56+0200\n"
+"POT-Creation-Date: 2012-10-01 01:05+0200\n"
+"PO-Revision-Date: 2012-10-01 01:05+0200\n"
 "Last-Translator: Sergio Costas <raster@rastersoft.com>\n"
 "Language-Team: Español; Castellano <raster@rastersoft.com>\n"
 "Language: \n"
@@ -499,6 +499,10 @@ msgid "Ignore all"
 msgstr "Ignorar todos"
 
 #: ../data/interface/config_exported.ui.h:1
+msgid "Configuration exported"
+msgstr "Configuración exportada"
+
+#: ../data/interface/config_exported.ui.h:2
 msgid ""
 "Cronopete exported your configuration.\n"
 "Please, check the list of folders to backup."
