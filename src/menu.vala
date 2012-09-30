@@ -46,15 +46,30 @@ class c_main_menu : GLib.Object {
 #endif
 	
 	public bool is_visible;
+	private GLib.Settings cronopete_settings;
 	
-	public c_main_menu(string path, cp_callback p) {
+	public bool switch_enabler {
+		get {
+			return this.parent.active;
+		}
+		
+		set {
+			this.my_widget.active=value;
+			if (this.is_visible==false) {
+				this.parent.active=value;
+			}
+		}
+	}
+	
+	public c_main_menu(string path, cp_callback p,GLib.Settings q) {
 
 		this.parent = p;
 		this.basepath=path;
+		this.cronopete_settings = q;
 		
 		this.builder = new Builder();		
 		this.builder.add_from_file(Path.build_filename(this.basepath,"main.ui"));
-				
+		
 		this.main_w = (Window) this.builder.get_object("window1");
 		
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
@@ -76,7 +91,6 @@ class c_main_menu : GLib.Object {
 
 #if USE_GTK2
 		this.my_widget=new Switch_Widget();
-		this.my_widget.toggled.connect(this.cronopete_is_active_callback);
 		cnt.pack_start(this.my_widget,false,true,0);
 		this.my_widget.show();
 #else
@@ -92,11 +106,12 @@ class c_main_menu : GLib.Object {
 		cnt.pack_start(tmp_w,false,true,0);
 		this.my_widget.show();
 		this.my_widget.notify_property("active");
-		this.my_widget.notify.connect(this.cronopete_is_active_callback);
 #endif
 
 		this.is_visible = false;
 		this.builder.connect_signals(this);
+		this.cronopete_settings.bind("enabled",this.my_widget,"active",GLib.SettingsBindFlags.DEFAULT);
+		this.cronopete_settings.bind("visible",this.show_in_bar_ch,"active",GLib.SettingsBindFlags.DEFAULT);
 	}
 
 	public void set_status(string msg) {
@@ -204,21 +219,6 @@ class c_main_menu : GLib.Object {
 	
 	}
 
-	public void cronopete_is_active_callback() {
-
-		if (this.is_visible==false) {
-			return;
-		}
-
-		if (this.my_widget.active) {
-			this.parent.active=true;
-		} else {
-			this.parent.active=false;
-			this.parent.stop_backup();
-		}
-		this.refresh_backup_data();
-	}
-
 	[CCode (instance_pos = -1)]
 	public bool on_destroy_event(Gtk.Widget o) {
 	
@@ -241,16 +241,16 @@ class c_main_menu : GLib.Object {
 	
 		bool not_configured;
 
-		if (this.parent.p_backup_path=="") {
+		if (this.parent.backup_path=="") {
 			not_configured=true;
 		} else {
 			not_configured=false;
 		}
 		var tmp = new c_choose_disk();
-		tmp.run.begin(this.basepath,this.parent,(obj,res) => {
+		tmp.run.begin(this.basepath,this.parent,this.cronopete_settings, (obj,res) => {
 			tmp.run.end(res);
 			this.refresh_backup_data();
-			if ((this.parent.p_backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
+			if ((this.parent.backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
 				this.parent.active=true;
 				this.my_widget.active=true;
 			}
@@ -272,8 +272,4 @@ class c_main_menu : GLib.Object {
 		about_w.destroy();
 	}
 
-	[CCode (instance_pos = -1)]
-	public void cronopete_show_in_bar_callback(Gtk.CheckButton source) {
-		this.parent.show_in_bar=this.show_in_bar_ch.active;
-	}
 }

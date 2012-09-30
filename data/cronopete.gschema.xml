@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="apps.cronopete" path="/apps/cronopete/">
+    <key type="b" name="enabled">
+      <default>false</default>
+      <summary>Enable doing backups</summary>
+      <description>When enabled, Cronopete will do backups periodically.</description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Visible in menu bar</summary>
+      <description>When enabled, an icon with the current status will be shown in the menu bar.</description>
+    </key>
+    <key type="b" name="skip-hiden-at-home">
+      <default>false</default>
+      <summary>Don't backup the hiden files in the personal folder</summary>
+      <description>When enabled, hiden files and folders in the root of the personal folder won't be backed up (but hiden files and folders in subdirectories will be).</description>
+    </key>
+	<key type="s" name="backup-path">
+      <default>""</default>
+      <summary>Path to the external disk</summary>
+      <description>Path to the location where the external disk is mounted.</description>
+    </key>
+	<key type="as" name="backup-folders">
+      <default>[]</default>
+      <summary>Folders to back up</summary>
+      <description>List of folders to be backed up.</description>
+    </key>
+	<key type="as" name="exclude-folders">
+      <default>[]</default>
+      <summary>Folders to exclude</summary>
+      <description>These folders won't be backed up, even if they are inside a folder that will be backed up.</description>
+    </key>
+	<key type="u" name="backup-period">
+      <default>3600</default>
+      <summary>Time between backups</summary>
+      <description>Time in seconds between backups.</description>
+    </key>
+	<!--<key type="" name="">
+      <default></default>
+      <summary></summary>
+      <description></description>
+    </key> -->
+  </schema>
+</schemalist>

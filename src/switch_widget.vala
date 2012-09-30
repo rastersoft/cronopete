@@ -30,11 +30,11 @@ public class Switch_Widget : DrawingArea {
 		
 		set {
 			this._active=value;
-			if (this.visible) {
-				this.refresh(null);
-			}
+			this.refresh(null);
+			this.toggled(this);
 		}
 	}
+	private bool first_done;
 
 	public signal void toggled(Switch_Widget w);
 
@@ -47,11 +47,13 @@ public class Switch_Widget : DrawingArea {
 		// Set favored widget size
 		set_size_request (86, 26);
 		this._active=false;
+		this.first_done=false;
 	}
 
 	/* Widget is asked to draw itself */
 	public override bool expose_event (Gdk.EventExpose event) {
 
+		this.first_done=true;
 		return (this.refresh(event));
 		
 	}
@@ -63,6 +65,10 @@ public class Switch_Widget : DrawingArea {
 		int ox;
 		int oy;
 		int pos;
+		
+		if ((this.visible==false)||(this.first_done==false)) {
+			return false;
+		}
 		
 		this.window.get_size(out width,out height);
 
@@ -163,7 +169,7 @@ public class Switch_Widget : DrawingArea {
 			}
 		
 			this.window.clear_area_e(0,0,width,height);
-			this.toggled(this);
+			this.active=this._active;
 		}
 		return false;
 	}

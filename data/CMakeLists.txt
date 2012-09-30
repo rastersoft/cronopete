@@ -1,3 +1,6 @@
+include(GSettings)
+add_schema(cronopete.gschema.xml)
+
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.desktop
 DESTINATION

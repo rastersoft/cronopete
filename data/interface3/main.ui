@@ -360,7 +360,6 @@
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="c_main_menu_cronopete_show_in_bar_callback" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>

@@ -51,7 +51,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -392,6 +392,12 @@
          id="feGaussianBlur5091" />
     </filter>
   </defs>
+  <path
+     style="fill:#234567;fill-opacity:0.58823529;stroke:#123456;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5089)"
+     d="M 16.324262,41.576968 C 33.70448,8.8895315 76.384744,-5.5214395 110.99865,12.883103 145.61255,31.287645 157.9819,72.311342 139.9335,107.6525 122.60811,141.57791 78.696804,154.70932 45.173594,136.753 18.040289,122.21936 11.303683,95.862652 11.13488,95.055012 l 29.764012,-9.15899 c 2.432022,6.6773 7.166551,16.880708 18.934537,23.137858 15.730895,8.36426 40.871111,5.66955 52.391861,-15.997838 C 123.37782,72.061182 113.52116,49.636973 96.284214,40.471924 78.156844,30.833439 54.427808,36.496919 43.923872,56.25194 L 58.126341,63.803525 18.479809,71.012962 2.2866341,34.113028 z"
+     id="path4329-9"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="csssccsssccccc" />
   <g
      id="g4934"
      transform="translate(58.174335,-19.545438)">
@@ -1274,10 +1280,4 @@
        d="m 17.210513,138.70873 -4.09326,12.90952 10.54802,-1.49562 4.09327,-12.90951 z"
        style="fill:#a04c2b;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
   </g>
-  <path
-     style="fill:#234567;fill-opacity:0.58823529;stroke:#123456;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5089)"
-     d="M 16.324262,41.576968 C 33.70448,8.8895315 76.384744,-5.5214395 110.99865,12.883103 145.61255,31.287645 157.9819,72.311342 139.9335,107.6525 122.60811,141.57791 78.696804,154.70932 45.173594,136.753 18.040289,122.21936 11.303683,95.862652 11.13488,95.055012 l 29.764012,-9.15899 c 2.432022,6.6773 7.166551,16.880708 18.934537,23.137858 15.730895,8.36426 40.871111,5.66955 52.391861,-15.997838 C 123.37782,72.061182 113.52116,49.636973 96.284214,40.471924 78.156844,30.833439 54.427808,36.496919 43.923872,56.25194 L 58.126341,63.803525 18.479809,71.012962 2.2866341,34.113028 z"
-     id="path4329-9"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="csssccsssccccc" />
 </svg>

@@ -184,25 +184,21 @@ class c_format : GLib.Object {
 			this.waiting_for_job=null;
 			this.job_found=true;
 		});
-		
-		try {
-			device2.FilesystemCreate.begin(format,options);
+
+
+		device2.FilesystemCreate.begin(format,options);
 			
-			this.job_in_progress=true;
-			this.job_found=false;
-			this.waiting_for_job="FilesystemCreate";
-			while(true) {
-				if (this.job_in_progress==false) {
-					break;
-				} else {
-					yield;
-				}
+		this.job_in_progress=true;
+		this.job_found=false;
+		this.waiting_for_job="FilesystemCreate";
+		while(true) {
+			if (this.job_in_progress==false) {
+				break;
+			} else {
+				yield;
 			}
-		} catch (IOError e) {
-			this.ioerror=e.message.dup();
-			this.retval=-1;
-			return;
 		}
+
 		device2.disconnect(handler_id);
 
 		yield this.remount(format);
@@ -286,10 +282,12 @@ class c_choose_disk : GLib.Object {
 	ListStore disk_listmodel;
 	private VolumeMonitor monitor;
 	private Button ok_button;
+	private GLib.Settings cronopete_settings;
 
-	public async void run(string path, cp_callback p) {
+	public async void run(string path, cp_callback p, GLib.Settings c_settings) {
 	
 		this.parent = p;
+		this.cronopete_settings=c_settings;
 		this.basepath=path;
 		this.builder = new Builder();
 		this.builder.add_from_file(Path.build_filename(this.basepath,"chooser.ui"));
@@ -353,7 +351,7 @@ class c_choose_disk : GLib.Object {
 							try {
 								// if it's possible to create it, go ahead
 								directory2.make_directory_with_parents();
-								this.parent.p_backup_path=final_path;
+								this.cronopete_settings.set_string("backup-path",final_path);
 								do_run=false;
 								break;
 							} catch (IOError e) {
@@ -361,7 +359,7 @@ class c_choose_disk : GLib.Object {
 								not_writable=true;
 							}
 						} else {
-							this.parent.p_backup_path=final_path;
+							this.cronopete_settings.set_string("backup-path",final_path);
 							do_run=false;
 							break;
 						}
@@ -371,7 +369,7 @@ class c_choose_disk : GLib.Object {
 				var w = new c_format();
 				yield w.run(this.basepath,fstype,final_path,not_writable);
 				if (w.retval==0) {
-					this.parent.p_backup_path=w.final_path;
+					this.cronopete_settings.set_string("backup-path",w.final_path);
 					do_run=false;
 					break;
 				}

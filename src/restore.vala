@@ -104,7 +104,6 @@ class restore_iface : GLib.Object {
 
 	private Gtk.Window error_window;
 
-	private unowned Thread <void *> c_thread;
 	private uint timer_bar;
 
 	private double icon_scale;
@@ -523,7 +522,6 @@ class restore_iface : GLib.Object {
 		double oy;
 		double ow;
 		double oh;
-		double scale;
 		double s_factor;
 		ctx.set_line_width(1.5);
 		ctx.set_source_rgb(0.2,0.2,0.2);
@@ -1215,7 +1213,6 @@ class restore_iface : GLib.Object {
 	
 	[CCode (instance_pos = -1)]
 	public bool on_delete_event(Event event) {
-
 		return true;
 	}
 }

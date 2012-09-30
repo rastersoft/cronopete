@@ -276,18 +276,27 @@ class nanockup:Object {
 		}
 	}
 	
-	public void set_config(Gee.List<string> origin_path,Gee.List<string> exclude_path, bool skip_h_at_h) {
+	public void set_config(string[] origin_path,string[] exclude_path, bool skip_h_at_h) {
 
 		this.origin_path_list=new path_list();
 		this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
 	
 		foreach (string tmp in origin_path) {
+			this.callback.show_message(_("Backing up folder %s.\n").printf(tmp));
 			this.origin_path_list.add(tmp,0);
 		}
 		foreach (string tmp in exclude_path) {
+			this.callback.show_message(_("Excluding folder %s.\n").printf(tmp));
 			this.exclude_path_list.add(tmp);
 		}
 		this.skip_hiden_at_HOME=skip_h_at_h;
+		string homedir=GLib.Environment.get_home_dir();
+		if (this.skip_hiden_at_HOME) {
+			this.callback.show_message(_("Excluding hiden folders in %s.\n").printf(homedir));
+		} else {
+			this.callback.show_message(_("Backing up hiden folders in %s.\n").printf(homedir));
+		}
+		
 		
 		// Never back up the .gvfs folder
 		string exclude_this_path=Path.build_filename(Environment.get_home_dir(),".gvfs");

@@ -1,3 +1,12 @@
+set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+set (PKGDATADIR "${DATADIR}/cronopete")
+set (GETTEXT_PACKAGE "cronopete")
+set (RELEASE_NAME "Cronopete")
+set (VERSION "3.3.2")
+set (VERSION_INFO "Release")
+set (CMAKE_C_FLAGS "")
+set (PREFIX ${CMAKE_INSTALL_PREFIX})
+
 configure_file (${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
 
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")

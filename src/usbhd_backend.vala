@@ -50,8 +50,16 @@ class usbhd_backend: Object, backends {
 	private GLib.Mutex lock_delete;
 	private time_t deleting;
 
-	public usbhd_backend(string bpath) {
+	public usbhd_backend(string? bpath2) {
 	
+		string bpath;
+		
+		if (bpath2==null) {
+			bpath="";
+		} else {
+			bpath=bpath2;
+		}
+		
 		var tmpid=bpath.split("/");
 		foreach (string v in tmpid) {
 			this.id=v;

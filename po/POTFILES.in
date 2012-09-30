@@ -18,5 +18,4 @@ src/icons_widget.vala
 [type: gettext/glade]data/interface/restoring.ui
 [type: gettext/glade]data/interface/restore_ok.ui
 [type: gettext/glade]data/interface/restore_error.ui
-
-
+[type: gettext/glade]data/interface/config_exported.ui

@@ -39,6 +39,8 @@ class c_options : GLib.Object {
 	private bool backup_hiden_at_home;
 	private uint period;
 
+	private GLib.Settings cronopete_settings;
+
 	public c_options(string path, cp_callback p) {
 	
 		int retval;
@@ -57,17 +59,17 @@ class c_options : GLib.Object {
 		this.w_period = (SpinButton) this.builder.get_object("backup_period");
 		this.b_hiden.label=_("Backup hiden files and folders in %s").printf(Environment.get_home_dir());
 		
-		p.get_path_list(out this.backup_folders,out this.exclude_folders, out this.backup_hiden_at_home, out this.period);
+		this.cronopete_settings = new GLib.Settings("apps.cronopete");
 		
-		this.w_period.set_value((float)(this.period/3600));
+		this.w_period.set_value((float)((this.cronopete_settings.get_uint("backup-period"))/3600));
 		
 		this.tmp_backup_folders = new Gee.ArrayList<string>();
-		foreach (string s in this.backup_folders) {
+		foreach (string s in this.cronopete_settings.get_strv("backup-folders")) {
 			this.tmp_backup_folders.add(s);
 		}
 		
 		this.tmp_exclude_folders = new Gee.ArrayList<string>();
-		foreach (string s in this.exclude_folders) {
+		foreach (string s in this.cronopete_settings.get_strv("exclude-folders")) {
 			this.tmp_exclude_folders.add(s);
 		}
 		
@@ -80,19 +82,34 @@ class c_options : GLib.Object {
 		this.exclude_view.insert_column_with_attributes (-1, "Folders to exclude", new CellRendererText (), "text", 0);
 		
 		this.fill_backup_list(false);
-		this.fill_exclude_list(false);	
-		this.b_hiden.active=this.backup_hiden_at_home;
-
+		this.fill_exclude_list(false);
+		if (this.cronopete_settings.get_boolean("skip-hiden-at-home")) {
+			this.b_hiden.active=false;
+		} else {
+			this.b_hiden.active=true;
+		}
 
 		this.main_w.show_all();
 		retval=this.main_w.run();
 		this.main_w.hide();
 		this.main_w.destroy();
 		if (retval==-6) {
-			this.backup_hiden_at_home=this.b_hiden.active;
-			this.period=3600*((uint)this.w_period.get_value_as_int());
-			this.parent.set_path_list(this.tmp_backup_folders,this.tmp_exclude_folders,this.backup_hiden_at_home, this.period);
-			this.parent.write_configuration();
+			if (this.b_hiden.active) {
+				this.cronopete_settings.set_boolean("skip-hiden-at-home",false);
+			} else {
+				this.cronopete_settings.set_boolean("skip-hiden-at-home",true);
+			}
+			this.cronopete_settings.set_uint("backup-period",3600*((uint)this.w_period.get_value_as_int()));
+			string[] bfold={};
+			foreach(string v in this.tmp_backup_folders) {
+				bfold+=v;
+			}
+			string[] efold={};
+			foreach(string v in this.tmp_exclude_folders) {
+				efold+=v;
+			}
+			this.cronopete_settings.set_strv("backup-folders",bfold);
+			this.cronopete_settings.set_strv("exclude-folders",efold);
 		}
 	}
 	
