@@ -12,7 +12,7 @@
       <description>When enabled, an icon with the current status will be shown in the menu bar.</description>
     </key>
     <key type="b" name="skip-hiden-at-home">
-      <default>false</default>
+      <default>true</default>
       <summary>Don't backup the hiden files in the personal folder</summary>
       <description>When enabled, hiden files and folders in the root of the personal folder won't be backed up (but hiden files and folders in subdirectories will be).</description>
     </key>

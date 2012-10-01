@@ -1,15 +1,19 @@
 [Desktop Entry]
 X-MultipleArgs=false
 Type=Application
-Name=Cronopete preferences
-GenericName=Setup Cronopete
-X-GNOME-FullName=Setup Cronopete
-X-GNOME-FullName[es]=Configurar Cronopete
-X-GNOME-FullName[gl]=Configurar Cronopete
+Name=Backup settings
+GenericName=Setup backup preferences
+X-GNOME-FullName=Setup backup
+X-GNOME-FullName[es]=Configurar copia de seguridad
+X-GNOME-FullName[gl]=Configurar copia de seguridade
 Comment=Allows to set the preferences for the Cronopete Backup system
 Comment[es]=Permite configurar el programa de backups Cronopete
 Comment[gl]=Permite configurar o programa de backups Cronopete
 TryExec=cronopete_preferences
 Exec=cronopete_preferences
-Categories=System;
+Categories=Configuración;GTK;
 Icon=cronopete_preferences.svg
+Name[es]=Copia de seguridad
+GenericName[es]=Configuración de la copia de seguridad
+Name[gl]=Copia de seguridade
+GenericName[gl]=Configuración da copia de seguridade
