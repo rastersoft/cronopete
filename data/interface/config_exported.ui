@@ -30,8 +30,10 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Cronopete exported your configuration.
-Please, check the list of folders to backup.</property>
+                <property name="label" translatable="yes">The backup configuration has been exported.
+Please, check the list of folders to ensure that everything went fine.</property>
+                <property name="justify">center</property>
+                <property name="wrap">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>

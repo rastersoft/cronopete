@@ -243,13 +243,7 @@ class c_format : GLib.Object {
 		var builder = new Builder();
 
 		builder.add_from_file(Path.build_filename(path,"format_force.ui"));
-		if (not_writable) {
-			message = _("The selected drive is not writable, so Cronopete will format it. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo format the drive, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.");
-		} else if (filesystem=="btrfs") {
-			message = _("The file system %s is not valid for Cronopete because, currently, it has several bugs that can put in risk your backups. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
-		} else {
-			message = _("The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n\nTo change the file format in the disk, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>.").printf(filesystem);
-		}
+		message = _("The selected drive must be formated to be used for backups. To do it, click the <i>Format disk</i> button. <b>All the data in the drive will be erased</b>");
 		builder.connect_signals(this);
 
 		var label = (Label) builder.get_object("label_text");
