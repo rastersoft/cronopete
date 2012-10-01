@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-01 10:34+0200\n"
-"PO-Revision-Date: 2012-10-01 10:35+0200\n"
+"POT-Creation-Date: 2012-10-02 00:30+0200\n"
+"PO-Revision-Date: 2012-10-02 00:31+0200\n"
 "Last-Translator: Sergio Costas <raster@rastersoft.com>\n"
 "Language-Team: Español; Castellano <raster@rastersoft.com>\n"
 "Language: \n"
@@ -338,6 +338,10 @@ msgstr ""
 #: ../data/interface/about.ui.h:10
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr "Por que <i>ana<b>CRONOPETE</b></i>?"
+
+#: ../data/interface/chooser.ui.h:1
+msgid "Available USB disks:"
+msgstr "Discos USB dispoñibeis:"
 
 #: ../data/interface/format_error.ui.h:1
 msgid ""
