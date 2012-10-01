@@ -12,3 +12,9 @@ install(FILES
 DESTINATION
 	share/applications/
 )
+
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.plug
+DESTINATION
+	lib/plugs/cronopete/cronopete/
+)

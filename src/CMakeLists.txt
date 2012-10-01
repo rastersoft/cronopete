@@ -100,3 +100,9 @@ install(PROGRAMS
 DESTINATION
 	bin
 )
+
+install(PROGRAMS
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences
+DESTINATION
+	lib/plugs/cronopete/cronopete/
+)
