@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-01 10:21+0200\n"
-"PO-Revision-Date: 2012-10-01 10:24+0200\n"
+"POT-Creation-Date: 2012-10-01 10:34+0200\n"
+"PO-Revision-Date: 2012-10-01 10:35+0200\n"
 "Last-Translator: Sergio Costas <raster@rastersoft.com>\n"
 "Language-Team: Español; Castellano <raster@rastersoft.com>\n"
 "Language: \n"
@@ -165,8 +165,8 @@ msgid "Restore files"
 msgstr "Restaurar ficheiros"
 
 #: ../src/cronopete.vala:434
-msgid "Open Cronopete Preferences..."
-msgstr "Abrir as preferencias de Cronopete..."
+msgid "Configure backup policies"
+msgstr "Configurar a copia de seguridade"
 
 #: ../src/cronopete.vala:495
 #, c-format
@@ -473,6 +473,9 @@ msgstr ""
 "Exportouse a configuración da copia de seguridade.\n"
 "Por favor, comprobe a lista de cartafoles para confirmar que todo está "
 "correcto."
+
+#~ msgid "Open backup preferences..."
+#~ msgstr "Preferencias para as copias de seguridade..."
 
 #~ msgid ""
 #~ "Cronopete exported your configuration.\n"

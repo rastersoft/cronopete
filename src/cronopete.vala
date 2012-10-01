@@ -431,7 +431,7 @@ class cp_callback : GLib.Object, callbacks {
 		var menuBar = new Gtk.SeparatorMenuItem();
 		menuSystem.append(menuBar);
 		
-		var menuMain = new Gtk.MenuItem.with_label(_("Open Cronopete Preferences..."));
+		var menuMain = new Gtk.MenuItem.with_label(_("Configure backup policies"));
 		menuMain.activate.connect(main_clicked);
 		menuSystem.append(menuMain);
 	
