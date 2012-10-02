@@ -30,6 +30,7 @@ interface UDisk_if : GLib.Object {
 interface Device_if : GLib.Object {
 	public abstract string IdLabel { owned get; }
 	public abstract string[] DeviceMountPaths { owned get; }
+	public abstract bool DeviceIsSystemInternal { owned get; }
 	public signal void JobChanged(bool job_in_progress,string job_id,uint job_initiated_by_uid,bool job_is_cancellable,double job_percentage);
 	public signal void Changed();
 	
@@ -385,6 +386,38 @@ class c_choose_disk : GLib.Object {
 		}
 	}
 
+	private bool check_is_external(string path_mount) {
+
+		ObjectPath[] retval;
+	
+		try {
+			UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
+			udisk.EnumerateDevices(out retval);
+			udisk=null;
+
+			Device_if device2;
+
+			// Find the device which is mounted in the specified path
+			foreach (ObjectPath o in retval) {
+				device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",o);
+				foreach (string s in device2.DeviceMountPaths) {
+					if (s == path_mount) {
+						if (device2.DeviceIsSystemInternal) {
+							GLib.stdout.printf("Es interno\n");
+							return (false);
+						} else {
+							GLib.stdout.printf("Es externo\n");
+							return (true);
+						}
+					}
+				}
+			}
+		} catch (IOError e) {
+			GLib.stdout.printf(e.message);
+		}
+		return (true);
+	}
+
 	private void refresh_list() {
 
 		TreeIter iter;
@@ -422,6 +455,10 @@ class c_choose_disk : GLib.Object {
 			}
 			
 			path = root.get_path();
+			if (false==this.check_is_external(path)) {
+				continue;
+			}
+			
 			bpath = root.get_basename();
 
 			this.disk_listmodel.append (out iter);
