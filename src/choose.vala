@@ -403,10 +403,8 @@ class c_choose_disk : GLib.Object {
 				foreach (string s in device2.DeviceMountPaths) {
 					if (s == path_mount) {
 						if (device2.DeviceIsSystemInternal) {
-							GLib.stdout.printf("Es interno\n");
 							return (false);
 						} else {
-							GLib.stdout.printf("Es externo\n");
 							return (true);
 						}
 					}
