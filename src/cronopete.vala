@@ -624,6 +624,7 @@ class cp_callback : GLib.Object, callbacks {
 		uint new_period=3600;
 
 		bool failed=false;
+		bool is_activated=false;
 
 		while ((line = in_stream.read_line (null, null)) != null) {
 			line_counter++;
@@ -667,6 +668,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 			
 			if (line=="active") {
+				is_activated=true;
 				continue;
 			}
 			if (line=="no_show_in_bar") {
@@ -696,6 +698,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.cronopete_settings.set_strv("exclude-folders",exclude_path_list);
 		this.cronopete_settings.set_boolean("skip-hiden-at-home",skip_hiden_at_home);
 		this.cronopete_settings.set_uint("backup-period",new_period);
+		this.cronopete_settings.set_boolean("enabled",is_activated);
 		in_stream=null;
 		file_read=null;
 		config_file.delete();
