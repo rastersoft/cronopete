@@ -694,6 +694,9 @@ class cp_callback : GLib.Object, callbacks {
 		}
 		
 		this.cronopete_settings.set_string("backup-path",backup_path2);
+		if (origin_path_list.length==0) {
+			origin_path_list+=Environment.get_home_dir();
+		}
 		this.cronopete_settings.set_strv("backup-folders",origin_path_list);
 		this.cronopete_settings.set_strv("exclude-folders",exclude_path_list);
 		this.cronopete_settings.set_boolean("skip-hiden-at-home",skip_hiden_at_home);

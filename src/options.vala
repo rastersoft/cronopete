@@ -64,7 +64,12 @@ class c_options : GLib.Object {
 		this.w_period.set_value((float)((this.cronopete_settings.get_uint("backup-period"))/3600));
 		
 		this.tmp_backup_folders = new Gee.ArrayList<string>();
-		foreach (string s in this.cronopete_settings.get_strv("backup-folders")) {
+		string[] folder_list=this.cronopete_settings.get_strv("backup-folders");
+		if (folder_list.length==0) {
+			folder_list={};
+			folder_list+=GLib.Environment.get_home_dir();
+		}
+		foreach (string s in folder_list) {
 			this.tmp_backup_folders.add(s);
 		}
 		
