@@ -99,6 +99,7 @@ class restore_iface : GLib.Object {
 	private Gtk.Window restore_window;
 	private Gtk.Label restore_label;
 	private Gtk.ProgressBar restore_bar;
+	private Gtk.ProgressBar restore_file_bar;
 	private bool cancel_restoring;
 	private bool ignore_restoring_all;
 
@@ -997,6 +998,17 @@ class restore_iface : GLib.Object {
 		return newfilename;
 	}
 	
+	public void restore_progress_cb (int64 current_num_bytes, int64 total_num_bytes) {
+
+		double a;
+		double b;
+		
+		a=(double)current_num_bytes;
+		b=(double)total_num_bytes;
+		
+		this.restore_file_bar.fraction=a/b;
+	}
+	
 	public async void restoring_ended() {
 
 		BACKUP_RETVAL rv;
@@ -1008,7 +1020,8 @@ class restore_iface : GLib.Object {
 			this.restore_files.remove_at(0);
 			this.restore_label.label=_("Restoring file:\n\n%s").printf(filename.restored_file);
 			this.restore_bar.fraction=percent;
-			rv= yield this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file);
+			this.restore_file_bar.fraction=0.0;
+			rv=yield this.backend.restore_file(filename.original_file,this.backups[this.pos],filename.restored_file,this.restore_progress_cb);
 
 			if (this.cancel_restoring) {
 				this.restore_files.clear();
@@ -1081,6 +1094,7 @@ class restore_iface : GLib.Object {
 
 		this.restore_window = (Gtk.Window)w.get_object("restore_status");
 		this.restore_bar = (Gtk.ProgressBar)w.get_object("restore_progressbar");
+		this.restore_file_bar = (Gtk.ProgressBar)w.get_object("restore_file_progressbar");
 		this.restore_label = (Gtk.Label)w.get_object("restoring_file");
 
 		this.cancel_restoring=false;

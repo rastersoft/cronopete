@@ -56,7 +56,7 @@ interface backends : GLib.Object {
 
 	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<file_info ?> files, out string date);
 
-	public abstract async BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename);
+	public abstract async BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename,FileProgressCallback? cb);
 	public abstract void lock_delete_backup(bool lock_in);
 
 	public signal void restore_ended(backends b, string file_ended, BACKUP_RETVAL status);

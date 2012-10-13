@@ -133,7 +133,7 @@ class usbhd_backend: Object, backends {
 		
 	}
 	
-	public async BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename) {
+	public async BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename, FileProgressCallback? cb) {
 
 		var origin_path = Path.build_filename(this.backup_path,this.get_backup_path(backup),filename);
 
@@ -142,7 +142,7 @@ class usbhd_backend: Object, backends {
 		
 		origin=File.new_for_path(origin_path);
 		try {
-			yield origin.copy_async(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT);
+			yield origin.copy_async(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,cb);
 			rv=BACKUP_RETVAL.OK;
 		} catch (IOError e2) {
 			if (e2 is IOError.NO_SPACE) {
