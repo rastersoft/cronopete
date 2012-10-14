@@ -1,10 +1,27 @@
 include(GSettings)
 add_schema(cronopete.gschema.xml)
 
+STRING (REPLACE "/" ";" PATH_LIST ${CMAKE_INSTALL_PREFIX})
+SET (FINAL_PATH "")
+
+FOREACH(element ${PATH_LIST})
+	IF (${FOUND_USR})
+		SET(FINAL_PATH ${FINAL_PATH}/.. )
+	ELSE()
+		IF(${element} STREQUAL "usr")
+        	        SET(FOUND_USR 1)
+			SET(FINAL_PATH ${FINAL_PATH}.. )
+	        ENDIF()
+
+	ENDIF()
+ENDFOREACH()
+
+MESSAGE(STATUS ${FINAL_PATH})
+
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.desktop
 DESTINATION
-	/etc/xdg/autostart/
+	${FINAL_PATH}/etc/xdg/autostart/
 )
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.desktop
