@@ -1,17 +1,5 @@
-IF ( ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr") OR
-     ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/") OR
-     ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local" ) OR
-     ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local/" ))
-	include(GSettings)
-	add_schema(cronopete.gschema.xml)
-ELSE()
-	install(FILES
-	        ${CMAKE_CURRENT_SOURCE_DIR}/cronopete.gschema.xml
-	DESTINATION
-        	share/glib-2.0/schemas/
-	)
-ENDIF()
-
+include(GSettings)
+add_schema(cronopete.gschema.xml)
 
 STRING (REPLACE "/" ";" PATH_LIST ${CMAKE_INSTALL_PREFIX})
 SET (FINAL_PATH "")
