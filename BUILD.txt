@@ -1,12 +1,6 @@
 BUILDING CRONOPETE
 
-To build Cronopete, first you need the CMake files for Vala. To get them,
-run from a command line:
-
-    bzr branch lp:~elementary-apps/+junk/cmake-modules
-
-and copy the folder "cmake", which is inside "cmake-modules", to inside the
-"cronopete" folder.
+To build Cronopete, you need to install CMAKE and Vala-0.16
 
 Now, type
 
