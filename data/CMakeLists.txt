@@ -1,5 +1,17 @@
-include(GSettings)
-add_schema(cronopete.gschema.xml)
+IF ( ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr") OR
+     ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/") OR
+     ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local" ) OR
+     ( ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local/" ))
+	include(GSettings)
+	add_schema(cronopete.gschema.xml)
+ELSE()
+	install(FILES
+	        ${CMAKE_CURRENT_SOURCE_DIR}/cronopete.gschema.xml
+	DESTINATION
+        	share/glib-2.0/schemas/
+	)
+ENDIF()
+
 
 STRING (REPLACE "/" ";" PATH_LIST ${CMAKE_INSTALL_PREFIX})
 SET (FINAL_PATH "")
@@ -15,8 +27,6 @@ FOREACH(element ${PATH_LIST})
 
 	ENDIF()
 ENDFOREACH()
-
-MESSAGE(STATUS ${FINAL_PATH})
 
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.desktop
