@@ -1,0 +1,43 @@
+cronopete (3.4.5-0ppa1) precise; urgency=low
+
+  * Set permissions in postinst and postrm files
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 16 Oct 2012 08:17:17 +0100
+
+cronopete (3.4.5-0ppa0) precise; urgency=low
+
+  * Added D-Bus activation when calling settings or restore without cronopete running
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 16 Oct 2012 00:05:17 +0100
+
+cronopete (3.4.4-0ppa0) precise; urgency=low
+
+  * Fixed pre-compilation of GSchemas
+  * Now warns to reboot the system after installing
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 15 Oct 2012 21:20:17 +0100
+
+cronopete (3.4.3-0ppa0) precise; urgency=low
+
+  * Fixed dependencies
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 23:16:17 +0100
+
+cronopete (3.4.2-0ppa0) precise; urgency=low
+
+  * Changed rules file to allow final compilation
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 22:21:17 +0100
+
+cronopete (3.4.1-0ppa0) precise; urgency=low
+
+  * Changed paths for autorun file
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 22:01:17 +0100
+
+cronopete (3.4.0-0ppa0) precise; urgency=low
+
+  * Renamed numbering
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 11:43:17 +0100
+

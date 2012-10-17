@@ -1,0 +1,12 @@
+Source: cronopete
+Section: devel
+Priority: optional
+Maintainer: Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>
+Build-Depends: cmake, build-essential, valac-0.16, libvala-0.16-dev, libgee-dev, libgsl0-dev, libgtk-3-dev, libappindicator3-dev, gettext, po-debconf
+Homepage: http://www.rastersoft.com
+
+Package: cronopete
+Architecture: any
+Depends: valac-0.16, libvala-0.16-0, libgee2, libgsl0ldbl, libgtk-3-0, libappindicator3-1
+Description: A backup utility
+ A backup utility modeled after Apple's Time Machine
