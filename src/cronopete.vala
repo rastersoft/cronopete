@@ -49,7 +49,12 @@ class cp_callback : GLib.Object, callbacks {
 	private uint refresh_timer;
 	private StringBuilder messages;
 	private string basepath;
-	private Gtk.Menu menuSystem;
+	private Gtk.Menu? menuSystem;
+	private Gtk.MenuItem? menuDate;
+	private Gtk.MenuItem menuBUnow;
+	private Gtk.MenuItem menuSBUnow;
+	private Gtk.MenuItem menuEnter;
+	
 	private string last_backup;
 	private nanockup? basedir;
 	private c_main_menu main_menu;
@@ -139,6 +144,7 @@ class cp_callback : GLib.Object, callbacks {
 
 	public cp_callback(string path) {
 
+		this.menuSystem=null;
 		this.update_path=true;
 		this.messages = new StringBuilder("");
 		this.backup_running = SystemStatus.IDLE;
@@ -391,32 +397,46 @@ class cp_callback : GLib.Object, callbacks {
 		return true;
 	}
 
-
 	private void menuSystem_popup() {
-	
-		this.menuSystem = new Gtk.Menu();
 
-		this.fill_last_backup();
-		var menuDate = new Gtk.MenuItem.with_label(this.last_backup);
-
-		menuDate.sensitive=false;
-		menuSystem.append(menuDate);
+#if USE_APPINDICATOR
+		if(this.menuSystem==null)
+#endif
+		{
+			this.menuSystem = new Gtk.Menu();
+			this.menuDate = new Gtk.MenuItem();
 	
-		Gtk.MenuItem menuBUnow;
-		if (this.backup_running==SystemStatus.IDLE) {
+			menuDate.sensitive=false;
+			menuSystem.append(menuDate);
+			
 			menuBUnow = new Gtk.MenuItem.with_label(_("Back Up Now"));
 			menuBUnow.activate.connect(backup_now);
-		} else {
-			menuBUnow = new Gtk.MenuItem.with_label(_("Stop Backing Up"));
-			menuBUnow.activate.connect(stop_backup);
+			this.menuSystem.append(menuBUnow);
+			menuSBUnow = new Gtk.MenuItem.with_label(_("Stop Backing Up"));
+			menuSBUnow.activate.connect(stop_backup);
+			this.menuSystem.append(menuSBUnow);
+	
+			menuEnter = new Gtk.MenuItem.with_label(_("Restore files"));
+			menuEnter.activate.connect(enter_clicked);
+			menuSystem.append(menuEnter);
+			
+			
+			var menuBar = new Gtk.SeparatorMenuItem();
+			menuSystem.append(menuBar);
+			
+			var menuMain = new Gtk.MenuItem.with_label(_("Configure backup policies"));
+			menuMain.activate.connect(main_clicked);
+			menuSystem.append(menuMain);
+		
+			menuSystem.show_all();
+#if USE_APPINDICATOR
+			this.appindicator.set_menu(this.menuSystem);
+#endif
+
 		}
-		this.menuSystem.append(menuBUnow);
 
-		menuBUnow.sensitive=this.backend.available;
-
-		var menuEnter = new Gtk.MenuItem.with_label(_("Restore files"));
-		menuEnter.activate.connect(enter_clicked);
-		menuSystem.append(menuEnter);
+		this.fill_last_backup();
+		this.menuDate.set_label(this.last_backup);
 		if (this.backend.available) {
 			var list = this.backend.get_backup_list ();
 			if ((list==null)||(list.size<=0)) {
@@ -427,23 +447,23 @@ class cp_callback : GLib.Object, callbacks {
 		} else {
 			menuEnter.sensitive=false;
 		}
-		
-		var menuBar = new Gtk.SeparatorMenuItem();
-		menuSystem.append(menuBar);
-		
-		var menuMain = new Gtk.MenuItem.with_label(_("Configure backup policies"));
-		menuMain.activate.connect(main_clicked);
-		menuSystem.append(menuMain);
-	
-		menuSystem.show_all();
-#if USE_APPINDICATOR
-		this.appindicator.set_menu(this.menuSystem);
-#else
+		if (this.backup_running==SystemStatus.IDLE) {
+			menuBUnow.show();
+			menuSBUnow.hide();
+		} else {
+			menuSBUnow.show();
+			menuBUnow.hide();
+		}
+		menuBUnow.sensitive=this.backend.available;
+		menuSBUnow.sensitive=this.backend.available;
+
+#if !USE_APPINDICATOR
 		this.menuSystem.popup(null,null,this.trayicon.position_menu,2,Gtk.get_current_event_time());
 #endif
 
+						
 	}
-	
+
 	public void backup_now() {
 	
 		if (this.backup_running==SystemStatus.IDLE) {
