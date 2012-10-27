@@ -27,6 +27,11 @@ configure_file(
 	${CMAKE_CURRENT_BINARY_DIR}/com.backup.cronopete.service
 )
 
+configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.plug
+	${CMAKE_CURRENT_BINARY_DIR}/cronopete.plug
+)
+
 install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/com.backup.cronopete.service
 DESTINATION
@@ -46,7 +51,7 @@ DESTINATION
 )
 
 install(FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/cronopete.plug
+	${CMAKE_CURRENT_BINARY_DIR}/cronopete.plug
 DESTINATION
 	lib/plugs/cronopete/cronopete/
 )
