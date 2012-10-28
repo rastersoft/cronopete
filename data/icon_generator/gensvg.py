@@ -9,7 +9,7 @@ if (len(sys.argv)!=2):
     print "Usage: gensvg input_file"
     sys.exit()
     
-colors={"white":["#234567","#234567"], "red":["#ff0000","#ff0000"], "green":["#00ff00","#00ff00"], "yellow":["#ffc000","#ffc000"], "orange":["#ff8000","#ff8000"]}
+colors={"white":["#234567","#234567","#ffffff"], "red":["#ff0000","#ff0000","#ffffff"], "green":["#00ff00","#00ff00","#ffffff"], "yellow":["#ffc000","#ffc000","#ffffff"], "orange":["#ff8000","#ff8000","#ffffff"]}
 sizes={"16":18, "22":13, "24":12 ,"32":11 , "48":10 ,"64":8, "128":4}
 default_size=18
 
@@ -35,7 +35,7 @@ for color in colors:
             os.system("rm tmp.svg")
 
     newpic=picture[:]
-    newpic=newpic.replace("fill:#234567","fill:"+colors[color][0]).replace("stroke:#123456","stroke:"+colors[color][1]).replace("stroke-width:20;","stroke-width:"+str(default_size)+";")
+    newpic=newpic.replace("fill:#345678","fill:"+colors[color][2]).replace("fill:#234567","fill:"+colors[color][0]).replace("stroke:#123456","stroke:"+colors[color][1]).replace("stroke-width:20;","stroke-width:"+str(default_size)+";")
     fname3=fname+"_"+color
     fileout=open(fname3+".svg","w")
     fileout.write(newpic)
