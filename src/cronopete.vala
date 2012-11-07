@@ -773,7 +773,7 @@ class cp_callback : GLib.Object, callbacks {
 
 void on_bus_aquired (DBusConnection conn) {
     try {
-        conn.register_object ("/com/backup/cronopete", new DetectServer ());
+        conn.register_object ("/com/rastersoft/cronopete", new DetectServer ());
     } catch (IOError e) {
         GLib.stderr.printf ("Could not register service\n");
     }
