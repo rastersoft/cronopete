@@ -152,14 +152,14 @@ the most recent backups are kept for 24 hours (top); then it jumps to one backup
 <p>To uninstall cronopete, just use <i>make uninstall</i>.</p>
 
 <h2>Using Dbus to control Cronopete</h2>
-<p>Dbus remote control can be used to control Cronopete in systems without system tray. It offers the following four methods in com.backup.cronopete,
+<p>Dbus remote control can be used to control Cronopete in systems without system tray. It offers the following four methods in com.rastersoft.cronopete,
 path /com/backup/cronopete:</p>
 <ul>
-<li><b>DoBackup</b>: will force a backup now. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.DoBackup</pre></li>
-<li><b>StopBackup</b>: will stop a current backup proccess. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.StopBackup</pre></li>
-<li><b>ShowPreferences</b>: will show the preferences window, to let you configure Cronopete. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.ShowPreferences</pre>,
+<li><b>DoBackup</b>: will force a backup now. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.DoBackup</pre></li>
+<li><b>StopBackup</b>: will stop a current backup proccess. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.StopBackup</pre></li>
+<li><b>ShowPreferences</b>: will show the preferences window, to let you configure Cronopete. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.ShowPreferences</pre>,
 or with the program <span class="command">/usr/bin/cronopete_preferences</span></li>
-<li><b>RestoreFiles</b>: will show the restoring files interface. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.RestoreFiles</pre>,
+<li><b>RestoreFiles</b>: will show the restoring files interface. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.RestoreFiles</pre>,
 or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 </ul>
 

@@ -1,2 +1,2 @@
 #!/bin/sh
-dbus-send --session --print-reply --dest=com.backup.cronopete /com/backup/cronopete com.backup.cronopete.ShowPreferences
+dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/rastersoft/cronopete com.rastersoft.cronopete.ShowPreferences

@@ -138,7 +138,7 @@ namespace FilelistIcons {
 			container2.pack_start(this.scroll,true,true,0);
 
 			this.scroll2 = new ScrolledWindow(null,null);
-			this.scroll2.hscrollbar_policy=PolicyType.AUTOMATIC;
+			this.scroll2.hscrollbar_policy=PolicyType.NEVER;
 			this.scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
 			container2.pack_start(this.scroll2,true,true,0);
 			

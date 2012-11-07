@@ -803,7 +803,7 @@ int main(string[] args) {
 	Gtk.init(ref args);
 
 	callback_object = new cp_callback(basepath);
-	Bus.own_name (BusType.SESSION, "com.backup.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
+	Bus.own_name (BusType.SESSION, "com.rastersoft.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
 		GLib.stderr.printf ("Cronopete is already running\n");
 		exit(1);
 	});
@@ -820,7 +820,7 @@ int main(string[] args) {
 	return 0;
 }
 
-[DBus (name = "com.backup.cronopete")]
+[DBus (name = "com.rastersoft.cronopete")]
 public class DetectServer : GLib.Object {
 	
 	public bool do_ping() {

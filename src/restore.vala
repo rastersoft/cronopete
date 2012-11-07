@@ -804,7 +804,7 @@ class restore_iface : GLib.Object {
 			if (this.pos>=(this.backups.size-1)) {
 				return;
 			} else {
-				this.browser.hide();
+				this.browser_visible(false);
 				this.browserhide=true;
 				this.pos++;
 			}
@@ -812,7 +812,7 @@ class restore_iface : GLib.Object {
 			if (this.pos==0) {
 				return;
 			} else {
-				this.browser.hide();
+				this.browser_visible(false);
 				this.browserhide=true;
 				this.pos--;
 			}
@@ -821,6 +821,26 @@ class restore_iface : GLib.Object {
 		this.browser.set_backup_time(this.backups[this.pos]);
 		this.paint_window();
 		this.launch_animation();
+	}
+
+	private void browser_visible(bool visible) {
+		
+		// this trick is needed to ensure that, in GTK3, the size keeps constant
+		
+		if(visible) {
+#if USE_GTK2
+			this.browser.show();
+#else
+			this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
+#endif
+		} else {
+#if USE_GTK2
+			this.browser.hide();
+#else
+			this.base_layout.move(this.browser,-this.scr_w,(int)(this.browser_y+this.browser_margin));
+#endif
+		}
+		
 	}
 
 	private void launch_animation() {
@@ -874,7 +894,7 @@ class restore_iface : GLib.Object {
 		} else {
 			if (this.browserhide) {
 				this.browser.do_refresh_icons();
-				this.browser.show();
+				this.browser_visible(true);
 				this.browserhide=false;
 			}
 		}

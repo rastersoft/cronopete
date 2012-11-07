@@ -23,8 +23,8 @@ ELSE()
 ENDIF()
 
 configure_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/com.backup.cronopete.service.base
-	${CMAKE_CURRENT_BINARY_DIR}/com.backup.cronopete.service
+	${CMAKE_CURRENT_SOURCE_DIR}/com.rastersoft.cronopete.service.base
+	${CMAKE_CURRENT_BINARY_DIR}/com.rastersoft.cronopete.service
 )
 
 configure_file(
@@ -33,7 +33,7 @@ configure_file(
 )
 
 install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/com.backup.cronopete.service
+	${CMAKE_CURRENT_BINARY_DIR}/com.rastersoft.cronopete.service
 DESTINATION
     ${CMAKE_INSTALL_PREFIX}/share/dbus-1/services/
 )
