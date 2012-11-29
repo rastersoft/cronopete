@@ -39,7 +39,7 @@
 	<key type="b" name="all-drives">
       <default>false</default>
       <summary>Allow all drives</summary>
-      <description>Allows to choose an internal or non-removable drive for backups.</description>
+      <description>Allows to choose an internal or non-removable drive for backups (only recommended for testing).</description>
     </key>
 
 	<!--<key type="" name="">
