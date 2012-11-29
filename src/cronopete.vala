@@ -823,8 +823,8 @@ int main(string[] args) {
 [DBus (name = "com.rastersoft.cronopete")]
 public class DetectServer : GLib.Object {
 	
-	public bool do_ping() {
-		return true;
+	public int do_ping(int v) {
+		return (v+1);
 	}
 
 	public void do_backup() {

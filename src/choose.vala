@@ -390,6 +390,10 @@ class c_choose_disk : GLib.Object {
 
 		ObjectPath[] retval;
 	
+		if (this.cronopete_settings.get_boolean("all-drives")) {
+			return (true);
+		}
+	
 		try {
 			UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
 			udisk.EnumerateDevices(out retval);
