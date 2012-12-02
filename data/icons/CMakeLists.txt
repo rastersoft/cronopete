@@ -18,12 +18,25 @@ foreach(size_png ${list_sizes})
 	)
 endforeach()
 
-file(GLOB list_svg RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} cronopete_arrow_*.svg)
+file(GLOB list_svg RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} cronopete-arrow-*.svg)
 
 foreach(filename ${list_svg})
 	install(FILES
 			${CMAKE_CURRENT_SOURCE_DIR}/${filename}
 		DESTINATION
-			share/icons/hicolor/scalable/animations
+			share/icons/hicolor/scalable/status
 		)
 endforeach()
+
+IF(NOT (DEFINED ICON_UPDATE))
+	SET (ICON_UPDATE "ON")
+ENDIF()
+
+IF( NOT (${ICON_UPDATE}  STREQUAL "OFF" ))
+
+	if(USE_GTK2)
+		install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor )" )
+	else()
+		install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor )" )
+	endif()
+ENDIF()
