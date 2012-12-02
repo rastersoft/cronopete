@@ -10,7 +10,7 @@ if (len(sys.argv)!=2):
 
 # First is the name of the icon; second the inner color for the arrow; third the outline color for the arror; fourth the fill color for the container circle
 
-colors={"white":["#234567","#234567","#ffffff"], "red":["#ff0000","#ff0000","#ffffff"], "green":["#00ff00","#00ff00","#ffffff"], "yellow":["#ffc000","#ffc000","#ffffff"], "orange":["#ff8000","#ff8000","#ffffff"]}
+colors={"white":["#bebebe","#234567","#ffffff"], "red":["#ff0000","#ff0000","#ffffff"], "green":["#00ff00","#00ff00","#ffffff"], "yellow":["#ffc000","#ffc000","#ffffff"], "orange":["#ff8000","#ff8000","#ffffff"]}
 
 # DEFAULT_SIZE contains the outline width for the arror
 default_size=18
@@ -21,7 +21,7 @@ do_sizes=False
 
 for number in [1,2,3,4]:
 
-    fname=sys.argv[1]+"_"+str(number)
+    fname=sys.argv[1]+"-"+str(number)
 
     fileini=open(fname+".svg","r")
     picture=fileini.read()
@@ -43,7 +43,7 @@ for number in [1,2,3,4]:
 
         newpic=picture[:]
         newpic=newpic.replace("fill:#345678","fill:"+colors[color][2]).replace("fill:#234567","fill:"+colors[color][0]).replace("stroke:#123456","stroke:"+colors[color][1]).replace("stroke-width:20;","stroke-width:"+str(default_size)+";")
-        fname3=fname+"_"+color
-        fileout=open(fname3+".svg","w")
+        fname3=fname+"-"+color
+        fileout=open(fname3+"-symbolic.svg","w")
         fileout.write(newpic)
         fileout.close()

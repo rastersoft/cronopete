@@ -35,7 +35,7 @@ configure_file(
 install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/com.rastersoft.cronopete.service
 DESTINATION
-    ${CMAKE_INSTALL_PREFIX}/share/dbus-1/services/
+	${CMAKE_INSTALL_PREFIX}/share/dbus-1/services/
 )
 
 install(FILES

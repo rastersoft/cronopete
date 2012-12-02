@@ -66,7 +66,7 @@ class cp_callback : GLib.Object, callbacks {
 	private string tooltip_value;
 	private uint iconpos;
 	private Gtk.Window main_w2;
-
+	
 	public restore_iface restore_w;
 
 	//private bool configuration_read;
@@ -349,24 +349,24 @@ class cp_callback : GLib.Object, callbacks {
 	/* Paints the animated icon in the panel */
 	public bool repaint(int size) {
 
-		string icon_name;
+		string icon_name="cronopete-arrow-";
 
 		switch(this.iconpos) {
 		default:
-			icon_name="cronopete_arrow_1_";
+			icon_name+="1";
 			this.iconpos=0;
 		break;
 		case 1:
-			icon_name="cronopete_arrow_2_";
+			icon_name+="2";
 		break;
 		case 2:
-			icon_name="cronopete_arrow_3_";
+			icon_name+="3";
 		break;
 		case 3:
-			icon_name="cronopete_arrow_4_";
+			icon_name+="4";
 		break;
 		}
-		
+		icon_name+="-";
 		if (this.backend.available==false) {
 			icon_name+="red"; // There's no disk connected
 		} else {
@@ -389,11 +389,14 @@ class cp_callback : GLib.Object, callbacks {
 				icon_name+="orange";
 			}
 		}
+		icon_name+="-symbolic";
+
 #if USE_APPINDICATOR
-		this.appindicator.set_icon(icon_name);
+		this.appindicator.set_icon_full(icon_name,"Cronopete, the backup utility");
 #else
 		this.trayicon.set_from_icon_name(icon_name);
 #endif
+
 		return true;
 	}
 
