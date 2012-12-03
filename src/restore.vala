@@ -219,7 +219,7 @@ class restore_iface : GLib.Object {
 		this.create_cairo_layouts();
 		
 		this.base_layout.add(this.browser);
-		this.browser.width_request=(int)this.browser_w;
+		this.browser.width_request=(int)this.browser_w-3;
 		this.browser.height_request=(int)this.browser_h;
 		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
 
@@ -272,9 +272,10 @@ class restore_iface : GLib.Object {
 		h=(this.scr_h);
 		double scale;
 		var c_base = new Cairo.Context(this.base_surface);
+
 		c_base.set_source_rgb(0,0,0);
 		c_base.paint();
-		
+
 		// Border screws
 		scale=w/2800.0;
 
