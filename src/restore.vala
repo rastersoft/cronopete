@@ -175,8 +175,8 @@ class restore_iface : GLib.Object {
 		var scr=this.mywindow.get_screen();
 		this.scr_w=scr.get_width();
 		this.scr_h=scr.get_height();
-		//this.scr_w=800;
-		//this.scr_h=600;
+		//this.scr_w=640;
+		//this.scr_h=480; // for tests
 		this.grid_h=0;
 		this.grid_w=0;
 		
@@ -560,18 +560,7 @@ class restore_iface : GLib.Object {
 
 			ctx.show_text(date);
 
-			/*scale = ow/this.browser_w;
-			ctx.save();
-			ctx.scale(scale,scale);
-			Gdk.cairo_set_source_pixbuf(ctx,this.capture,ox/scale,oy/scale);
-			ctx.paint();
-			ctx.restore();
-			ctx.rectangle(ox,oy,ow,oh);
-			ctx.stroke();*/
 		}
-		/*ctx.set_source_rgb(0.2,0.2,0.2);
-		ctx.rectangle(this.browser_x,this.browser_y,this.browser_w,this.browser_h);
-		ctx.stroke();*/
 
 		// paint buttons
 
@@ -826,22 +815,11 @@ class restore_iface : GLib.Object {
 
 	private void browser_visible(bool visible) {
 		
-		// this trick is needed to ensure that, in GTK3, the size keeps constant
-		
 		if(visible) {
-#if USE_GTK2
 			this.browser.show();
-#else
-			this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
-#endif
 		} else {
-#if USE_GTK2
 			this.browser.hide();
-#else
-			this.base_layout.move(this.browser,-this.scr_w,(int)(this.browser_y+this.browser_margin));
-#endif
 		}
-		
 	}
 
 	private void launch_animation() {

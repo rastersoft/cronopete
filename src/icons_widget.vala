@@ -39,7 +39,6 @@ namespace FilelistIcons {
 
 		private VBox main_container;
 		private HBox buttons_path;
-		private ScrolledWindow buttons_scroll;
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
@@ -83,7 +82,7 @@ namespace FilelistIcons {
 
 			this.to_refresh=false;
 		
-			this.main_container=new VBox(false,0);
+			this.main_container=new VBox(false,0); // Contains everything in the widget
 			this.timer_refresh=0;
 			this.showing_menu=false;
 			
@@ -91,14 +90,10 @@ namespace FilelistIcons {
 			this.view_as_icons=true;
 			this.sort_by=e_sort_by.NAME;
 
-			this.buttons_scroll=new Gtk.ScrolledWindow(null,null);
-			this.buttons_scroll.hscrollbar_policy=PolicyType.NEVER;
-			this.buttons_scroll.vscrollbar_policy=PolicyType.NEVER;
 			this.buttons_path=new HBox(false,0);
-			this.buttons_path.homogeneous=false;
-			this.buttons_scroll.add_with_viewport(this.buttons_path);
 
-			var buttons_container = new HBox(false,0);
+/*			var buttons_container = new ButtonBox(Orientation.HORIZONTAL);
+			buttons_container.layout_style=ButtonBoxStyle.START;
 			this.btn_prev=new Button();
 			var pic1 = new Gtk.Image.from_icon_name("back",IconSize.SMALL_TOOLBAR);
 			this.btn_prev.add(pic1);
@@ -108,9 +103,9 @@ namespace FilelistIcons {
 			this.btn_prev.clicked.connect(this.path_prev);
 			this.btn_next.clicked.connect(this.path_next);
 			buttons_container.pack_start(this.btn_prev,false,false,0);
-			buttons_container.pack_start(this.buttons_scroll,false,false,0);
-			buttons_container.pack_start(this.btn_next,false,false,0);
-			this.main_container.pack_start(buttons_container,false,false,0);
+			buttons_container.pack_start(this.buttons_path,false,false,0);
+			buttons_container.pack_start(this.btn_next,false,false,0);*/
+			this.main_container.pack_start(buttons_path,false,false,0);
 
 			this.paned = new HPaned();
 			var container2 = new Gtk.HBox(false,0);
@@ -346,7 +341,6 @@ namespace FilelistIcons {
 				this.bookmark_model.set(iter,0,tmp);
 				this.bookmark_model.set(iter,1,GLib.Path.get_basename(folder.name));
 				this.bookmark_model.set(iter,2,folder.name);
-
 			}
 			
 			return true;
@@ -509,10 +503,6 @@ namespace FilelistIcons {
 			this.current_backup=backup;
 			this.path_model.clear();
 			this.to_refresh=true;
-			/*if (this.timer_refresh!=0) {
-				Source.remove(this.timer_refresh);
-			}
-			this.timer_refresh=Timeout.add(100,this.timer_f);*/
 		}
 
 		public void do_refresh_icons() {
@@ -524,12 +514,6 @@ namespace FilelistIcons {
 			
 		}
 		
-		/*public bool timer_f() {
-
-			this.refresh_icons();
-			return false;
-		}*/
-
 		public bool selection_made(EventButton event) {
 	
 			if (event.type==EventType.2BUTTON_PRESS) {
@@ -644,6 +628,7 @@ namespace FilelistIcons {
 			this.buttons_path.show_all();
 			btn.has_focus=true;
 
+/*
 			Gtk.Requisition req;
 			Gtk.Requisition req2;
 #if USE_GTK2
@@ -672,7 +657,7 @@ namespace FilelistIcons {
 				this.buttons_scroll.width_request=req2.width;
 				this.btn_prev.hide();
 				this.btn_next.hide();
-			}
+			}*/
 
 			if (send_signal) {
 				this.to_refresh=true;
@@ -682,7 +667,7 @@ namespace FilelistIcons {
 			
 		}
 
-		private void path_prev() {
+		/*private void path_prev() {
 
 			var v=this.buttons_scroll.hadjustment.value;
 			v-=30;
@@ -707,7 +692,7 @@ namespace FilelistIcons {
 				v=max;
 			}
 			this.buttons_scroll.hadjustment.value=v;
-		}
+		}*/
 		
 		private void set_scroll_top() {
 	
