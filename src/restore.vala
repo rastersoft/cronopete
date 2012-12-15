@@ -108,6 +108,8 @@ class restore_iface : GLib.Object {
 	private double my;
 	private double mh;
 	
+	private Gtk.Label current_date;
+	
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -130,8 +132,6 @@ class restore_iface : GLib.Object {
 		this.zmul=1000;
 		this.capture_done=false;
 
-		
-		
 		// An ugly way of know if the current locale defines the date as MM/DD/YY or DD/MM/YY
 		GLib.Time timeval = GLib.Time();
 		timeval.day=1;
@@ -166,7 +166,39 @@ class restore_iface : GLib.Object {
 		this.box = new EventBox();
 		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.KEY_PRESS_MASK|Gdk.EventMask.KEY_RELEASE_MASK);
 		this.box.add(this.base_layout);
-		this.mywindow.add(box);
+		
+#if USE_GTK2
+		var main_box=new Gtk.VBox(false,0);
+		var button_box=new Gtk.HBox(false,0);
+#else
+		var main_box=new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		var button_box=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+#endif
+		
+		
+		this.current_date=new Label("<span size=\"30000\"> </span>");
+		this.current_date.use_markup=true;
+		
+		var pic1=new Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DIALOG);
+		var restore_button=new Gtk.Button();
+		restore_button.set_image(pic1);
+		restore_button.tooltip_text=_("Restore files");
+		var pic2=new Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DIALOG);
+		var quit_button=new Gtk.Button();
+		quit_button.set_image(pic2);
+		quit_button.tooltip_text=_("Exit");
+		
+		restore_button.clicked.connect(this.do_restore);
+		quit_button.clicked.connect(this.exit_restore);
+		
+		button_box.pack_start(restore_button,false,false,0);
+		button_box.pack_start(this.current_date,true,true,0);
+		button_box.pack_start(quit_button,false,false,0);
+		
+		main_box.pack_start(button_box,false,true,0);
+		main_box.pack_start(box,true,true,0);
+		
+		this.mywindow.add(main_box);
 		
 		this.box.scroll_event.connect(this.on_scroll);
 		this.box.button_release_event.connect(this.on_click);
@@ -266,7 +298,7 @@ class restore_iface : GLib.Object {
 		scale=w/2800.0;
 
 		this.margin_around=50;
-		this.mh=0;//((double)(this.margin_around))*4.0/3.0;
+		this.mh=0;
 		// Browser border
 		this.browser_x=scr_w*0.1;
 		this.browser_y=this.mh+this.margin_around;
@@ -440,12 +472,38 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface print_nixies(time_t backup_date, out double width) {
 
 		var ctime = GLib.Time.local(backup_date);
+		var ctime_now = GLib.Time.local(time_t());
+		var ctime_yesterday = GLib.Time.local(time_t()-86400);
+
 		string date;
-		if (this.date_format) {
-			date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+		if ((ctime_now.day==ctime.day)&&(ctime_now.month==ctime.month)&&(ctime_now.year==ctime.year)) {
+			/// This string is used to show the date of a backup when it is in today;
+			/// %H gets replaced by the hour, and %M by the minute of the backup
+			/// Singular and plurar forms are chosen based on the hour's value (%H)
+			date=ctime.format(ngettext("Today, at %H:%M","Today, at %H:%M",ctime.hour));
+		} else if ((ctime_yesterday.day==ctime.day)&&(ctime_yesterday.month==ctime.month)&&(ctime_yesterday.year==ctime.year)) {
+			/// This string is used to show the date of a backup when it is in yesterday;
+			/// %H gets replaced by the hour, and %M by the minute of the backup
+			/// Singular and plurar forms are chosen based on the hour's value (%H)
+			date=ctime.format(ngettext("Yesterday, at %H:%M","Yesterday, at %H:%M",ctime.hour));
 		} else {
-			date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.month+1,ctime.day,1900+ctime.year);
+			if (this.date_format) {
+				/// This string is used to show the date of a backup in european format (day/month/year);
+				/// %A gets replaced by the day's name; %d by the day (in number);
+				/// %B by the month (in letters); %Y by the year in four-digits format
+				/// %H gets replaced by the hour, and %M by the minute of the backup
+				/// Singular and plurar forms are chosen based on the hour's value (%H)
+				date=ctime.format(ngettext("%A, %d %B %Y at %H:%M","%A, %d %B %Y at %H:%M",ctime.hour));
+			} else {
+				/// This string is used to show the date of a backup in USA format (month/day/year);
+				/// %A gets replaced by the day's name; %B by the month (in letters);
+				/// %d by the day (in number); %Y by the year in four-digits format
+				/// %H gets replaced by the hour, and %M by the minute of the backup
+				/// Singular and plurar forms are chosen based on the hour's value (%H)
+				date=ctime.format(ngettext("%A, %B %d %Y at %H:%M","%A, %B %d %Y at %H:%M",ctime.hour));
+			}
 		}
+		this.current_date.set_markup("<span size=\"xx-large\">"+date+"</span>");
 		width=0;
 		return null;
 	}
