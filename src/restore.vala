@@ -176,14 +176,14 @@ class restore_iface : GLib.Object {
 #endif
 		
 		
-		this.current_date=new Label("<span size=\"30000\"> </span>");
+		this.current_date=new Label("<span size=\"xx-large\"> </span>");
 		this.current_date.use_markup=true;
 		
-		var pic1=new Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DIALOG);
+		var pic1=new Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DND);
 		var restore_button=new Gtk.Button();
 		restore_button.set_image(pic1);
 		restore_button.tooltip_text=_("Restore files");
-		var pic2=new Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DIALOG);
+		var pic2=new Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DND);
 		var quit_button=new Gtk.Button();
 		quit_button.set_image(pic2);
 		quit_button.tooltip_text=_("Exit");
@@ -297,7 +297,7 @@ class restore_iface : GLib.Object {
 
 		scale=w/2800.0;
 
-		this.margin_around=50;
+		this.margin_around=this.scr_h/20;
 		this.mh=0;
 		// Browser border
 		this.browser_x=scr_w*0.1;
@@ -512,16 +512,6 @@ class restore_iface : GLib.Object {
 
 		if(event.button!=1) {
 			return false;
-		}
-
-		if ((event.x_root>=this.exit_x)&&(event.x_root<(this.exit_x+this.exit_w))&&(event.y_root>=this.exit_y)&&(event.y_root<(this.exit_y+this.exit_h))) {
-			this.exit_restore ();
-			return true;
-		}
-
-		if ((event.x_root>=this.restore_x)&&(event.x_root<(this.restore_x+this.restore_w))&&(event.y_root>=this.restore_y)&&(event.y_root<(this.restore_y+this.restore_h))) {
-			this.do_restore();
-			return true;
 		}
 
 		if ((event.x_root>=this.arrows_x)&&(event.x_root<(this.arrows_x+(this.arrows_w/2)))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
