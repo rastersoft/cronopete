@@ -179,11 +179,11 @@ class restore_iface : GLib.Object {
 		this.current_date=new Label("<span size=\"xx-large\"> </span>");
 		this.current_date.use_markup=true;
 		
-		var pic1=new Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DND);
+		var pic1=new Gtk.Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DND);
 		var restore_button=new Gtk.Button();
 		restore_button.set_image(pic1);
 		restore_button.tooltip_text=_("Restore files");
-		var pic2=new Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DND);
+		var pic2=new Gtk.Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DND);
 		var quit_button=new Gtk.Button();
 		quit_button.set_image(pic2);
 		quit_button.tooltip_text=_("Exit");
