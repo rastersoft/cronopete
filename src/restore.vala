@@ -314,7 +314,28 @@ class restore_iface : GLib.Object {
 		Color bgcolor_final;
 		Gdk.Color.parse(bgcolor,out bgcolor_final);
 
-		c_base.set_source_rgb(((double)bgcolor_final.red)/65536.0,((double)bgcolor_final.green)/65536.0,((double)bgcolor_final.blue)/65536.0);
+		int32 r;
+		int32 g;
+		int32 b;
+		int32 bas;
+
+		r=bgcolor_final.red/255;
+		g=bgcolor_final.green/255;
+		b=bgcolor_final.blue/255;
+		
+		bas=(r*3+g*6+b)/10;
+		// transform to sepia
+		if (bas<128) {
+			r=(102*bas)/128;
+			g=( 59*bas)/128;
+			b=( 42*bas)/128;
+		} else {
+			r=102+((255-102)*(bas-128)/127);
+			g= 59+((255- 59)*(bas-128)/127);
+			b= 42+((255- 42)*(bas-128)/127);
+		}
+
+		c_base.set_source_rgb(((double)r)/255.0,((double)g)/255.0,((double)b)/255.0);
 		c_base.paint();
 		
 		Gdk.Pixbuf ?bgpic=null;
@@ -332,12 +353,11 @@ class restore_iface : GLib.Object {
 			int y;
 			unowned uint8 *data;
 			data = bgpic.pixels;
-			int32 r;
-			int32 g;
-			int32 b;
-			int32 bas;
 			
 			var rnd=new GLib.Rand();
+			
+			var has_alpha = bgpic.has_alpha;
+			
 			for(y=0;y<bgpic.height;y++) {
 				for(x=0;x<bgpic.width;x++) {
 					r=*(data);
@@ -357,6 +377,9 @@ class restore_iface : GLib.Object {
 					*(data++)=r;
 					*(data++)=g;
 					*(data++)=b;
+					if(has_alpha) {
+						data++;
+					}
 				}
 			}
 		} catch(GLib.Error v) {
