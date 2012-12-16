@@ -108,6 +108,9 @@ class restore_iface : GLib.Object {
 	private double my;
 	private double mh;
 	
+	private double screen_w;
+	private double screen_h;
+	
 	private Gtk.Label current_date;
 	
 	public static int mysort_64(time_t? a, time_t? b) {
@@ -151,8 +154,10 @@ class restore_iface : GLib.Object {
 		this.mywindow = new Gtk.Window();
 		this.mywindow.fullscreen();
 		var scr=this.mywindow.get_screen();
-		this.scr_w=0;//scr.get_width();
-		this.scr_h=0;//scr.get_height();
+		this.scr_w=0;
+		this.screen_w=scr.get_width();
+		this.scr_h=0;
+		this.screen_h=scr.get_height();
 		
 		//this.scr_w=640;
 		//this.scr_h=480; // for tests
@@ -278,6 +283,8 @@ class restore_iface : GLib.Object {
 		this.scr_w=fsize.width;
 		this.scr_h=fsize.height;
 		
+		double top_margin=this.screen_h-((double)this.scr_h);
+		
 		this.drawing.width_request=this.scr_w;
 		this.drawing.height_request=this.scr_h;
 		
@@ -292,8 +299,129 @@ class restore_iface : GLib.Object {
 		double scale;
 		var c_base = new Cairo.Context(this.base_surface);
 
-		c_base.set_source_rgb(0,0,0);
+		string bgcolor="#000000";
+		var stng = new GLib.Settings("org.gnome.desktop.background");
+		bgcolor=stng.get_string("primary-color");
+		Color bgcolor_final;
+		Gdk.Color.parse(bgcolor,out bgcolor_final);
+
+		c_base.set_source_rgb(((double)bgcolor_final.red)/65536.0,((double)bgcolor_final.green)/65536.0,((double)bgcolor_final.blue)/65536.0);
 		c_base.paint();
+		
+		Gdk.Pixbuf ?bgpic=null;
+		double px_w=this.screen_w;
+		double px_h=this.screen_h;
+		try {
+			var bgstr = stng.get_string("picture-uri");
+			if (bgstr.substring(0,7)=="file://") {
+				bgstr=bgstr.substring(7);
+			}
+			bgpic = new Gdk.Pixbuf.from_file(bgstr);
+			px_w=(double)bgpic.width;
+			px_h=(double)bgpic.height;
+			int x;
+			int y;
+			unowned uint8 *data;
+			data = bgpic.pixels;
+			int32 r;
+			int32 g;
+			int32 b;
+			int32 bas;
+			
+			var rnd=new GLib.Rand();
+			for(y=0;y<bgpic.height;y++) {
+				for(x=0;x<bgpic.width;x++) {
+					r=*(data);
+					g=*(data+1);
+					b=*(data+2);
+					bas=(r*3+g*6+b)/10;
+					// transform to sepia
+					if (bas<128) {
+						r=(102*bas)/128;
+						g=( 59*bas)/128;
+						b=( 42*bas)/128;
+					} else {
+						r=102+((255-102)*(bas-128)/127);
+						g= 59+((255- 59)*(bas-128)/127);
+						b= 42+((255- 42)*(bas-128)/127);
+					}
+					*(data++)=r;
+					*(data++)=g;
+					*(data++)=b;
+				}
+			}
+		} catch(GLib.Error v) {
+		}
+		
+		var bgformat=stng.get_string("picture-options");
+		if (bgpic!=null) {
+			if (bgformat=="wallpaper") { // repeat it
+				double l1;
+				double l2;
+				double s1=0.0;
+				double s2=0.0;
+				if (px_w>this.screen_w) {
+					s1=(this.screen_w-px_w)/2.0;
+				}
+				if (px_h>this.screen_h) {
+					s2=(this.screen_h-px_h)/2.0;
+				}
+				for(l2=s2;l2<this.screen_h;l2+=px_h) {
+					for(l1=s1;l1<this.screen_w;l1+=px_w) {
+						Gdk.cairo_set_source_pixbuf(c_base,bgpic,l1,l2-top_margin);
+						c_base.paint();
+					}
+				}
+				
+			} else if (bgformat=="centered") {
+				double s1=0.0;
+				double s2=0.0;
+				s1=(this.screen_w-px_w)/2.0;
+				s2=(this.screen_h-px_h)/2.0;
+				Gdk.cairo_set_source_pixbuf(c_base,bgpic,s1,s2-top_margin);
+				c_base.paint();
+
+			} else if ((bgformat=="scaled")||(bgformat=="spanned")) {
+				c_base.save();
+				double new_w=px_w*(this.screen_h/px_h);
+				double new_h=px_h*(this.screen_w/px_w);
+				if (new_w>this.screen_w) { // width is the limiting factor
+					double factor=scr_w/px_w;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-top_margin);
+				} else { // height is the limiting factor
+					double factor=scr_h/px_h;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-top_margin);
+				}
+				c_base.paint();
+				c_base.restore();
+				
+			} else if (bgformat=="stretched") {
+				c_base.save();
+				c_base.scale(scr_w/px_w,scr_h/px_h);
+				Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,-top_margin);
+				c_base.paint();
+				c_base.restore();
+				
+			} else if (bgformat=="zoom") {
+				c_base.save();
+				double new_w=px_w*(this.screen_h/px_h);
+				double new_h=px_h*(this.screen_w/px_w);
+				if (new_h>this.screen_h) {
+					double factor=scr_w/px_w;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-top_margin);
+				} else {
+					double factor=scr_h/px_h;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-top_margin);
+				}
+				c_base.paint();
+				c_base.restore();
+				
+			}
+		}
 
 		scale=w/2800.0;
 
@@ -349,7 +477,7 @@ class restore_iface : GLib.Object {
 			c_base.stroke();
 		}
 		
-		this.browser.width_request=(int)this.browser_w-3;
+		this.browser.width_request=(int)this.browser_w;
 		this.browser.height_request=(int)this.browser_h;
 		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
 	}
