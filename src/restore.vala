@@ -110,6 +110,7 @@ class restore_iface : GLib.Object {
 	
 	private double screen_w;
 	private double screen_h;
+	private int topmargin;
 	
 	private Gtk.Label current_date;
 	
@@ -130,6 +131,7 @@ class restore_iface : GLib.Object {
 		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
 		
+		this.topmargin=0;
 		this.scale_current_value=-1;
 		this.windows_current_value=-1;
 		this.zmul=1000;
@@ -240,9 +242,15 @@ class restore_iface : GLib.Object {
 
 		this.mywindow.show_all();
 		
+		this.desired_alpha=0.0;
+		Timeout.add(250,start_all,0); // wait to end the window animation
+		
+	}
+
+	public bool start_all() {
 		this.desired_alpha=1.0;
 		this.launch_animation();
-		
+		return false;
 	}
 
 	public void changed_path_list() {
@@ -284,6 +292,7 @@ class restore_iface : GLib.Object {
 		this.scr_h=fsize.height;
 		
 		double top_margin=this.screen_h-((double)this.scr_h);
+		this.topmargin=(int)top_margin;
 		
 		this.drawing.width_request=this.scr_w;
 		this.drawing.height_request=this.scr_h;
@@ -440,7 +449,7 @@ class restore_iface : GLib.Object {
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
-		this.arrows_y=this.browser_y;
+		this.arrows_y=this.browser_y/2;
 		this.arrows_w=256*scale2;
 		this.arrows_h=150*scale2;
 		c_base.set_source_surface(arrows_pic,this.arrows_x/scale2,this.arrows_y/scale2);
@@ -642,11 +651,11 @@ class restore_iface : GLib.Object {
 			return false;
 		}
 
-		if ((event.x_root>=this.arrows_x)&&(event.x_root<(this.arrows_x+(this.arrows_w/2)))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
+		if ((event.x_root>=this.arrows_x)&&(event.x_root<(this.arrows_x+(this.arrows_w/2)))&&(event.y_root>=this.arrows_y+this.topmargin)&&(event.y_root<(this.arrows_y+this.arrows_h+this.topmargin))) {
 			this.move_timeline(false);
 			return true;
 		}
-		if ((event.x_root>=(this.arrows_x+(this.arrows_w/2)))&&(event.x_root<(this.arrows_x+this.arrows_w))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
+		if ((event.x_root>=(this.arrows_x+(this.arrows_w/2)))&&(event.x_root<(this.arrows_x+this.arrows_w))&&(event.y_root>=this.arrows_y+this.topmargin)&&(event.y_root<(this.arrows_y+this.arrows_h+this.topmargin))) {
 			this.move_timeline(true);
 			return true;
 		}
@@ -656,7 +665,7 @@ class restore_iface : GLib.Object {
 
 	private bool on_scroll(Gdk.EventScroll event) {
 
-		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)(this.browser_y+this.browser_margin)))&&(event.y_root<((int)(this.browser_y+this.browser_margin+this.browser_h)))) {
+		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)(this.browser_y+this.browser_margin+this.topmargin)))&&(event.y_root<((int)(this.browser_y+this.browser_margin+this.browser_h+this.topmargin)))) {
 			return false;
 		}
 		
