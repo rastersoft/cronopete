@@ -342,17 +342,22 @@ class restore_iface : GLib.Object {
 		
 		string bgstr;
 		string bgformat;
-		
+		bgcolor="#7f7f7f7f7f7f";
+		bgstr="";
+		bgformat="";
+				
 		if (gnome_found) {
 			var stng = new GLib.Settings("org.gnome.desktop.background");
-			bgcolor=stng.get_string("primary-color");
-			bgstr = stng.get_string("picture-uri");
-			bgformat=stng.get_string("picture-options");
-		} else {
-			//bgcolor="#4e4e9a9a0606";
-			bgcolor="#7f7f7f7f7f7f";
-			bgstr="";
-			bgformat="";
+			var entries_list = stng.list_keys();
+			foreach(var v in entries_list) {
+				if (v=="primary-color") {
+					bgcolor=stng.get_string("primary-color");
+				} else if (v=="picture-uri") {
+					bgstr = stng.get_string("picture-uri");
+				} else if (v=="picture-options") {
+					bgformat=stng.get_string("picture-options");
+				}
+			}
 		}
 
 		Color bgcolor_final;
