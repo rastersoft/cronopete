@@ -314,8 +314,6 @@ class restore_iface : GLib.Object {
 		h=(this.scr_h);
 		double scale;
 		var c_base = new Cairo.Context(this.base_surface);
-
-		string bgcolor="#000000";
 		
 		var tonecolor=this.cronopete_settings.get_string("toning-color");
 		Color tonecolor_final;
@@ -342,6 +340,8 @@ class restore_iface : GLib.Object {
 		
 		string bgstr;
 		string bgformat;
+		string bgcolor;
+	
 		bgcolor="#7f7f7f7f7f7f";
 		bgstr="";
 		bgformat="";
