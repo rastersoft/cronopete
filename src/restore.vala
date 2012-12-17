@@ -114,6 +114,10 @@ class restore_iface : GLib.Object {
 	
 	private Gtk.Label current_date;
 	
+	private GLib.Settings cronopete_settings;
+	
+	private bool doshow; // this is for testing
+	
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -125,8 +129,11 @@ class restore_iface : GLib.Object {
 		return 0;
 	}
 
-	public restore_iface(backends p_backend,string paths) {
+	public restore_iface(backends p_backend,string paths,GLib.Settings stg) {
 		
+		this.doshow=true; // if false, will not paint the windows, allowing to check the background rendering
+		
+		this.cronopete_settings=stg;
 		this.backend=p_backend;
 		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
@@ -309,8 +316,45 @@ class restore_iface : GLib.Object {
 		var c_base = new Cairo.Context(this.base_surface);
 
 		string bgcolor="#000000";
-		var stng = new GLib.Settings("org.gnome.desktop.background");
-		bgcolor=stng.get_string("primary-color");
+		
+		var tonecolor=this.cronopete_settings.get_string("toning-color");
+		Color tonecolor_final;
+		Gdk.Color.parse(tonecolor,out tonecolor_final);
+		
+		int32 final_r;
+		int32 final_g;
+		int32 final_b;
+		
+		final_r=tonecolor_final.red/256;
+		final_g=tonecolor_final.green/256;
+		final_b=tonecolor_final.blue/256;
+		
+		var list_schemas = GLib.Settings.list_schemas();
+		
+		bool gnome_found=false;
+		
+		foreach(var v in list_schemas) {
+			if (v=="org.gnome.desktop.background") {
+				gnome_found=true;
+				break;
+			}
+		}
+		
+		string bgstr;
+		string bgformat;
+		
+		if (gnome_found) {
+			var stng = new GLib.Settings("org.gnome.desktop.background");
+			bgcolor=stng.get_string("primary-color");
+			bgstr = stng.get_string("picture-uri");
+			bgformat=stng.get_string("picture-options");
+		} else {
+			//bgcolor="#4e4e9a9a0606";
+			bgcolor="#7f7f7f7f7f7f";
+			bgstr="";
+			bgformat="";
+		}
+
 		Color bgcolor_final;
 		Gdk.Color.parse(bgcolor,out bgcolor_final);
 
@@ -319,20 +363,20 @@ class restore_iface : GLib.Object {
 		int32 b;
 		int32 bas;
 
-		r=bgcolor_final.red/255;
-		g=bgcolor_final.green/255;
-		b=bgcolor_final.blue/255;
+		r=bgcolor_final.red/256;
+		g=bgcolor_final.green/256;
+		b=bgcolor_final.blue/256;
 		
 		bas=(r*3+g*6+b)/10;
-		// transform to sepia
+		// tone to sepia
 		if (bas<128) {
-			r=(102*bas)/128;
-			g=( 59*bas)/128;
-			b=( 42*bas)/128;
+			r=(final_r*bas)/128;
+			g=(final_g*bas)/128;
+			b=(final_b*bas)/128;
 		} else {
-			r=102+((255-102)*(bas-128)/127);
-			g= 59+((255- 59)*(bas-128)/127);
-			b= 42+((255- 42)*(bas-128)/127);
+			r=final_r+(((255-final_r)*(bas-128))/127);
+			g=final_g+(((255-final_g)*(bas-128))/127);
+			b=final_b+(((255-final_b)*(bas-128))/127);
 		}
 
 		c_base.set_source_rgb(((double)r)/255.0,((double)g)/255.0,((double)b)/255.0);
@@ -342,8 +386,7 @@ class restore_iface : GLib.Object {
 		double px_w=this.screen_w;
 		double px_h=this.screen_h;
 		try {
-			var bgstr = stng.get_string("picture-uri");
-			if (bgstr.substring(0,7)=="file://") {
+			if ((bgstr.length>6)&&(bgstr.substring(0,7)=="file://")) {
 				bgstr=bgstr.substring(7);
 			}
 			bgpic = new Gdk.Pixbuf.from_file(bgstr);
@@ -364,16 +407,17 @@ class restore_iface : GLib.Object {
 					g=*(data+1);
 					b=*(data+2);
 					bas=(r*3+g*6+b)/10;
-					// transform to sepia
+					// tone to sepia
 					if (bas<128) {
-						r=(102*bas)/128;
-						g=( 59*bas)/128;
-						b=( 42*bas)/128;
+						r=(final_r*bas)/128;
+						g=(final_g*bas)/128;
+						b=(final_b*bas)/128;
 					} else {
-						r=102+((255-102)*(bas-128)/127);
-						g= 59+((255- 59)*(bas-128)/127);
-						b= 42+((255- 42)*(bas-128)/127);
+						r=final_r+(((255-final_r)*(bas-128))/127);
+						g=final_g+(((255-final_g)*(bas-128))/127);
+						b=final_b+(((255-final_b)*(bas-128))/127);
 					}
+
 					*(data++)=r;
 					*(data++)=g;
 					*(data++)=b;
@@ -385,7 +429,6 @@ class restore_iface : GLib.Object {
 		} catch(GLib.Error v) {
 		}
 		
-		var bgformat=stng.get_string("picture-options");
 		if (bgpic!=null) {
 			if (bgformat=="wallpaper") { // repeat it
 				double l1;
@@ -601,7 +644,9 @@ class restore_iface : GLib.Object {
 			double final_add=4.0*s_factor;
 
 			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
-			ctx.fill();
+			if (this.doshow) {
+				ctx.fill();
+			}
 			ctx.set_source_rgb(0.0, 0.0, 0.0);
 			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
 			ctx.stroke();
@@ -756,7 +801,11 @@ class restore_iface : GLib.Object {
 	private void browser_visible(bool visible) {
 		
 		if(visible) {
-			this.browser.show();
+			if (this.doshow) {
+				this.browser.show();	
+			} else {
+				this.browser.hide();
+			}
 		} else {
 			this.browser.hide();
 		}

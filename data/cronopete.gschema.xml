@@ -16,32 +16,36 @@
       <summary>Don't backup the hiden files in the personal folder</summary>
       <description>When enabled, hiden files and folders in the root of the personal folder won't be backed up (but hiden files and folders in subdirectories will be).</description>
     </key>
-	<key type="s" name="backup-path">
+    <key type="s" name="backup-path">
       <default>""</default>
       <summary>Path to the external disk</summary>
       <description>Path to the location where the external disk is mounted.</description>
     </key>
-	<key type="as" name="backup-folders">
+    <key type="as" name="backup-folders">
       <default>[]</default>
       <summary>Folders to back up</summary>
       <description>List of folders to be backed up.</description>
     </key>
-	<key type="as" name="exclude-folders">
+    <key type="as" name="exclude-folders">
       <default>[]</default>
       <summary>Folders to exclude</summary>
       <description>These folders won't be backed up, even if they are inside a folder that will be backed up.</description>
     </key>
-	<key type="u" name="backup-period">
+    <key type="u" name="backup-period">
       <default>3600</default>
       <summary>Time between backups</summary>
       <description>Time in seconds between backups.</description>
     </key>
-	<key type="b" name="all-drives">
+    <key type="b" name="all-drives">
       <default>false</default>
       <summary>Allow all drives</summary>
       <description>Allows to choose an internal or non-removable drive for backups (only recommended for testing).</description>
     </key>
-
+    <key type="s" name="toning-color">
+      <default>"#663B2A"</default>
+      <summary>Color for toning the background</summary>
+      <description>This color will be used when entering in the Restoring backups interface, for toning the background picture</description>
+    </key>
 	<!--<key type="" name="">
       <default></default>
       <summary></summary>
