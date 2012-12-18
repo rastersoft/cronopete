@@ -116,6 +116,8 @@ class restore_iface : GLib.Object {
 	
 	private GLib.Settings cronopete_settings;
 	
+	private double incval;
+
 	private bool doshow; // this is for testing
 	
 	public static int mysort_64(time_t? a, time_t? b) {
@@ -506,12 +508,12 @@ class restore_iface : GLib.Object {
 		scale=w/2800.0;
 
 		this.margin_around=this.scr_h/20;
-		this.mh=0;
+		this.mh=0.0;
 		// Browser border
 		this.browser_x=scr_w*0.1;
 		this.browser_y=this.mh+this.margin_around;
-		this.browser_margin=this.scr_h/8;
-		this.browser_w=scr_w*4/5;
+		this.browser_margin=this.scr_h/8.0;
+		this.browser_w=scr_w*4.0/5.0;
 		this.browser_h=this.scr_h-this.browser_y-this.browser_margin-this.margin_around;
 		double scale2=(w-60.0-100.0*scale)/2175.0;
 		c_base.save();
@@ -520,9 +522,9 @@ class restore_iface : GLib.Object {
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
-		this.arrows_y=this.browser_y/2;
-		this.arrows_w=256*scale2;
-		this.arrows_h=150*scale2;
+		this.arrows_y=this.browser_y/2.0;
+		this.arrows_w=256.0*scale2;
+		this.arrows_h=150.0*scale2;
 		c_base.set_source_surface(arrows_pic,this.arrows_x/scale2,this.arrows_y/scale2);
 		c_base.paint();
 		c_base.restore();
@@ -530,7 +532,7 @@ class restore_iface : GLib.Object {
 		// timeline
 		this.scale_x=this.restore_x;
 		this.scale_y=this.browser_y;
-		this.scale_w=this.scr_w/28;
+		this.scale_w=this.scr_w/28.0;
 		this.scale_h=this.browser_h+this.browser_margin;
 				
 		this.last_time=this.backups[this.backups.size-1];
@@ -540,11 +542,16 @@ class restore_iface : GLib.Object {
 		double pos_y=this.scale_y+this.scale_h;
 		double new_y;
 		
+		this.incval = this.scale_w/5.0;
+		double nw = this.scale_w*3.0/5.0;
+		this.scale_x+=this.incval/2.0;
+		
+		c_base.set_source_rgba(0,0,0,0.6);
+		this.rounded_rectangle(c_base,this.scale_x,this.scale_y-incval,this.scale_w,this.scale_h+2.0*incval,2.0*incval);
+		c_base.fill();
+		
 		c_base.set_source_rgb(1,1,1);
 		c_base.set_line_width(1);
-		
-		double incval = this.scale_w/5;
-		double nw = this.scale_w*3/5;
 
 		for(var i=0;i<this.backups.size;i++) {
 			new_y = pos_y-this.scale_factor*(this.backups[i]-this.last_time);
@@ -561,6 +568,20 @@ class restore_iface : GLib.Object {
 		this.browser.height_request=(int)this.browser_h;
 		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
 	}
+
+	public void rounded_rectangle(Cairo.Context context, double x, double y, double w, double h, double r) {
+
+		context.move_to(x+r,y);
+		context.line_to(x+w-r,y);
+		context.curve_to(x+w,y,x+w,y,x+w,y+r);
+		context.line_to(x+w,y+h-r);
+		context.curve_to(x+w,y+h,x+w,y+h,x+w-r,y+h);
+		context.line_to(x+r,y+h);
+		context.curve_to(x,y+h,x,y+h,x,y+h-r);
+		context.line_to(x,y+r);
+		context.curve_to(x,y,x,y,x+r,y);
+	}
+
 
 	private void paint_window() {
 		
