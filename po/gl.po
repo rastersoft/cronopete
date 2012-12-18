@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-16 00:41+0100\n"
+"POT-Creation-Date: 2012-12-18 23:55+0100\n"
 "PO-Revision-Date: 2012-12-16 00:13+0100\n"
 "Last-Translator: raster <raster@rastersoft.com>\n"
 "Language-Team: Español; Castellano <>\n"
@@ -160,7 +160,7 @@ msgstr "Copiar agora"
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: ../src/cronopete.vala:422 ../src/restore.vala:185
+#: ../src/cronopete.vala:422 ../src/restore.vala:201
 msgid "Restore files"
 msgstr "Restaurar ficheiros"
 
@@ -213,14 +213,14 @@ msgstr "Non é posíbel facer a copia"
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
 
-#: ../src/restore.vala:189
+#: ../src/restore.vala:205
 msgid "Exit"
 msgstr ""
 
 #. / This string is used to show the date of a backup when it is in today;
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:483
+#: ../src/restore.vala:714
 msgid "Today, at %H:%M"
 msgid_plural "Today, at %H:%M"
 msgstr[0] ""
@@ -229,7 +229,7 @@ msgstr[1] ""
 #. / This string is used to show the date of a backup when it is in yesterday;
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:488
+#: ../src/restore.vala:719
 msgid "Yesterday, at %H:%M"
 msgid_plural "Yesterday, at %H:%M"
 msgstr[0] ""
@@ -240,7 +240,7 @@ msgstr[1] ""
 #. / %B by the month (in letters); %Y by the year in four-digits format
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:496
+#: ../src/restore.vala:727
 msgid "%A, %d %B %Y at %H:%M"
 msgid_plural "%A, %d %B %Y at %H:%M"
 msgstr[0] ""
@@ -251,13 +251,13 @@ msgstr[1] ""
 #. / %d by the day (in number); %Y by the year in four-digits format
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:503
+#: ../src/restore.vala:734
 msgid "%A, %B %d %Y at %H:%M"
 msgid_plural "%A, %B %d %Y at %H:%M"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/restore.vala:785
+#: ../src/restore.vala:1010
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -268,7 +268,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:797
+#: ../src/restore.vala:1022
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -283,7 +283,7 @@ msgstr ""
 "\n"
 "Non hai espazo baleiro abondo"
 
-#: ../src/restore.vala:799
+#: ../src/restore.vala:1024
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -294,7 +294,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:864
+#: ../src/restore.vala:1089
 msgid "Preparing folders to restore"
 msgstr "Preparando os cartafoles para restaurar"
 
