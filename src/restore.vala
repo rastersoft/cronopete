@@ -67,6 +67,8 @@ class restore_iface : GLib.Object {
 	private double arrows_w;
 	private double arrows_h;
 
+	private int margin_around;
+
 	private int windows_current_value;
 	private int zmul;
 	
@@ -86,14 +88,7 @@ class restore_iface : GLib.Object {
 	private Cairo.ImageSurface base_surface;
 	private Cairo.ImageSurface final_surface;
 	private Cairo.ImageSurface animation_surface;
-	private Cairo.ImageSurface nixies[13];
-	private Cairo.ImageSurface grid;
-	private int grid_w;
-	private int grid_h;
-	private int nixies_w[13];
-	private int nixie_w;
-	private int nixie_h;
-	private int margin_nixie;
+
 	private bool date_format;
 
 	private Gtk.Window restore_window;
@@ -107,25 +102,24 @@ class restore_iface : GLib.Object {
 
 	private uint timer_bar;
 
-	private double icon_scale;
-	private double icon_x_restore;
-	private double icon_y_restore;
-	private double icon_x_exit;
-	private double icon_y_exit;
-	private double icon_restore_scale;
-	private double icon_exit_scale;
-	private Cairo.ImageSurface restore_pic;
-	private Cairo.ImageSurface exit_pic;
-
 	private bool capture_done;
 	private bool browserhide;
 
-	private double mx;
 	private double my;
-	private double mw;
 	private double mh;
 	
+	private double screen_w;
+	private double screen_h;
+	private int topmargin;
+	
+	private Gtk.Label current_date;
+	
+	private GLib.Settings cronopete_settings;
+	
+	private double incval;
 
+	private bool doshow; // this is for testing
+	
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -137,23 +131,21 @@ class restore_iface : GLib.Object {
 		return 0;
 	}
 
-	public restore_iface(backends p_backend,string paths) {
+	public restore_iface(backends p_backend,string paths,GLib.Settings stg) {
 		
+		this.doshow=true; // if false, will not paint the windows, allowing to check the background rendering
+		
+		this.cronopete_settings=stg;
 		this.backend=p_backend;
 		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
 		
+		this.topmargin=0;
 		this.scale_current_value=-1;
 		this.windows_current_value=-1;
 		this.zmul=1000;
 		this.capture_done=false;
 
-		this.icon_restore_scale=0.0;
-		this.icon_exit_scale=0.0;
-
-		this.backend.restore_ended.connect(this.restoring_ended);
-		this.backend.status.connect(this.refresh_status);
-		
 		// An ugly way of know if the current locale defines the date as MM/DD/YY or DD/MM/YY
 		GLib.Time timeval = GLib.Time();
 		timeval.day=1;
@@ -173,30 +165,56 @@ class restore_iface : GLib.Object {
 		this.mywindow = new Gtk.Window();
 		this.mywindow.fullscreen();
 		var scr=this.mywindow.get_screen();
-		this.scr_w=scr.get_width();
-		this.scr_h=scr.get_height();
+		this.scr_w=0;
+		this.screen_w=scr.get_width();
+		this.scr_h=0;
+		this.screen_h=scr.get_height();
+		
 		//this.scr_w=640;
 		//this.scr_h=480; // for tests
-		this.grid_h=0;
-		this.grid_w=0;
-		
+	
 		this.base_layout = new Fixed();
 
 		this.drawing = new DrawingArea();
 
-#if USE_GTK2
-		this.drawing.expose_event.connect(this.repaint_draw);
-#else
-		this.drawing.draw.connect(this.repaint_draw3);
-#endif
 		this.base_layout.add(this.drawing);
 		
 		this.box = new EventBox();
 		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.KEY_PRESS_MASK|Gdk.EventMask.KEY_RELEASE_MASK);
 		this.box.add(this.base_layout);
-		this.drawing.width_request=this.scr_w;
-		this.drawing.height_request=this.scr_h;
-		this.mywindow.add(box);
+		
+#if USE_GTK2
+		var main_box=new Gtk.VBox(false,0);
+		var button_box=new Gtk.HBox(false,0);
+#else
+		var main_box=new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		var button_box=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+#endif
+		
+		
+		this.current_date=new Label("<span size=\"xx-large\"> </span>");
+		this.current_date.use_markup=true;
+		
+		var pic1=new Gtk.Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DND);
+		var restore_button=new Gtk.Button();
+		restore_button.set_image(pic1);
+		restore_button.tooltip_text=_("Restore files");
+		var pic2=new Gtk.Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DND);
+		var quit_button=new Gtk.Button();
+		quit_button.set_image(pic2);
+		quit_button.tooltip_text=_("Exit");
+		
+		restore_button.clicked.connect(this.do_restore);
+		quit_button.clicked.connect(this.exit_restore);
+		
+		button_box.pack_start(restore_button,false,false,0);
+		button_box.pack_start(this.current_date,true,true,0);
+		button_box.pack_start(quit_button,false,false,0);
+		
+		main_box.pack_start(button_box,false,true,0);
+		main_box.pack_start(box,true,true,0);
+		
+		this.mywindow.add(main_box);
 		
 		this.box.scroll_event.connect(this.on_scroll);
 		this.box.button_release_event.connect(this.on_click);
@@ -216,20 +234,32 @@ class restore_iface : GLib.Object {
 		this.browser.set_backup_time(this.backups[0]);
 		this.browser.changed_path_list.connect(this.changed_path_list);
 
-		this.create_cairo_layouts();
+		//this.create_cairo_layouts();
 		
 		this.base_layout.add(this.browser);
-		this.browser.width_request=(int)this.browser_w-3;
-		this.browser.height_request=(int)this.browser_h;
-		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
 
 		this.paint_window();
 
+		this.backend.restore_ended.connect(this.restoring_ended);
+		this.backend.status.connect(this.refresh_status);
+
+#if USE_GTK2
+		this.drawing.expose_event.connect(this.repaint_draw);
+#else
+		this.drawing.draw.connect(this.repaint_draw3);
+#endif
+
 		this.mywindow.show_all();
 		
-		this.desired_alpha=1.0;
-		this.launch_animation ();
+		this.desired_alpha=0.0;
+		Timeout.add(250,start_all,0); // wait to end the window animation
 		
+	}
+
+	public bool start_all() {
+		this.desired_alpha=1.0;
+		this.launch_animation();
+		return false;
 	}
 
 	public void changed_path_list() {
@@ -258,13 +288,27 @@ class restore_iface : GLib.Object {
 	
 	private void create_cairo_layouts() {
 		
+		Allocation fsize;
+		this.base_layout.get_allocation(out fsize);
+		if ((fsize.width<=0)||(fsize.height<=0)) {
+			return;
+		}
+		if ((fsize.width==this.scr_w)&&(fsize.height==this.scr_h)) {
+			return;
+		}
+		
+		this.scr_w=fsize.width;
+		this.scr_h=fsize.height;
+		
+		double top_margin=this.screen_h-((double)this.scr_h);
+		this.topmargin=(int)top_margin;
+		
+		this.drawing.width_request=this.scr_w;
+		this.drawing.height_request=this.scr_h;
+		
 		this.base_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
 		this.final_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
 		this.animation_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
-		var brass = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"brass.png"));
-		var screw1 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw1.png"));
-		var screw2 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw2.png"));
-		//var screw3 = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"screw3.png"));
 
 		double w;
 		w=(this.scr_w);
@@ -272,148 +316,223 @@ class restore_iface : GLib.Object {
 		h=(this.scr_h);
 		double scale;
 		var c_base = new Cairo.Context(this.base_surface);
-
-		c_base.set_source_rgb(0,0,0);
-		c_base.paint();
-
-		// Border screws
-		scale=w/2800.0;
-
-		// Generate nixies
-		double scale2=(w-60.0-100.0*scale)/2175.0;
-		this.nixie_w=(int)(145.0*scale2);
-		this.nixie_h=(int)(150.0*scale2);
-		this.margin_nixie=(int)(30.0+50.0*scale);
-		Cairo.ImageSurface? nixie;
-		double xtra;
-		for (int c=0;c<13;c++) {
-			switch (c) {
-			case 10:
-				nixie = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"nixiedots.png"));
-				this.nixies_w[c]=(int)(70.0*scale2);
-				xtra=-37.5;
-			break;
-			case 11:
-				nixie = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"nixieslash.png"));
-				this.nixies_w[c]=(int)(100.0*scale2);
-				xtra=-22.5;
-			break;
-			case 12:
-				nixie = null;
-				this.nixies_w[c]=(int)(70.0*scale2);
-				xtra=-37.5;
-			break;
-			default:
-				nixie = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"nixie%d.png".printf(c)));
-				this.nixies_w[c]=(int)(113.6*scale2);
-				xtra=-16.2;
-			break;
+		
+		var tonecolor=this.cronopete_settings.get_string("toning-color");
+		Color tonecolor_final;
+		Gdk.Color.parse(tonecolor,out tonecolor_final);
+		
+		int32 final_r;
+		int32 final_g;
+		int32 final_b;
+		
+		final_r=tonecolor_final.red/256;
+		final_g=tonecolor_final.green/256;
+		final_b=tonecolor_final.blue/256;
+		
+		var list_schemas = GLib.Settings.list_schemas();
+		
+		bool gnome_found=false;
+		
+		foreach(var v in list_schemas) {
+			if (v=="org.gnome.desktop.background") {
+				gnome_found=true;
+				break;
 			}
-			this.nixies[c] = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.nixies_w[c],(int)(150.0*scale2));
-			var ctx = new Context(this.nixies[c]);
-			ctx.set_source_rgb(0,0,0);
-			ctx.paint();
-			if (nixie!=null) {
-				ctx.save();
-				ctx.scale(scale2,scale2);
-				ctx.set_source_surface(nixie,xtra,0);
-				ctx.paint();
-				ctx.restore();
-				ctx.set_source_rgb(0,0,0);
-				ctx.move_to(0,0);
-				ctx.set_line_width(6.0);
-				ctx.line_to(this.nixies_w[c],0);
-				ctx.line_to(this.nixies_w[c],150.0*scale2);
-				ctx.line_to(0,150.0*scale2);
-				ctx.close_path();
-				ctx.stroke();
+		}
+		
+		string bgstr;
+		string bgformat;
+		string bgcolor;
+	
+		bgcolor="#7f7f7f7f7f7f";
+		bgstr="";
+		bgformat="";
+				
+		if (gnome_found) {
+			var stng = new GLib.Settings("org.gnome.desktop.background");
+			var entries_list = stng.list_keys();
+			foreach(var v in entries_list) {
+				if (v=="primary-color") {
+					bgcolor=stng.get_string("primary-color");
+				} else if (v=="picture-uri") {
+					bgstr = stng.get_string("picture-uri");
+				} else if (v=="picture-options") {
+					bgformat=stng.get_string("picture-options");
+				}
 			}
 		}
 
-		double width;
-		this.print_nixies(0, out width);
-		scale=this.scr_w/2800.0;
-		
-		// Paint base surface
-		this.mh=((double)(this.nixie_h))*4.0/3.0;
-		this.mx=(this.scr_w-width)/2.0-80.0*scale;
-		this.my=0;
-		this.mw=width+160*scale;
-		
-		c_base.set_source_surface(brass,0,this.my);
-		c_base.rectangle(this.mx-this.mh,this.my,this.mw+2.0*this.mh,this.mh);
-		c_base.fill();
-		this.paint_border (c_base,this.mx,this.my,this.mw,this.mh,-1.5,true);
+		Color bgcolor_final;
+		Gdk.Color.parse(bgcolor,out bgcolor_final);
 
+		int32 r;
+		int32 g;
+		int32 b;
+		int32 bas;
+
+		r=bgcolor_final.red/256;
+		g=bgcolor_final.green/256;
+		b=bgcolor_final.blue/256;
+		
+		bas=(r*3+g*6+b)/10;
+		// tone to sepia
+		if (bas<128) {
+			r=(final_r*bas)/128;
+			g=(final_g*bas)/128;
+			b=(final_b*bas)/128;
+		} else {
+			r=final_r+(((255-final_r)*(bas-128))/127);
+			g=final_g+(((255-final_g)*(bas-128))/127);
+			b=final_b+(((255-final_b)*(bas-128))/127);
+		}
+
+		c_base.set_source_rgb(((double)r)/255.0,((double)g)/255.0,((double)b)/255.0);
+		c_base.paint();
+		
+		Gdk.Pixbuf ?bgpic=null;
+		double px_w=this.screen_w;
+		double px_h=this.screen_h;
+		try {
+			if ((bgstr.length>6)&&(bgstr.substring(0,7)=="file://")) {
+				bgstr=bgstr.substring(7);
+			}
+			bgpic = new Gdk.Pixbuf.from_file(bgstr);
+			px_w=(double)bgpic.width;
+			px_h=(double)bgpic.height;
+			int x;
+			int y;
+			unowned uint8 *data;
+			data = bgpic.pixels;
+			
+			var rnd=new GLib.Rand();
+			
+			var has_alpha = bgpic.has_alpha;
+			
+			for(y=0;y<bgpic.height;y++) {
+				for(x=0;x<bgpic.width;x++) {
+					r=*(data);
+					g=*(data+1);
+					b=*(data+2);
+					bas=(r*3+g*6+b)/10;
+					// tone to sepia
+					if (bas<128) {
+						r=(final_r*bas)/128;
+						g=(final_g*bas)/128;
+						b=(final_b*bas)/128;
+					} else {
+						r=final_r+(((255-final_r)*(bas-128))/127);
+						g=final_g+(((255-final_g)*(bas-128))/127);
+						b=final_b+(((255-final_b)*(bas-128))/127);
+					}
+
+					*(data++)=r;
+					*(data++)=g;
+					*(data++)=b;
+					if(has_alpha) {
+						data++;
+					}
+				}
+			}
+		} catch(GLib.Error v) {
+		}
+		
+		if (bgpic!=null) {
+			if (bgformat=="wallpaper") { // repeat it
+				double l1;
+				double l2;
+				double s1=0.0;
+				double s2=0.0;
+				if (px_w>this.screen_w) {
+					s1=(this.screen_w-px_w)/2.0;
+				}
+				if (px_h>this.screen_h) {
+					s2=(this.screen_h-px_h)/2.0;
+				}
+				for(l2=s2;l2<this.screen_h;l2+=px_h) {
+					for(l1=s1;l1<this.screen_w;l1+=px_w) {
+						Gdk.cairo_set_source_pixbuf(c_base,bgpic,l1,l2-top_margin);
+						c_base.paint();
+					}
+				}
+				
+			} else if (bgformat=="centered") {
+				double s1=0.0;
+				double s2=0.0;
+				s1=(this.screen_w-px_w)/2.0;
+				s2=(this.screen_h-px_h)/2.0;
+				Gdk.cairo_set_source_pixbuf(c_base,bgpic,s1,s2-top_margin);
+				c_base.paint();
+
+			} else if ((bgformat=="scaled")||(bgformat=="spanned")) {
+				c_base.save();
+				double new_w=px_w*(this.screen_h/px_h);
+				double new_h=px_h*(this.screen_w/px_w);
+				if (new_w>this.screen_w) { // width is the limiting factor
+					double factor=scr_w/px_w;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-top_margin);
+				} else { // height is the limiting factor
+					double factor=scr_h/px_h;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-top_margin);
+				}
+				c_base.paint();
+				c_base.restore();
+				
+			} else if (bgformat=="stretched") {
+				c_base.save();
+				c_base.scale(scr_w/px_w,scr_h/px_h);
+				Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,-top_margin);
+				c_base.paint();
+				c_base.restore();
+				
+			} else if (bgformat=="zoom") {
+				c_base.save();
+				double new_w=px_w*(this.screen_h/px_h);
+				double new_h=px_h*(this.screen_w/px_w);
+				if (new_h>this.screen_h) {
+					double factor=scr_w/px_w;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-top_margin);
+				} else {
+					double factor=scr_h/px_h;
+					c_base.scale(factor,factor);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-top_margin);
+				}
+				c_base.paint();
+				c_base.restore();
+				
+			}
+		}
+
+		scale=w/2800.0;
+
+		this.margin_around=this.scr_h/20;
+		this.mh=0.0;
 		// Browser border
 		this.browser_x=scr_w*0.1;
-		this.browser_y=this.mh+this.nixie_h/6;
-		this.browser_margin=this.scr_h/8;
-		this.browser_w=scr_w*4/5;
-		this.browser_h=this.scr_h-this.browser_y-this.browser_margin-this.nixie_h/6;
-		
+		this.browser_y=this.mh+this.margin_around;
+		this.browser_margin=this.scr_h/8.0;
+		this.browser_w=scr_w*4.0/5.0;
+		this.browser_h=this.scr_h-this.browser_y-this.browser_margin-this.margin_around;
+		double scale2=(w-60.0-100.0*scale)/2175.0;
 		c_base.save();
 		c_base.scale(scale2,scale2);
-		this.icon_scale=scale2;
-		double button_border = (mh/scale2-150.0)/2;
-		
-		// Restore button
-		this.icon_x_restore=(this.mx-this.mh)/scale2+button_border;
-		this.icon_y_restore=this.my/scale2+button_border;
-		this.restore_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"restore.png"));
-		c_base.set_source_surface(restore_pic,this.icon_x_restore,this.icon_y_restore);
-		c_base.paint();
-		// Exit button
-		this.icon_x_exit=(this.mx+this.mw)/scale2+button_border;
-		this.icon_y_exit=this.my/scale2+button_border;
-		this.exit_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"exit.png"));
-		c_base.set_source_surface(exit_pic,this.icon_x_exit,this.icon_y_exit);
-		c_base.paint();
 		
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
-		this.arrows_y=this.browser_y;
-		this.arrows_w=256*scale2;
-		this.arrows_h=150*scale2;
+		this.arrows_y=this.browser_y/2.0;
+		this.arrows_w=256.0*scale2;
+		this.arrows_h=150.0*scale2;
 		c_base.set_source_surface(arrows_pic,this.arrows_x/scale2,this.arrows_y/scale2);
-		c_base.paint();
-		c_base.restore();
-
-		// Exit button coords
-		this.exit_w=this.mh;
-		this.exit_h=this.mh;
-		this.exit_x=this.mx+this.mw;
-		this.exit_y=this.my;
-		this.paint_border (c_base,this.exit_x,this.exit_y,this.exit_w,this.exit_h,-1.5,true);
-
-		// Restore button coords
-		this.restore_w=this.mh;
-		this.restore_h=this.mh;
-		this.restore_x=this.mx-this.mh;
-		this.restore_y=this.my;
-		this.paint_border (c_base,this.restore_x,this.restore_y,this.restore_w,this.restore_h,-1.5,true);
-			
-		// Nixies border
-		double mx2=(this.scr_w-width)/2.0;
-		double my2=this.my+(double)(this.nixie_h/6);
-		double mh2=(double)(this.nixie_h);
-		
-		this.paint_border (c_base,mx2,my2,width,mh2,1.5,false);
-
-		// Nixies screws
-		c_base.save();
-		c_base.scale(scale,scale);
-		c_base.set_source_surface(screw2,(((this.scr_w-width)/2.0))/scale-65,this.my/scale+90.0);
-		c_base.paint();
-		c_base.set_source_surface(screw1,(((this.scr_w+width)/2.0))/scale+15,this.my/scale+90.0);
 		c_base.paint();
 		c_base.restore();
 
 		// timeline
 		this.scale_x=this.restore_x;
 		this.scale_y=this.browser_y;
-		this.scale_w=this.scr_w/28;
+		this.scale_w=this.scr_w/28.0;
 		this.scale_h=this.browser_h+this.browser_margin;
 				
 		this.last_time=this.backups[this.backups.size-1];
@@ -423,11 +542,16 @@ class restore_iface : GLib.Object {
 		double pos_y=this.scale_y+this.scale_h;
 		double new_y;
 		
+		this.incval = this.scale_w/5.0;
+		double nw = this.scale_w*3.0/5.0;
+		this.scale_x+=this.incval/2.0;
+		
+		c_base.set_source_rgba(0,0,0,0.6);
+		this.rounded_rectangle(c_base,this.scale_x,this.scale_y-incval,this.scale_w,this.scale_h+2.0*incval,2.0*incval);
+		c_base.fill();
+		
 		c_base.set_source_rgb(1,1,1);
 		c_base.set_line_width(1);
-		
-		double incval = this.scale_w/5;
-		double nw = this.scale_w*3/5;
 
 		for(var i=0;i<this.backups.size;i++) {
 			new_y = pos_y-this.scale_factor*(this.backups[i]-this.last_time);
@@ -440,31 +564,25 @@ class restore_iface : GLib.Object {
 			c_base.stroke();
 		}
 		
+		this.browser.width_request=(int)this.browser_w;
+		this.browser.height_request=(int)this.browser_h;
+		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
 	}
 
-	private void paint_border(Cairo.Context ctx, double mx, double my, double mw, double mh, double margin,bool reversed) {
+	public void rounded_rectangle(Cairo.Context context, double x, double y, double w, double h, double r) {
 
-		if (reversed) {
-			ctx.set_source_rgba(0,0,0,0.3);
-		} else {
-			ctx.set_source_rgba(1,1,1,0.3);
-		}
-		ctx.set_line_width(3.0);
-		ctx.move_to(mx-margin,my-margin);
-		ctx.rel_line_to(mw+2*margin,0);
-		ctx.rel_line_to(0,mh+2*margin);
-		ctx.stroke();
-		if (reversed) {
-			ctx.set_source_rgba(1,1,1,0.3);
-		} else {
-			ctx.set_source_rgba(0,0,0,0.3);
-		}
-		ctx.move_to(mx-margin,my-margin);
-		ctx.rel_line_to(0,mh+2*margin);
-		ctx.rel_line_to(mw+2*margin,0);
-		ctx.stroke();
+		context.move_to(x+r,y);
+		context.line_to(x+w-r,y);
+		context.curve_to(x+w,y,x+w,y,x+w,y+r);
+		context.line_to(x+w,y+h-r);
+		context.curve_to(x+w,y+h,x+w,y+h,x+w-r,y+h);
+		context.line_to(x+r,y+h);
+		context.curve_to(x,y+h,x,y+h,x,y+h-r);
+		context.line_to(x,y+r);
+		context.curve_to(x,y,x,y,x+r,y);
 	}
-	
+
+
 	private void paint_window() {
 		
 		double width;
@@ -477,7 +595,7 @@ class restore_iface : GLib.Object {
 		
 		var sf = this.print_nixies(this.current_instant,out width);
 		double mx2=(this.scr_w-width)/2.0;
-		double my2=this.my+(double)(this.nixie_h/6);
+		double my2=this.my+(double)(this.margin_around);
 		ctx.set_source_surface(sf,mx2,my2);
 		ctx.paint();
 		this.scale_desired_value = this.scale_y+this.scale_h-this.scale_factor * (this.current_instant-this.last_time);
@@ -487,12 +605,10 @@ class restore_iface : GLib.Object {
 	}
 
 	private bool repaint_draw(EventExpose ev) {
-
-		
 		this.repaint_draw2();
 		return true;
-
 	}
+
 	private void repaint_draw2() {
 
 		var ctx = new Cairo.Context(this.animation_surface);
@@ -501,6 +617,8 @@ class restore_iface : GLib.Object {
 	}
 	
 	private bool repaint_draw3(Context ctx) {
+		
+		this.create_cairo_layouts();
 		
 		// Paint the base image
 		ctx.set_source_surface(this.final_surface,0,0);
@@ -552,7 +670,9 @@ class restore_iface : GLib.Object {
 			double final_add=4.0*s_factor;
 
 			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
-			ctx.fill();
+			if (this.doshow) {
+				ctx.fill();
+			}
 			ctx.set_source_rgb(0.0, 0.0, 0.0);
 			ctx.rectangle(ox,oy-2*final_add-extents.height,ow,oh+2*final_add+extents.height);
 			ctx.stroke();
@@ -560,28 +680,6 @@ class restore_iface : GLib.Object {
 
 			ctx.show_text(date);
 
-		}
-
-		// paint buttons
-
-		if (this.icon_restore_scale!=0.0) {
-			ctx.save();
-			ctx.scale(this.icon_restore_scale,this.icon_restore_scale);
-			var factor=(this.icon_restore_scale/this.icon_scale-1);
-			var dif_factor=this.restore_pic.get_width()*factor/(this.icon_restore_scale*3);
-			ctx.set_source_surface(this.restore_pic,this.icon_x_restore*this.icon_scale/this.icon_restore_scale-dif_factor,this.icon_y_restore*this.icon_scale/this.icon_restore_scale-dif_factor);
-			ctx.paint_with_alpha(2.0-(this.icon_restore_scale/this.icon_scale));
-			ctx.restore();
-		}
-
-		if (this.icon_exit_scale!=0.0) {
-			ctx.save();
-			ctx.scale(this.icon_exit_scale,this.icon_exit_scale);
-			var factor=(this.icon_exit_scale/this.icon_scale-1);
-			var dif_factor=this.exit_pic.get_width()*factor/(this.icon_exit_scale*3);
-			ctx.set_source_surface(this.exit_pic,this.icon_x_exit*this.icon_scale/this.icon_exit_scale-dif_factor,this.icon_y_exit*this.icon_scale/this.icon_exit_scale-dif_factor);
-			ctx.paint_with_alpha(2.0-(this.icon_exit_scale/this.icon_scale));
-			ctx.restore();
 		}
 		
 		var ctx2 = Gdk.cairo_create(this.drawing.get_window());
@@ -601,121 +699,44 @@ class restore_iface : GLib.Object {
 		oy+=this.browser_y;
 		s_factor=eyedist/(z+eyedist);
 	}
-	
-	private int get_nixie_pos(char v) {
-		
-		if ((v>='0')&&(v<='9')) {
-			return (v-'0');
-		}
-		if (v==':') {
-			return (10);
-		}
-		if (v=='/') {
-			return (11);
-		}
-		if (v==' ') {
-			return (12);
-		}
-		return 0;
-	}
-
-	private void print_mesh(Cairo.Context ctx,double ox, double ow, double oh) {
-		
-		var rnd = new Rand.with_seed((int)ox);
-		var dx = rnd.next_double();
-		var dy = rnd.next_double();
-		
-		double v1=5.0;
-		double v2=v1/2.0;
-		double v31=v1/2;
-		double v32=v1*0.866;
-		double v4=2*v1+2*v31;
-		double v5=2*v32;
-
-		dx*=v1;
-		dy*=v2;
-		
-		ctx.set_source_rgb(0,0,0);
-		ctx.set_line_width(0.25);
-		for(double x=-dx;x<ow;x+=v4) {
-			for (double y=-dy;y<oh;y+=v5) {
-				ctx.move_to(x+ox,y);
-				ctx.rel_line_to(v1,0);
-				ctx.rel_line_to(v31,v32);
-				ctx.rel_line_to(v1,0);
-				ctx.rel_line_to(v31,-v32);
-				ctx.rel_line_to(-v31,-v32);
-				ctx.move_to(x+ox+v1,y);
-				ctx.rel_line_to(v31,-v32);
-				ctx.stroke();
-			}
-		}	
-	}
 
 	private Cairo.ImageSurface print_nixies(time_t backup_date, out double width) {
 
 		var ctime = GLib.Time.local(backup_date);
+		var ctime_now = GLib.Time.local(time_t());
+		var ctime_yesterday = GLib.Time.local(time_t()-86400);
+
 		string date;
-		if (this.date_format) {
-			date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.day,ctime.month+1,1900+ctime.year);
+		if ((ctime_now.day==ctime.day)&&(ctime_now.month==ctime.month)&&(ctime_now.year==ctime.year)) {
+			/// This string is used to show the date of a backup when it is in today;
+			/// %H gets replaced by the hour, and %M by the minute of the backup
+			/// Singular and plurar forms are chosen based on the hour's value (%H)
+			date=ctime.format(ngettext("Today, at %H:%M","Today, at %H:%M",ctime.hour));
+		} else if ((ctime_yesterday.day==ctime.day)&&(ctime_yesterday.month==ctime.month)&&(ctime_yesterday.year==ctime.year)) {
+			/// This string is used to show the date of a backup when it is in yesterday;
+			/// %H gets replaced by the hour, and %M by the minute of the backup
+			/// Singular and plurar forms are chosen based on the hour's value (%H)
+			date=ctime.format(ngettext("Yesterday, at %H:%M","Yesterday, at %H:%M",ctime.hour));
 		} else {
-			date="%02d:%02d %02d/%02d/%04d".printf(ctime.hour,ctime.minute,ctime.month+1,ctime.day,1900+ctime.year);
-		}
-		
-		bool repaint_grid;
-		double size=0;
-		double pos=0;
-
-		for (int c=0;c<date.length;c++) {
-			size+=this.nixies_w[this.get_nixie_pos(date[c])];
-		}
-		
-		width=size;
-		
-		var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,(int)size,this.nixie_h);
-		var ctx = new Cairo.Context(surface);
-		if ((this.grid_w!=((int)size))||(this.grid_h!=this.nixie_h)) {
-			this.grid = new Cairo.ImageSurface(Cairo.Format.ARGB32,(int)size,this.nixie_h);
-			repaint_grid=true;
-			this.grid_w = (int)size;
-			this.grid_h = this.nixie_h;
-		} else {
-			repaint_grid=false;
-		}
-
-		var ctx2 = new Cairo.Context(this.grid);
-		
-		int element;
-		ctx.set_line_width(0.0);
-		for (int c=0;c<date.length;c++) {
-			element=this.get_nixie_pos(date[c]);
-			ctx.reset_clip();
-			ctx.move_to(pos,0.0);
-			ctx.rel_line_to(this.nixies_w[element],0.0);
-			ctx.rel_line_to(0,this.nixie_h);
-			ctx.rel_line_to(-this.nixies_w[element],0.0);
-			ctx.rel_line_to(0,-this.nixie_h);
-			ctx.clip();
-			ctx.new_path();
-			ctx.set_source_surface(this.nixies[element],pos,0.0);
-			ctx.paint();
-			if (repaint_grid) {
-				ctx2.reset_clip();
-				ctx2.move_to(pos,0.0);
-				ctx2.rel_line_to(this.nixies_w[element],0.0);
-				ctx2.rel_line_to(0,this.nixie_h);
-				ctx2.rel_line_to(-this.nixies_w[element],0.0);
-				ctx2.rel_line_to(0,-this.nixie_h);
-				ctx2.clip();
-				ctx2.new_path();
-				this.print_mesh(ctx2,pos,this.nixies_w[element],this.nixie_h);
+			if (this.date_format) {
+				/// This string is used to show the date of a backup in european format (day/month/year);
+				/// %A gets replaced by the day's name; %d by the day (in number);
+				/// %B by the month (in letters); %Y by the year in four-digits format
+				/// %H gets replaced by the hour, and %M by the minute of the backup
+				/// Singular and plurar forms are chosen based on the hour's value (%H)
+				date=ctime.format(ngettext("%A, %d %B %Y at %H:%M","%A, %d %B %Y at %H:%M",ctime.hour));
+			} else {
+				/// This string is used to show the date of a backup in USA format (month/day/year);
+				/// %A gets replaced by the day's name; %B by the month (in letters);
+				/// %d by the day (in number); %Y by the year in four-digits format
+				/// %H gets replaced by the hour, and %M by the minute of the backup
+				/// Singular and plurar forms are chosen based on the hour's value (%H)
+				date=ctime.format(ngettext("%A, %B %d %Y at %H:%M","%A, %B %d %Y at %H:%M",ctime.hour));
 			}
-			pos+=this.nixies_w[element];
 		}
-		ctx.reset_clip();
-		ctx.set_source_surface(this.grid,0.0,0.0);
-		ctx.paint();
-		return surface;
+		this.current_date.set_markup("<span size=\"xx-large\">"+date+"</span>");
+		width=0;
+		return null;
 	}
 
 	private bool on_click(Gdk.EventButton event) {
@@ -724,21 +745,11 @@ class restore_iface : GLib.Object {
 			return false;
 		}
 
-		if ((event.x_root>=this.exit_x)&&(event.x_root<(this.exit_x+this.exit_w))&&(event.y_root>=this.exit_y)&&(event.y_root<(this.exit_y+this.exit_h))) {
-			this.exit_restore ();
-			return true;
-		}
-
-		if ((event.x_root>=this.restore_x)&&(event.x_root<(this.restore_x+this.restore_w))&&(event.y_root>=this.restore_y)&&(event.y_root<(this.restore_y+this.restore_h))) {
-			this.do_restore();
-			return true;
-		}
-
-		if ((event.x_root>=this.arrows_x)&&(event.x_root<(this.arrows_x+(this.arrows_w/2)))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
+		if ((event.x_root>=this.arrows_x)&&(event.x_root<(this.arrows_x+(this.arrows_w/2)))&&(event.y_root>=this.arrows_y+this.topmargin)&&(event.y_root<(this.arrows_y+this.arrows_h+this.topmargin))) {
 			this.move_timeline(false);
 			return true;
 		}
-		if ((event.x_root>=(this.arrows_x+(this.arrows_w/2)))&&(event.x_root<(this.arrows_x+this.arrows_w))&&(event.y_root>=this.arrows_y)&&(event.y_root<(this.arrows_y+this.arrows_h))) {
+		if ((event.x_root>=(this.arrows_x+(this.arrows_w/2)))&&(event.x_root<(this.arrows_x+this.arrows_w))&&(event.y_root>=this.arrows_y+this.topmargin)&&(event.y_root<(this.arrows_y+this.arrows_h+this.topmargin))) {
 			this.move_timeline(true);
 			return true;
 		}
@@ -748,7 +759,7 @@ class restore_iface : GLib.Object {
 
 	private bool on_scroll(Gdk.EventScroll event) {
 
-		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)(this.browser_y+this.browser_margin)))&&(event.y_root<((int)(this.browser_y+this.browser_margin+this.browser_h)))) {
+		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)(this.browser_y+this.browser_margin+this.topmargin)))&&(event.y_root<((int)(this.browser_y+this.browser_margin+this.browser_h+this.topmargin)))) {
 			return false;
 		}
 		
@@ -816,7 +827,11 @@ class restore_iface : GLib.Object {
 	private void browser_visible(bool visible) {
 		
 		if(visible) {
-			this.browser.show();
+			if (this.doshow) {
+				this.browser.show();	
+			} else {
+				this.browser.hide();
+			}
 		} else {
 			this.browser.hide();
 		}
@@ -878,30 +893,6 @@ class restore_iface : GLib.Object {
 			}
 		}
 
-		if (this.icon_restore_scale!=0.0) {
-			do_repaint=true;
-			var final_value = this.icon_scale*2;
-			double diff=((final_value-this.icon_restore_scale)/4);
-			if (this.icon_restore_scale>=final_value*0.95) {
-				this.icon_restore_scale=0.0;
-			} else {
-				this.icon_restore_scale+=diff;
-				end_animation=false;
-			}
-		}	
-
-		if (this.icon_exit_scale!=0.0) {
-			do_repaint=true;
-			var final_value = this.icon_scale*2;
-			double diff=((final_value-this.icon_exit_scale)/4);
-			if (this.icon_exit_scale>=final_value*0.95) {
-				this.icon_exit_scale=0.0;
-			} else {
-				this.icon_exit_scale+=diff;
-				end_animation=false;
-			}
-		}	
-		
 		if (do_repaint) {
 			this.repaint_draw2();
 		}
@@ -943,7 +934,6 @@ class restore_iface : GLib.Object {
 
 	private void exit_restore() {
 
-		this.icon_exit_scale=this.icon_scale;
 		this.launch_animation ();
 		
 		this.desired_alpha=0.0;
@@ -1082,7 +1072,6 @@ class restore_iface : GLib.Object {
 	
 	private void do_restore() {
 
-		this.icon_restore_scale=this.icon_scale;
 		this.launch_animation ();
 		
 		this.ignore_restoring_all=false;

@@ -33,7 +33,6 @@ IF(NOT (DEFINED ICON_UPDATE))
 ENDIF()
 
 IF( NOT (${ICON_UPDATE}  STREQUAL "OFF" ))
-
 	if(USE_GTK2)
 		install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor )" )
 	else()

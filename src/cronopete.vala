@@ -500,7 +500,7 @@ class cp_callback : GLib.Object, callbacks {
 			if ((list==null)||(list.size<=0)) {
 				return;
 			}			
-			this.restore_w=new restore_iface(this.backend,this.basepath);
+			this.restore_w=new restore_iface(this.backend,this.basepath,this.cronopete_settings);
 		}
 	}
 	

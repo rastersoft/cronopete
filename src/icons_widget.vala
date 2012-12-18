@@ -55,8 +55,6 @@ namespace FilelistIcons {
 		private Gee.List<bookmark_str ?> bookmarks;
 		private Gtk.TreeView bookmark_view;
 		private ListStore bookmark_model;
-		private Gtk.Button btn_prev;
-		private Gtk.Button btn_next;
 
 		private e_sort_by sort_by;
 		private bool reverse_sort;

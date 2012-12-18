@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the Cronopete package.
 # Sergio Costas <raster@rastersoft.com>, 2011, 2012.
 # Miguel Anxo Bouzada <mbouzada@gmail.com>, 2011, 2012.
+# raster <raster@rastersoft.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-03 00:25+0100\n"
-"PO-Revision-Date: 2012-11-02 10:14+0200\n"
-"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
-"Language-Team: Proxecto Trasno proxecto@trasno.net\n"
+"POT-Creation-Date: 2012-12-16 00:41+0100\n"
+"PO-Revision-Date: 2012-12-16 00:13+0100\n"
+"Last-Translator: raster <raster@rastersoft.com>\n"
+"Language-Team: Español; Castellano <>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Virtaal 0.7.0\n"
 "X-Poedit-Language: Galician\n"
 
@@ -128,7 +129,7 @@ msgstr ""
 "Para elo, prema o botón <i>Formatar o disco</i>. <b>Perderanse todos os "
 "datos contidos no disco</b>."
 
-#: ../src/choose.vala:452
+#: ../src/choose.vala:456
 msgid "Unknown FS"
 msgstr "Sistema de ficheiros descoñecido"
 
@@ -151,68 +152,112 @@ msgstr "O almacenamento non está dispoñíbel "
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../src/cronopete.vala:412
+#: ../src/cronopete.vala:415
 msgid "Back Up Now"
 msgstr "Copiar agora"
 
-#: ../src/cronopete.vala:415
+#: ../src/cronopete.vala:418
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: ../src/cronopete.vala:419
+#: ../src/cronopete.vala:422 ../src/restore.vala:185
 msgid "Restore files"
 msgstr "Restaurar ficheiros"
 
-#: ../src/cronopete.vala:427
+#: ../src/cronopete.vala:430
 msgid "Configure backup policies"
 msgstr "Configurar a copia de seguranza"
 
-#: ../src/cronopete.vala:515
+#: ../src/cronopete.vala:518
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../src/cronopete.vala:534
+#: ../src/cronopete.vala:537
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../src/cronopete.vala:539
+#: ../src/cronopete.vala:542
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../src/cronopete.vala:544
+#: ../src/cronopete.vala:547
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../src/cronopete.vala:563
+#: ../src/cronopete.vala:566
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../src/cronopete.vala:578
+#: ../src/cronopete.vala:581
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../src/cronopete.vala:590
+#: ../src/cronopete.vala:593
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../src/cronopete.vala:594
+#: ../src/cronopete.vala:597
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../src/cronopete.vala:598
+#: ../src/cronopete.vala:601
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../src/cronopete.vala:712
+#: ../src/cronopete.vala:715
 #, c-format
 msgid "Invalid parameter in config file %s (line %d)\n"
 msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
 
-#: ../src/restore.vala:1041
+#: ../src/restore.vala:189
+msgid "Exit"
+msgstr ""
+
+#. / This string is used to show the date of a backup when it is in today;
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:483
+msgid "Today, at %H:%M"
+msgid_plural "Today, at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#. / This string is used to show the date of a backup when it is in yesterday;
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:488
+msgid "Yesterday, at %H:%M"
+msgid_plural "Yesterday, at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#. / This string is used to show the date of a backup in european format (day/month/year);
+#. / %A gets replaced by the day's name; %d by the day (in number);
+#. / %B by the month (in letters); %Y by the year in four-digits format
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:496
+msgid "%A, %d %B %Y at %H:%M"
+msgid_plural "%A, %d %B %Y at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#. / This string is used to show the date of a backup in USA format (month/day/year);
+#. / %A gets replaced by the day's name; %B by the month (in letters);
+#. / %d by the day (in number); %Y by the year in four-digits format
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:503
+msgid "%A, %B %d %Y at %H:%M"
+msgid_plural "%A, %B %d %Y at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/restore.vala:785
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -223,7 +268,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:1053
+#: ../src/restore.vala:797
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -238,7 +283,7 @@ msgstr ""
 "\n"
 "Non hai espazo baleiro abondo"
 
-#: ../src/restore.vala:1055
+#: ../src/restore.vala:799
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -249,51 +294,51 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:1121
+#: ../src/restore.vala:864
 msgid "Preparing folders to restore"
 msgstr "Preparando os cartafoles para restaurar"
 
-#: ../src/icons_widget.vala:176
+#: ../src/icons_widget.vala:169
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/icons_widget.vala:179
+#: ../src/icons_widget.vala:172
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../src/icons_widget.vala:180
+#: ../src/icons_widget.vala:173
 msgid "Modification date"
 msgstr "Data de modificación"
 
-#: ../src/icons_widget.vala:398
+#: ../src/icons_widget.vala:390
 msgid "Show hiden files"
 msgstr "Amosar os ficheiros agochados"
 
-#: ../src/icons_widget.vala:406
+#: ../src/icons_widget.vala:398
 msgid "Reverse order"
 msgstr "Inverter a orde"
 
-#: ../src/icons_widget.vala:414
+#: ../src/icons_widget.vala:406
 msgid "Sort by name"
 msgstr "Ordenar por nome"
 
-#: ../src/icons_widget.vala:418
+#: ../src/icons_widget.vala:410
 msgid "Sort by type"
 msgstr "Ordenar por tipo"
 
-#: ../src/icons_widget.vala:422
+#: ../src/icons_widget.vala:414
 msgid "Sort by size"
 msgstr "Ordenar por tamaño"
 
-#: ../src/icons_widget.vala:426
+#: ../src/icons_widget.vala:418
 msgid "Sort by date"
 msgstr "Ordenar por data"
 
-#: ../src/icons_widget.vala:448
+#: ../src/icons_widget.vala:440
 msgid "View as icons"
 msgstr "Ver como iconas"
 
-#: ../src/icons_widget.vala:452
+#: ../src/icons_widget.vala:444
 msgid "View as list"
 msgstr "Ver como lista"
 
