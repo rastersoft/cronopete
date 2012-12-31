@@ -186,9 +186,13 @@ class restore_iface : GLib.Object {
 #if USE_GTK2
 		var main_box=new Gtk.VBox(false,0);
 		var button_box=new Gtk.HBox(false,0);
+		var container1=new Gtk.HBox(false,0);
+		var container2=new Gtk.HBox(false,0);
 #else
 		var main_box=new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		var button_box=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		var container1=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		var container2=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 #endif
 		
 		
@@ -196,16 +200,29 @@ class restore_iface : GLib.Object {
 		this.current_date.use_markup=true;
 		
 		var pic1=new Gtk.Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DND);
+		var label1=new Label("<span size=\"xx-large\">"+_("Restore files")+"</span>");
+		label1.use_markup=true;
+		container1.pack_start(pic1,false,false,0);
+		container1.pack_start(label1,false,false,0);
+		container1.halign=Gtk.Align.CENTER;
 		var restore_button=new Gtk.Button();
-		restore_button.set_image(pic1);
-		restore_button.tooltip_text=_("Restore files");
+		restore_button.add(container1);
+		
 		var pic2=new Gtk.Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DND);
+		var label2=new Label("<span size=\"xx-large\">"+_("Exit")+"</span>");
+		label2.use_markup=true;
+		container2.pack_start(pic2,false,false,0);
+		container2.pack_start(label2,false,false,0);
+		container2.halign=Gtk.Align.CENTER;
 		var quit_button=new Gtk.Button();
-		quit_button.set_image(pic2);
-		quit_button.tooltip_text=_("Exit");
+		quit_button.add(container2);
 		
 		restore_button.clicked.connect(this.do_restore);
 		quit_button.clicked.connect(this.exit_restore);
+		
+		var sizegroup=new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		sizegroup.add_widget(restore_button);
+		sizegroup.add_widget(quit_button);
 		
 		button_box.pack_start(restore_button,false,false,0);
 		button_box.pack_start(this.current_date,true,true,0);
