@@ -199,7 +199,7 @@ class restore_iface : GLib.Object {
 		this.current_date=new Label("<span size=\"xx-large\"> </span>");
 		this.current_date.use_markup=true;
 		
-		var pic1=new Gtk.Image.from_stock(Gtk.STOCK_REVERT_TO_SAVED,Gtk.IconSize.DND);
+		var pic1=new Gtk.Image.from_stock(Gtk.Stock.REVERT_TO_SAVED,Gtk.IconSize.DND);
 		var label1=new Label("<span size=\"xx-large\">"+_("Restore files")+"</span>");
 		label1.use_markup=true;
 		container1.pack_start(pic1,false,false,0);
@@ -208,7 +208,7 @@ class restore_iface : GLib.Object {
 		var restore_button=new Gtk.Button();
 		restore_button.add(container1);
 		
-		var pic2=new Gtk.Image.from_stock(Gtk.STOCK_QUIT,Gtk.IconSize.DND);
+		var pic2=new Gtk.Image.from_stock(Gtk.Stock.QUIT,Gtk.IconSize.DND);
 		var label2=new Label("<span size=\"xx-large\">"+_("Exit")+"</span>");
 		label2.use_markup=true;
 		container2.pack_start(pic2,false,false,0);
@@ -602,19 +602,13 @@ class restore_iface : GLib.Object {
 
 	private void paint_window() {
 		
-		double width;
-
 		this.current_instant=this.backups[this.pos];
 		
 		var ctx = new Cairo.Context(this.final_surface);
 		ctx.set_source_surface(this.base_surface,0,0);
 		ctx.paint();
 		
-		var sf = this.print_nixies(this.current_instant,out width);
-		double mx2=(this.scr_w-width)/2.0;
-		double my2=this.my+(double)(this.margin_around);
-		ctx.set_source_surface(sf,mx2,my2);
-		ctx.paint();
+		this.print_nixies(this.current_instant);
 		this.scale_desired_value = this.scale_y+this.scale_h-this.scale_factor * (this.current_instant-this.last_time);
 		if (this.scale_current_value==-1) {
 			this.scale_current_value=this.scale_desired_value;
@@ -717,7 +711,7 @@ class restore_iface : GLib.Object {
 		s_factor=eyedist/(z+eyedist);
 	}
 
-	private Cairo.ImageSurface print_nixies(time_t backup_date, out double width) {
+	private void print_nixies(time_t backup_date) {
 
 		var ctime = GLib.Time.local(backup_date);
 		var ctime_now = GLib.Time.local(time_t());
@@ -752,8 +746,6 @@ class restore_iface : GLib.Object {
 			}
 		}
 		this.current_date.set_markup("<span size=\"xx-large\">"+date+"</span>");
-		width=0;
-		return null;
 	}
 
 	private bool on_click(Gdk.EventButton event) {
