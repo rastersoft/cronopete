@@ -454,7 +454,7 @@ class restore_iface : GLib.Object {
 		}
 		
 		if (bgpic!=null) {
-			if (bgformat=="wallpaper") { // repeat it
+			if (bgformat=="wallpaper") { // repeat it several times
 				double l1;
 				double l2;
 				double s1=0.0;
@@ -485,21 +485,22 @@ class restore_iface : GLib.Object {
 				double new_w=px_w*(this.screen_h/px_h);
 				double new_h=px_h*(this.screen_w/px_w);
 				if (new_w>this.screen_w) { // width is the limiting factor
-					double factor=scr_w/px_w;
+					double factor=screen_w/px_w;
 					c_base.scale(factor,factor);
-					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-top_margin);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-(top_margin/factor));
 				} else { // height is the limiting factor
-					double factor=scr_h/px_h;
+					double factor=screen_h/px_h;
 					c_base.scale(factor,factor);
-					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-top_margin);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-(top_margin/factor));
 				}
 				c_base.paint();
 				c_base.restore();
 				
 			} else if (bgformat=="stretched") {
 				c_base.save();
-				c_base.scale(scr_w/px_w,scr_h/px_h);
-				Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,-top_margin);
+				double factor=screen_h/px_h;
+				c_base.scale(screen_w/px_w,factor);
+				Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,-(top_margin/factor));
 				c_base.paint();
 				c_base.restore();
 				
@@ -508,13 +509,13 @@ class restore_iface : GLib.Object {
 				double new_w=px_w*(this.screen_h/px_h);
 				double new_h=px_h*(this.screen_w/px_w);
 				if (new_h>this.screen_h) {
-					double factor=scr_w/px_w;
+					double factor=screen_w/px_w;
 					c_base.scale(factor,factor);
-					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-top_margin);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,(this.screen_h-new_h)/(2.0*factor)-(top_margin/factor));
 				} else {
-					double factor=scr_h/px_h;
+					double factor=screen_h/px_h;
 					c_base.scale(factor,factor);
-					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-top_margin);
+					Gdk.cairo_set_source_pixbuf(c_base,bgpic,(this.screen_w-new_w)/(2.0*factor),-(top_margin/factor));
 				}
 				c_base.paint();
 				c_base.restore();
