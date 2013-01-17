@@ -94,8 +94,8 @@ namespace FilelistIcons {
 
 			this.paned = new HPaned();
 			var container2 = new Gtk.HBox(false,0);
-			var scroll2= new ScrolledWindow(null,null);
-			scroll2.hscrollbar_policy=PolicyType.NEVER;
+			var scroll3= new ScrolledWindow(null,null);
+			scroll3.hscrollbar_policy=PolicyType.NEVER;
 			this.bookmark_model=new ListStore(3,typeof(GLib.Icon),typeof(string),typeof(string));
 			this.bookmark_view=new Gtk.TreeView.with_model(this.bookmark_model);
 			var crpb = new CellRendererPixbuf();
@@ -107,9 +107,9 @@ namespace FilelistIcons {
 			this.read_bookmarks();
 			this.bookmark_view.cursor_changed.connect(this.bookmark_selected);
 
-			scroll2.add(this.bookmark_view);
-			scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
-			this.paned.add1(scroll2);
+			scroll3.add(this.bookmark_view);
+			scroll3.vscrollbar_policy=PolicyType.AUTOMATIC;
+			this.paned.add1(scroll3);
 			this.paned.add2(container2);
 			
 			this.scroll = new ScrolledWindow(null,null);
