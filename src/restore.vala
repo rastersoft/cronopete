@@ -423,8 +423,6 @@ class restore_iface : GLib.Object {
 			unowned uint8 *data;
 			data = bgpic.pixels;
 			
-			var rnd=new GLib.Rand();
-			
 			var has_alpha = bgpic.has_alpha;
 			
 			for(y=0;y<bgpic.height;y++) {
