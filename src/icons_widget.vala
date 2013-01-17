@@ -880,7 +880,7 @@ namespace FilelistIcons {
 							pbuf2= this.path_view.render_icon(Stock.FILE,IconSize.SMALL_TOOLBAR,"");
 						}
 					}
-					element_cache=new icon_cache_st();
+					element_cache=icon_cache_st();
 					element_cache.big=pbuf;
 					element_cache.small=pbuf2;
 					this.icon_cache.set(icon_hash,element_cache);
