@@ -411,7 +411,9 @@ class restore_iface : GLib.Object {
 		double px_h=this.screen_h;
 		try {
 			if ((bgstr.length>6)&&(bgstr.substring(0,7)=="file://")) {
-				bgstr=bgstr.substring(7);
+				var tmpfile = GLib.File.new_for_uri(bgstr);
+				bgstr=tmpfile.get_path();
+				GLib.stdout.printf("Loading %s\n",bgstr);
 			}
 			bgpic = new Gdk.Pixbuf.from_file(bgstr);
 			px_w=(double)bgpic.width;
