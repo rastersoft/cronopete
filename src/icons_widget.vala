@@ -69,11 +69,11 @@ namespace FilelistIcons {
 
 		public signal void changed_path_list();
 
-		private Gee.Map<string, icon_cache_st ?>icon_cache;
+		private Gee.Map<uint, icon_cache_st ?>icon_cache;
 
 		public IconBrowser(backends p_backend,string p_current_path) {
 
-			this.icon_cache=new Gee.TreeMap<string, icon_cache_st ?>();
+			this.icon_cache=new Gee.TreeMap<uint, icon_cache_st ?>();
 
 			this.backend=p_backend;
 			this.current_path=p_current_path;
@@ -90,19 +90,6 @@ namespace FilelistIcons {
 
 			this.buttons_path=new HBox(false,0);
 
-/*			var buttons_container = new ButtonBox(Orientation.HORIZONTAL);
-			buttons_container.layout_style=ButtonBoxStyle.START;
-			this.btn_prev=new Button();
-			var pic1 = new Gtk.Image.from_icon_name("back",IconSize.SMALL_TOOLBAR);
-			this.btn_prev.add(pic1);
-			this.btn_next=new Button();
-			var pic2 = new Gtk.Image.from_icon_name("forward",IconSize.SMALL_TOOLBAR);
-			this.btn_next.add(pic2);
-			this.btn_prev.clicked.connect(this.path_prev);
-			this.btn_next.clicked.connect(this.path_next);
-			buttons_container.pack_start(this.btn_prev,false,false,0);
-			buttons_container.pack_start(this.buttons_path,false,false,0);
-			buttons_container.pack_start(this.btn_next,false,false,0);*/
 			this.main_container.pack_start(buttons_path,false,false,0);
 
 			this.paned = new HPaned();
@@ -626,36 +613,6 @@ namespace FilelistIcons {
 			this.buttons_path.show_all();
 			btn.has_focus=true;
 
-/*
-			Gtk.Requisition req;
-			Gtk.Requisition req2;
-#if USE_GTK2
-			this.buttons_path.size_request(out req);
-			this.size_request(out req2);
-#else
-			this.buttons_path.get_child_requisition(out req);
-			this.get_child_requisition(out req2);		
-#endif
-			if (req.width>=req2.width) {
-				this.btn_prev.show();
-				this.btn_next.show();
-				Gtk.Requisition req3;
-#if USE_GTK2
-				this.btn_prev.size_request(out req3);
-#else
-				this.btn_prev.get_child_requisition(out req3);
-#endif
-				var newwidth = req2.width-2*req3.width-10;
-				if (newwidth>0) {
-					this.buttons_scroll.width_request=newwidth;
-					this.buttons_scroll.hadjustment.upper=req.width-newwidth;
-					this.buttons_scroll.hadjustment.value=req.width-newwidth;
-				}
-			} else {
-				this.buttons_scroll.width_request=req2.width;
-				this.btn_prev.hide();
-				this.btn_next.hide();
-			}*/
 
 			if (send_signal) {
 				this.to_refresh=true;
@@ -665,33 +622,6 @@ namespace FilelistIcons {
 			
 		}
 
-		/*private void path_prev() {
-
-			var v=this.buttons_scroll.hadjustment.value;
-			v-=30;
-			this.buttons_scroll.hadjustment.value=v;
-
-		}
-
-		private void path_next() {
-			var v=this.buttons_scroll.hadjustment.value;
-			v+=30;
-			Gtk.Requisition req;
-			Gtk.Requisition req2;
-#if USE_GTK2
-			this.buttons_path.size_request(out req);
-			this.buttons_scroll.size_request(out req2);
-#else
-			this.buttons_path.get_child_requisition(out req);
-			this.buttons_scroll.get_child_requisition(out req2);
-#endif
-			var max = req.width-req2.width;
-			if (v>max) {
-				v=max;
-			}
-			this.buttons_scroll.hadjustment.value=v;
-		}*/
-		
 		private void set_scroll_top() {
 	
 			this.scroll.hadjustment.value=this.scroll.hadjustment.lower;
@@ -722,7 +652,6 @@ namespace FilelistIcons {
 				}
 			}
 			this.current_path=fpath;
-			//this.refresh_icons();
 			this.to_refresh=true;
 			this.path_model.clear();
 			this.changed_path_list();
@@ -917,14 +846,15 @@ namespace FilelistIcons {
 			Gdk.Pixbuf pbuf=null;
 			Gdk.Pixbuf pbuf2=null;
 			
+			uint icon_hash;
 			foreach (file_info f in files) {
-
 				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
 					continue;
 				}
 
-				if (this.icon_cache.has_key(f.icon.names[0])) {
-					element_cache = this.icon_cache.get(f.icon.names[0]);
+				icon_hash=f.icon.hash();
+				if ((this.icon_cache.has_key(icon_hash))) {
+					element_cache = this.icon_cache.get(icon_hash);
 					pbuf=element_cache.big;
 					pbuf2=element_cache.small;
 				} else {
@@ -950,10 +880,10 @@ namespace FilelistIcons {
 							pbuf2= this.path_view.render_icon(Stock.FILE,IconSize.SMALL_TOOLBAR,"");
 						}
 					}
-					element_cache= icon_cache_st();
+					element_cache=new icon_cache_st();
 					element_cache.big=pbuf;
 					element_cache.small=pbuf2;
-					this.icon_cache.set(f.icon.names[0],element_cache);
+					this.icon_cache.set(icon_hash,element_cache);
 				}
 				
 				this.path_model.append (out iter);
