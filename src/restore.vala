@@ -581,9 +581,9 @@ class restore_iface : GLib.Object {
 			c_base.stroke();
 		}
 		
-		this.browser.width_request=(int)this.browser_w;
-		this.browser.height_request=(int)this.browser_h;
-		this.base_layout.move(this.browser,(int)this.browser_x,(int)(this.browser_y+this.browser_margin));
+		this.browser.width_request=(int)(this.browser_w);
+		this.browser.height_request=(int)(this.browser_h);
+		this.base_layout.move(this.browser,(int)(this.browser_x),(int)(this.browser_y+this.browser_margin));
 	}
 
 	public void rounded_rectangle(Cairo.Context context, double x, double y, double w, double h, double r) {

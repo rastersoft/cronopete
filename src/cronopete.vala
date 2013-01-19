@@ -197,7 +197,7 @@ class cp_callback : GLib.Object, callbacks {
 		if (retval==0) {
 			var builder = new Builder();		
 			builder.add_from_file(GLib.Path.build_filename(this.basepath,"config_exported.ui"));
-		
+
 			this.main_w2 = (Gtk.Window) builder.get_object("window1");
 			var btn = (Button)builder.get_object("button1");
 			btn.clicked.connect(this.destroy_exported);

@@ -141,11 +141,12 @@ namespace FilelistIcons {
 			this.path_view.item_activated.connect(this.activated);
 #if USE_GTK2
 			this.path_view.orientation=Orientation.VERTICAL;
+			this.scroll.add_with_viewport(this.path_view);
 #else
 			this.path_view.item_orientation=Orientation.VERTICAL;
+			this.scroll.add(this.path_view);
 #endif
-			this.scroll.add_with_viewport(this.path_view);
-			
+
 			// View for list
 			this.path_view2=new Gtk.TreeView.with_model(this.path_model);
 			this.path_view2.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
@@ -164,7 +165,11 @@ namespace FilelistIcons {
 			
 			this.path_view2.button_press_event.connect(this.selection_made);
 			this.path_view2.row_activated.connect(this.activated2);
+#if USE_GTK2
 			this.scroll2.add_with_viewport(this.path_view2);
+#else
+			this.scroll2.add(this.path_view2);
+#endif
 			
 			this.background_eb = new EventBox();
 			this.background_eb.add(this.main_container);
