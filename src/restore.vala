@@ -188,11 +188,17 @@ class restore_iface : GLib.Object {
 		var button_box=new Gtk.HBox(false,0);
 		var container1=new Gtk.HBox(false,0);
 		var container2=new Gtk.HBox(false,0);
+
+		// quirk way of centering the text and the icon in Gtk2
+		container1.pack_start(new Gtk.Label(""),true,true,0);
+		container2.pack_start(new Gtk.Label(""),true,true,0);
 #else
 		var main_box=new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		var button_box=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		var container1=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		var container2=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		container1.halign=Gtk.Align.CENTER;
+		container2.halign=Gtk.Align.CENTER;
 #endif
 		
 		
@@ -204,7 +210,6 @@ class restore_iface : GLib.Object {
 		label1.use_markup=true;
 		container1.pack_start(pic1,false,false,0);
 		container1.pack_start(label1,false,false,0);
-		container1.halign=Gtk.Align.CENTER;
 		var restore_button=new Gtk.Button();
 		restore_button.add(container1);
 		
@@ -213,10 +218,15 @@ class restore_iface : GLib.Object {
 		label2.use_markup=true;
 		container2.pack_start(pic2,false,false,0);
 		container2.pack_start(label2,false,false,0);
-		container2.halign=Gtk.Align.CENTER;
 		var quit_button=new Gtk.Button();
 		quit_button.add(container2);
-		
+
+#if USE_GTK2
+		// quirk way of centering the text and the icon in Gtk2
+		container1.pack_start(new Gtk.Label(""),true,true,0);
+		container2.pack_start(new Gtk.Label(""),true,true,0);
+#endif
+
 		restore_button.clicked.connect(this.do_restore);
 		quit_button.clicked.connect(this.exit_restore);
 		
