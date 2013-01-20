@@ -1,9 +1,17 @@
+cronopete (3.8.1-ppa0) precise; urgency=low
+
+  * Fixed compilation under Gtk2
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 20 Jan 2013 12:15:17 +0100
+
 cronopete (3.8.0-ppa0) precise; urgency=low
 
   * Fixed icons and scrolling in the recovery interface
   * Fixed background painting in the recovery interface
   * Added texts in the buttons of the recovery interface
   * Can render background pictures stored in folders with UTF-8 characters
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 20 Jan 2013 12:10:17 +0100
 
 cronopete (3.6.0-0ppa0) precise; urgency=low
 
