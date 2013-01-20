@@ -1,3 +1,10 @@
+cronopete (3.8.0-ppa0) precise; urgency=low
+
+  * Fixed icons and scrolling in the recovery interface
+  * Fixed background painting in the recovery interface
+  * Added texts in the buttons of the recovery interface
+  * Can render background pictures stored in folders with UTF-8 characters
+
 cronopete (3.6.0-0ppa0) precise; urgency=low
 
   * Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete
