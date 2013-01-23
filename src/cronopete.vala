@@ -373,7 +373,7 @@ class cp_callback : GLib.Object, callbacks {
 			if ((this._active)||(this.backup_forced)) {
 				switch (this.current_status) {
 				case BackupStatus.STOPPED:
-					icon_name+="white"; // Idle
+					icon_name+="white-symbolic"; // Idle
 				break;
 				case BackupStatus.ALLFINE:
 					icon_name+="green"; // Doing backup; everything fine
@@ -389,7 +389,6 @@ class cp_callback : GLib.Object, callbacks {
 				icon_name+="orange";
 			}
 		}
-		icon_name+="-symbolic";
 
 #if USE_APPINDICATOR
 		this.appindicator.set_icon_full(icon_name,"Cronopete, the backup utility");

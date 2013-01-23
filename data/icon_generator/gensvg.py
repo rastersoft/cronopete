@@ -44,6 +44,8 @@ for number in [1,2,3,4]:
         newpic=picture[:]
         newpic=newpic.replace("fill:#345678","fill:"+colors[color][2]).replace("fill:#234567","fill:"+colors[color][0]).replace("stroke:#123456","stroke:"+colors[color][1]).replace("stroke-width:20;","stroke-width:"+str(default_size)+";")
         fname3=fname+"-"+color
-        fileout=open(fname3+"-symbolic.svg","w")
+	if color=="white":
+                fname3+="-symbolic"
+        fileout=open(fname3+".svg","w")
         fileout.write(newpic)
         fileout.close()
