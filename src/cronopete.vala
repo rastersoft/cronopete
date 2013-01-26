@@ -376,17 +376,17 @@ class cp_callback : GLib.Object, callbacks {
 					icon_name+="white-symbolic"; // Idle
 				break;
 				case BackupStatus.ALLFINE:
-					icon_name+="green"; // Doing backup; everything fine
+					icon_name+="green-symbolic"; // Doing backup; everything fine
 				break;
 				case BackupStatus.WARNING:
-					icon_name+="yellow";
+					icon_name+="yellow-symbolic";
 				break;
 				case BackupStatus.ERROR:
-					icon_name+="red";
+					icon_name+="red-symbolic";
 				break;
 				}
 			} else {
-				icon_name+="orange";
+				icon_name+="orange-symbolic";
 			}
 		}
 
