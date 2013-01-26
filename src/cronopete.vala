@@ -368,7 +368,7 @@ class cp_callback : GLib.Object, callbacks {
 		}
 		icon_name+="-";
 		if (this.backend.available==false) {
-			icon_name+="red"; // There's no disk connected
+			icon_name+="red-symbolic"; // There's no disk connected
 		} else {
 			if ((this._active)||(this.backup_forced)) {
 				switch (this.current_status) {
