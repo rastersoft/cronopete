@@ -1,3 +1,9 @@
+cronopete (3.10.0-ppa0) precise; urgency=low
+
+  * Fixed colors in symbolic icons
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 27 Jan 2013 12:15:17 +0100
+
 cronopete (3.8.1-ppa0) precise; urgency=low
 
   * Fixed compilation under Gtk2
