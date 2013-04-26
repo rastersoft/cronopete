@@ -5,4 +5,4 @@ Exec=cronopete
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
-Name=Simple backup application
+_Name=Simple backup application
