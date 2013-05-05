@@ -627,7 +627,7 @@ class restore_iface : GLib.Object {
 
 	private bool repaint_draw(EventExpose ev) {
 		this.repaint_draw2();
-		return true;
+		return false;
 	}
 
 	private void repaint_draw2() {
@@ -706,7 +706,7 @@ class restore_iface : GLib.Object {
 		var ctx2 = Gdk.cairo_create(this.drawing.get_window());
 		ctx2.set_source_surface(this.animation_surface,0,0);
 		ctx2.paint();
-		return true;
+		return false;
 	}
 
 	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {

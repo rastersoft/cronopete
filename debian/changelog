@@ -1,3 +1,15 @@
+cronopete (3.11.1-ppa0) precise; urgency=low
+
+  * Fixed return value at DRAW and EXPOSE-EVENT callbacks
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 May 2013 14:15:17 +0100
+
+cronopete (3.11.0-ppa0) precise; urgency=low
+
+  * Added delay at startup to avoid problems between gnome shell and libappindicator
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 May 2013 12:15:17 +0100
+
 cronopete (3.10.0-ppa0) precise; urgency=low
 
   * Fixed colors in symbolic icons
