@@ -50,7 +50,7 @@ interface backends : GLib.Object {
 	public abstract BACKUP_RETVAL set_modtime(string path, time_t mod_time);
 	public abstract BACKUP_RETVAL abort_backup();
 	public abstract bool get_free_space(out uint64 total_space, out uint64 free_space);
-	
+
 	public abstract bool available {get;}
 	public signal void status(usbhd_backend b);
 
@@ -78,11 +78,11 @@ class path_node:Object {
 		this.prev=null;
 		this.next=null;
 	}
-	
+
 	~path_node() {
 		this.remove();
 	}
-	
+
 	public void remove() {
 		if (this.prev!=null) {
 			this.prev.next=this.next;
@@ -93,7 +93,7 @@ class path_node:Object {
 		this.next=null;
 		this.prev=null;
 	}
-	
+
 	public void add(path_node node) {
 		this.next=node.next;
 		node.next=this;
@@ -113,18 +113,18 @@ class path_list:Object {
 	private path_node? first;
 	private weak path_node? last;
 	private weak path_node? iterator;
-	
+
 	public path_list() {
-	
+
 		this.first=null;
 		this.last=null;
 		this.iterator=null;
 	}
-	
+
 	~path_list() {
-	
+
 		path_node? next;
-		
+
 		while(this.last!=null) {
 
 			// Freeing the first node will cause its reference count to be
@@ -139,39 +139,39 @@ class path_list:Object {
 		next=null;
 		this.first=null;
 	}
-	
+
 	public void start_iterator() {
-	
+
 		// Call this method to start an iteration over the list
-		
+
 		this.iterator=null;
 	}
-	
+
 	public string? next_iterator(out time_t mod_time) {
-		
+
 		// This method returns the next element in the list
-		
+
 		if (this.iterator==this.last) {
 			mod_time=0;
 			return null;
-		}		
+		}
 
 		if (this.iterator==null) {
 			this.iterator=this.first;
 		} else{
 			this.iterator=this.iterator.next;
 		}
-		
+
 		mod_time=this.iterator.modified_time;
 		return this.iterator.path;
 	}
-	
+
 	public void add(string path, time_t mtime) {
-	
+
 		// Adds a node at the end of the list
-	
+
 		path_node new_node=new path_node(path,mtime);
-		
+
 		if (this.first==null) {
 			this.first=new_node;
 			this.last=this.first;
@@ -186,42 +186,42 @@ class path_list:Object {
 class nanockup:Object {
 
 	// This is the backup class itself
-	
+
 	// Contains the time (in seconds from EPOCH) of the last backup
 	private int64 last_backup_time;
-	
+
 	// Contains the paths to backup
 	private path_list origin_path_list;
-	
+
 	// Contains the paths backed up, to set the modification time in folders
 	private path_list done_backup;
-	
+
 	// Contains a list of directory paths which must NOT be backed up
 	private HashSet<string> exclude_path_list;
 
-	// If true, cronopete won't backup the hiden files or folders at the HOME directory	
+	// If true, cronopete won't backup the hiden files or folders at the HOME directory
 	private bool skip_hiden_at_HOME;
 
 	public ulong time_used {get; set;}
-	
+
 	private callbacks callback;
 	private backends backend;
-	
+
 	private bool abort;
-	
+
 	public void abort_backup() {
-	
+
 		this.abort = true;
-		
+
 	}
 
 	public nanockup(callbacks to_callback,backends to_backend) {
-	
+
 		this.origin_path_list=new path_list();
 		this.exclude_path_list =new HashSet<string>(str_hash,str_equal);
 		this.callback=to_callback;
 		this.backend=to_backend;
-		
+
 		// by default, don't backup hidden files or folders at HOME folder
 		this.skip_hiden_at_HOME=true;
 		this.last_backup_time=0;
@@ -239,23 +239,23 @@ class nanockup:Object {
 		}
 		return 0;
 	}
-	
+
 	public void delete_old_backups() {
-	
+
 		var lbacks=this.backend.get_backup_list();
 		if (lbacks==null) {
 			return;
 		}
 
 		lbacks.sort((CompareFunc)mysort_64);
-		
+
 		var ctime=time_t();
-		
+
 		var day_limit=ctime-86400; // 24 hour period for hourly backups
 		var week_limit=ctime-2678400; // 1 month (31 days) period for daily backups
-		
+
 		time_t divider=0;
-		
+
 		foreach (time_t v in lbacks) {
 			if (v>day_limit) { // keep all backups for a day
 				continue;
@@ -275,12 +275,12 @@ class nanockup:Object {
 			}
 		}
 	}
-	
+
 	public void set_config(string[] origin_path,string[] exclude_path, bool skip_h_at_h) {
 
 		this.origin_path_list=new path_list();
 		this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
-	
+
 		foreach (string tmp in origin_path) {
 			this.callback.show_message(_("Backing up folder %s.\n").printf(tmp));
 			this.origin_path_list.add(tmp,0);
@@ -296,17 +296,17 @@ class nanockup:Object {
 		} else {
 			this.callback.show_message(_("Backing up hiden folders in %s.\n").printf(homedir));
 		}
-		
-		
+
+
 		// Never back up the .gvfs folder
 		string exclude_this_path=Path.build_filename(Environment.get_home_dir(),".gvfs");
 		if (false==this.exclude_path_list.contains(exclude_this_path)) {
 			this.exclude_path_list.add(exclude_this_path);
 		}
 	}
-	
+
 	public int do_backup() {
-	
+
 		/******************************************************************************************************
 		 * Does the backup process itself.                                                                    *
 		 * Returns:                                                                                           *
@@ -321,26 +321,25 @@ class nanockup:Object {
 		 *    -6: backup aborted                                                                              *
 		 *    -7: there's not enought disk space to do just one backup                                        *
 		 ******************************************************************************************************/
-	
+
 		int retval,tmp;
 		string? directory=null;
 		time_t mod_time;
-		
+
 		this.abort=false;
-		
+
 		int do_loop=0;
-		
+
 		this.done_backup=new path_list();
-		
+
 		if (this.backend.get_backup_id()==null) { // system not configured
 			this.callback.show_message("User didn't specified a device where to store the backups. Aborting backup.\n"); 
 			return -2; // the class isn't configured (don't know where to store the backups)
 		}
-		
-		
+
+		this.free_bytes(1000000);
 		while(do_loop<2) {
 			var rv=this.backend.start_backup(out this.last_backup_time);
-		
 			switch (rv) {
 				case BACKUP_RETVAL.NOT_WRITABLE:
 					this.callback.show_message(_("Can't create the folder for this backup. Aborting backup.\n"));
@@ -368,7 +367,7 @@ class nanockup:Object {
 		}
 
 		var timestamp=time_t();
-		
+
 		retval=0;
 
 		// backup all the directories
@@ -408,16 +407,16 @@ class nanockup:Object {
 			this.callback.show_message(_("Can't close the backup. Aborting.\n"));
 			return -5;
 		}
-	
-		var timestamp2=time_t();			
+
+		var timestamp2=time_t();
 		this.time_used=(ulong)timestamp2-timestamp;
 		this.callback.show_message(_("Backup done. Needed %ld seconds.\n").printf((long)this.time_used));
 		return retval;
 	}
-	
+
 
 	int copy_dir(string first_path,time_t dirmod_time) {
-	
+
 		/*****************************************************************************************************
 		 * This method takes the first directory in the list and copies the files in it to the destination   *
 		 * adding the new directories found to the list too, in order to allow to, in a future, add          *
@@ -428,7 +427,7 @@ class nanockup:Object {
 		 *     -2: if it was aborted                                                                         *
 		 *     -3: if it can't free the needed space to complete a backup                                    *
 		 *****************************************************************************************************/
-	
+
 		FileInfo info_file;
 		TimeVal mod_time;
 		FileEnumerator enumerator;
@@ -440,16 +439,16 @@ class nanockup:Object {
 
 		initial_path=first_path;
 		var directory = File.new_for_path(initial_path);
-		
+
 		retval=0;
-		
+
 		if ((this.backend.create_folder(first_path,dirmod_time))==BACKUP_RETVAL.CANT_CREATE_FOLDER) {
 			this.callback.error_create_directory(first_path);
 			return -1;
 		}
-		
+
 		this.done_backup.add(first_path,dirmod_time);
-		
+
 		try {
 			 enumerator = directory.enumerate_children(FileAttribute.TIME_MODIFIED+","+FileAttribute.STANDARD_NAME+","+FileAttribute.STANDARD_TYPE+","+FileAttribute.STANDARD_SIZE,FileQueryInfoFlags.NOFOLLOW_SYMLINKS,null);
 		} catch (Error e) {
@@ -471,7 +470,7 @@ class nanockup:Object {
 			typeinfo=info_file.get_file_type();
 
 			mod_time=info_file.get_modification_time();
-			
+
 			// Add the directories to the list, to continue deep in the directory tree
 			if (typeinfo==FileType.DIRECTORY) {
 				// Don't backup hidden folders if the user doesn't want
@@ -489,13 +488,13 @@ class nanockup:Object {
 				this.origin_path_list.add(full_path,mod_time.tv_sec);
 				continue;
 			}
-			
+
 			if (typeinfo==FileType.REGULAR) {
 				// Don't backup hidden files if the user doesn't want
 				if ((info_file.get_name()[0]=='.') && (this.skip_hiden_at_HOME) && (first_path==Environment.get_home_dir())) {
 					continue;
 				}
-				
+
 				// If the modification time is before the last backup time, just link; if not, copy to the directory
 				if (mod_time.tv_sec < ((long)this.last_backup_time)) {
 					this.callback.backup_link_file(full_path);
@@ -557,7 +556,7 @@ class nanockup:Object {
 	}
 
 	public bool free_bytes(uint64 d_size) {
-	
+
 		uint64 c_size;
 		uint64 t_size;
 
@@ -572,16 +571,16 @@ class nanockup:Object {
 		if (blist==null) {
 			return false;
 		}
-	
+
 		blist.sort((CompareFunc)mysort_64);
-		
+
 		time_t entry;
 		while(c_size<=d_size) {
 			if (blist.size==0) {
 				return false;
 			}
 			entry = blist.remove_at(0);
-			//GLib.stdout.printf("Need to free up to %lld; currently there are %lld bytes free; erasing backup %lld\n",d_size,c_size,entry);
+			GLib.stdout.printf("Need to free up to %lld; currently there are %lld bytes free; erasing backup %lld\n",d_size,c_size,entry);
 			this.backend.delete_backup(entry);
 			if (false==this.backend.get_free_space(out t_size,out c_size)) {
 				return false;
