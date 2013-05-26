@@ -36,7 +36,7 @@ class restore_iface : GLib.Object {
 	private int scr_w;
 	private int scr_h;
 	private string basepath;
-	
+
 	private EventBox box;
 	private FilelistIcons.IconBrowser browser;
 	private double browser_x;
@@ -71,7 +71,7 @@ class restore_iface : GLib.Object {
 
 	private int windows_current_value;
 	private int zmul;
-	
+
 	private Gee.List<time_t?>? backups;
 	private time_t last_time;
 	private time_t current_instant;
@@ -79,11 +79,11 @@ class restore_iface : GLib.Object {
 	private Fixed base_layout;
 	private Gtk.Window mywindow;
 	private int pos;
-	
+
 	private Gee.List<path_filename ?> restore_files;
 	private Gee.List<path_filename ?> restore_folders;
 	private double total_to_restore;
-	
+
 	private DrawingArea drawing;
 	private Cairo.ImageSurface base_surface;
 	private Cairo.ImageSurface final_surface;
@@ -107,19 +107,19 @@ class restore_iface : GLib.Object {
 
 	private double my;
 	private double mh;
-	
+
 	private double screen_w;
 	private double screen_h;
 	private int topmargin;
-	
+
 	private Gtk.Label current_date;
-	
+
 	private GLib.Settings cronopete_settings;
-	
+
 	private double incval;
 
 	private bool doshow; // this is for testing
-	
+
 	public static int mysort_64(time_t? a, time_t? b) {
 
 		if(a<b) {
@@ -132,14 +132,14 @@ class restore_iface : GLib.Object {
 	}
 
 	public restore_iface(backends p_backend,string paths,GLib.Settings stg) {
-		
+
 		this.doshow=true; // if false, will not paint the windows, allowing to check the background rendering
-		
+
 		this.cronopete_settings=stg;
 		this.backend=p_backend;
 		this.backend.lock_delete_backup(true);
 		this.basepath=paths;
-		
+
 		this.topmargin=0;
 		this.scale_current_value=-1;
 		this.windows_current_value=-1;
@@ -158,7 +158,7 @@ class restore_iface : GLib.Object {
 		} else {
 			this.date_format=false; // USA style
 		}
-		
+
 		this.restore_files = new Gee.ArrayList<path_filename ?>();
 		this.restore_folders = new Gee.ArrayList<path_filename ?>();
 
@@ -169,20 +169,20 @@ class restore_iface : GLib.Object {
 		this.screen_w=scr.get_width();
 		this.scr_h=0;
 		this.screen_h=scr.get_height();
-		
+
 		//this.scr_w=640;
 		//this.scr_h=480; // for tests
-	
+
 		this.base_layout = new Fixed();
 
 		this.drawing = new DrawingArea();
 
 		this.base_layout.add(this.drawing);
-		
+
 		this.box = new EventBox();
 		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.KEY_PRESS_MASK|Gdk.EventMask.KEY_RELEASE_MASK);
 		this.box.add(this.base_layout);
-		
+
 #if USE_GTK2
 		var main_box=new Gtk.VBox(false,0);
 		var button_box=new Gtk.HBox(false,0);
@@ -200,11 +200,11 @@ class restore_iface : GLib.Object {
 		container1.halign=Gtk.Align.CENTER;
 		container2.halign=Gtk.Align.CENTER;
 #endif
-		
-		
+
+
 		this.current_date=new Label("<span size=\"xx-large\"> </span>");
 		this.current_date.use_markup=true;
-		
+
 		var pic1=new Gtk.Image.from_stock(Gtk.Stock.REVERT_TO_SAVED,Gtk.IconSize.DND);
 		var label1=new Label("<span size=\"xx-large\">"+_("Restore files")+"</span>");
 		label1.use_markup=true;
@@ -212,7 +212,7 @@ class restore_iface : GLib.Object {
 		container1.pack_start(label1,false,false,0);
 		var restore_button=new Gtk.Button();
 		restore_button.add(container1);
-		
+
 		var pic2=new Gtk.Image.from_stock(Gtk.Stock.QUIT,Gtk.IconSize.DND);
 		var label2=new Label("<span size=\"xx-large\">"+_("Exit")+"</span>");
 		label2.use_markup=true;
@@ -229,30 +229,30 @@ class restore_iface : GLib.Object {
 
 		restore_button.clicked.connect(this.do_restore);
 		quit_button.clicked.connect(this.exit_restore);
-		
+
 		var sizegroup=new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		sizegroup.add_widget(restore_button);
 		sizegroup.add_widget(quit_button);
-		
+
 		button_box.pack_start(restore_button,false,false,0);
 		button_box.pack_start(this.current_date,true,true,0);
 		button_box.pack_start(quit_button,false,false,0);
-		
+
 		main_box.pack_start(button_box,false,true,0);
 		main_box.pack_start(box,true,true,0);
-		
+
 		this.mywindow.add(main_box);
-		
+
 		this.box.scroll_event.connect(this.on_scroll);
 		this.box.button_release_event.connect(this.on_click);
 		this.box.key_press_event.connect(this.on_key_press);
 		this.box.key_release_event.connect(this.on_key_release);
-		
+
 		this.box.sensitive=true;
-		
+
 		this.current_alpha=0.0;
 		this.mywindow.opacity=this.current_alpha;
-		
+
 		this.backups=p_backend.get_backup_list();
 		this.backups.sort((CompareFunc)mysort_64);
 
@@ -262,7 +262,7 @@ class restore_iface : GLib.Object {
 		this.browser.changed_path_list.connect(this.changed_path_list);
 
 		//this.create_cairo_layouts();
-		
+
 		this.base_layout.add(this.browser);
 
 		this.paint_window();
@@ -277,10 +277,10 @@ class restore_iface : GLib.Object {
 #endif
 
 		this.mywindow.show_all();
-		
+
 		this.desired_alpha=0.0;
 		Timeout.add(250,start_all,0); // wait to end the window animation
-		
+
 	}
 
 	public bool start_all() {
@@ -293,9 +293,9 @@ class restore_iface : GLib.Object {
 
 		this.capture_done=false;
 		this.launch_animation ();
-		
+
 	}
-	
+
 	public bool do_show() {
 
 		this.browser.do_refresh_icons ();
@@ -312,9 +312,9 @@ class restore_iface : GLib.Object {
 			this.exit_restore ();
 		}
 	}
-	
+
 	private void create_cairo_layouts() {
-		
+
 		Allocation fsize;
 		this.base_layout.get_allocation(out fsize);
 		if ((fsize.width<=0)||(fsize.height<=0)) {
@@ -323,16 +323,16 @@ class restore_iface : GLib.Object {
 		if ((fsize.width==this.scr_w)&&(fsize.height==this.scr_h)) {
 			return;
 		}
-		
+
 		this.scr_w=fsize.width;
 		this.scr_h=fsize.height;
-		
+
 		double top_margin=this.screen_h-((double)this.scr_h);
 		this.topmargin=(int)top_margin;
-		
+
 		this.drawing.width_request=this.scr_w;
 		this.drawing.height_request=this.scr_h;
-		
+
 		this.base_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
 		this.final_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
 		this.animation_surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,this.scr_w,this.scr_h);
@@ -343,38 +343,38 @@ class restore_iface : GLib.Object {
 		h=(this.scr_h);
 		double scale;
 		var c_base = new Cairo.Context(this.base_surface);
-		
+
 		var tonecolor=this.cronopete_settings.get_string("toning-color");
 		Color tonecolor_final;
 		Gdk.Color.parse(tonecolor,out tonecolor_final);
-		
+
 		int32 final_r;
 		int32 final_g;
 		int32 final_b;
-		
+
 		final_r=tonecolor_final.red/256;
 		final_g=tonecolor_final.green/256;
 		final_b=tonecolor_final.blue/256;
-		
+
 		var list_schemas = GLib.Settings.list_schemas();
-		
+
 		bool gnome_found=false;
-		
+
 		foreach(var v in list_schemas) {
 			if (v=="org.gnome.desktop.background") {
 				gnome_found=true;
 				break;
 			}
 		}
-		
+
 		string bgstr;
 		string bgformat;
 		string bgcolor;
-	
+
 		bgcolor="#7f7f7f7f7f7f";
 		bgstr="";
 		bgformat="";
-				
+
 		if (gnome_found) {
 			var stng = new GLib.Settings("org.gnome.desktop.background");
 			var entries_list = stng.list_keys();
@@ -400,7 +400,7 @@ class restore_iface : GLib.Object {
 		r=bgcolor_final.red/256;
 		g=bgcolor_final.green/256;
 		b=bgcolor_final.blue/256;
-		
+
 		bas=(r*3+g*6+b)/10;
 		// tone to sepia
 		if (bas<128) {
@@ -415,7 +415,7 @@ class restore_iface : GLib.Object {
 
 		c_base.set_source_rgb(((double)r)/255.0,((double)g)/255.0,((double)b)/255.0);
 		c_base.paint();
-		
+
 		Gdk.Pixbuf ?bgpic=null;
 		double px_w=this.screen_w;
 		double px_h=this.screen_h;
@@ -431,9 +431,9 @@ class restore_iface : GLib.Object {
 			int y;
 			unowned uint8 *data;
 			data = bgpic.pixels;
-			
+
 			var has_alpha = bgpic.has_alpha;
-			
+
 			for(y=0;y<bgpic.height;y++) {
 				for(x=0;x<bgpic.width;x++) {
 					r=*(data);
@@ -461,7 +461,7 @@ class restore_iface : GLib.Object {
 			}
 		} catch(GLib.Error v) {
 		}
-		
+
 		if (bgpic!=null) {
 			if (bgformat=="wallpaper") { // repeat it several times
 				double l1;
@@ -480,7 +480,7 @@ class restore_iface : GLib.Object {
 						c_base.paint();
 					}
 				}
-				
+
 			} else if (bgformat=="centered") {
 				double s1=0.0;
 				double s2=0.0;
@@ -504,7 +504,7 @@ class restore_iface : GLib.Object {
 				}
 				c_base.paint();
 				c_base.restore();
-				
+
 			} else if (bgformat=="stretched") {
 				c_base.save();
 				double factor=screen_h/px_h;
@@ -512,7 +512,7 @@ class restore_iface : GLib.Object {
 				Gdk.cairo_set_source_pixbuf(c_base,bgpic,0,-(top_margin/factor));
 				c_base.paint();
 				c_base.restore();
-				
+
 			} else if (bgformat=="zoom") {
 				c_base.save();
 				double new_w=px_w*(this.screen_h/px_h);
@@ -528,7 +528,7 @@ class restore_iface : GLib.Object {
 				}
 				c_base.paint();
 				c_base.restore();
-				
+
 			}
 		}
 
@@ -545,7 +545,7 @@ class restore_iface : GLib.Object {
 		double scale2=(w-60.0-100.0*scale)/2175.0;
 		c_base.save();
 		c_base.scale(scale2,scale2);
-		
+
 		// arrows
 		var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(this.basepath,"arrows.png"));
 		this.arrows_x=(this.browser_x+this.browser_w)-256.0*scale2;
@@ -561,22 +561,22 @@ class restore_iface : GLib.Object {
 		this.scale_y=this.browser_y;
 		this.scale_w=this.scr_w/28.0;
 		this.scale_h=this.browser_h+this.browser_margin;
-				
+
 		this.last_time=this.backups[this.backups.size-1];
 		this.scale_factor=this.scale_h/(this.backups[0]-this.last_time);
 
 		double last_pos_y=-1;
 		double pos_y=this.scale_y+this.scale_h;
 		double new_y;
-		
+
 		this.incval = this.scale_w/5.0;
 		double nw = this.scale_w*3.0/5.0;
 		this.scale_x+=this.incval/2.0;
-		
+
 		c_base.set_source_rgba(0,0,0,0.6);
 		this.rounded_rectangle(c_base,this.scale_x,this.scale_y-incval,this.scale_w,this.scale_h+2.0*incval,2.0*incval);
 		c_base.fill();
-		
+
 		c_base.set_source_rgb(1,1,1);
 		c_base.set_line_width(1);
 
@@ -590,7 +590,7 @@ class restore_iface : GLib.Object {
 			c_base.rel_line_to(nw,0);
 			c_base.stroke();
 		}
-		
+
 		this.browser.width_request=(int)(this.browser_w);
 		this.browser.height_request=(int)(this.browser_h);
 		this.base_layout.move(this.browser,(int)(this.browser_x),(int)(this.browser_y+this.browser_margin));
@@ -611,13 +611,13 @@ class restore_iface : GLib.Object {
 
 
 	private void paint_window() {
-		
+
 		this.current_instant=this.backups[this.pos];
-		
+
 		var ctx = new Cairo.Context(this.final_surface);
 		ctx.set_source_surface(this.base_surface,0,0);
 		ctx.paint();
-		
+
 		this.print_nixies(this.current_instant);
 		this.scale_desired_value = this.scale_y+this.scale_h-this.scale_factor * (this.current_instant-this.last_time);
 		if (this.scale_current_value==-1) {
@@ -636,11 +636,11 @@ class restore_iface : GLib.Object {
 		this.repaint_draw3 (ctx);
 
 	}
-	
+
 	private bool repaint_draw3(Context ctx) {
-		
+
 		this.create_cairo_layouts();
-		
+
 		// Paint the base image
 		ctx.set_source_surface(this.final_surface,0,0);
 		ctx.paint();
@@ -702,7 +702,7 @@ class restore_iface : GLib.Object {
 			ctx.show_text(date);
 
 		}
-		
+
 		var ctx2 = Gdk.cairo_create(this.drawing.get_window());
 		ctx2.set_source_surface(this.animation_surface,0,0);
 		ctx2.paint();
@@ -710,7 +710,7 @@ class restore_iface : GLib.Object {
 	}
 
 	private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {
-	
+
 		double eyedist = 2500.0;
 
 		ox=(this.browser_x*eyedist+(z*((double)this.scr_w)/2))/(z+eyedist);
@@ -773,7 +773,7 @@ class restore_iface : GLib.Object {
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	private bool on_scroll(Gdk.EventScroll event) {
@@ -781,7 +781,7 @@ class restore_iface : GLib.Object {
 		if ((event.x_root>=((int)this.browser_x))&&(event.x_root<((int)(this.browser_x+this.browser_w)))&&(event.y_root>=((int)(this.browser_y+this.browser_margin+this.topmargin)))&&(event.y_root<((int)(this.browser_y+this.browser_margin+this.browser_h+this.topmargin)))) {
 			return false;
 		}
-		
+
 		if (event.direction==ScrollDirection.UP) {
 			this.move_timeline(false);
 		}
@@ -814,10 +814,10 @@ class restore_iface : GLib.Object {
 			this.do_restore ();
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private void move_timeline(bool increase) {
 
 		if (increase) {
@@ -844,10 +844,10 @@ class restore_iface : GLib.Object {
 	}
 
 	private void browser_visible(bool visible) {
-		
+
 		if(visible) {
 			if (this.doshow) {
-				this.browser.show();	
+				this.browser.show();
 			} else {
 				this.browser.hide();
 			}
@@ -861,7 +861,7 @@ class restore_iface : GLib.Object {
 			this.timer=Timeout.add(40,this.timer_move);
 		}
 	}
-	
+
 	private bool timer_move() {
 
 		bool end_animation=true;
@@ -871,7 +871,7 @@ class restore_iface : GLib.Object {
 			GLib.Idle.add(this.do_show);
 			this.capture_done=true;
 		}
-		
+
 		if (this.scale_current_value!=this.scale_desired_value) {
 			double diff;
 			end_animation=false;
@@ -889,7 +889,7 @@ class restore_iface : GLib.Object {
 		}
 
 		int windows_desired_value=this.pos*this.zmul;
-		
+
 		if (this.windows_current_value!=windows_desired_value) {
 			int diff2;
 			end_animation=false;
@@ -915,7 +915,7 @@ class restore_iface : GLib.Object {
 		if (do_repaint) {
 			this.repaint_draw2();
 		}
-		
+
 		if (this.desired_alpha!=this.current_alpha) {
 			double diff;
 			if (this.desired_alpha>this.current_alpha) {
@@ -928,7 +928,7 @@ class restore_iface : GLib.Object {
 			if (diff<0.05) {
 				this.current_alpha=this.desired_alpha;
 			}
-			
+
 			if (this.current_alpha==0.0) {
 				this.backend.restore_ended.disconnect(this.restoring_ended);
 				this.backend.status.disconnect(this.refresh_status);
@@ -942,7 +942,7 @@ class restore_iface : GLib.Object {
 				end_animation=false;
 			}
 		}
-		
+
 		if (end_animation) {
 			this.timer=0;
 			return false;
@@ -954,13 +954,13 @@ class restore_iface : GLib.Object {
 	private void exit_restore() {
 
 		this.launch_animation ();
-		
+
 		this.desired_alpha=0.0;
-		
+
 		this.launch_animation ();
-		
+
 	}
-	
+
 	private string get_restored_filename(string path, string filename) {
 
 		int pos,pos2;
@@ -988,11 +988,11 @@ class restore_iface : GLib.Object {
 				suffix=filename.substring(pos);
 			}
 		}
-		
+
 		string newfilename="%s.restored%s".printf(preffix,suffix);
 		int counter=1;
 		File fs;
-		
+
 		while(true) {
 			fs = File.new_for_path(GLib.Path.build_filename(path,newfilename));
 			if (fs.query_exists()) {
@@ -1002,21 +1002,21 @@ class restore_iface : GLib.Object {
 				break;
 			}
 		}
-		
+
 		return newfilename;
 	}
-	
+
 	public void restore_progress_cb (int64 current_num_bytes, int64 total_num_bytes) {
 
 		double a;
 		double b;
-		
+
 		a=(double)current_num_bytes;
 		b=(double)total_num_bytes;
-		
+
 		this.restore_file_bar.fraction=a/b;
 	}
-	
+
 	public async void restoring_ended() {
 
 		BACKUP_RETVAL rv;
@@ -1044,13 +1044,13 @@ class restore_iface : GLib.Object {
 				}
 
 				var w2 = new Builder();
-			
+
 				w2.add_from_file(GLib.Path.build_filename(this.basepath,"restore_error.ui"));
 				w2.connect_signals(this);
 				this.error_window = (Gtk.Window)w2.get_object("restore_error");
 				var error_label = (Gtk.Label)w2.get_object("error_msg");
 				error_label.label=error_msg;
-			
+
 				error_window.show_all();
 				this.restore_files.clear();
 			} else {
@@ -1088,14 +1088,14 @@ class restore_iface : GLib.Object {
 		rok.destroy();
 		return;
 	}
-	
+
 	private void do_restore() {
 
 		this.launch_animation ();
-		
+
 		this.ignore_restoring_all=false;
 		var w = new Builder();
-		
+
 		w.add_from_file(GLib.Path.build_filename(this.basepath,"restoring.ui"));
 		w.connect_signals(this);
 
@@ -1111,7 +1111,7 @@ class restore_iface : GLib.Object {
 
 		var cursor_working = new Gdk.Cursor(Gdk.CursorType.WATCH);
 		this.mywindow.get_window().set_cursor(cursor_working);
-		
+
 		this.launch_fill_restore_list.begin( (obj,res) => {
 			this.launch_fill_restore_list.end(res);
 			Source.remove(this.timer_bar);
@@ -1130,14 +1130,14 @@ class restore_iface : GLib.Object {
 		this.restore_bar.pulse();
 		return true;
 	}
-	
+
 	private async void launch_fill_restore_list() {
 
 		Gee.List<string> files;
 		Gee.List<string> folders;
-			
+
 		var path=this.browser.get_current_path();
-			
+
 		this.browser.get_selected_items(out files, out folders);
 		foreach (string f in files) {
 			if (this.cancel_restoring) {
@@ -1163,14 +1163,14 @@ class restore_iface : GLib.Object {
 			}
 		}
 	}
-	
+
 	private async BACKUP_RETVAL add_folder_to_restore(string o_path, string f_path) {
-		
+
 		Gee.List<file_info ?> files;
 		string date;
 		string new_opath;
 		string new_rpath;
-		
+
 		try {
 			var dir2 = File.new_for_path(GLib.Path.build_filename(f_path));
 			dir2.make_directory_with_parents(null);
@@ -1181,7 +1181,7 @@ class restore_iface : GLib.Object {
 				return BACKUP_RETVAL.CANT_CREATE_FOLDER;
 			}
 		}
-		
+
 		if (false==this.backend.get_filelist(o_path,this.backups[this.pos],out files,out date)) {
 			return BACKUP_RETVAL.NOT_AVAILABLE;
 		}
@@ -1231,7 +1231,7 @@ class restore_iface : GLib.Object {
 		this.error_window.destroy();
 		this.restoring_ended();
 	}
-	
+
 	[CCode (instance_pos = -1)]
 	public bool on_delete_event(Event event) {
 		return true;

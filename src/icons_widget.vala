@@ -34,7 +34,7 @@ namespace FilelistIcons {
 	}
 
 	enum e_sort_by {NAME, TYPE, DATE, SIZE}
-	
+
 	class IconBrowser : Frame {
 
 		private VBox main_container;
@@ -44,7 +44,7 @@ namespace FilelistIcons {
 		private ScrolledWindow scroll;
 		private Gtk.TreeView path_view2;
 		private ScrolledWindow scroll2;
-		
+
 		private string current_path;
 		private Gee.List<Button> path_list;
 		private EventBox background_eb;
@@ -79,11 +79,11 @@ namespace FilelistIcons {
 			this.current_path=p_current_path;
 
 			this.to_refresh=false;
-		
+
 			this.main_container=new VBox(false,0); // Contains everything in the widget
 			this.timer_refresh=0;
 			this.showing_menu=false;
-			
+
 			this.show_hiden=false;
 			this.view_as_icons=true;
 			this.sort_by=e_sort_by.NAME;
@@ -111,7 +111,7 @@ namespace FilelistIcons {
 			scroll3.vscrollbar_policy=PolicyType.AUTOMATIC;
 			this.paned.add1(scroll3);
 			this.paned.add2(container2);
-			
+
 			this.scroll = new ScrolledWindow(null,null);
 			this.scroll.hscrollbar_policy=PolicyType.AUTOMATIC;
 			this.scroll.vscrollbar_policy=PolicyType.AUTOMATIC;
@@ -121,9 +121,9 @@ namespace FilelistIcons {
 			this.scroll2.hscrollbar_policy=PolicyType.NEVER;
 			this.scroll2.vscrollbar_policy=PolicyType.AUTOMATIC;
 			container2.pack_start(this.scroll2,true,true,0);
-			
+
 			this.main_container.pack_start(this.paned,true,true,0);
-			
+
 			/* path_model stores the data for each file/folder:
 				 - file name (string)
 				 - icon (string)
@@ -162,7 +162,7 @@ namespace FilelistIcons {
 			this.path_view2.get_selection().set_mode(SelectionMode.MULTIPLE);
 			var column=this.path_view2.get_column(1);
 			column.resizable=true;
-			
+
 			this.path_view2.button_press_event.connect(this.selection_made);
 			this.path_view2.row_activated.connect(this.activated2);
 #if USE_GTK2
@@ -170,19 +170,19 @@ namespace FilelistIcons {
 #else
 			this.scroll2.add(this.path_view2);
 #endif
-			
+
 			this.background_eb = new EventBox();
 			this.background_eb.add(this.main_container);
 			this.add(this.background_eb);
 
 			this.path_view.item_width=175;
-		
+
 			this.path_list=new Gee.ArrayList<ToggleButton>();
 
 			this.refresh_path_list();
 			this.key_press_event.connect(this.on_key_press);
 			this.show.connect_after(this.refresh_path_list_show);
-		
+
 		}
 
 		private bool on_key_press(Gdk.EventKey event) {
@@ -195,12 +195,12 @@ namespace FilelistIcons {
 			if ((event.keyval==0xFF1B) && (this.showing_menu)) {
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public void activated2(TreePath path, TreeViewColumn column) {
-			
+
 			this.selection_made2();
 
 		}
@@ -210,7 +210,7 @@ namespace FilelistIcons {
 			this.selection_made2();
 
 		}
-		
+
 		private bool read_bookmarks() {
 
 			TreeIter iter;
@@ -223,9 +223,9 @@ namespace FilelistIcons {
 			val.name=home.dup();
 			val.icon="user-home folder-home";
 			this.bookmarks.add(val);
-			
+
 			var config_file = File.new_for_path (GLib.Path.build_filename(home,".config","user-dirs.dirs"));
-			
+
 			if (config_file.query_exists (null)) {
 				try {
 					var file_read=config_file.read(null);
@@ -288,7 +288,7 @@ namespace FilelistIcons {
 			}
 
 			config_file = File.new_for_path (GLib.Path.build_filename(home,".gtk-bookmarks"));
-			
+
 			if (config_file.query_exists (null)) {
 				try {
 					var file_read=config_file.read(null);
@@ -332,7 +332,7 @@ namespace FilelistIcons {
 				this.bookmark_model.set(iter,1,GLib.Path.get_basename(folder.name));
 				this.bookmark_model.set(iter,2,folder.name);
 			}
-			
+
 			return true;
 		}
 
@@ -355,7 +355,7 @@ namespace FilelistIcons {
 				this.set_scroll_top();
 			}
 		}
-		
+
 		private bool on_click(Gdk.EventButton event) {
 
 			if (event.button!=3) {
@@ -363,22 +363,22 @@ namespace FilelistIcons {
 			}
 
 			this.show_menu();
-			
+
 			return true;
 		}
 
 		private void hide_menu() {
 
 			this.showing_menu=false;
-			
+
 		}
-		
+
 		private void show_menu() {
 
 			this.showing_menu=true;
 			this.menu=new Gtk.Menu();
 			this.menu.hide.connect(this.hide_menu);
-			
+
 			var item1 = new CheckMenuItem.with_label(_("Show hiden files"));
 			item1.active=this.show_hiden;
 			item1.activate.connect(this.toggle_show_hide);
@@ -442,12 +442,12 @@ namespace FilelistIcons {
 			} else {
 				item11.active=true;
 			}
-			
+
 			this.menu.show_all();
 			this.menu.popup(null,null,null,2,Gtk.get_current_event_time());
 
 		}
-		
+
 		private void set_view_as_icons() {
 			this.view_as_icons=true;
 			this.refresh_path_list (false);
@@ -457,7 +457,7 @@ namespace FilelistIcons {
 			this.view_as_icons=false;
 			this.refresh_path_list (false);
 		}
-		
+
 		private void set_sort_by_name() {
 			this.sort_by=e_sort_by.NAME;
 			this.refresh_icons ();
@@ -477,7 +477,7 @@ namespace FilelistIcons {
 			this.sort_by=e_sort_by.DATE;
 			this.refresh_icons ();
 		}
-		
+
 		private void toggle_show_hide() {
 			this.show_hiden = this.show_hiden ? false : true;
 			this.refresh_icons ();
@@ -487,9 +487,9 @@ namespace FilelistIcons {
 			this.reverse_sort = this.reverse_sort ? false : true;
 			this.refresh_icons ();
 		}
-		
+
 		public void set_backup_time(time_t backup) {
-			
+
 			this.current_backup=backup;
 			this.path_model.clear();
 			this.to_refresh=true;
@@ -501,15 +501,15 @@ namespace FilelistIcons {
 				this.to_refresh=false;
 				this.refresh_icons();
 			}
-			
+
 		}
-		
+
 		public bool selection_made(EventButton event) {
-	
+
 			if (event.type==EventType.2BUTTON_PRESS) {
-		
+
 				return this.selection_made2 ();
-			
+
 			}
 			return false;
 		}
@@ -519,13 +519,13 @@ namespace FilelistIcons {
 			Gee.ArrayList<string> files;
 			Gee.ArrayList<string> folders;
 			get_selected_items(out files,out folders);
-		
+
 			if ((files.size!=0)||(folders.size!=1)) {
 				return false;
 			}
-			
+
 			var newfolder=folders.get(0);
-		
+
 			this.current_path=Path.build_filename(this.current_path,newfolder);
 			this.refresh_path_list();
 			this.set_scroll_top();
@@ -535,15 +535,15 @@ namespace FilelistIcons {
 			} else {
 				this.path_view2.has_focus=true;
 			}
-			
+
 			return true;
 		}
-		
+
 		public void get_selected_items(out Gee.ArrayList<string> files_selected, out Gee.ArrayList<string> folders_selected) {
 
 			GLib.List<TreePath> selection;
 			TreeModel model;
-			
+
 			if (this.view_as_icons) {
 				selection = this.path_view.get_selected_items();
 				model = this.path_view.model;
@@ -557,7 +557,7 @@ namespace FilelistIcons {
 
 			files_selected = new Gee.ArrayList<string>();
 			folders_selected = new Gee.ArrayList<string>();
-	
+
 			foreach (var v in selection) {
 
 				model.get_iter(out iter,v);
@@ -572,17 +572,17 @@ namespace FilelistIcons {
 		}
 
 		public string get_current_path() {
-			
+
 			return (this.current_path);
-			
+
 		}
 
 		private void refresh_path_list_show() {
 
 			this.refresh_path_list (false);
-			
+
 		}
-		
+
 		private void refresh_path_list(bool send_signal=true) {
 
 			if (this.view_as_icons) {
@@ -624,29 +624,29 @@ namespace FilelistIcons {
 				this.path_model.clear();
 				this.changed_path_list();
 			}
-			
+
 		}
 
 		private void set_scroll_top() {
-	
+
 			this.scroll.hadjustment.value=this.scroll.hadjustment.lower;
 			this.scroll.vadjustment.value=this.scroll.vadjustment.lower;
 			this.scroll2.hadjustment.value=this.scroll.hadjustment.lower;
 			this.scroll2.vadjustment.value=this.scroll.vadjustment.lower;
-	
+
 		}
 
 		public void change_path(Widget btn) {
-	
+
 			string fpath="";
 			bool found;
-	
+
 			found = false;
 
 			Button btn2=(Button)btn;
-			
+
 			foreach (Button b in this.path_list) {
-		
+
 				if (!found) {
 					fpath = Path.build_filename(fpath,b.label);
 				} else {
@@ -684,7 +684,7 @@ namespace FilelistIcons {
 			return mysort_files(a,b,false,e_sort_by.SIZE);
 		}
 		public static int mysort_files_bysize_r(file_info? a, file_info? b) {
-			
+
 			return mysort_files(a,b,true,e_sort_by.SIZE);
 		}
 		public static int mysort_files_bytype(file_info? a, file_info? b) {
@@ -695,7 +695,7 @@ namespace FilelistIcons {
 
 			return mysort_files(a,b,true,e_sort_by.TYPE);
 		}
-		
+
 		public static int mysort_files(file_info? a, file_info? b, bool reverse, e_sort_by mode) {
 
 			// Folders always first
@@ -759,7 +759,7 @@ namespace FilelistIcons {
 						}
 					}
 				}
-				
+
 				int r1;
 				if (posa>=0) {
 					var exta=a.name.substring(posa);
@@ -778,10 +778,10 @@ namespace FilelistIcons {
 			}
 
 			// If both names are equal in the desired comparison mode, then sort by name
-			
+
 			string name1;
 			string name2;
-			
+
 			if (a.name[0]=='.') {
 				name1=a.name.substring(1);
 			} else {
@@ -792,7 +792,7 @@ namespace FilelistIcons {
 			} else {
 				name2=b.name.dup();
 			}
-			
+
 			name1=name1.casefold();
 			name2=name2.casefold();
 			if (reverse) {
@@ -803,13 +803,13 @@ namespace FilelistIcons {
 		}
 
 		private void refresh_icons() {
-	
+
 			TreeIter iter;
 			Gee.List<file_info?> files;
 			string title;
-	
+
 			this.path_model.clear();
-			
+
 			if (false==this.backend.get_filelist(this.current_path,this.current_backup, out files, out title)) {
 				return;
 			}
@@ -844,13 +844,13 @@ namespace FilelistIcons {
 				}
 			break;
 			}
-		
+
 			var theme = Gtk.IconTheme.get_default();
 			icon_cache_st element_cache;
-			
+
 			Gdk.Pixbuf pbuf=null;
 			Gdk.Pixbuf pbuf2=null;
-			
+
 			uint icon_hash;
 			foreach (file_info f in files) {
 				if ((this.show_hiden==false)&&(f.name[0]=='.')) {
@@ -890,7 +890,7 @@ namespace FilelistIcons {
 					element_cache.small=pbuf2;
 					this.icon_cache.set(icon_hash,element_cache);
 				}
-				
+
 				this.path_model.append (out iter);
 				this.path_model.set (iter,0,f.name);
 				this.path_model.set (iter,1,pbuf);
@@ -910,7 +910,7 @@ namespace FilelistIcons {
 				this.path_model.set (iter,4,fssize);
 				GLib.DateTime timeval = new GLib.DateTime.from_timeval_utc(f.mod_time);
 				this.path_model.set (iter,5,timeval.format("%c"));
-				
+
 			}
 		}
 

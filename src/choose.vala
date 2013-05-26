@@ -33,7 +33,7 @@ interface Device_if : GLib.Object {
 	public abstract bool DeviceIsSystemInternal { owned get; }
 	public signal void JobChanged(bool job_in_progress,string job_id,uint job_initiated_by_uid,bool job_is_cancellable,double job_percentage);
 	public signal void Changed();
-	
+
 	public abstract async void FilesystemUnmount(string[]? options) throws IOError;
 	public abstract async void FilesystemCreate(string type, string[] options) throws IOError;
 	public abstract async void PartitionModify (string type, string label, string[]? options) throws IOError;
@@ -56,11 +56,11 @@ class c_format : GLib.Object {
 	private bool job_found;
 
 	public signal void format_ended(int status);
-	
+
 	private void show_error(string msg) {
 
 		GLib.stdout.printf("Error: %s\n",msg);
-		
+
 		var builder=new Builder();
 		builder.add_from_file(Path.build_filename(this.uipath,"format_error.ui"));
 		var label = (Label) builder.get_object("msg_error");
@@ -74,9 +74,9 @@ class c_format : GLib.Object {
 	}
 
 	private bool find_drive(string path_mount) {
-	
+
 		ObjectPath[] retval;
-	
+
 		try {
 			UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
 			udisk.EnumerateDevices(out retval);
@@ -104,11 +104,11 @@ class c_format : GLib.Object {
 		}
 		return (false);
 	}
-	
+
 	private async void remount(string format) {
 
 		Device_if device2;
-		
+
 		try {
 			device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
 		} catch (IOError e) {
@@ -119,10 +119,9 @@ class c_format : GLib.Object {
 		try {
 			yield device2.PartitionModify("131","",null);
 		} catch (IOError e) {
-			this.retval=-1;
-			return;
 		}
-		
+
+		Posix.sleep(2);
 		try {
 			string out_path;
 			yield device2.FilesystemMount(format,null,out out_path);
@@ -145,7 +144,7 @@ class c_format : GLib.Object {
 		this.ioerror=null;
 
 		Device_if device2;
-		
+
 		try {
 			device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
 		} catch (IOError e) {
@@ -158,7 +157,7 @@ class c_format : GLib.Object {
 			yield device2.FilesystemUnmount(null);
 		} catch (IOError e) {
 		}
-		
+
 		string[] options;
 		if ((this.label==null)||(this.label=="")) {
 			options = new string[2];
@@ -168,7 +167,7 @@ class c_format : GLib.Object {
 				this.label=this.label.substring(0,16);
 			}
 			options[2]="label=%s".printf(this.label);
-		}			
+		}
 		options[0]="take_ownership_uid=%d".printf((int)Posix.getuid());
 		options[1]="take_ownership_gid=%d".printf((int)Posix.getgid());
 
@@ -188,7 +187,7 @@ class c_format : GLib.Object {
 
 
 		device2.FilesystemCreate.begin(format,options);
-			
+
 		this.job_in_progress=true;
 		this.job_found=false;
 		this.waiting_for_job="FilesystemCreate";
@@ -233,7 +232,7 @@ class c_format : GLib.Object {
 		}
 	}
 	public async void run(string path, string filesystem, string disk_path,bool not_writable) {
-		
+
 		this.mount_path=null;
 		this.device=null;
 		this.final_path="";
@@ -249,9 +248,9 @@ class c_format : GLib.Object {
 
 		var label = (Label) builder.get_object("label_text");
 		label.set_label(message);
-				
+
 		var window = (Dialog) builder.get_object("dialog_format");
-		
+
 		window.show_all();
 		var rv=window.run();
 		window.destroy();
@@ -280,7 +279,7 @@ class c_choose_disk : GLib.Object {
 	private GLib.Settings cronopete_settings;
 
 	public async void run(string path, cp_callback p, GLib.Settings c_settings) {
-	
+
 		this.parent = p;
 		this.cronopete_settings=c_settings;
 		this.basepath=path;
@@ -292,7 +291,7 @@ class c_choose_disk : GLib.Object {
 
 		this.disk_list = (TreeView) this.builder.get_object("disk_list");
 		this.ok_button = (Button) this.builder.get_object("ok_button");
-	
+
 		this.disk_listmodel = new ListStore (5, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string));
 		this.disk_list.set_model(this.disk_listmodel);
 		var crpb = new CellRendererPixbuf();
@@ -301,22 +300,22 @@ class c_choose_disk : GLib.Object {
 		this.disk_list.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 1);
 		this.disk_list.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 2);
 		this.disk_list.insert_column_with_attributes (-1, "", new CellRendererText (), "text", 3);
-	
+
 		this.monitor = VolumeMonitor.get();
 		this.monitor.mount_added.connect_after(this.refresh_list);
 		this.monitor.mount_removed.connect_after(this.refresh_list);
 		this.refresh_list();
 		this.set_ok();
-		
+
 		this.choose_w.show();
 
 		bool do_run;
 		bool not_writable;
-		
+
 		do_run=true;
 		while (do_run) {
 			var r=this.choose_w.run	();
-			
+
 			if (r!=-5) {
 				do_run = false;
 				break;
@@ -333,7 +332,7 @@ class c_choose_disk : GLib.Object {
 				model.get_value(iter,2,out stype);
 				var fstype = stype.get_string();
 				var final_path = spath.get_string().dup();
-				
+
 				// Reiser3 is the recomended filesystem for cronopete
 				not_writable=false;
 				if ((fstype == "reiserfs") ||
@@ -377,7 +376,7 @@ class c_choose_disk : GLib.Object {
 	}
 
 	private void set_ok() {
-	
+
 		var selected = this.disk_list.get_selection();
 		if (selected.count_selected_rows()!=0) {
 			this.ok_button.sensitive=true;
@@ -389,11 +388,11 @@ class c_choose_disk : GLib.Object {
 	private bool check_is_external(string path_mount) {
 
 		ObjectPath[] retval;
-	
+
 		if (this.cronopete_settings.get_boolean("all-drives")) {
 			return (true);
 		}
-	
+
 		try {
 			UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
 			udisk.EnumerateDevices(out retval);
@@ -431,13 +430,13 @@ class c_choose_disk : GLib.Object {
 		string ssize;
 		string fsystem;
 		bool first;
-	
+
 		var volumes = this.monitor.get_volumes();
-	
+
 		this.disk_listmodel.clear();
 		first = true;
-		
-		foreach (Volume v in volumes) {		
+
+		foreach (Volume v in volumes) {
 
 			mnt=v.get_mount();
 			if ((mnt is Mount)==false) {
@@ -447,7 +446,7 @@ class c_choose_disk : GLib.Object {
 			root=mnt.get_root();
 			var info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
 			fsystem = info.get_attribute_string("filesystem::type");
-			
+
 			if (fsystem=="isofs") {
 				continue;
 			}
@@ -455,18 +454,18 @@ class c_choose_disk : GLib.Object {
 			if (fsystem==null) {
 				fsystem=_("Unknown FS");
 			}
-			
+
 			path = root.get_path();
 			if (false==this.check_is_external(path)) {
 				continue;
 			}
-			
+
 			bpath = root.get_basename();
 
 			this.disk_listmodel.append (out iter);
-			
+
 			var tmp = new ThemedIcon.from_names(v.get_icon().to_string().split(" "));
-			
+
 			this.disk_listmodel.set (iter,0,tmp);
 			this.disk_listmodel.set (iter,1,bpath);
 			this.disk_listmodel.set (iter,2,fsystem);
@@ -480,7 +479,7 @@ class c_choose_disk : GLib.Object {
 			} else {
 				ssize = "%lld B".printf(size);
 			}
-			
+
 			this.disk_listmodel.set (iter,3,ssize);
 			this.disk_listmodel.set (iter,4,path);
 			if (first) {
@@ -490,12 +489,12 @@ class c_choose_disk : GLib.Object {
 		}
 		this.set_ok();
 	}
-	
+
 	[CCode (instance_pos = -1)]
 	public bool on_press_event(Gtk.Widget w , Gdk.Event v) {
 
 		this.set_ok();
 		return false;
 	}
-	
+
 }

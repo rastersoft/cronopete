@@ -809,9 +809,9 @@ int main(string[] args) {
 		exit(1);
 	});
 
-	if (args.length==1) {
+	/*if (args.length==1) {
 		sleep(2); // To ensure that the menu bar has been loaded
-	}
+	}*/
 
 	Gdk.threads_enter();
 

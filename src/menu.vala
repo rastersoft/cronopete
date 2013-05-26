@@ -44,15 +44,15 @@ class c_main_menu : GLib.Object {
 #else
 	private Switch my_widget;
 #endif
-	
+
 	public bool is_visible;
 	private GLib.Settings cronopete_settings;
-	
+
 	public bool switch_enabler {
 		get {
 			return this.parent.active;
 		}
-		
+
 		set {
 			this.my_widget.active=value;
 			if (this.is_visible==false) {
@@ -60,18 +60,18 @@ class c_main_menu : GLib.Object {
 			}
 		}
 	}
-	
+
 	public c_main_menu(string path, cp_callback p,GLib.Settings q) {
 
 		this.parent = p;
 		this.basepath=path;
 		this.cronopete_settings = q;
-		
-		this.builder = new Builder();		
+
+		this.builder = new Builder();
 		this.builder.add_from_file(Path.build_filename(this.basepath,"main.ui"));
-		
+
 		this.main_w = (Window) this.builder.get_object("window1");
-		
+
 		this.log = (TextBuffer) this.builder.get_object("textbuffer1");
 		this.log_view = (TextView) this.builder.get_object("textview1");
 		this.tabs = (Notebook) this.builder.get_object("notebook1");
@@ -86,7 +86,7 @@ class c_main_menu : GLib.Object {
 		this.show_in_bar_ch = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
 
 		this.show_in_bar_ch.set_active(this.parent.show_in_bar);
-		
+
 		var cnt = (VBox) this.builder.get_object("vbox_switch");
 
 #if USE_GTK2
@@ -115,7 +115,7 @@ class c_main_menu : GLib.Object {
 	}
 
 	public void set_status(string msg) {
-	
+
 		/* This string shows the current status of Cronopete. It could be
 			Status: idle, or Status: copying file... */
 		this.last_status=_("Status: %s").printf(msg);
@@ -125,7 +125,7 @@ class c_main_menu : GLib.Object {
 	}
 
 	public void insert_log(string msg,bool reset) {
-	
+
 		if (this.is_visible) {
 			TextIter iter;
 			Gdk.threads_enter();
@@ -134,7 +134,7 @@ class c_main_menu : GLib.Object {
 			} else {
 				this.log.insert_at_cursor(msg,msg.length);
 			}
-			this.log.get_end_iter(out iter);				
+			this.log.get_end_iter(out iter);
 			this.mark = this.log.create_mark("end", iter, false);
 			this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 			Gdk.flush();
@@ -143,16 +143,16 @@ class c_main_menu : GLib.Object {
 	}
 
 	private string parse_date(time_t val) {
-		
+
 		string retval;
-		
+
 		if (val==0) {
 			// This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
 			retval=_("None");
 		} else {
 			var date = new DateTime.from_unix_local(val);
-			
-			
+
+
 			time_t current = time_t();
 			if ((current-val)<86400) {
 				retval = date.format("%X").dup();
@@ -160,8 +160,8 @@ class c_main_menu : GLib.Object {
 				retval = date.format("%x").dup();
 			}
 		}
-		
-		return retval;		
+
+		return retval;
 	}
 
 	public void show_main(bool show_log, string log) {
@@ -171,22 +171,22 @@ class c_main_menu : GLib.Object {
 		this.log.set_text(log,-1);
 		this.main_w.show_all();
 		this.main_w.present();
-	
+
 		this.tabs.set_current_page(0);
-		
+
 		this.my_widget.active=this.parent.active;
-		
+
 		TextIter iter;
-		this.log.get_end_iter(out iter);				
+		this.log.get_end_iter(out iter);
 		this.mark = this.log.create_mark("end", iter, false);
 		this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 		this.text_status.set_label(this.last_status);
 		this.is_visible = true;
-	
+
 	}
 
 	public void refresh_backup_data() {
-	
+
 		string? volume_id;
 		time_t oldest;
 		time_t newest;
@@ -195,7 +195,7 @@ class c_main_menu : GLib.Object {
 		uint64 free_space;
 
 		this.parent.get_backup_data(out volume_id, out oldest, out newest, out next, out total_space, out free_space);
-		
+
 		if (volume_id==null) {
 			// This text means that the user still has not selected a hard disk where to do the backups
 			this.Lvid.set_text(_("Not defined"));
@@ -207,38 +207,38 @@ class c_main_menu : GLib.Object {
 		this.Lnext.set_text(this.parse_date(next));
 		/* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB */
 		this.Lspace.set_text(_("%lld GB of %lld GB").printf((free_space+900000000)/1073741824,(total_space+900000000)/1073741824));
-	
+
 	}
 
 	[CCode (instance_pos = -1)]
 	public void cronopete_options_callback(Button source) {
-	
+
 		var tmp = new c_options(this.basepath,this.parent);
 		this.refresh_backup_data();
 		tmp = null;
-	
+
 	}
 
 	[CCode (instance_pos = -1)]
 	public bool on_destroy_event(Gtk.Widget o) {
-	
-		this.main_w.hide();	
+
+		this.main_w.hide();
 		this.is_visible = false;
 		return true;
 	}
-	
+
 	[CCode (instance_pos = -1)]
 	public bool on_delete_event(Gtk.Widget source, Gdk.Event e) {
-	
+
 		this.is_visible = false;
 		this.main_w.hide();
 		return true;
-		
+
 	}
-	
+
 	[CCode (instance_pos = -1)]
 	public void cronopete_change_disk_callback(Button source) {
-	
+
 		bool not_configured;
 
 		if (this.parent.backup_path=="") {
@@ -259,9 +259,9 @@ class c_main_menu : GLib.Object {
 
 	[CCode (instance_pos = -1)]
 	public void cronopete_about_clicked(Button source) {
-		
+
 		var w = new Builder();
-		
+
 		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
 
 		var about_w = (Dialog)w.get_object("aboutdialog1");

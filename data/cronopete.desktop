@@ -1,8 +1,8 @@
-
 [Desktop Entry]
 Type=Application
 Exec=cronopete
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
-_Name=Simple backup application
+X-GNOME-Autostart-phase=Running
+Name=Simple backup application

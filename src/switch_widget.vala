@@ -27,7 +27,7 @@ public class Switch_Widget : DrawingArea {
 		get {
 			return (this._active);
 		}
-		
+
 		set {
 			this._active=value;
 			this.refresh(null);
@@ -55,7 +55,7 @@ public class Switch_Widget : DrawingArea {
 
 		this.first_done=true;
 		return (this.refresh(event));
-		
+
 	}
 
 	private bool refresh(Gdk.EventExpose? event) {
@@ -65,11 +65,11 @@ public class Switch_Widget : DrawingArea {
 		int ox;
 		int oy;
 		int pos;
-		
+
 		if ((this.visible==false)||(this.first_done==false)) {
 			return false;
 		}
-		
+
 		this.window.get_size(out width,out height);
 
 		ox=(width-86)/2;
@@ -128,13 +128,13 @@ public class Switch_Widget : DrawingArea {
 	}
 
 	void do_switch(int ox, int oy, int size_x, int size_y, Cairo.Context cr) {
-	
+
 		int cx;
 		int cy;
-	
+
 		cx = ox+size_x;
 		cy = oy+size_y;
-	
+
 		cr.move_to(ox+5,oy+1);
 		cr.line_to(cx-5,oy+1);
 		cr.arc(cx-5,oy+5,4,4.712388,0);
@@ -150,7 +150,7 @@ public class Switch_Widget : DrawingArea {
 
 	/* Mouse button got released */
 	public override bool button_release_event (Gdk.EventButton event) {
-		
+
 		int width;
 		int height;
 		int ox;
@@ -167,7 +167,7 @@ public class Switch_Widget : DrawingArea {
 			} else {
 				this._active=true;
 			}
-		
+
 			this.window.clear_area_e(0,0,width,height);
 			this.active=this._active;
 		}
