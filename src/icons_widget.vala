@@ -37,8 +37,13 @@ namespace FilelistIcons {
 
 	class IconBrowser : Frame {
 
+#if USE_GTK2
 		private VBox main_container;
 		private HBox buttons_path;
+#else
+		private Box main_container;
+		private Box buttons_path;
+#endif
 		private ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
@@ -80,20 +85,32 @@ namespace FilelistIcons {
 
 			this.to_refresh=false;
 
+#if USE_GTK2
 			this.main_container=new VBox(false,0); // Contains everything in the widget
+#else
+			this.main_container=new Box(Gtk.Orientation.VERTICAL,0);
+#endif
 			this.timer_refresh=0;
 			this.showing_menu=false;
 
 			this.show_hiden=false;
 			this.view_as_icons=true;
 			this.sort_by=e_sort_by.NAME;
-
+#if USE_GTK2
 			this.buttons_path=new HBox(false,0);
+#else
+			this.buttons_path=new Box(Gtk.Orientation.HORIZONTAL,0);
+#endif
 
 			this.main_container.pack_start(buttons_path,false,false,0);
 
+#if USE_GTK2
 			this.paned = new HPaned();
 			var container2 = new Gtk.HBox(false,0);
+#else
+			this.paned = new Paned(Gtk.Orientation.HORIZONTAL);
+			var container2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL,0);
+#endif
 			var scroll3= new ScrolledWindow(null,null);
 			scroll3.hscrollbar_policy=PolicyType.NEVER;
 			this.bookmark_model=new ListStore(3,typeof(GLib.Icon),typeof(string),typeof(string));

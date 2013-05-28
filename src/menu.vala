@@ -96,7 +96,7 @@ class c_main_menu : GLib.Object {
 #else
 		this.my_widget=new Switch();
 		this.my_widget.expand=false;
-		var tmp_w=new HBox(false,0);
+		var tmp_w=new Box(Gtk.Orientation.HORIZONTAL,0);
 		var tmp_w2=new Label("");
 		var tmp_w3=new Label("");
 		tmp_w.pack_start(tmp_w2,true,true,0);

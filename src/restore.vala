@@ -1193,7 +1193,7 @@ class restore_iface : GLib.Object {
 			if (v.isdir) {
 				new_opath = GLib.Path.build_filename(o_path,v.name);
 				new_rpath = GLib.Path.build_filename(f_path,v.name);
-				this.add_folder_to_restore(new_opath,new_rpath);
+				yield this.add_folder_to_restore(new_opath,new_rpath);
 			} else {
 				var element = path_filename();
 				element.original_file=GLib.Path.build_filename(o_path,v.name);
@@ -1216,20 +1216,20 @@ class restore_iface : GLib.Object {
 
 		this.error_window.destroy();
 		this.cancel_restoring=true;
-		this.restoring_ended();
+		this.restoring_ended.begin();
 	}
 
 	[CCode (instance_pos = -1)]
 	public void on_ignore_restore_error_clicked(Button source) {
 		this.error_window.destroy();
-		this.restoring_ended();
+		this.restoring_ended.begin();
 	}
 
 	[CCode (instance_pos = -1)]
 	public void on_ignore_all_restore_error_clicked(Button source) {
 		this.ignore_restoring_all=true;
 		this.error_window.destroy();
-		this.restoring_ended();
+		this.restoring_ended.begin();
 	}
 
 	[CCode (instance_pos = -1)]
