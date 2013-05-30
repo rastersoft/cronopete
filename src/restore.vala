@@ -301,8 +301,8 @@ class restore_iface : GLib.Object {
 		this.browser.do_refresh_icons ();
 		this.browserhide=true;
 		this.capture_done=true;
-		this.repaint_draw2 ();
-		this.paint_window ();
+		//this.repaint_draw2();
+		this.paint_window();
 		return false;
 	}
 
