@@ -904,12 +904,6 @@ class restore_iface : GLib.Object {
 				this.windows_current_value=windows_desired_value;
 			}
 			do_repaint=true;
-		} else {
-			if (this.browserhide) {
-				this.browser.do_refresh_icons();
-				this.browser_visible(true);
-				this.browserhide=false;
-			}
 		}
 
 		if (do_repaint) {
@@ -945,6 +939,9 @@ class restore_iface : GLib.Object {
 
 		if (end_animation) {
 			this.timer=0;
+			this.browser.do_refresh_icons();
+			this.browser_visible(true);
+			this.browserhide=false; // repaint all, to ensure that there is no failure when ending animation
 			return false;
 		} else {
 			return true;
