@@ -8,7 +8,7 @@
     </style>
   </head>
 <body>
-<div align="center"><h1>CRONOPETE 3.4.0</h1></div>
+<div align="center"><h1>CRONOPETE 3.14.0</h1></div>
 
 <p>The Apple's TimeMachine clone for Linux</p>
 
@@ -165,6 +165,58 @@ or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 
 <h2>History of versions</h2>
 <ul>
+
+<li>Version 3.14.0 (2013/06/15)</li>
+<li>Fixed the refresh bug when the timer line has to do a big jump.</li>
+
+<li>Version 3.13.0 (2013/06/09)</li>
+<li>Fixed picture refresh bug in the file restoring system.</li>
+<li>Fixed bug when formating external drives without partition table.</li>
+<li>Removed several deprecated calls.</li>
+
+<li>Version 3.12.0 (2013/05/11)</li>
+<li>Fixed a bug when trying to do a backup in a disk 100% full.</li>
+
+<li>Version 3.11.0 (2013/05/05)</li>
+<li>Added a delay to avoid failure launch in Gnome Shell</li>
+<li>Fixed return value in DRAW y EXPOSE-EVENT callbacks</li>
+
+<li>Version 3.10.0 (2013/01/27)</li>
+<li>Fixed colors in symbolic icons.</li>
+
+<li>Version 3.9.0</li>
+<li>Development version</li>
+
+<li>Version 3.8.0/1 (2013/01/20)</li>
+<li>Fixed the scroll and the icons in the restore interface.</li>
+<li>Fixed the background painting in the restore interface.</li>
+<li>Added texts in the buttons of the restore interface.</li>
+<li>Fixed compilation under Gtk2.</li>
+<li>Added .deb packages for Gtk2.</li>
+
+<li>Version 3.7.0</li>
+<li>Development version</li>
+
+<li>Version 3.6.0 (2012/12/21)</li>
+<li>New restoring interface</li>
+<li>Allows to use internal, non-removable drives (for testing)</li>
+<li>Added new icons based in the -symbolic standard</li>
+<li>Fixed the bug that made the restore window to grow each time the user changed the folder</li>
+<li>Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete</li>
+
+<li>Version 3.5.0</li>
+<li>Development version</li>
+
+<li>Version 3.4.6 (2012/10/28)</li>
+<li>The configuration icon in Elementary will keep in the icon window</li>
+<li>Removed sleep during startup because, with libappnotify, it's not needed</li>
+<li>Now doesn't recreate the menu in the system bar each time something changes, but takes advantage of the capabilities of libappindicator (when used)</li>
+
+<li>Version 3.4.5 (2012/10/17)</li>
+<li>Added D-Bus activation, to launch Cronopete when opening the configuration icon</li>
+<li>CMake files modified to ensure that the autostart file is copied in the right place even when using a non-standard folder</li>
+<li>Included the Vala CMake files</li>
+<li>Added control files for PPA repositories with DEB packages for Ubuntu and Elementary OS</li>
 
 <li>Version 3.4.0 (2012/10/13)</li>
 <ul>
