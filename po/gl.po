@@ -47,7 +47,7 @@ msgstr "%lld GB de %lld GB"
 
 #: ../src/options.vala:60
 #, c-format
-msgid "Backup hiden files and folders in %s"
+msgid "Backup hidden files and folders in %s"
 msgstr "Copiar ficheiros e cartafoles agochados en %s"
 
 #: ../src/backup.vala:285
@@ -62,12 +62,12 @@ msgstr "Excluindo o cartafol %s.\n"
 
 #: ../src/backup.vala:295
 #, c-format
-msgid "Excluding hiden folders in %s.\n"
+msgid "Excluding hidden folders in %s.\n"
 msgstr "Excluindo cartafoles agochados en %s.\n"
 
 #: ../src/backup.vala:297
 #, c-format
-msgid "Backing up hiden folders in %s.\n"
+msgid "Backing up hidden folders in %s.\n"
 msgstr "Copiando cartafoles agochados en %s.\n"
 
 #: ../src/backup.vala:346
@@ -310,7 +310,7 @@ msgid "Modification date"
 msgstr "Data da modificación"
 
 #: ../src/icons_widget.vala:390
-msgid "Show hiden files"
+msgid "Show hidden files"
 msgstr "Amosar os ficheiros agochados"
 
 #: ../src/icons_widget.vala:398

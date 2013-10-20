@@ -21,6 +21,20 @@ FOREACH(element ${AUTOVALA_PATH_LIST})
 	ENDIF()
 ENDFOREACH()
 
-include (Translations)
-add_translations_directory("cronopete")
-add_translations_catalog("cronopete" ../src ../data/interface2 ../data/interface )
+file(GLOB list_data RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *)
+foreach(file_data ${list_data})
+	IF(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${file_data})
+		install(DIRECTORY
+			${file_data}
+		DESTINATION
+			share/cronopete
+		)
+	ELSE()
+		install(FILES
+			${file_data}
+		DESTINATION
+			share/cronopete
+		)
+	ENDIF()
+endforeach()
+

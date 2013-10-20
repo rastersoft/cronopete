@@ -20,6 +20,8 @@
  
 using Gtk;
 
+#if USE_GTK2
+
 public class Switch_Widget : DrawingArea {
 
 	private bool _active;
@@ -174,3 +176,4 @@ public class Switch_Widget : DrawingArea {
 		return false;
 	}
 }
+#endif

@@ -320,18 +320,18 @@ namespace FilelistIcons {
 							} else {
 								folder=line.substring(7);
 							}
-						    var folder2 = GLib.Uri.unescape_string(folder);
-						    bool found=false;
-						    foreach (var l in this.bookmarks) {
+							var folder2 = GLib.Uri.unescape_string(folder);
+							bool found=false;
+							foreach (var l in this.bookmarks) {
 								if (l.name==folder2) {
 									found=true;
 									break;
 								}
 							}
-						    if (found) {
+							if (found) {
 								continue;
 							}
-						    val = bookmark_str();
+							val = bookmark_str();
 							val.name = folder2;
 							val.icon=Gtk.Stock.DIRECTORY;
 							this.bookmarks.add(val);
@@ -396,7 +396,7 @@ namespace FilelistIcons {
 			this.menu=new Gtk.Menu();
 			this.menu.hide.connect(this.hide_menu);
 
-			var item1 = new CheckMenuItem.with_label(_("Show hiden files"));
+			var item1 = new CheckMenuItem.with_label(_("Show hidden files"));
 			item1.active=this.show_hiden;
 			item1.activate.connect(this.toggle_show_hide);
 			this.menu.append(item1);

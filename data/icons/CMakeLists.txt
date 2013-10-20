@@ -1,41 +1,71 @@
-install(FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.svg
-	${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.svg
-DESTINATION
-	share/icons/hicolor/scalable/apps
-)
+### CMakeLists automatically created with AutoVala
+### Do not edit
 
+if(${CMAKE_INSTALL_PREFIX} MATCHES usr/local/? )
+	set( AUTOVALA_INSTALL_PREFIX "/usr/local")
+else()
+	set( AUTOVALA_INSTALL_PREFIX "/usr")
+endif()
 
-SET (list_sizes "16x16" "22x22" "24x24" "32x32" "48x48" "64x64" "128x128")
+STRING (REPLACE "/" ";" AUTOVALA_PATH_LIST ${CMAKE_INSTALL_PREFIX})
+SET (FINAL_AUTOVALA_PATH "")
 
-foreach(size_png ${list_sizes})
-	install(FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_${size_png}.png
-	DESTINATION
-		share/icons/hicolor/${size_png}/apps
-	RENAME
-		anacronopete.png
-	)
-endforeach()
+FOREACH(element ${AUTOVALA_PATH_LIST})
+	IF (${FOUND_USR})
+		SET(FINAL_AUTOVALA_PATH ${FINAL_AUTOVALA_PATH}/.. )
+	ELSE()
+		IF(${element} STREQUAL "usr")
+			SET(FOUND_USR 1)
+			SET(FINAL_AUTOVALA_PATH ${FINAL_AUTOVALA_PATH}.. )
+		ENDIF()
+	ENDIF()
+ENDFOREACH()
 
-file(GLOB list_svg RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} cronopete-arrow-*.svg)
-
-foreach(filename ${list_svg})
-	install(FILES
-			${CMAKE_CURRENT_SOURCE_DIR}/${filename}
-		DESTINATION
-			share/icons/hicolor/scalable/status
-		)
-endforeach()
-
-IF(NOT (DEFINED ICON_UPDATE))
-	SET (ICON_UPDATE "ON")
-ENDIF()
-
-IF( NOT (${ICON_UPDATE}  STREQUAL "OFF" ))
-	if(USE_GTK2)
-		install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor )" )
-	else()
-		install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor )" )
-	endif()
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-red-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-red.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_64x64.png DESTINATION share/icons/hicolor/64/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_24x24.png DESTINATION share/icons/hicolor/24/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-red-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-orange.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-green.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_32x32.png DESTINATION share/icons/hicolor/32/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-orange-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-green.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-red-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-yellow-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-red-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_22x22.png DESTINATION share/icons/hicolor/22/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-green-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-orange.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-white-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-green-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-orange-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-red.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-yellow-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-yellow.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-green.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-green-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-yellow-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-red.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-green-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-orange.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_48x48.png DESTINATION share/icons/hicolor/48/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-white-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-white-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-orange-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-yellow.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-red.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-green.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_16x16.png DESTINATION share/icons/hicolor/16/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-white-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-yellow-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-2-yellow.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-orange.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-orange-symbolic.svg DESTINATION share/icons/hicolor/scalable/status/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_128x128.png DESTINATION share/icons/hicolor/128/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-3-yellow.svg DESTINATION share/icons/hicolor/scalable/apps/)
+IF( NOT (${ICON_UPDATE} STREQUAL "OFF" ))
+	install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor )" )
 ENDIF()

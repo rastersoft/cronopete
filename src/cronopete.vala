@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 using AppIndicator;
 #endif
  
@@ -35,7 +35,7 @@ cp_callback callback_object;
 
 class cp_callback : GLib.Object, callbacks {
 
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 	private Indicator appindicator;
 #else
 	private StatusIcon trayicon;
@@ -99,7 +99,7 @@ class cp_callback : GLib.Object, callbacks {
 
 		set {
 			this._show_in_bar=value;
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 			if (this._show_in_bar) {
 				this.appindicator.set_status(IndicatorStatus.ACTIVE);
 			} else {
@@ -134,7 +134,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.repaint(this.size);
 		this.status_tooltip();
 		this.main_menu.refresh_backup_data();
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 		this.menuSystem_popup();
 #endif
 		if ((this._active) && (this.backend.available) && (this.backup_pending)) {
@@ -166,7 +166,7 @@ class cp_callback : GLib.Object, callbacks {
 
 		this.basedir = null;
 		this.main_menu = new c_main_menu(this.basepath,this,this.cronopete_settings);
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 		this.appindicator = new Indicator("Cronopete","cronopete_arrow_1_green",IndicatorCategory.APPLICATION_STATUS);
 		if (this._show_in_bar) {
 			this.appindicator.set_status(IndicatorStatus.ACTIVE);
@@ -189,7 +189,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.cur_period=init_delay;
 		this.next_backup=init_delay+time_t();
 		init_delay*=1000;
-		this.main_timer=Timeout.add(init_delay,this.timer_f);
+		this.main_timer=GLib.Timeout.add(init_delay,this.timer_f);
 		this.cronopete_settings.bind("enabled",this,"active",GLib.SettingsBindFlags.DEFAULT);
 		this.cronopete_settings.bind("visible",this,"show_in_bar",GLib.SettingsBindFlags.DEFAULT);
 		this.cronopete_settings.bind("backup-path",this,"backup_path",GLib.SettingsBindFlags.DEFAULT);
@@ -251,13 +251,13 @@ class cp_callback : GLib.Object, callbacks {
 		} else {
 			lock (this.tooltip_value) {
 				if (message==null) {
-#if !USE_APPINDICATOR
+#if NO_APPINDICATOR
 					this.trayicon.set_tooltip_text (this.tooltip_value);
 #endif
 					this.main_menu.set_status(this.tooltip_value);
 					this.tooltip_changed=false;
 				} else {
-#if !USE_APPINDICATOR
+#if NO_APPINDICATOR
 					this.trayicon.set_tooltip_text (message);
 #endif
 					this.main_menu.set_status(message);
@@ -279,7 +279,7 @@ class cp_callback : GLib.Object, callbacks {
 				if (this.main_timer!=0) {
 					Source.remove(this.main_timer);
 				}
-				this.main_timer=Timeout.add(this.cur_period*1000,this.timer_f);
+				this.main_timer=GLib.Timeout.add(this.cur_period*1000,this.timer_f);
 			}
 
 			this.next_backup=this.cur_period+time_t();
@@ -296,8 +296,8 @@ class cp_callback : GLib.Object, callbacks {
 			if (this.refresh_timer!=0) {
 				Source.remove(this.refresh_timer);
 			}
-			this.refresh_timer=Timeout.add(500,this.timer_f);
-#if USE_APPINDICATOR
+			this.refresh_timer=GLib.Timeout.add(500,this.timer_f);
+#if !NO_APPINDICATOR
 			this.menuSystem_popup();
 #endif
 
@@ -316,7 +316,7 @@ class cp_callback : GLib.Object, callbacks {
 				Source.remove(this.refresh_timer);
 				this.refresh_timer=0;
 			}
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 			this.menuSystem_popup();
 #endif
 		}
@@ -390,7 +390,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 		}
 
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 		this.appindicator.set_icon_full(icon_name,"Cronopete, the backup utility");
 #else
 		this.trayicon.set_from_icon_name(icon_name);
@@ -401,7 +401,7 @@ class cp_callback : GLib.Object, callbacks {
 
 	private void menuSystem_popup() {
 
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 		if(this.menuSystem==null)
 #endif
 		{
@@ -431,7 +431,7 @@ class cp_callback : GLib.Object, callbacks {
 			menuSystem.append(menuMain);
 
 			menuSystem.show_all();
-#if USE_APPINDICATOR
+#if !NO_APPINDICATOR
 			this.appindicator.set_menu(this.menuSystem);
 #endif
 
@@ -459,7 +459,7 @@ class cp_callback : GLib.Object, callbacks {
 		menuBUnow.sensitive=this.backend.available;
 		menuSBUnow.sensitive=this.backend.available;
 
-#if !USE_APPINDICATOR
+#if NO_APPINDICATOR
 		this.menuSystem.popup(null,null,this.trayicon.position_menu,2,Gtk.get_current_event_time());
 #endif
 
@@ -473,7 +473,7 @@ class cp_callback : GLib.Object, callbacks {
 			}
 			if (this.main_timer>0) {
 				Source.remove(this.main_timer);
-				this.main_timer=Timeout.add(3600000,this.timer_f);
+				this.main_timer=GLib.Timeout.add(3600000,this.timer_f);
 			}
 			if (this._active==false) {
 				this.backup_forced=true;

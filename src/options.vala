@@ -57,7 +57,7 @@ class c_options : GLib.Object {
 		this.exclude_view = (TreeView) this.builder.get_object("exclude_folders");
 		this.b_hiden = (CheckButton) this.builder.get_object("backup_root_hiden");
 		this.w_period = (SpinButton) this.builder.get_object("backup_period");
-		this.b_hiden.label=_("Backup hiden files and folders in %s").printf(Environment.get_home_dir());
+		this.b_hiden.label=_("Backup hidden files and folders in %s").printf(Environment.get_home_dir());
 
 		this.cronopete_settings = new GLib.Settings("apps.cronopete");
 

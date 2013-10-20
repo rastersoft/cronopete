@@ -13,8 +13,8 @@
     </key>
     <key type="b" name="skip-hiden-at-home">
       <default>true</default>
-      <summary>Don't backup the hiden files in the personal folder</summary>
-      <description>When enabled, hiden files and folders in the root of the personal folder won't be backed up (but hiden files and folders in subdirectories will be).</description>
+      <summary>Don't backup the hidden files in the personal folder</summary>
+      <description>When enabled, hidden files and folders in the root of the personal folder won't be backed up (but hidden files and folders in subdirectories will be).</description>
     </key>
     <key type="s" name="backup-path">
       <default>""</default>

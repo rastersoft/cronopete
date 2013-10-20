@@ -292,9 +292,9 @@ class nanockup:Object {
 		this.skip_hiden_at_HOME=skip_h_at_h;
 		string homedir=GLib.Environment.get_home_dir();
 		if (this.skip_hiden_at_HOME) {
-			this.callback.show_message(_("Excluding hiden folders in %s.\n").printf(homedir));
+			this.callback.show_message(_("Excluding hidden folders in %s.\n").printf(homedir));
 		} else {
-			this.callback.show_message(_("Backing up hiden folders in %s.\n").printf(homedir));
+			this.callback.show_message(_("Backing up hidden folders in %s.\n").printf(homedir));
 		}
 
 

@@ -47,7 +47,7 @@ msgstr "%lld GB de %lld GB"
 
 #: ../src/options.vala:60
 #, c-format
-msgid "Backup hiden files and folders in %s"
+msgid "Backup hidden files and folders in %s"
 msgstr "Copiar ficheros y carpetas ocultos en %s"
 
 #: ../src/backup.vala:285
@@ -62,12 +62,12 @@ msgstr "Excluyendo la carpeta %s\n"
 
 #: ../src/backup.vala:295
 #, c-format
-msgid "Excluding hiden folders in %s.\n"
+msgid "Excluding hidden folders in %s.\n"
 msgstr "Excluyendo ficheros y carpetas ocultos en %s.\n"
 
 #: ../src/backup.vala:297
 #, c-format
-msgid "Backing up hiden folders in %s.\n"
+msgid "Backing up hidden folders in %s.\n"
 msgstr "Copiando ficheros ocultos de la carpeta %s\n"
 
 #: ../src/backup.vala:346
@@ -310,7 +310,7 @@ msgid "Modification date"
 msgstr "Fecha de modificación"
 
 #: ../src/icons_widget.vala:382
-msgid "Show hiden files"
+msgid "Show hidden files"
 msgstr "Mostrar ficheros ocultos"
 
 #: ../src/icons_widget.vala:390
@@ -565,7 +565,7 @@ msgstr ""
 #~ "<i>Formatear disco</i>. <b>Todos los datos contenidos en el disco se "
 #~ "perderán</b>."
 
-#~ msgid "Don't show hiden files"
+#~ msgid "Don't show hidden files"
 #~ msgstr "No mostrar ficheros ocultos"
 
 #, fuzzy

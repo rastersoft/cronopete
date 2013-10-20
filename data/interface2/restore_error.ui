@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="2.24"/>
+  <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="restore_error">
     <property name="width_request">400</property>
     <property name="height_request">250</property>
@@ -10,7 +11,6 @@
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="icon">anacronopete.svg</property>
-    <property name="has_resize_grip">False</property>
     <signal name="delete-event" handler="restore_iface_on_delete_event" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -37,7 +37,6 @@
             <child>
               <object class="GtkButton" id="button1">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -54,7 +53,6 @@
             <child>
               <object class="GtkButton" id="button2">
                 <property name="label" translatable="yes">Ignore</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -70,7 +68,6 @@
             <child>
               <object class="GtkButton" id="button3">
                 <property name="label" translatable="yes">Ignore all</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

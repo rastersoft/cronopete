@@ -21,7 +21,7 @@ FOREACH(element ${AUTOVALA_PATH_LIST})
 	ENDIF()
 ENDFOREACH()
 
-IF (NOT(USE_GTK2))
+IF (USE_GTK2)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config_exported.ui DESTINATION share/cronopete/ )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/format_force.ui DESTINATION share/cronopete/ )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/formatting.ui DESTINATION share/cronopete/ )

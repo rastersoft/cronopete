@@ -279,7 +279,7 @@ class restore_iface : GLib.Object {
 		this.mywindow.show_all();
 
 		this.desired_alpha=0.0;
-		Timeout.add(250,start_all,0); // wait to end the window animation
+		GLib.Timeout.add(250,start_all,0); // wait to end the window animation
 
 	}
 
@@ -858,7 +858,7 @@ class restore_iface : GLib.Object {
 
 	private void launch_animation() {
 		if (this.timer==0) {
-			this.timer=Timeout.add(40,this.timer_move);
+			this.timer=GLib.Timeout.add(40,this.timer_move);
 		}
 	}
 
@@ -1104,7 +1104,7 @@ class restore_iface : GLib.Object {
 		this.cancel_restoring=false;
 		this.restore_label.label=_("Preparing folders to restore");
 		this.restore_window.show_all();
-		this.timer_bar=Timeout.add(250,this.timer_bar_f);
+		this.timer_bar=GLib.Timeout.add(250,this.timer_bar_f);
 
 		var cursor_working = new Gdk.Cursor(Gdk.CursorType.WATCH);
 		this.mywindow.get_window().set_cursor(cursor_working);
@@ -1144,7 +1144,7 @@ class restore_iface : GLib.Object {
 			element.original_file=GLib.Path.build_filename(path,f);
 			element.restored_file=GLib.Path.build_filename(path,this.get_restored_filename(path,f));
 			this.restore_files.add(element);
-			Idle.add(launch_fill_restore_list.callback);
+			GLib.Idle.add(launch_fill_restore_list.callback);
 			yield;
 		}
 
@@ -1155,7 +1155,7 @@ class restore_iface : GLib.Object {
 			var restored_folder = GLib.Path.build_filename(path,this.get_restored_filename(path,v));
 			var rv=yield this.add_folder_to_restore(GLib.Path.build_filename(path,v),restored_folder);
 			if (rv!=BACKUP_RETVAL.OK) {
-				Idle.add(launch_fill_restore_list.callback);
+				GLib.Idle.add(launch_fill_restore_list.callback);
 				yield;
 			}
 		}
@@ -1197,7 +1197,7 @@ class restore_iface : GLib.Object {
 				element.restored_file=GLib.Path.build_filename(f_path,v.name);
 				this.restore_files.add(element);
 			}
-			Idle.add(add_folder_to_restore.callback);
+			GLib.Idle.add(add_folder_to_restore.callback);
 			yield;
 		}
 		return BACKUP_RETVAL.OK;
