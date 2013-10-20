@@ -247,14 +247,12 @@ class c_main_menu : GLib.Object {
 			not_configured=false;
 		}
 		var tmp = new c_choose_disk();
-		tmp.run.begin(this.basepath,this.parent,this.cronopete_settings, (obj,res) => {
-			tmp.run.end(res);
-			this.refresh_backup_data();
-			if ((this.parent.backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
-				this.parent.active=true;
-				this.my_widget.active=true;
-			}
-		});
+		tmp.run(this.basepath,this.parent,this.cronopete_settings);
+		this.refresh_backup_data();
+		if ((this.parent.backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
+			this.parent.active=true;
+			this.my_widget.active=true;
+		}
 	}
 
 	[CCode (instance_pos = -1)]

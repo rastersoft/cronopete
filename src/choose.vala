@@ -185,7 +185,6 @@ class c_format : GLib.Object {
 			this.job_found=true;
 		});
 
-
 		device2.FilesystemCreate.begin(format,options);
 
 		this.job_in_progress=true;
@@ -198,7 +197,6 @@ class c_format : GLib.Object {
 				yield;
 			}
 		}
-
 		device2.disconnect(handler_id);
 
 		yield this.remount(format);
@@ -217,10 +215,7 @@ class c_format : GLib.Object {
 			this.format_window = (Dialog) builder2.get_object("formatting");
 			this.retval=2;
 			this.format_window.show_all();
-			yield this.format_drive("reiserfs");
-			if (this.retval!=0) {
-				yield this.format_drive("ext4");
-			}
+			yield this.format_drive("ext4");
 			this.format_window.close();
 			this.format_window.destroy();
 		} else {
@@ -231,13 +226,14 @@ class c_format : GLib.Object {
 			this.show_error(this.ioerror);
 		}
 	}
-	public async void run(string path, string filesystem, string disk_path,bool not_writable) {
+	public void run(string path, string filesystem, string disk_path,bool not_writable) {
 
 		this.mount_path=null;
 		this.device=null;
 		this.final_path="";
 		this.uipath=path;
 		this.ioerror=null;
+		this.retval=0;
 
 		string message;
 		var builder = new Builder();
@@ -255,12 +251,16 @@ class c_format : GLib.Object {
 		var rv=window.run();
 		window.destroy();
 		if (rv==1) { // format
-			yield this.do_format(path,filesystem,disk_path);
+			this.do_format.begin(path,filesystem,disk_path, (obj,res) => {
+				this.do_format.end(res);
+				Gtk.main_quit();
+			});
+			Gtk.main();
 		} else if (rv==0) {
 			this.final_path=disk_path.dup();
 			this.retval=0;
 		} else {
-			retval=-1;
+			this.retval=-1;
 		}
 	}
 }
@@ -278,7 +278,7 @@ class c_choose_disk : GLib.Object {
 	private Button ok_button;
 	private GLib.Settings cronopete_settings;
 
-	public async void run(string path, cp_callback p, GLib.Settings c_settings) {
+	public void run(string path, cp_callback p, GLib.Settings c_settings) {
 
 		this.parent = p;
 		this.cronopete_settings=c_settings;
@@ -361,7 +361,7 @@ class c_choose_disk : GLib.Object {
 				this.choose_w.hide();
 
 				var w = new c_format();
-				yield w.run(this.basepath,fstype,final_path,not_writable);
+				w.run(this.basepath,fstype,final_path,not_writable);
 				if (w.retval==0) {
 					this.cronopete_settings.set_string("backup-path",w.final_path);
 					do_run=false;
