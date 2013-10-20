@@ -116,10 +116,10 @@ class c_format : GLib.Object {
 			return;
 		}
 
-		try {
+		/*try {
 			yield device2.PartitionModify("131","",null);
 		} catch (IOError e) {
-		}
+		}*/ // Removed because it hangs :(
 
 		Posix.sleep(2);
 		try {
