@@ -53,7 +53,7 @@ end
 
 *eos_plug: data/cronopete.plug
 
-*scheme: data/cronopete.gschema.xml
+*scheme: data/org.rastersoft.cronopete.gschema.xml
 
 if USE_GTK2
 glade: data/interface2/config_exported.ui

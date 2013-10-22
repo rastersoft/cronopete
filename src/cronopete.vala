@@ -155,7 +155,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.backup_pending=false;
 		this.backup_forced=false;
 		this.tooltip_value="";
-		this.cronopete_settings = new GLib.Settings("apps.cronopete");
+		this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 		var retval=this.read_configuration();
 
 		this.backend=new usbhd_backend(this.cronopete_settings.get_string("backup-path"));

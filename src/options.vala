@@ -59,7 +59,7 @@ class c_options : GLib.Object {
 		this.w_period = (SpinButton) this.builder.get_object("backup_period");
 		this.b_hiden.label=_("Backup hidden files and folders in %s").printf(Environment.get_home_dir());
 
-		this.cronopete_settings = new GLib.Settings("apps.cronopete");
+		this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 
 		this.w_period.set_value((float)((this.cronopete_settings.get_uint("backup-period"))/3600));
 

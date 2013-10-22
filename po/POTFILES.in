@@ -1,12 +1,12 @@
-src/menu.vala
-src/backup.vala
-src/icons_widget.vala
 src/options.vala
-src/choose.vala
-src/restore.vala
+src/icons_widget.vala
 src/cronopete.vala
+src/restore.vala
+src/backup.vala
 src/usbhd_backend.vala
 src/switch_widget.vala
+src/menu.vala
+src/choose.vala
 [type: gettext/glade]data/interface2/config_exported.ui
 [type: gettext/glade]data/interface2/format_force.ui
 [type: gettext/glade]data/interface2/formatting.ui

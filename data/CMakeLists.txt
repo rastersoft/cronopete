@@ -32,4 +32,4 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/com.rastersoft.cronopete.service.base 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cronopete.plug ${CMAKE_CURRENT_BINARY_DIR}/cronopete.plug)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cronopete.plug DESTINATION lib/plugs/cronopete/cronopete/)
 include(GSettings)
-add_schema(cronopete.gschema.xml)
+add_schema(org.rastersoft.cronopete.gschema.xml)

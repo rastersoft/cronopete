@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="apps.cronopete" path="/apps/cronopete/">
+  <schema id="org.rastersoft.cronopete" path="/org/rastersoft/cronopete/">
     <key type="b" name="enabled">
       <default>false</default>
       <summary>Enable doing backups</summary>
