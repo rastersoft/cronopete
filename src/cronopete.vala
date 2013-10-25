@@ -24,6 +24,8 @@ using Gdk;
 using Cairo;
 using Gsl;
 
+// project version=3.15.0
+
 #if !NO_APPINDICATOR
 using AppIndicator;
 #endif
@@ -786,16 +788,9 @@ int main(string[] args) {
 	// try to connect to the bus
 
 	nice(19); // Minimum priority
-	string basepath;
+	string basepath=Constants.PKGDATADIR;
 
-	var file=File.new_for_path("/usr/share/cronopete/main.ui");
-	if (file.query_exists()) {
-		basepath="/usr/share/cronopete/";
-		Intl.bindtextdomain("cronopete", "/usr/share/locale");
-	} else {
-		basepath="/usr/local/share/cronopete/";
-		Intl.bindtextdomain("cronopete", "/usr/local/share/locale");
-	}
+	Intl.bindtextdomain(Constants.GETTEXT_PACKAGE, GLib.Path.build_filename(Constants.DATADIR,"locale"));
 
 	//Intl.setlocale (LocaleCategory.ALL, "");
 	Intl.textdomain("cronopete");

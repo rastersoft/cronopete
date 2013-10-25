@@ -262,8 +262,9 @@ class c_main_menu : GLib.Object {
 
 		w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
 
-		var about_w = (Dialog)w.get_object("aboutdialog1");
+		var about_w = (AboutDialog)w.get_object("aboutdialog1");
 
+		about_w.set_version(Constants.VERSION);
 		about_w.show();
 		about_w.run();
 		about_w.hide();
