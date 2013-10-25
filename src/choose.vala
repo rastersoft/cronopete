@@ -278,6 +278,14 @@ class c_choose_disk : GLib.Object {
 	private Button ok_button;
 	private GLib.Settings cronopete_settings;
 
+	private Gtk.CheckButton show_all;
+
+	private void show_all_toggled() {
+		var status=this.show_all.get_active();
+		this.cronopete_settings.set_boolean("all-drives",status);
+		this.refresh_list();
+	}
+
 	public void run(string path, cp_callback p, GLib.Settings c_settings) {
 
 		this.parent = p;
@@ -291,6 +299,10 @@ class c_choose_disk : GLib.Object {
 
 		this.disk_list = (TreeView) this.builder.get_object("disk_list");
 		this.ok_button = (Button) this.builder.get_object("ok_button");
+
+		this.show_all = (Gtk.CheckButton) this.builder.get_object("show_all_disks");
+		this.show_all.set_active(this.cronopete_settings.get_boolean("all-drives"));
+		this.show_all.toggled.connect(this.show_all_toggled);
 
 		this.disk_listmodel = new ListStore (5, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string));
 		this.disk_list.set_model(this.disk_listmodel);
