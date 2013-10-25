@@ -123,7 +123,8 @@ class cp_callback : GLib.Object, callbacks {
 
 		set {
 			this.i_backup_path=value;
-			this.backend=new usbhd_backend(value);
+			this.backend=new usbhd_backend(value,this.cronopete_settings.get_string("backup-uid"));
+			this.cronopete_settings.set_string("backup-uid",this.backend.get_uuid);
 			this.backend.status.connect(this.refresh_status);
 			this.refresh_status(null);
 		}
@@ -158,7 +159,7 @@ class cp_callback : GLib.Object, callbacks {
 		this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 		var retval=this.read_configuration();
 
-		this.backend=new usbhd_backend(this.cronopete_settings.get_string("backup-path"));
+		this.backend=new usbhd_backend(this.cronopete_settings.get_string("backup-path"),this.cronopete_settings.get_string("backup-uid"));
 		this.backend.status.connect(this.refresh_status);
 		this.fill_last_backup();
 

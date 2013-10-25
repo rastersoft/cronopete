@@ -52,6 +52,7 @@ interface backends : GLib.Object {
 	public abstract bool get_free_space(out uint64 total_space, out uint64 free_space);
 
 	public abstract bool available {get;}
+	public abstract string? get_uuid {get;}
 	public signal void status(usbhd_backend b);
 
 	public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<file_info ?> files, out string date);

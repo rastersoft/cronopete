@@ -16,6 +16,11 @@
       <summary>Don't backup the hidden files in the personal folder</summary>
       <description>When enabled, hidden files and folders in the root of the personal folder won't be backed up (but hidden files and folders in subdirectories will be).</description>
     </key>
+    <key type="s" name="backup-uid">
+      <default>""</default>
+      <summary>UID of the external disk</summary>
+      <description>UID of the partition where to do the backups.</description>
+    </key>
     <key type="s" name="backup-path">
       <default>""</default>
       <summary>Path to the external disk</summary>

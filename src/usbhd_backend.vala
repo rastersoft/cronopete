@@ -39,6 +39,12 @@ class usbhd_backend: Object, backends {
 	private string drive_path;
 	private VolumeMonitor monitor;
 	public bool _available;
+	private string? drive_uuid;
+	public string? get_uuid {
+		get {
+			return (this.drive_uuid);
+		}
+	}
 	public bool available {
 		get {
 			return (this._available);
@@ -50,9 +56,10 @@ class usbhd_backend: Object, backends {
 	private GLib.Mutex lock_delete;
 	private time_t deleting;
 
-	public usbhd_backend(string? bpath2) {
+	public usbhd_backend(string? bpath2, string? uuid) {
 
 		string bpath;
+		this.drive_uuid="";
 
 		if (bpath2==null) {
 			bpath="";
@@ -77,8 +84,23 @@ class usbhd_backend: Object, backends {
 		this.monitor.mount_added.connect_after(this.refresh_connect);
 		this.monitor.mount_removed.connect_after(this.refresh_connect);
 		this.last_msg=0;
-		this.refresh_connect();
 
+		var volumes = this.monitor.get_volumes();
+		Mount mnt;
+		if ((uuid!=null)&&(uuid!="")) {
+			foreach (Volume v in volumes) {
+				mnt=v.get_mount();
+				if ((mnt is Mount)) {
+					continue;
+				}
+				string ?id=v.get_identifier("uuid");
+				if (id==uuid) {
+					v.mount(GLib.MountMountFlags.NONE,null);
+					break;
+				}
+			}
+		}
+		this.refresh_connect();
 	}
 
 	public void lock_delete_backup (bool lock_in) {
@@ -205,13 +227,12 @@ class usbhd_backend: Object, backends {
 		var volumes = this.monitor.get_volumes();
 		Mount mnt;
 		foreach (Volume v in volumes) {
-
 			mnt=v.get_mount();
 			if ((mnt is Mount)==false) {
 				continue;
 			}
-
 			if (this.drive_path==mnt.get_root().get_path()) {
+				this.drive_uuid=v.get_identifier("uuid");
 				this._available=true;
 				if (this.last_msg!=1) {
 					this.last_msg=1;

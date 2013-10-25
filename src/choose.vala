@@ -31,6 +31,8 @@ interface Device_if : GLib.Object {
 	public abstract string IdLabel { owned get; }
 	public abstract string[] DeviceMountPaths { owned get; }
 	public abstract bool DeviceIsSystemInternal { owned get; }
+	public abstract bool DeviceIsPartition { owned get; }
+	public abstract string IdUuid { owned get; }
 	public signal void JobChanged(bool job_in_progress,string job_id,uint job_initiated_by_uid,bool job_is_cancellable,double job_percentage);
 	public signal void Changed();
 
@@ -119,9 +121,10 @@ class c_format : GLib.Object {
 		/*try {
 			yield device2.PartitionModify("131","",null);
 		} catch (IOError e) {
-		}*/ // Removed because it hangs :(
-
+		}
 		Posix.sleep(2);
+		*/ // Removed because it hangs :(
+
 		try {
 			string out_path;
 			yield device2.FilesystemMount(format,null,out out_path);
