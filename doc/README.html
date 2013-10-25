@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Cronopete 3.4.0</title>
+    <title>Cronopete 3.15.0</title>
     <style type="text/css" media="all">
       .menu { background-color: #dddbd8; }
       .filename { color: green; }
@@ -8,7 +8,7 @@
     </style>
   </head>
 <body>
-<div align="center"><h1>CRONOPETE 3.14.0</h1></div>
+<div align="center"><h1>CRONOPETE 3.15.0</h1></div>
 
 <p>The Apple's TimeMachine clone for Linux</p>
 
@@ -64,7 +64,7 @@ a temporal backup (one that is still being made).</p>
 
 <p>Cronopete is written in Vala, so you need to install it:</p>
 <p><ul>
-<li>A recent version of Vala (0.16 or later)</li>
+<li>A recent version of Vala (0.20 or later)</li>
 <li>GSL library</li>
 <li>Gee library</li>
 <li>GTK+ 2.20 or later, or GTK+ 3.0 or later</li>
@@ -112,10 +112,15 @@ up, or can't access into a folder). If it's green or white, all is working fine.
 <p>The first thing to do is to choose the external hard disk to use to do the backups. By clicking the <span class="menu">Change disk</span> button a windows with the currently
 mounted USB hard disks will be shown:</p>
 <div align="center"><img src="cronopete4.png" /></div>
+<p>By default only the USB drives will be shown, but if the option <i>Show all disks (except /home)</i> is marked, all other hard disks in the system will be shown,
+except the one where the <i>/home</i> personal folder is. This is because Cronopete is a backup program, and a backup never should be in the same physical disk than
+the data to be backed up, because in case the disk fails, both the original data and the backup would be lost.</p>
+<div align="center"><img src="cronopete4b.png" /></div>
 <p>If we choose the MSDOS/FAT formatted disk, a new window will be shown:</p>
 <div align="center"><img src="cronopete6.png" /></div>
-<p>The best file system to use is ReiserFS because it supports <a href="http://en.wikipedia.org/wiki/Tail_packing">tail packing</a>, which allows to optimize
-the disk usage; but EXT3/EXT4 is also allowed. BTRFS is not allowed because it still has bugs which prevents it to be reliabely used with cronopete.</p>
+<p>Cronopete supports both ReiserFS and Ext3/Ext4, but to use the former, the user must manually format the drive and ensure that it has permissions for reading and
+writting; if Cronopete formats a drive, will do it in Ext4 format. BTRFS is not allowed because it still has bugs which prevents it to be reliabely used with
+cronopete.</p>
 <p>If you click the <span class="menu">Format disk</span> button, cronopete will try to format the disk in ReiserFS format; if it fails (let's say, because reiserfstools are not
 installed in the system), then it will try to format it in EXT4 format. Of course, this operation will erase all the data in the external disk.</p>
 <p>When the disk is ready, cronopete will show its main window like this:</p>
@@ -165,6 +170,15 @@ or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 
 <h2>History of versions</h2>
 <ul>
+
+<li>Version 3.15.0 (2013/10/26)</li>
+<li>Now doesn't hang when trying to set the partition type during disk formating</li>
+<li>Changed the schema path from <i>apps.cronopete</i> to <i>org.rastersoft.cronopete</i> to be compliant with the Gnome rules (requires reconfiguration!!!)</li>
+<li>Removed formating in ReiserFS; now only formats in Ext4, but still supports ReiserFS if formated manually by the user</li>
+<li>Allows to show the non-usb disks directly from the interface</li>
+<li>Now automounts the drive during launch</li>
+<li>Build system migrated to Autovala+CMake</li>
+<li>The code now uses the data automatically detected by Autovala</li>
 
 <li>Version 3.14.0 (2013/06/15)</li>
 <li>Fixed the refresh bug when the timer line has to do a big jump.</li>
