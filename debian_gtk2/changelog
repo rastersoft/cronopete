@@ -1,3 +1,16 @@
+cronopete-gtk2 (3.15.1-ppa1) raring; urgency=low
+
+  * Added a welcome window
+  * Now doesn't hang when trying to set the partition type during disk formating
+  * Changed the schema path from apps.cronopete to org.rastersoft.cronopete to be compliant with the Gnome rules (requires reconfiguration!!!)
+  * Removed formating in ReiserFS; now only formats in Ext4, but still supports ReiserFS if formated manually by the user
+  * Allows to show the non-usb disks directly from the interface
+  * Now automounts the drive during launch
+  * Build system migrated to Autovala+CMake
+  * The code now uses the data automatically detected by Autovala
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 26 Oct 2013 16:52:17 +0100
+
 cronopete-gtk2 (3.14.0-ppa1) raring; urgency=low
 
   * Fixes the refresh bug when the timer line has to do a big jump
