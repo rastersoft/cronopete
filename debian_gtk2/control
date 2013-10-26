@@ -7,7 +7,7 @@ Homepage: http://www.rastersoft.com
 
 Package: cronopete-gtk2
 Architecture: any
-Depends: valac-0.18, libvala-0.18-0, libgee2, libgsl0ldbl, libgtk2.0-0, libappindicator-1
+Depends: valac-0.18, libvala-0.18-0, libgee2, libgsl0ldbl, libgtk2.0-0, libappindicator1
 Conflicts: cronopete
 Description: A backup utility
  A backup utility modeled after Apple's Time Machine
