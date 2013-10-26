@@ -1,7 +1,7 @@
 ### AutoVala Project ###
 autovala_version: 6
 project_name: cronopete
-vala_version: 0.20
+vala_version: 0.18
 
 *po: po
 
