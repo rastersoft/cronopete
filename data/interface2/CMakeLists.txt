@@ -34,5 +34,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/restoring.ui DESTINATION share/cronope
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/folder_selector.ui DESTINATION share/cronopete/ )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/format_error.ui DESTINATION share/cronopete/ )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/restore_error.ui DESTINATION share/cronopete/ )
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/welcome.ui DESTINATION share/cronopete/ )
 ENDIF()
 

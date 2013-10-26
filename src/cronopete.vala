@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.15.0
+// project version=3.15.1
 
 #if !NO_APPINDICATOR
 using AppIndicator;
@@ -142,6 +142,33 @@ class cp_callback : GLib.Object, callbacks {
 #endif
 		if ((this._active) && (this.backend.available) && (this.backup_pending)) {
 			this.timer_f();
+		}
+	}
+
+	public void check_welcome() {
+		if(this.cronopete_settings.get_boolean("show-welcome")==false) {
+			return;
+		}
+		var w = new Builder();
+
+		w.add_from_file(GLib.Path.build_filename(this.basepath,"welcome.ui"));
+
+		var welcome_w = (Dialog)w.get_object("dialog1");
+
+		welcome_w.show();
+		var retval=welcome_w.run();
+		welcome_w.hide();
+		welcome_w.destroy();
+		switch(retval) {
+		case 1: // ask me later
+		break;
+		case 2: // configure now
+			this.cronopete_settings.set_boolean("show-welcome",false);
+			this.main_clicked();
+		break;
+		case 3: // don't ask again
+			this.cronopete_settings.set_boolean("show-welcome",false);
+		break;
 		}
 	}
 
@@ -798,6 +825,7 @@ int main(string[] args) {
 
 	Gdk.threads_init();
 	Gtk.init(ref args);
+	Gdk.threads_enter();
 
 	callback_object = new cp_callback(basepath);
 	Bus.own_name (BusType.SESSION, "com.rastersoft.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
@@ -809,8 +837,7 @@ int main(string[] args) {
 		sleep(2); // To ensure that the menu bar has been loaded
 	}*/
 
-	Gdk.threads_enter();
-
+	callback_object.check_welcome();
 	Gtk.main();
 
 	Gdk.threads_leave();

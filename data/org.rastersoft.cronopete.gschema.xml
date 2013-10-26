@@ -51,6 +51,12 @@
       <summary>Color for toning the background</summary>
       <description>This color will be used when entering in the Restoring backups interface, for toning the background picture</description>
     </key>
+    <key type="b" name="show-welcome">
+      <default>true</default>
+      <summary>Shows the welcome message</summary>
+      <description>When enabled, Cronopete will show the welcome message asking the user to configure the backups.</description>
+    </key>
+
 	<!--<key type="" name="">
       <default></default>
       <summary></summary>

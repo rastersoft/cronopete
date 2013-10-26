@@ -13,7 +13,7 @@ vala_version: 0.20
 *doc: doc
 
 vala_binary: src/cronopete
-*version: 3.15.0
+*version: 3.15.1
 *vala_package: posix
 *vala_check_package: gee-1.0
 *vala_check_package: cairo
@@ -69,6 +69,7 @@ glade: data/interface2/restoring.ui
 glade: data/interface2/folder_selector.ui
 glade: data/interface2/format_error.ui
 glade: data/interface2/restore_error.ui
+glade: data/interface2/welcome.ui
 else
 glade: data/interface/config_exported.ui
 glade: data/interface/format_force.ui
@@ -82,6 +83,7 @@ glade: data/interface/restoring.ui
 glade: data/interface/folder_selector.ui
 glade: data/interface/format_error.ui
 glade: data/interface/restore_error.ui
+glade: data/interface/welcome.ui
 end
 
 *icon: status data/icons/cronopete-arrow-2-red-symbolic.svg
