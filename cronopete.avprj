@@ -13,7 +13,7 @@ vala_version: 0.18
 *doc: doc
 
 vala_binary: src/cronopete
-*version: 3.15.1
+*version: 3.15.2
 *vala_package: posix
 *vala_check_package: gee-1.0
 *vala_check_package: cairo

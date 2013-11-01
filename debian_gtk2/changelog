@@ -1,9 +1,18 @@
+cronopete-gtk2 (3.15.2-ppa1) raring; urgency=low
+
+  * Fixed galician translation
+  * Removed the access to GTK from several threads
+  * The CANCEL button when choosing a folder to (or not) backup now works
+  * Now doesn't fail if pressing the ACCEPT button in the folder selection dialog without a folder selected
+  * Now removes the wellcome message also if the user shows the configuration dialog
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Fri, 1 Nov 2013 20:17:17 +0100
+
 cronopete-gtk2 (3.15.1-ppa2) raring; urgency=low
 
   * Changed vala version needed to 0.18
 
  -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 26 Oct 2013 20:17:17 +0100
-
 
 cronopete-gtk2 (3.15.1-ppa1) raring; urgency=low
 
