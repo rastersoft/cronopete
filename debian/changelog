@@ -1,3 +1,9 @@
+cronopete (3.15.1-ppa2) raring; urgency=low
+
+  * Changed vala version needed to 0.18
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 26 Oct 2013 20:17:17 +0100
+
 cronopete (3.15.1-ppa1) raring; urgency=low
 
   * Added a welcome window

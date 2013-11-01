@@ -492,7 +492,6 @@ class cp_callback : GLib.Object, callbacks {
 #if NO_APPINDICATOR
 		this.menuSystem.popup(null,null,this.trayicon.position_menu,2,Gtk.get_current_event_time());
 #endif
-
 	}
 
 	public void backup_now() {
@@ -518,7 +517,6 @@ class cp_callback : GLib.Object, callbacks {
 			this.backup_forced=false;
 			this.basedir.abort_backup();
 		}
-
 	}
 
 	public void enter_clicked() {
@@ -823,9 +821,7 @@ int main(string[] args) {
 	Intl.textdomain("cronopete");
 	Intl.bind_textdomain_codeset("cronopete", "UTF-8" );
 
-	Gdk.threads_init();
 	Gtk.init(ref args);
-	Gdk.threads_enter();
 
 	callback_object = new cp_callback(basepath);
 	Bus.own_name (BusType.SESSION, "com.rastersoft.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
@@ -833,14 +829,9 @@ int main(string[] args) {
 		exit(1);
 	});
 
-	/*if (args.length==1) {
-		sleep(2); // To ensure that the menu bar has been loaded
-	}*/
-
 	callback_object.check_welcome();
 	Gtk.main();
 
-	Gdk.threads_leave();
 	return 0;
 }
 

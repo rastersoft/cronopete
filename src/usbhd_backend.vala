@@ -221,7 +221,6 @@ class usbhd_backend: Object, backends {
 		}
 	}
 
-
 	public void refresh_connect() {
 
 		var volumes = this.monitor.get_volumes();
