@@ -4,6 +4,7 @@
   <object class="GtkFileChooserDialog" id="folder_selector">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="role">GtkFileChooserDialog</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="icon">anacronopete.svg</property>
@@ -12,45 +13,39 @@
     <property name="create_folders">False</property>
     <property name="preview_widget_active">False</property>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
-        <property name="visible">True</property>
+      <object class="GtkBox" id="filechooserdialog-vbox2">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
+          <object class="GtkButtonBox" id="filechooserdialog-action_area2">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button1">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="button2">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -68,7 +63,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">button1</action-widget>
+      <action-widget response="0">button1</action-widget>
       <action-widget response="-6">button2</action-widget>
     </action-widgets>
   </object>
