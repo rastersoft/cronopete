@@ -159,6 +159,7 @@ class c_main_menu : GLib.Object {
 				this.mark = this.log.create_mark("end", iter, false);
 				this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 			} else {
+				// From another thread, use the pipe
 				size_t len;
 				this.io_write.write_chars((char[])msg,out len);
 			}
@@ -218,6 +219,7 @@ class c_main_menu : GLib.Object {
 		this.refresh_backup_data();
 
 		this.log.set_text(log,-1);
+		this.cronopete_settings.set_boolean("show-welcome",false);
 		this.main_w.show_all();
 		this.main_w.present();
 

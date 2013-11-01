@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.15.1
+// project version=3.15.2
 
 #if !NO_APPINDICATOR
 using AppIndicator;
