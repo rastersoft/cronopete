@@ -1,22 +1,17 @@
 ### AutoVala Project ###
-autovala_version: 6
+autovala_version: 7
 project_name: cronopete
-vala_version: 0.18
+vala_version: 0.20
 
-*po: po
-
-*define: USE_GTK2
 *define: NO_APPINDICATOR
-
-*data: data/local
-
-*doc: doc
+*define: USE_GTK2
 
 vala_binary: src/cronopete
 *version: 3.15.2
 *vala_package: posix
-*vala_check_package: gee-1.0
 *vala_check_package: cairo
+*vala_check_package: gee-1.0
+*vala_check_package: gio-2.0
 *vala_check_package: gsl
 if (NOT NO_APPINDICATOR) AND (NOT USE_GTK2)
 vala_check_package: appindicator3-0.1
@@ -25,28 +20,34 @@ if (NOT NO_APPINDICATOR) AND (USE_GTK2)
 vala_check_package: appindicator-0.1
 end
 if USE_GTK2
-vala_check_package: gtk+-2.0
 vala_check_package: gdk-2.0
+vala_check_package: gtk+-2.0
 else
-vala_check_package: gtk+-3.0
 vala_check_package: gdk-3.0
 vala_check_package: glib-2.0
+vala_check_package: gtk+-3.0
 end
-*vala_source: switch_widget.vala
-*vala_source: options.vala
-*vala_source: usbhd_backend.vala
-*vala_source: cronopete.vala
-*vala_source: menu.vala
-*vala_source: icons_widget.vala
-*vala_source: restore.vala
 *vala_source: backup.vala
 *vala_source: choose.vala
+*vala_source: cronopete.vala
+*vala_source: icons_widget.vala
+*vala_source: menu.vala
+*vala_source: options.vala
+*vala_source: restore.vala
+*vala_source: switch_widget.vala
+*vala_source: usbhd_backend.vala
+
+*po: po
+
+*data: data/local
+
+*doc: doc
 
 *binary: data/cronopete_preferences.sh
 *binary: data/cronopete_restore.sh
 
-*desktop: data/cronopete_restore.desktop
 *desktop: data/cronopete_preferences.desktop
+*desktop: data/cronopete_restore.desktop
 
 *autostart: data/cronopete.desktop
 
@@ -57,82 +58,82 @@ end
 *scheme: data/org.rastersoft.cronopete.gschema.xml
 
 if USE_GTK2
-glade: data/interface2/config_exported.ui
-glade: data/interface2/format_force.ui
-glade: data/interface2/formatting.ui
-glade: data/interface2/options.ui
 glade: data/interface2/about.ui
-glade: data/interface2/restore_ok.ui
-glade: data/interface2/main.ui
 glade: data/interface2/chooser.ui
-glade: data/interface2/restoring.ui
+glade: data/interface2/config_exported.ui
 glade: data/interface2/folder_selector.ui
 glade: data/interface2/format_error.ui
+glade: data/interface2/format_force.ui
+glade: data/interface2/formatting.ui
+glade: data/interface2/main.ui
+glade: data/interface2/options.ui
 glade: data/interface2/restore_error.ui
+glade: data/interface2/restore_ok.ui
+glade: data/interface2/restoring.ui
 glade: data/interface2/welcome.ui
 else
-glade: data/interface/config_exported.ui
-glade: data/interface/format_force.ui
-glade: data/interface/formatting.ui
-glade: data/interface/options.ui
 glade: data/interface/about.ui
-glade: data/interface/restore_ok.ui
-glade: data/interface/main.ui
 glade: data/interface/chooser.ui
-glade: data/interface/restoring.ui
+glade: data/interface/config_exported.ui
 glade: data/interface/folder_selector.ui
 glade: data/interface/format_error.ui
+glade: data/interface/format_force.ui
+glade: data/interface/formatting.ui
+glade: data/interface/main.ui
+glade: data/interface/options.ui
 glade: data/interface/restore_error.ui
+glade: data/interface/restore_ok.ui
+glade: data/interface/restoring.ui
 glade: data/interface/welcome.ui
 end
 
-*icon: status data/icons/cronopete-arrow-2-red-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-4-red.svg
-*icon: apps data/icons/anacronopete_64x64.png
-*icon: apps data/icons/anacronopete_24x24.png
-*icon: status data/icons/cronopete-arrow-1-red-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-2-orange.svg
-*icon: apps data/icons/cronopete-arrow-1-green.svg
-*icon: apps data/icons/anacronopete_32x32.png
-*icon: status data/icons/cronopete-arrow-1-orange-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-3-green.svg
-*icon: status data/icons/cronopete-arrow-4-red-symbolic.svg
-*icon: status data/icons/cronopete-arrow-2-yellow-symbolic.svg
-*icon: status data/icons/cronopete-arrow-3-red-symbolic.svg
-*icon: apps data/icons/anacronopete_22x22.png
-*icon: status data/icons/cronopete-arrow-1-green-symbolic.svg
-*icon: apps data/icons/cronopete_restore.svg
-*icon: apps data/icons/cronopete-arrow-3-orange.svg
-*icon: status data/icons/cronopete-arrow-4-white-symbolic.svg
-*icon: status data/icons/cronopete-arrow-2-green-symbolic.svg
-*icon: status data/icons/cronopete-arrow-2-orange-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-1-red.svg
-*icon: status data/icons/cronopete-arrow-1-yellow-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-4-yellow.svg
-*icon: apps data/icons/cronopete-arrow-2-green.svg
-*icon: status data/icons/cronopete-arrow-3-green-symbolic.svg
-*icon: apps data/icons/cronopete_preferences.svg
-*icon: status data/icons/cronopete-arrow-3-yellow-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-2-red.svg
-*icon: status data/icons/cronopete-arrow-4-green-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-4-orange.svg
-*icon: apps data/icons/anacronopete_48x48.png
-*icon: status data/icons/cronopete-arrow-1-white-symbolic.svg
-*icon: status data/icons/cronopete-arrow-2-white-symbolic.svg
-*icon: status data/icons/cronopete-arrow-3-orange-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-1-yellow.svg
-*icon: apps data/icons/cronopete-arrow-3-red.svg
-*icon: apps data/icons/cronopete-arrow-4-green.svg
-*icon: apps data/icons/anacronopete_16x16.png
-*icon: status data/icons/cronopete-arrow-3-white-symbolic.svg
-*icon: status data/icons/cronopete-arrow-4-yellow-symbolic.svg
-*icon: apps data/icons/cronopete-arrow-2-yellow.svg
-*icon: apps data/icons/cronopete-arrow-1-orange.svg
-*icon: status data/icons/cronopete-arrow-4-orange-symbolic.svg
 *icon: apps data/icons/anacronopete_128x128.png
+*icon: apps data/icons/anacronopete_16x16.png
+*icon: apps data/icons/anacronopete_22x22.png
+*icon: apps data/icons/anacronopete_24x24.png
+*icon: apps data/icons/anacronopete_32x32.png
+*icon: apps data/icons/anacronopete_48x48.png
+*icon: apps data/icons/anacronopete_64x64.png
+*icon: status data/icons/cronopete-arrow-1-green-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-1-green.svg
+*icon: status data/icons/cronopete-arrow-1-orange-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-1-orange.svg
+*icon: status data/icons/cronopete-arrow-1-red-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-1-red.svg
+*icon: status data/icons/cronopete-arrow-1-white-symbolic.svg
+*icon: status data/icons/cronopete-arrow-1-yellow-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-1-yellow.svg
+*icon: status data/icons/cronopete-arrow-2-green-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-2-green.svg
+*icon: status data/icons/cronopete-arrow-2-orange-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-2-orange.svg
+*icon: status data/icons/cronopete-arrow-2-red-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-2-red.svg
+*icon: status data/icons/cronopete-arrow-2-white-symbolic.svg
+*icon: status data/icons/cronopete-arrow-2-yellow-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-2-yellow.svg
+*icon: status data/icons/cronopete-arrow-3-green-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-3-green.svg
+*icon: status data/icons/cronopete-arrow-3-orange-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-3-orange.svg
+*icon: status data/icons/cronopete-arrow-3-red-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-3-red.svg
+*icon: status data/icons/cronopete-arrow-3-white-symbolic.svg
+*icon: status data/icons/cronopete-arrow-3-yellow-symbolic.svg
 *icon: apps data/icons/cronopete-arrow-3-yellow.svg
+*icon: status data/icons/cronopete-arrow-4-green-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-4-green.svg
+*icon: status data/icons/cronopete-arrow-4-orange-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-4-orange.svg
+*icon: status data/icons/cronopete-arrow-4-red-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-4-red.svg
+*icon: status data/icons/cronopete-arrow-4-white-symbolic.svg
+*icon: status data/icons/cronopete-arrow-4-yellow-symbolic.svg
+*icon: apps data/icons/cronopete-arrow-4-yellow.svg
+*icon: apps data/icons/cronopete_preferences.svg
+*icon: apps data/icons/cronopete_restore.svg
 
-*pixmap: data/pixmaps/arrows.png
 *pixmap: data/pixmaps/anacronopete.svg
 *pixmap: data/pixmaps/anacronopete_tiny.svg
+*pixmap: data/pixmaps/arrows.png
 
