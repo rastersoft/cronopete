@@ -1,7 +1,7 @@
 ### CMakeLists automatically created with AutoVala
 ### Do not edit
 
-set (DATADIR "${AUTOVALA_INSTALL_PREFIX}/share")
+set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set (PKGDATADIR "${DATADIR}/cronopete")
 set (GETTEXT_PACKAGE "cronopete")
 set (RELEASE_NAME "cronopete")

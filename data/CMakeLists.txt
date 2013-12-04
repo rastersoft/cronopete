@@ -1,7 +1,7 @@
 ### CMakeLists automatically created with AutoVala
 ### Do not edit
 
-SET(DBUS_PREFIX ${AUTOVALA_INSTALL_PREFIX})
+SET(DBUS_PREFIX ${CMAKE_INSTALL_PREFIX})
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.sh DESTINATION bin/)
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.sh DESTINATION bin/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.desktop DESTINATION share/applications/ )

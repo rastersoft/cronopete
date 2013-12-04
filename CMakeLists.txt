@@ -6,8 +6,6 @@ cmake_minimum_required (VERSION 2.6)
 cmake_policy (VERSION 2.8)
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 enable_testing ()
-set (AUTOVALA_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} )
-
 option(ICON_UPDATE "Update the icon cache after installing" ON)
 option(BUILD_VALADOC "Build API documentation if Valadoc is available" OFF)
 option(NO_APPINDICATOR "NO_APPINDICATOR" OFF)
