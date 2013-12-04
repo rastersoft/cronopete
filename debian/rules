@@ -5,8 +5,8 @@ BUILDDIR = build_dir
 # secondly called by launchpad
 build:
 	mkdir $(BUILDDIR);
-	cd $(BUILDDIR); cmake -DCMAKE_INSTALL_PREFIX=../debian/tmp/usr -DGSETTINGS_COMPILE=OFF -DICON_UPDATE=OFF ..
-	make -C $(BUILDDIR)
+	cd $(BUILDDIR); cmake -DCMAKE_INSTALL_PREFIX=/usr -DGSETTINGS_COMPILE=OFF -DICON_UPDATE=OFF ..
+	make -C $(BUILDDIR) DESTDIR=../debian/tmp
 
 # thirdly called by launchpad
 binary: binary-indep binary-arch
