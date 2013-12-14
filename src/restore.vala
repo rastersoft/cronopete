@@ -254,7 +254,7 @@ class restore_iface : GLib.Object {
 		this.mywindow.opacity=this.current_alpha;
 
 		this.backups=p_backend.get_backup_list();
-		this.backups.sort((CompareFunc)mysort_64);
+		this.backups.sort(mysort_64);
 
 		this.browser=new FilelistIcons.IconBrowser(this.backend,Environment.get_home_dir());
 		this.pos=0;

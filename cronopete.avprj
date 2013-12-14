@@ -1,13 +1,13 @@
 ### AutoVala Project ###
 autovala_version: 7
 project_name: cronopete
-vala_version: 0.20
+vala_version: 0.22
 
 *define: NO_APPINDICATOR
 *define: USE_GTK2
 
 vala_binary: src/cronopete
-*version: 3.15.2
+*version: 3.15.3
 *vala_package: posix
 if (NOT NO_APPINDICATOR) AND (NOT USE_GTK2)
 vala_check_package: appindicator3-0.1
@@ -24,8 +24,9 @@ vala_check_package: glib-2.0
 vala_check_package: gtk+-3.0
 end
 *vala_check_package: cairo
-*vala_check_package: gee-1.0
+*vala_check_package: gee-0.8
 *vala_check_package: gio-2.0
+*vala_check_package: gobject-2.0
 *vala_check_package: gsl
 *vala_source: backup.vala
 *vala_source: choose.vala

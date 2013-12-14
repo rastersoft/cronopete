@@ -198,7 +198,7 @@ class nanockup:Object {
 	private path_list done_backup;
 
 	// Contains a list of directory paths which must NOT be backed up
-	private HashSet<string> exclude_path_list;
+	private Gee.HashSet<string> exclude_path_list;
 
 	// If true, cronopete won't backup the hiden files or folders at the HOME directory
 	private bool skip_hiden_at_HOME;
@@ -219,7 +219,7 @@ class nanockup:Object {
 	public nanockup(callbacks to_callback,backends to_backend) {
 
 		this.origin_path_list=new path_list();
-		this.exclude_path_list =new HashSet<string>(str_hash,str_equal);
+		this.exclude_path_list =new Gee.HashSet<string>();
 		this.callback=to_callback;
 		this.backend=to_backend;
 
@@ -248,7 +248,7 @@ class nanockup:Object {
 			return;
 		}
 
-		lbacks.sort((CompareFunc)mysort_64);
+		lbacks.sort(mysort_64);
 
 		var ctime=time_t();
 
@@ -280,7 +280,7 @@ class nanockup:Object {
 	public void set_config(string[] origin_path,string[] exclude_path, bool skip_h_at_h) {
 
 		this.origin_path_list=new path_list();
-		this.exclude_path_list=new HashSet<string>(str_hash,str_equal);
+		this.exclude_path_list=new Gee.HashSet<string>();
 
 		foreach (string tmp in origin_path) {
 			this.callback.show_message(_("Backing up folder %s.\n").printf(tmp));
@@ -573,7 +573,7 @@ class nanockup:Object {
 			return false;
 		}
 
-		blist.sort((CompareFunc)mysort_64);
+		blist.sort(mysort_64);
 
 		time_t entry;
 		while(c_size<=d_size) {
