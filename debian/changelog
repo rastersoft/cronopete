@@ -1,3 +1,27 @@
+cronopete (3.15.3-ppa4) saucy; urgency=low
+
+  * Updated dependencies to use Vala 0.20
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete (3.15.3-ppa3) saucy; urgency=low
+
+  * Updated to Saucy, to use Vala 0.20
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete (3.15.3-ppa2) raring; urgency=low
+
+  * Set again Vala compiler version to 0.20
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete (3.15.3-ppa1) raring; urgency=low
+
+  * Updated to Gee 0.8
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
 cronopete (3.15.2-ppa1) raring; urgency=low
 
   * Fixed galician translation
