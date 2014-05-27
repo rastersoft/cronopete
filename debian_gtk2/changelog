@@ -1,3 +1,27 @@
+cronopete-gtk2 (3.15.3-ppa8) saucy; urgency=low
+
+  * Fixed the new RULES file
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 15 Dec 2013 20:17:17 +0100
+
+cronopete-gtk2 (3.15.3-ppa7) saucy; urgency=low
+
+  * Trying to use DESTDIR again(2)
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete-gtk2 (3.15.3-ppa6) saucy; urgency=low
+
+  * Trying to use DESTDIR again
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete-gtk2 (3.15.3-ppa5) saucy; urgency=low
+
+  * Trying to use DESTDIR
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
 cronopete-gtk2 (3.15.3-ppa4) saucy; urgency=low
 
   * Updated dependencies to use Vala 0.20
@@ -6,7 +30,7 @@ cronopete-gtk2 (3.15.3-ppa4) saucy; urgency=low
 
 cronopete-gtk2 (3.15.3-ppa3) saucy; urgency=low
 
-  * Updated to saucy, to allow to use Vala 0.20
+  * Updated to Saucy, to use Vala 0.20
 
  -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
 
@@ -50,7 +74,7 @@ cronopete-gtk2 (3.15.1-ppa1) raring; urgency=low
   * The code now uses the data automatically detected by Autovala
 
  -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 26 Oct 2013 16:52:17 +0100
-
+  
 cronopete-gtk2 (3.14.0-ppa1) raring; urgency=low
 
   * Fixes the refresh bug when the timer line has to do a big jump
@@ -91,7 +115,7 @@ cronopete-gtk2 (3.12.0-ppa0) precise; urgency=low
 
 cronopete-gtk2 (3.11.1-ppa0) precise; urgency=low
 
-  * Fixed return value at DRAW and EXPOSE-EVENT callbacks 
+  * Fixed return value at DRAW and EXPOSE-EVENT callbacks
 
  -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 May 2013 14:15:17 +0100
 

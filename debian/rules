@@ -6,7 +6,8 @@ BUILDDIR = build_dir
 build:
 	mkdir $(BUILDDIR);
 	cd $(BUILDDIR); cmake -DCMAKE_INSTALL_PREFIX=/usr -DGSETTINGS_COMPILE=OFF -DICON_UPDATE=OFF ..
-	make -C $(BUILDDIR) DESTDIR=../debian/tmp
+	make -C $(BUILDDIR)
+
 
 # thirdly called by launchpad
 binary: binary-indep binary-arch
@@ -15,7 +16,7 @@ binary-indep:
 	# nothing to be done
 
 binary-arch:
-	cd $(BUILDDIR); cmake -P cmake_install.cmake
+	make install -C $(BUILDDIR) DESTDIR=./debian/tmp
 	mkdir debian/tmp/DEBIAN
 	dpkg-gencontrol -pcronopete
 	dpkg --build debian/tmp ..

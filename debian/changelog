@@ -1,3 +1,27 @@
+cronopete (3.15.3-ppa8) saucy; urgency=low
+
+  * Removed TMP folder from the source package
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 15 Dec 2013 20:17:17 +0100
+
+cronopete (3.15.3-ppa7) saucy; urgency=low
+
+  * Trying to use DESTDIR again(2)
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete (3.15.3-ppa6) saucy; urgency=low
+
+  * Trying to use DESTDIR again
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
+cronopete (3.15.3-ppa5) saucy; urgency=low
+
+  * Trying to use DESTDIR
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
+
 cronopete (3.15.3-ppa4) saucy; urgency=low
 
   * Updated dependencies to use Vala 0.20
