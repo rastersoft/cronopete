@@ -1,10 +1,11 @@
 ### AutoVala Project ###
 autovala_version: 11
 project_name: cronopete
-vala_version: 0.22
+vala_version: 0.24
 
 *define: NO_APPINDICATOR
 *define: USE_GTK2
+
 
 vala_binary: src/cronopete
 *version: 3.15.3

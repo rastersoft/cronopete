@@ -1,7 +1,7 @@
 ### CMakeLists automatically created with AutoVala
 ### Do not edit
 
-set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+set (DATADIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}")
 set (PKGDATADIR "${DATADIR}/cronopete")
 set (GETTEXT_PACKAGE "cronopete")
 set (RELEASE_NAME "cronopete")
@@ -18,7 +18,7 @@ link_libraries ( ${DEPS_LIBRARIES} )
 link_directories ( ${DEPS_LIBRARY_DIRS} )
 find_package (Vala REQUIRED)
 include (ValaVersion)
-ensure_vala_version ("0.20" MINIMUM)
+ensure_vala_version ("0.24" MINIMUM)
 include (ValaPrecompile)
 
 set (VALA_PACKAGES ${VALA_PACKAGES} posix)
@@ -73,7 +73,7 @@ add_executable(cronopete ${VALA_C})
 install(TARGETS
 	cronopete
 RUNTIME DESTINATION
-	bin/
+	${CMAKE_INSTALL_BINDIR}/
 )
 
 if(HAVE_VALADOC)
@@ -88,6 +88,6 @@ if(HAVE_VALADOC)
 	install(DIRECTORY
 		${CMAKE_BINARY_DIR}/valadoc
 	DESTINATION
-		share/doc/cronopete
+		${CMAKE_INSTALL_DATAROOTDIR}/doc/cronopete
 	)
 endif()

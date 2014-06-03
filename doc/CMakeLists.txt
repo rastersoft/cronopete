@@ -7,13 +7,13 @@ foreach(file_data ${list_data})
 		install(DIRECTORY
 			${file_data}
 		DESTINATION
-			share/doc/cronopete
+			${CMAKE_INSTALL_DATAROOTDIR}/doc/cronopete
 		)
 	ELSE()
 		install(FILES
 			${file_data}
 		DESTINATION
-			share/doc/cronopete
+			${CMAKE_INSTALL_DATAROOTDIR}/doc/cronopete
 		)
 	ENDIF()
 endforeach()

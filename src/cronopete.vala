@@ -826,7 +826,7 @@ int main(string[] args) {
 	callback_object = new cp_callback(basepath);
 	Bus.own_name (BusType.SESSION, "com.rastersoft.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
 		GLib.stderr.printf ("Cronopete is already running\n");
-		exit(1);
+		Posix.exit(1);
 	});
 
 	callback_object.check_welcome();

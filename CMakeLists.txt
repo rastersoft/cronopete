@@ -11,6 +11,12 @@ option(BUILD_VALADOC "Build API documentation if Valadoc is available" OFF)
 option(NO_APPINDICATOR "NO_APPINDICATOR" OFF)
 option(USE_GTK2 "USE_GTK2" OFF)
 
+include(GNUInstallDirs)
+if( ( ${CMAKE_INSTALL_PREFIX} MATCHES "^/usr/local" ) )
+	# A workaround to ensure that works 'out of the box' in Debian-based systems
+	set(CMAKE_INSTALL_LIBDIR lib)
+endif()
+
 set(HAVE_VALADOC OFF)
 if(BUILD_VALADOC)
 	find_package(Valadoc)
