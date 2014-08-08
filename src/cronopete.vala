@@ -1,5 +1,5 @@
 /*
- Copyright 2011 (C) Raster Software Vigo (Sergio Costas)
+ Copyright 2011-14 (C) Raster Software Vigo (Sergio Costas)
 
  This file is part of Cronopete
 
@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.15.3
+// project version=3.16.0
 
 #if !NO_APPINDICATOR
 using AppIndicator;

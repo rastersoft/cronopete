@@ -39,11 +39,7 @@ class c_main_menu : GLib.Object {
 	private TextMark mark;
 	private TextView log_view;
 	private string last_status;
-#if USE_GTK2
-	private Switch_Widget my_widget;
-#else
 	private Switch my_widget;
-#endif
 
 	public bool is_visible;
 	private GLib.Settings cronopete_settings;
@@ -91,24 +87,8 @@ class c_main_menu : GLib.Object {
 
 		var cnt = (VBox) this.builder.get_object("vbox_switch");
 
-#if USE_GTK2
-		this.my_widget=new Switch_Widget();
-		cnt.pack_start(this.my_widget,false,true,0);
-		this.my_widget.show();
-#else
-		this.my_widget=new Switch();
-		this.my_widget.expand=false;
-		var tmp_w=new Box(Gtk.Orientation.HORIZONTAL,0);
-		var tmp_w2=new Label("");
-		var tmp_w3=new Label("");
-		tmp_w.pack_start(tmp_w2,true,true,0);
-		tmp_w.pack_start(this.my_widget,false,false,0);
-		tmp_w.pack_start(tmp_w3,true,true,0);
-		tmp_w.show();
-		cnt.pack_start(tmp_w,false,true,0);
-		this.my_widget.show();
+		this.my_widget = (Gtk.Switch) this.builder.get_object("switch_main");
 		this.my_widget.notify_property("active");
-#endif
 
 		this.is_visible = false;
 		this.builder.connect_signals(this);

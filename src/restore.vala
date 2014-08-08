@@ -183,23 +183,12 @@ class restore_iface : GLib.Object {
 		this.box.add_events (Gdk.EventMask.SCROLL_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK|Gdk.EventMask.KEY_PRESS_MASK|Gdk.EventMask.KEY_RELEASE_MASK);
 		this.box.add(this.base_layout);
 
-#if USE_GTK2
-		var main_box=new Gtk.VBox(false,0);
-		var button_box=new Gtk.HBox(false,0);
-		var container1=new Gtk.HBox(false,0);
-		var container2=new Gtk.HBox(false,0);
-
-		// quirk way of centering the text and the icon in Gtk2
-		container1.pack_start(new Gtk.Label(""),true,true,0);
-		container2.pack_start(new Gtk.Label(""),true,true,0);
-#else
 		var main_box=new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		var button_box=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		var container1=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		var container2=new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		container1.halign=Gtk.Align.CENTER;
 		container2.halign=Gtk.Align.CENTER;
-#endif
 
 
 		this.current_date=new Label("<span size=\"xx-large\"> </span>");
@@ -220,12 +209,6 @@ class restore_iface : GLib.Object {
 		container2.pack_start(label2,false,false,0);
 		var quit_button=new Gtk.Button();
 		quit_button.add(container2);
-
-#if USE_GTK2
-		// quirk way of centering the text and the icon in Gtk2
-		container1.pack_start(new Gtk.Label(""),true,true,0);
-		container2.pack_start(new Gtk.Label(""),true,true,0);
-#endif
 
 		restore_button.clicked.connect(this.do_restore);
 		quit_button.clicked.connect(this.exit_restore);
@@ -270,15 +253,11 @@ class restore_iface : GLib.Object {
 		this.backend.restore_ended.connect(this.restoring_ended);
 		this.backend.status.connect(this.refresh_status);
 
-#if USE_GTK2
-		this.drawing.expose_event.connect(this.repaint_draw);
-#else
 		this.drawing.draw.connect(this.repaint_draw3);
-#endif
 
 		this.mywindow.show_all();
 
-		this.desired_alpha=0.0;
+		this.desired_alpha=0.5;
 		GLib.Timeout.add(250,start_all,0); // wait to end the window animation
 
 	}

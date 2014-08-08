@@ -4,31 +4,26 @@ project_name: cronopete
 vala_version: 0.24
 
 *define: NO_APPINDICATOR
-*define: USE_GTK2
-
 
 vala_binary: src/cronopete
-*version: 3.15.3
+*version: 3.16.0
 *vala_package: posix
-if (NOT NO_APPINDICATOR) AND (NOT USE_GTK2)
+if (NOT NO_APPINDICATOR)
 vala_check_package: appindicator3-0.1
 end
-if (NOT NO_APPINDICATOR) AND (USE_GTK2)
-vala_check_package: appindicator-0.1
-end
-if USE_GTK2
-vala_check_package: gdk-2.0
-vala_check_package: gtk+-2.0
-else
-vala_check_package: gdk-3.0
-vala_check_package: glib-2.0
-vala_check_package: gtk+-3.0
-end
+*vala_check_package: atk
 *vala_check_package: cairo
+*vala_check_package: gdk-3.0
+*vala_check_package: gdk-pixbuf-2.0
 *vala_check_package: gee-0.8
 *vala_check_package: gio-2.0
+*vala_check_package: glib-2.0
 *vala_check_package: gobject-2.0
 *vala_check_package: gsl
+*vala_check_package: gtk+-3.0
+*vala_check_package: pango
+*vala_check_package: pangocairo
+*vala_check_package: x11
 *vala_source: backup.vala
 *vala_source: choose.vala
 *vala_source: cronopete.vala
@@ -36,7 +31,6 @@ end
 *vala_source: menu.vala
 *vala_source: options.vala
 *vala_source: restore.vala
-*vala_source: switch_widget.vala
 *vala_source: usbhd_backend.vala
 
 *po: po
@@ -59,35 +53,19 @@ end
 
 *scheme: data/org.rastersoft.cronopete.gschema.xml
 
-if USE_GTK2
-glade: data/interface2/about.ui
-glade: data/interface2/chooser.ui
-glade: data/interface2/config_exported.ui
-glade: data/interface2/folder_selector.ui
-glade: data/interface2/format_error.ui
-glade: data/interface2/format_force.ui
-glade: data/interface2/formatting.ui
-glade: data/interface2/main.ui
-glade: data/interface2/options.ui
-glade: data/interface2/restore_error.ui
-glade: data/interface2/restore_ok.ui
-glade: data/interface2/restoring.ui
-glade: data/interface2/welcome.ui
-else
-glade: data/interface/about.ui
-glade: data/interface/chooser.ui
-glade: data/interface/config_exported.ui
-glade: data/interface/folder_selector.ui
-glade: data/interface/format_error.ui
-glade: data/interface/format_force.ui
-glade: data/interface/formatting.ui
-glade: data/interface/main.ui
-glade: data/interface/options.ui
-glade: data/interface/restore_error.ui
-glade: data/interface/restore_ok.ui
-glade: data/interface/restoring.ui
-glade: data/interface/welcome.ui
-end
+*glade: data/interface/about.ui
+*glade: data/interface/chooser.ui
+*glade: data/interface/config_exported.ui
+*glade: data/interface/folder_selector.ui
+*glade: data/interface/format_error.ui
+*glade: data/interface/format_force.ui
+*glade: data/interface/formatting.ui
+*glade: data/interface/main.ui
+*glade: data/interface/options.ui
+*glade: data/interface/restore_error.ui
+*glade: data/interface/restore_ok.ui
+*glade: data/interface/restoring.ui
+*glade: data/interface/welcome.ui
 
 *icon: apps data/icons/anacronopete_128x128.png
 *icon: apps data/icons/anacronopete_16x16.png
