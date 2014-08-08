@@ -31,8 +31,6 @@ class restore_iface : GLib.Object {
 
 	private backends backend;
 	private uint timer;
-	private double current_alpha;
-	private double desired_alpha;
 	private int scr_w;
 	private int scr_h;
 	private string basepath;
@@ -233,9 +231,6 @@ class restore_iface : GLib.Object {
 
 		this.box.sensitive=true;
 
-		this.current_alpha=0.0;
-		this.mywindow.opacity=this.current_alpha;
-
 		this.backups=p_backend.get_backup_list();
 		this.backups.sort(mysort_64);
 
@@ -256,14 +251,11 @@ class restore_iface : GLib.Object {
 		this.drawing.draw.connect(this.repaint_draw3);
 
 		this.mywindow.show_all();
-
-		this.desired_alpha=0.5;
-		GLib.Timeout.add(250,start_all,0); // wait to end the window animation
-
+		GLib.Timeout.add(250,start_all,0);
 	}
 
 	public bool start_all() {
-		this.desired_alpha=1.0;
+		//this.repaint_draw2();
 		this.launch_animation();
 		return false;
 	}
@@ -685,6 +677,7 @@ class restore_iface : GLib.Object {
 		var ctx2 = Gdk.cairo_create(this.drawing.get_window());
 		ctx2.set_source_surface(this.animation_surface,0,0);
 		ctx2.paint();
+		this.browser.queue_draw();
 		return false;
 	}
 
@@ -889,33 +882,6 @@ class restore_iface : GLib.Object {
 			this.repaint_draw2();
 		}
 
-		if (this.desired_alpha!=this.current_alpha) {
-			double diff;
-			if (this.desired_alpha>this.current_alpha) {
-				diff=this.desired_alpha-this.current_alpha;
-				this.current_alpha+=(diff/6);
-			} else {
-				diff=this.current_alpha-this.desired_alpha;
-				this.current_alpha-=(diff/6);
-			}
-			if (diff<0.05) {
-				this.current_alpha=this.desired_alpha;
-			}
-
-			if (this.current_alpha==0.0) {
-				this.backend.restore_ended.disconnect(this.restoring_ended);
-				this.backend.status.disconnect(this.refresh_status);
-				this.mywindow.hide();
-				this.browser.hide();
-				this.mywindow.destroy();
-				this.backend.lock_delete_backup(false);
-				end_animation=true;
-			} else {
-				this.mywindow.opacity=this.current_alpha;
-				end_animation=false;
-			}
-		}
-
 		if (end_animation) {
 			this.timer=0;
 			this.browser.do_refresh_icons();
@@ -930,11 +896,12 @@ class restore_iface : GLib.Object {
 	private void exit_restore() {
 
 		this.launch_animation ();
-
-		this.desired_alpha=0.0;
-
-		this.launch_animation ();
-
+		this.backend.restore_ended.disconnect(this.restoring_ended);
+		this.backend.status.disconnect(this.refresh_status);
+		this.mywindow.hide();
+		this.browser.hide();
+		this.mywindow.destroy();
+		this.backend.lock_delete_backup(false);
 	}
 
 	private string get_restored_filename(string path, string filename) {
@@ -1062,6 +1029,7 @@ class restore_iface : GLib.Object {
 		yield;
 		rok.hide();
 		rok.destroy();
+		this.mywindow.show();
 		return;
 	}
 
@@ -1082,6 +1050,7 @@ class restore_iface : GLib.Object {
 
 		this.cancel_restoring=false;
 		this.restore_label.label=_("Preparing folders to restore");
+		this.mywindow.hide();
 		this.restore_window.show_all();
 		this.timer_bar=GLib.Timeout.add(250,this.timer_bar_f);
 
@@ -1097,6 +1066,7 @@ class restore_iface : GLib.Object {
 			} else {
 				this.restore_files.clear();
 				this.restore_window.destroy();
+				this.mywindow.show();
 				this.mywindow.get_window().set_cursor(null);
 			}
 		});
@@ -1192,12 +1162,14 @@ class restore_iface : GLib.Object {
 
 		this.error_window.destroy();
 		this.cancel_restoring=true;
+		this.mywindow.show();
 		this.restoring_ended.begin();
 	}
 
 	[CCode (instance_pos = -1)]
 	public void on_ignore_restore_error_clicked(Button source) {
 		this.error_window.destroy();
+		this.mywindow.show();
 		this.restoring_ended.begin();
 	}
 
@@ -1205,6 +1177,7 @@ class restore_iface : GLib.Object {
 	public void on_ignore_all_restore_error_clicked(Button source) {
 		this.ignore_restoring_all=true;
 		this.error_window.destroy();
+		this.mywindow.show();
 		this.restoring_ended.begin();
 	}
 
