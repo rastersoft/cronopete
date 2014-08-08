@@ -5,6 +5,7 @@ vala_version: 0.24
 
 *define: NO_APPINDICATOR
 
+
 vala_binary: src/cronopete
 *version: 3.16.0
 *vala_package: posix
