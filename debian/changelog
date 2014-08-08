@@ -1,3 +1,16 @@
+cronopete (3.16.0-ppa2) trusty; urgency=low
+
+  * Fixed the Vala compiler version to allow to compile under trusty
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 08 Aug 2014 20:17:17 +0100
+
+cronopete (3.16.0-ppa1) trusty; urgency=low
+
+  * Removed GTK2 support
+  * Fixed the problem when mixing fullscreen and popup windows
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 08 Aug 2014 20:17:17 +0100
+
 cronopete (3.15.3-ppa8) saucy; urgency=low
 
   * Removed TMP folder from the source package
