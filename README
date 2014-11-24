@@ -1,9 +1,9 @@
-CRONOPETE
+# CRONOPETE
 
 Cronopete is a backup utility for Linux, modeled after Apple's
 Time Machine.
 
-BUILDING CRONOPETE
+## BUILDING CRONOPETE
 
 To build Cronopete, you need to install CMAKE and Vala-0.16
 
@@ -33,10 +33,9 @@ libappindicator library:
   make
   sudo make install
 
-## CONTACTING THE AUTHOR ##
+## CONTACTING THE AUTHOR
 
-Sergio Costas Rodriguez
-(Raster Software Vigo)
+Sergio Costas Rodriguez (Raster Software Vigo)
 
 raster@rastersoft.com
 

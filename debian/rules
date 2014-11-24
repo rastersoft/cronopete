@@ -17,8 +17,9 @@ binary-indep:
 
 binary-arch:
 	make install -C $(BUILDDIR) DESTDIR=./debian/tmp
-	mkdir debian/tmp/DEBIAN
-	dpkg-gencontrol -pcronopete
+	mv $(BUILDDIR)/debian/tmp ./debian/tmp
+	mkdir ./debian/tmp/DEBIAN;
+	dpkg-gencontrol -pcronopete;
 	dpkg --build debian/tmp ..
 
 # firstly called by launchpad
