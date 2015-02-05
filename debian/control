@@ -1,9 +1,9 @@
-Maintainer: Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>
-Priority: optional
-Section: devel
 Source: cronopete
+Maintainer: Sergio Costas Rodriguez <raster@rastersoft.com>
+Section: devel
+Priority: optional
 Homepage: http://www.rastersoft.com
-Build-Depends: build-essential, po-debconf, libappindicator3-dev, libatk1.0-dev, libcairo2-dev, libgtk-3-dev, libgdk-pixbuf2.0-dev, libgee-0.8-dev, libglib2.0-dev, libgsl0-dev, libpango1.0-dev, libx11-dev, cmake, gettext, pkg-config, valac-0.20
+Build-Depends: build-essential, po-debconf, valac-0.20, libc6-dev, libappindicator3-dev, libatk1.0-dev, libcairo2-dev, libgtk-3-dev, libgdk-pixbuf2.0-dev, libgee-0.8-dev, libglib2.0-dev, libgsl0-dev, libpango1.0-dev, libx11-dev, cmake, gettext, pkg-config
 
 Package: cronopete
 Architecture: any

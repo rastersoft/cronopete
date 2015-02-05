@@ -17,8 +17,8 @@ binary-indep:
 
 binary-arch:
 	make install -C $(BUILDDIR) DESTDIR=./debian/tmp
-	mv $(BUILDDIR)/debian/tmp ./debian/tmp
-	mkdir ./debian/tmp/DEBIAN;
+	mkdir -p ./debian/tmp/DEBIAN
+	mv $(BUILDDIR)/debian/tmp/* ./debian/tmp
 	dpkg-gencontrol -pcronopete;
 	dpkg --build debian/tmp ..
 

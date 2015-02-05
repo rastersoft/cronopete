@@ -1,13 +1,13 @@
 ### CMakeLists automatically created with AutoVala
 ### Do not edit
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_128x128.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128/apps/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_16x16.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/16/apps/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_22x22.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/22/apps/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_24x24.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/24/apps/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_32x32.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32/apps/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_48x48.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48/apps/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_64x64.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_128x128.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_16x16.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/16x16/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_22x22.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/22x22/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_24x24.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/24x24/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_32x32.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_48x48.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/anacronopete_64x64.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-green-symbolic.svg DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/status/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-green.svg DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-1-orange-symbolic.svg DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/status/)
