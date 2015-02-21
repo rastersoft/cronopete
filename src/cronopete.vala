@@ -398,25 +398,25 @@ class cp_callback : GLib.Object, callbacks {
 		}
 		icon_name+="-";
 		if (this.backend.available==false) {
-			icon_name+="red-symbolic"; // There's no disk connected
+			icon_name+="red"; // There's no disk connected
 		} else {
 			if ((this._active)||(this.backup_forced)) {
 				switch (this.current_status) {
 				case BackupStatus.STOPPED:
-					icon_name+="white-symbolic"; // Idle
+					icon_name+="white"; // Idle
 				break;
 				case BackupStatus.ALLFINE:
-					icon_name+="green-symbolic"; // Doing backup; everything fine
+					icon_name+="green"; // Doing backup; everything fine
 				break;
 				case BackupStatus.WARNING:
-					icon_name+="yellow-symbolic";
+					icon_name+="yellow";
 				break;
 				case BackupStatus.ERROR:
-					icon_name+="red-symbolic";
+					icon_name+="red";
 				break;
 				}
 			} else {
-				icon_name+="orange-symbolic";
+				icon_name+="orange";
 			}
 		}
 

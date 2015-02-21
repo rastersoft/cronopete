@@ -47,5 +47,5 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete-arrow-4-yellow.svg DESTINATI
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.svg DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.svg DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/)
 IF( NOT (${ICON_UPDATE} STREQUAL "OFF" ))
-	install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons/Hicolor )" )
+	install (CODE "execute_process ( COMMAND /usr/bin/gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor )" )
 ENDIF()
