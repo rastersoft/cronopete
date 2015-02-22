@@ -190,8 +190,9 @@ class c_options : GLib.Object {
 		selector.show_all();
 		retval = selector.run();
 		if (retval==-6) {
-			var file_uri = selector.get_file().get_path();
-			if (file_uri!=null) {
+		        var files = selector.get_filenames();
+			foreach (var file_uri in files) {
+			    if (file_uri!=null) {
 				if (file_uri.has_prefix("file://")) {
 					file_uri = file_uri.substring(7,-1);
 				}
@@ -199,13 +200,13 @@ class c_options : GLib.Object {
 					this.tmp_backup_folders.add(file_uri);
 				}
 				this.fill_backup_list(true);
+			    }
 			}
 		}
 		selector.hide();
 		selector.destroy();
 
 	}
-
 
 	[CCode (instance_pos = -1)]
 	public void on_add_exclude_clicked(Gtk.Button w) {
@@ -218,20 +219,20 @@ class c_options : GLib.Object {
 		selector.show_all();
 		retval = selector.run();
 		if (retval==-6) {
-			var file_uri = selector.get_file().get_path();
-			if (file_uri!=null) {
-				if (file_uri.has_prefix("file://")) {
-					file_uri = file_uri.substring(7,-1);
-				}
-				if (false==this.tmp_exclude_folders.contains(file_uri)) {
-					this.tmp_exclude_folders.add(file_uri);
-				}
-				this.fill_exclude_list(true);
+			var files = selector.get_filenames();
+			foreach (var file_uri in files) {
+			    if (file_uri!=null) {
+				    if (file_uri.has_prefix("file://")) {
+					    file_uri = file_uri.substring(7,-1);
+				    }
+				    if (false==this.tmp_exclude_folders.contains(file_uri)) {
+					    this.tmp_exclude_folders.add(file_uri);
+				    }
+				    this.fill_exclude_list(true);
+			    }
 			}
 		}
 		selector.hide();
 		selector.destroy();
-
 	}
-
 }
