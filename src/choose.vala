@@ -57,6 +57,7 @@ class c_format : GLib.Object {
     private string? waiting_for_job;
     private bool job_found;
     private Gtk.Window parent_window;
+    private string uid;
 
     public signal void format_ended(int status);
 
@@ -151,6 +152,20 @@ class c_format : GLib.Object {
             return;
         }
 
+        VolumeMonitor monitor = VolumeMonitor.get();
+        var mount = monitor.get_mount_for_uuid(this.uid);
+        try {
+            bool umounted = yield mount.unmount_with_operation(MountUnmountFlags.NONE,null);
+            if (umounted) {
+                print("unmounted\n");
+            } else {
+                print("No unmounted\n");
+            }
+        } catch (Error e) {
+            print("Error 2 al desmontar %s\n".printf(e.message));
+        }
+        
+
         this.ioerror=null;
 
         Device_if device2;
@@ -166,7 +181,9 @@ class c_format : GLib.Object {
         try {
             yield device2.FilesystemUnmount(null);
         } catch (IOError e) {
+            print("Error al desmontar %s\n".printf(e.message));
         }
+        print("Pasamos\n");
 
         string[] options;
         if ((this.label==null)||(this.label=="")) {
@@ -237,7 +254,7 @@ class c_format : GLib.Object {
             this.show_error(this.ioerror);
         }
     }
-    public void run(string path, string filesystem, string disk_path,bool not_writable) {
+    public void run(string path, string filesystem, string disk_path, string disk_uid, bool not_writable) {
 
         this.mount_path=null;
         this.device=null;
@@ -245,6 +262,7 @@ class c_format : GLib.Object {
         this.uipath=path;
         this.ioerror=null;
         this.retval=0;
+        this.uid = disk_uid;
 
         string message;
         var builder = new Builder();
@@ -268,9 +286,6 @@ class c_format : GLib.Object {
                 Gtk.main_quit();
             });
             Gtk.main();
-        } else if (rv==0) {
-            this.final_path=disk_path.dup();
-            this.retval=0;
         } else {
             this.retval=-1;
         }
@@ -344,7 +359,7 @@ class c_choose_disk : GLib.Object {
 
         do_run=true;
         while (do_run) {
-            var r=this.choose_w.run    ();
+            var r=this.choose_w.run ();
 
             if (r!=-5) {
                 do_run = false;
@@ -396,7 +411,7 @@ class c_choose_disk : GLib.Object {
                 this.choose_w.hide();
 
                 var w = new c_format(this.parent_window);
-                w.run(this.basepath,fstype,final_path,not_writable);
+                w.run(this.basepath,fstype,final_path,final_uid,not_writable);
                 if (w.retval==0) {
                     this.cronopete_settings.set_string("backup-uid","");
                     this.cronopete_settings.set_string("backup-path",w.final_path);
