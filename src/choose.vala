@@ -307,7 +307,7 @@ class c_choose_disk : GLib.Object {
         this.show_all.set_active(this.cronopete_settings.get_boolean("all-drives"));
         this.show_all.toggled.connect(this.show_all_toggled);
 
-        this.disk_listmodel = new ListStore (5, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string));
+        this.disk_listmodel = new ListStore (6, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string), typeof (string));
         this.disk_list.set_model(this.disk_listmodel);
         var crpb = new CellRendererPixbuf();
         crpb.stock_size = IconSize.DIALOG;
@@ -343,10 +343,13 @@ class c_choose_disk : GLib.Object {
                 selected.get_selected(out model, out iter);
                 GLib.Value spath;
                 GLib.Value stype;
+                GLib.Value suid;
                 model.get_value(iter,4,out spath);
+                model.get_value(iter,5,out suid);
                 model.get_value(iter,2,out stype);
-                var fstype = stype.get_string();
+                var fstype = stype.get_string().dup();
                 var final_path = spath.get_string().dup();
+                var final_uid = suid.get_string().dup();
 
                 // Reiser3 is the recomended filesystem for cronopete
                 not_writable=false;
@@ -360,6 +363,7 @@ class c_choose_disk : GLib.Object {
                             try {
                                 // if it's possible to create it, go ahead
                                 directory2.make_directory_with_parents();
+                                this.cronopete_settings.set_string("backup-uid",final_uid);
                                 this.cronopete_settings.set_string("backup-path",final_path);
                                 do_run=false;
                                 break;
@@ -368,6 +372,7 @@ class c_choose_disk : GLib.Object {
                                 not_writable=true;
                             }
                         } else {
+                            this.cronopete_settings.set_string("backup-uid",final_uid);
                             this.cronopete_settings.set_string("backup-path",final_path);
                             do_run=false;
                             break;
@@ -378,6 +383,7 @@ class c_choose_disk : GLib.Object {
                 var w = new c_format();
                 w.run(this.basepath,fstype,final_path,not_writable);
                 if (w.retval==0) {
+                    this.cronopete_settings.set_string("backup-uid","");
                     this.cronopete_settings.set_string("backup-path",w.final_path);
                     do_run=false;
                     break;
@@ -444,6 +450,7 @@ class c_choose_disk : GLib.Object {
         string bpath;
         string ssize;
         string fsystem;
+        string uid;
         bool first;
 
         var volumes = this.monitor.get_volumes();
@@ -461,6 +468,7 @@ class c_choose_disk : GLib.Object {
             root=mnt.get_root();
             var info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
             fsystem = info.get_attribute_string("filesystem::type");
+            uid = v.get_identifier("uuid");
 
             if (fsystem=="isofs") {
                 continue;
@@ -497,6 +505,7 @@ class c_choose_disk : GLib.Object {
 
             this.disk_listmodel.set (iter,3,ssize);
             this.disk_listmodel.set (iter,4,path);
+            this.disk_listmodel.set (iter,5,uid);
             if (first) {
                 this.disk_list.get_selection().select_iter(iter);
                 first = false;

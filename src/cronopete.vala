@@ -743,6 +743,7 @@ class cp_callback : GLib.Object, callbacks {
             return line_counter;
         }
 
+        this.cronopete_settings.set_string("backup-uid","");
         this.cronopete_settings.set_string("backup-path",backup_path2);
         if (origin_path_list.length==0) {
             origin_path_list+=Environment.get_home_dir();
