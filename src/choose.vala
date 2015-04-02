@@ -20,6 +20,7 @@ using GLib;
 using Gtk;
 using Gdk;
 using Posix;
+using UDisks;
 
 [DBus (name = "org.freedesktop.UDisks")]
 interface UDisk_if : GLib.Object {
@@ -41,7 +42,6 @@ interface Device_if : GLib.Object {
     public abstract async void PartitionModify (string type, string label, string[]? options) throws IOError;
     public abstract async void FilesystemMount(string type, string[]? options, out string mount_path) throws IOError;
 }
-
 
 class c_format : GLib.Object {
 
@@ -80,38 +80,6 @@ class c_format : GLib.Object {
         w.hide();
         w.destroy();
 
-    }
-
-    private bool find_drive(string path_mount) {
-
-        ObjectPath[] retval;
-
-        try {
-            UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
-            udisk.EnumerateDevices(out retval);
-            udisk=null;
-
-            Device_if device2;
-
-            this.device=null;
-            this.mount_path=null;
-            this.label=null;
-            // Find the device which is mounted in the specified path
-            foreach (ObjectPath o in retval) {
-                device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",o);
-                foreach (string s in device2.DeviceMountPaths) {
-                    if (s == path_mount) {
-                        this.device=o;
-                        this.mount_path=path_mount.dup();
-                        this.label = device2.IdLabel.dup();
-                        return (true);
-                    }
-                }
-            }
-        } catch (IOError e) {
-            this.show_error(e.message);
-        }
-        return (false);
     }
 
     private async void remount(string format) {
@@ -166,6 +134,7 @@ class c_format : GLib.Object {
         try {
             yield device2.FilesystemUnmount(null);
         } catch (IOError e) {
+            GLib.stdout.printf("Can't unmount the filesystem (%s)\n",e.message);
         }
 
         string[] options;
@@ -183,19 +152,31 @@ class c_format : GLib.Object {
 
         var handler_id = device2.JobChanged.connect((inprogress,jobid,job_init,iscancelable,percentage) => {
             //GLib.stdout.printf("Evento %s %s %d %s %f\n",inprogress ? "activo":"inactivo",jobid,(int)job_init,iscancelable ? "cancelable" : "no cancelable", percentage);
+            print("entramos\n");
             if ((this.job_found)&&(inprogress==false)) {
+                print("Job found but not in progress\n");
                 this.job_in_progress=false;
                 this.format_drive.callback();
                 return;
             }
             if ((this.waiting_for_job==null)||(this.waiting_for_job!=jobid)) {
+                print("return extra\n");
+                if (this.waiting_for_job == null) {
+                    print("job es null\n");
+                }
+                if (this.waiting_for_job != jobid) {
+                    print("waiting %s; jobid %s\n".printf(this.waiting_for_job,jobid));
+                }
                 return;
             }
             this.waiting_for_job=null;
             this.job_found=true;
+            print("Salimos\n");
         });
 
+        print("Empezamos\n");
         device2.FilesystemCreate.begin(format,options);
+        print("Seguimos\n");
 
         this.job_in_progress=true;
         this.job_found=false;
@@ -204,12 +185,16 @@ class c_format : GLib.Object {
             if (this.job_in_progress==false) {
                 break;
             } else {
+                print("Hacemos yield\n");
                 yield;
+                print("Salimos de yield\n");
             }
         }
         device2.disconnect(handler_id);
 
+        print("Montando de nuevo\n");
         yield this.remount(format);
+        print("Ya hemos montado\n");
         if (this.retval!=0) {
             return;
         }
@@ -217,27 +202,53 @@ class c_format : GLib.Object {
         return;
     }
 
-    private async void do_format(string path, string filesystem, string disk_path) {
+    private async void do_format(string path, string filesystem, string disk_uid) {
 
-        if (this.find_drive(disk_path)) {
+        UDisks.Block ? block;
+        block = null;
+        try {
+            var client = new UDisks.Client.sync();
+            var blocks = client.get_block_for_uuid(disk_uid);
+            foreach (var o in blocks) {
+                block = o;
+            }
+        
+        
+        if (block != null) {
             var builder2 = new Builder();
             builder2.add_from_file(Path.build_filename(path,"formatting.ui"));
             this.format_window = (Dialog) builder2.get_object("formatting");
             this.format_window.set_transient_for(this.parent_window);
             this.retval=2;
             this.format_window.show_all();
-            yield this.format_drive("ext4");
+            var strvariant = new GLib.Variant.string("take-ownership");
+            var boolvariant = new GLib.Variant.boolean(true);
+            var array2 = new GLib.Variant.dict_entry(strvariant,boolvariant);
+            print("Entro\n");
+            if (!GLib.VariantType.string_is_valid("{sv}")) {
+                print("No valida\n");
+            }
+            var vtype = new GLib.VariantType("{sv}");
+            print("Sigo\n");
+            var myarray = new GLib.Variant.array(vtype,null);//{array2});
+            print("Sigo 2\n");
+            yield block.call_format("ext4",myarray,null);
+            print("Salgo\n");
             this.format_window.close();
             this.format_window.destroy();
         } else {
-            GLib.stdout.printf("Error, can't find disk %s\n",disk_path);
+            GLib.stdout.printf("Error, can't find disk %s\n",disk_uid);
             this.retval=-1;
+        }
+        } catch (IOError e) {
+            GLib.stdout.printf(e.message);
         }
         if (this.ioerror!=null) {
             this.show_error(this.ioerror);
         }
     }
-    public void run(string path, string filesystem, string disk_path,bool not_writable) {
+
+    public void run(string path, string filesystem, string disk_path, string disk_uid, bool not_writable) {
 
         this.mount_path=null;
         this.device=null;
@@ -263,7 +274,7 @@ class c_format : GLib.Object {
         var rv=window.run();
         window.destroy();
         if (rv==1) { // format
-            this.do_format.begin(path,filesystem,disk_path, (obj,res) => {
+            this.do_format.begin(path,filesystem,disk_uid, (obj,res) => {
                 this.do_format.end(res);
                 Gtk.main_quit();
             });
@@ -396,7 +407,7 @@ class c_choose_disk : GLib.Object {
                 this.choose_w.hide();
 
                 var w = new c_format(this.parent_window);
-                w.run(this.basepath,fstype,final_path,not_writable);
+                w.run(this.basepath,fstype,final_path, final_uid,not_writable);
                 if (w.retval==0) {
                     this.cronopete_settings.set_string("backup-uid","");
                     this.cronopete_settings.set_string("backup-path",w.final_path);
@@ -421,7 +432,7 @@ class c_choose_disk : GLib.Object {
         }
     }
 
-    private bool check_is_external(string path_mount) {
+    private bool check_is_external(string uid) {
 
         ObjectPath[] retval;
 
@@ -430,22 +441,15 @@ class c_choose_disk : GLib.Object {
         }
 
         try {
-            UDisk_if udisk = Bus.get_proxy_sync<UDisk_if> (BusType.SYSTEM, "org.freedesktop.UDisks","/org/freedesktop/UDisks");
-            udisk.EnumerateDevices(out retval);
-            udisk=null;
-
-            Device_if device2;
-
-            // Find the device which is mounted in the specified path
-            foreach (ObjectPath o in retval) {
-                device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",o);
-                foreach (string s in device2.DeviceMountPaths) {
-                    if (s == path_mount) {
-                        if (device2.DeviceIsSystemInternal) {
-                            return (false);
-                        } else {
-                            return (true);
-                        }
+            var client = new UDisks.Client.sync();
+            var blocks = client.get_block_for_uuid(uid);
+            foreach (var o in blocks) {
+                var drive = client.get_drive_for_block(o);
+                if (drive != null) {
+                    if (drive.removable || drive.media_removable) {
+                        return true;
+                    } else {
+                        return false;
                     }
                 }
             }
@@ -494,7 +498,7 @@ class c_choose_disk : GLib.Object {
             }
 
             path = root.get_path();
-            if (false==this.check_is_external(path)) {
+            if (false==this.check_is_external(uid)) {
                 continue;
             }
 
