@@ -131,7 +131,6 @@ class usbhd_backend: Object, backends {
 
         bpath = this.update_volume_data(bpath,uuid);
         this.drive_path=bpath;
-        print("Path: %s\n",bpath);
         this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
         this.refresh_connect();
     }
@@ -275,7 +274,6 @@ class usbhd_backend: Object, backends {
                 }
             } else {
                 if (this.drive_uuid == v.get_identifier("uuid")) {
-                    print("Encontrado\n");
                     this.drive_path == mnt.get_root().get_path();
                     this._available = true;
                     if (this.last_msg!=1) {
