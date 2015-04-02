@@ -1,3 +1,29 @@
+cronopete (3.17.0-ppa4) trusty; urgency=low
+
+  * Fixed rules file again
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 26 Feb 2015 20:23:17 +0100
+
+cronopete (3.17.0-ppa3) trusty; urgency=low
+
+  * Fixed rules file to compile POT files
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 26 Feb 2015 20:22:17 +0100
+
+cronopete (3.17.0-ppa2) trusty; urgency=low
+
+  * Fixed rules file
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 23 Feb 2015 20:22:17 +0100
+
+cronopete (3.17.0-ppa1) trusty; urgency=low
+
+  * Added Czech translation
+  * Allows to select several folders simultaneously
+  * Fixed the icon's paths
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 23 Feb 2015 20:21:17 +0100
+
 cronopete (3.16.0-ppa5) trusty; urgency=low
 
   * Fixed a typo in the .deb building scripts

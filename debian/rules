@@ -7,6 +7,7 @@ build:
 	mkdir $(BUILDDIR);
 	cd $(BUILDDIR); cmake -DCMAKE_INSTALL_PREFIX=/usr -DGSETTINGS_COMPILE=OFF -DICON_UPDATE=OFF ..
 	make -C $(BUILDDIR)
+	make -C $(BUILDDIR) pot
 
 
 # thirdly called by launchpad
