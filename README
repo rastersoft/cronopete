@@ -5,7 +5,7 @@ Time Machine.
 
 ## BUILDING CRONOPETE
 
-To build Cronopete, you need to install CMAKE and Vala-0.16
+To build Cronopete, you need to install CMAKE and Vala-0.20
 
 Now, type
 
