@@ -244,7 +244,7 @@ class c_main_menu : GLib.Object {
     [CCode (instance_pos = -1)]
     public void cronopete_options_callback(Button source) {
 
-        var tmp = new c_options(this.basepath,this.parent);
+        var tmp = new c_options(this.main_w,this.basepath,this.parent);
         this.refresh_backup_data();
         tmp = null;
 
@@ -277,7 +277,7 @@ class c_main_menu : GLib.Object {
         } else {
             not_configured=false;
         }
-        var tmp = new c_choose_disk();
+        var tmp = new c_choose_disk(this.main_w);
         tmp.run(this.basepath,this.parent,this.cronopete_settings);
         this.refresh_backup_data();
         if ((this.parent.backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {

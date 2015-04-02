@@ -41,7 +41,7 @@ class c_options : GLib.Object {
 
     private GLib.Settings cronopete_settings;
 
-    public c_options(string path, cp_callback p) {
+    public c_options(Gtk.Window parent, string path, cp_callback p) {
 
         int retval;
 
@@ -51,6 +51,7 @@ class c_options : GLib.Object {
         this.builder.add_from_file(Path.build_filename(this.basepath,"options.ui"));
 
         this.main_w = (Dialog) this.builder.get_object("options");
+        this.main_w.set_transient_for(parent);
         this.builder.connect_signals(this);
 
         this.backup_view = (TreeView) this.builder.get_object("backup_folders");

@@ -56,8 +56,14 @@ class c_format : GLib.Object {
     private bool job_in_progress;
     private string? waiting_for_job;
     private bool job_found;
+    private Gtk.Window parent_window;
 
     public signal void format_ended(int status);
+
+    public c_format(Gtk.Window parent) {
+    
+        this.parent_window = parent;
+    }
 
     private void show_error(string msg) {
 
@@ -68,6 +74,7 @@ class c_format : GLib.Object {
         var label = (Label) builder.get_object("msg_error");
         label.set_label(msg);
         var w = (Dialog) builder.get_object("error_dialog");
+        w.set_transient_for(this.parent_window);
         w.show_all();
         w.run();
         w.hide();
@@ -216,6 +223,7 @@ class c_format : GLib.Object {
             var builder2 = new Builder();
             builder2.add_from_file(Path.build_filename(path,"formatting.ui"));
             this.format_window = (Dialog) builder2.get_object("formatting");
+            this.format_window.set_transient_for(this.parent_window);
             this.retval=2;
             this.format_window.show_all();
             yield this.format_drive("ext4");
@@ -249,6 +257,7 @@ class c_format : GLib.Object {
         label.set_label(message);
 
         var window = (Dialog) builder.get_object("dialog_format");
+        window.set_transient_for(this.parent_window);
 
         window.show_all();
         var rv=window.run();
@@ -272,6 +281,7 @@ class c_format : GLib.Object {
 class c_choose_disk : GLib.Object {
 
     private cp_callback parent;
+    private Gtk.Window parent_window;
     private string basepath;
     private Builder builder;
     private Dialog choose_w;
@@ -289,6 +299,10 @@ class c_choose_disk : GLib.Object {
         this.refresh_list();
     }
 
+    public c_choose_disk(Gtk.Window parent) {
+        this.parent_window = parent;
+    }
+
     public void run(string path, cp_callback p, GLib.Settings c_settings) {
 
         this.parent = p;
@@ -299,6 +313,7 @@ class c_choose_disk : GLib.Object {
         this.builder.connect_signals(this);
 
         this.choose_w = (Dialog) this.builder.get_object("disk_chooser");
+        this.choose_w.set_transient_for(this.parent_window);
 
         this.disk_list = (TreeView) this.builder.get_object("disk_list");
         this.ok_button = (Button) this.builder.get_object("ok_button");
@@ -380,7 +395,7 @@ class c_choose_disk : GLib.Object {
                 }
                 this.choose_w.hide();
 
-                var w = new c_format();
+                var w = new c_format(this.parent_window);
                 w.run(this.basepath,fstype,final_path,not_writable);
                 if (w.retval==0) {
                     this.cronopete_settings.set_string("backup-uid","");
