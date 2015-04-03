@@ -22,9 +22,9 @@ using Gdk;
 using Posix;
 using UDisks;
 
-[DBus (name = "org.freedesktop.UDisks")]
+[DBus (name = "org.freedesktop.UDisks2")]
 interface UDisk_if : GLib.Object {
-    public abstract void EnumerateDevices(out ObjectPath[] path) throws IOError;
+    public abstract void GetManagedObjects(out ObjectPath[] path) throws IOError;
 }
 
 [DBus (timeout = 10000000, name = "org.freedesktop.UDisks.Device")]
@@ -82,126 +82,6 @@ class c_format : GLib.Object {
 
     }
 
-    private async void remount(string format) {
-
-        Device_if device2;
-
-        try {
-            device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
-        } catch (IOError e) {
-            this.ioerror=e.message.dup();
-            return;
-        }
-
-        /*try {
-            yield device2.PartitionModify("131","",null);
-        } catch (IOError e) {
-        }
-        Posix.sleep(2);
-        */ // Removed because it hangs :(
-
-        try {
-            string out_path;
-            yield device2.FilesystemMount(format,null,out out_path);
-            this.final_path=out_path.dup();
-        } catch (IOError e) {
-            this.ioerror=e.message.dup();
-            this.retval=-1;
-            return;
-        }
-        this.retval=0;
-    }
-
-    private async void format_drive(string format) {
-
-        if (this.device==null) {
-            final_path=null;
-            return;
-        }
-
-        this.ioerror=null;
-
-        Device_if device2;
-
-        try {
-            device2 = Bus.get_proxy_sync<Device_if> (BusType.SYSTEM, "org.freedesktop.UDisks",this.device);
-        } catch (IOError e) {
-            this.ioerror =e.message.dup();
-            GLib.stdout.printf("Error %s\n",e.message);
-            return;
-        }
-
-        try {
-            yield device2.FilesystemUnmount(null);
-        } catch (IOError e) {
-            GLib.stdout.printf("Can't unmount the filesystem (%s)\n",e.message);
-        }
-
-        string[] options;
-        if ((this.label==null)||(this.label=="")) {
-            options = new string[2];
-        } else {
-            options = new string[3];
-            if (this.label.length>16) {
-                this.label=this.label.substring(0,16);
-            }
-            options[2]="label=%s".printf(this.label);
-        }
-        options[0]="take_ownership_uid=%d".printf((int)Posix.getuid());
-        options[1]="take_ownership_gid=%d".printf((int)Posix.getgid());
-
-        var handler_id = device2.JobChanged.connect((inprogress,jobid,job_init,iscancelable,percentage) => {
-            //GLib.stdout.printf("Evento %s %s %d %s %f\n",inprogress ? "activo":"inactivo",jobid,(int)job_init,iscancelable ? "cancelable" : "no cancelable", percentage);
-            print("entramos\n");
-            if ((this.job_found)&&(inprogress==false)) {
-                print("Job found but not in progress\n");
-                this.job_in_progress=false;
-                this.format_drive.callback();
-                return;
-            }
-            if ((this.waiting_for_job==null)||(this.waiting_for_job!=jobid)) {
-                print("return extra\n");
-                if (this.waiting_for_job == null) {
-                    print("job es null\n");
-                }
-                if (this.waiting_for_job != jobid) {
-                    print("waiting %s; jobid %s\n".printf(this.waiting_for_job,jobid));
-                }
-                return;
-            }
-            this.waiting_for_job=null;
-            this.job_found=true;
-            print("Salimos\n");
-        });
-
-        print("Empezamos\n");
-        device2.FilesystemCreate.begin(format,options);
-        print("Seguimos\n");
-
-        this.job_in_progress=true;
-        this.job_found=false;
-        this.waiting_for_job="FilesystemCreate";
-        while(true) {
-            if (this.job_in_progress==false) {
-                break;
-            } else {
-                print("Hacemos yield\n");
-                yield;
-                print("Salimos de yield\n");
-            }
-        }
-        device2.disconnect(handler_id);
-
-        print("Montando de nuevo\n");
-        yield this.remount(format);
-        print("Ya hemos montado\n");
-        if (this.retval!=0) {
-            return;
-        }
-        this.retval=0;
-        return;
-    }
-
     private async void do_format(string path, string filesystem, string disk_uid) {
 
         UDisks.Block ? block;
@@ -211,6 +91,7 @@ class c_format : GLib.Object {
             var blocks = client.get_block_for_uuid(disk_uid);
             foreach (var o in blocks) {
                 block = o;
+                break;
             }
         
         
@@ -279,9 +160,6 @@ class c_format : GLib.Object {
                 Gtk.main_quit();
             });
             Gtk.main();
-        } else if (rv==0) {
-            this.final_path=disk_path.dup();
-            this.retval=0;
         } else {
             this.retval=-1;
         }
