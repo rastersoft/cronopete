@@ -78,7 +78,7 @@ class usbhd_backend: Object, backends {
                     mnt=v.get_mount();
                     if (!(mnt is Mount)) {
                         v.mount(GLib.MountMountFlags.NONE,null);
-                        mnt=v.get_mount();
+                        return bpath2; // return; if can be mounted, it will be detected whith the callback
                     }
                     var root = mnt.get_root();
                     bpath2 = root.get_path();
