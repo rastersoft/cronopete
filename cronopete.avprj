@@ -7,7 +7,7 @@ vala_version: 0.20
 
 
 vala_binary: src/cronopete
-*version: 3.18.2
+*version: 3.18.3
 *vala_package: posix
 if (NOT NO_APPINDICATOR)
 vala_check_package: appindicator3-0.1
@@ -24,6 +24,7 @@ end
 *vala_check_package: gtk+-3.0
 *vala_check_package: pango
 *vala_check_package: pangocairo
+*vala_check_package: udisks2
 *vala_check_package: x11
 *vala_source: backup.vala
 *vala_source: choose.vala

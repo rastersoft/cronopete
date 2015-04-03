@@ -17,15 +17,15 @@ Now, type
 
 This will compile Cronopete with AppIndicator support.
 
-There are two modifiers for "cmake" that allows to change the compilation
+There is one modifier for "cmake" that allows to change the compilation
 options:
 
   NO_APPINDICATOR will compile cronopete without the libappindicator library
 
-These modifiers must be prepended with "-D", and appended with "=on".
-To use these modifiers, first remove all the contents in the BUILD folder,
-and run again cmake. For example, this should compile cronopete without
-libappindicator library:
+This modifier must be prepended with "-D", and appended with "=on".
+To use this modifier, first remove all the contents in the BUILD folder,
+and run again cmake. This will compile cronopete without libappindicator
+library:
 
   cd BUILD
   rm -rf *
