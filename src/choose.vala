@@ -57,6 +57,7 @@ class c_format : GLib.Object {
     private string? waiting_for_job;
     private bool job_found;
     private Gtk.Window parent_window;
+    private string uid;
 
     public signal void format_ended(int status);
 
@@ -137,6 +138,7 @@ class c_format : GLib.Object {
         this.uipath=path;
         this.ioerror=null;
         this.retval=0;
+        this.uid = disk_uid;
 
         string message;
         var builder = new Builder();
@@ -233,7 +235,7 @@ class c_choose_disk : GLib.Object {
 
         do_run=true;
         while (do_run) {
-            var r=this.choose_w.run    ();
+            var r=this.choose_w.run ();
 
             if (r!=-5) {
                 do_run = false;
@@ -285,7 +287,7 @@ class c_choose_disk : GLib.Object {
                 this.choose_w.hide();
 
                 var w = new c_format(this.parent_window);
-                w.run(this.basepath,fstype,final_path, final_uid,not_writable);
+                w.run(this.basepath,fstype,final_path,final_uid,not_writable);
                 if (w.retval==0) {
                     this.cronopete_settings.set_string("backup-uid","");
                     this.cronopete_settings.set_string("backup-path",w.final_path);

@@ -1,6 +1,7 @@
 src/backup.vala
 src/choose.vala
 src/cronopete.vala
+src/fixedlabel.vala
 src/icons_widget.vala
 src/menu.vala
 src/options.vala

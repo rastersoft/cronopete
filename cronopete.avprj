@@ -7,7 +7,7 @@ vala_version: 0.20
 
 
 vala_binary: src/cronopete
-*version: 3.18.0
+*version: 3.18.2
 *vala_package: posix
 if (NOT NO_APPINDICATOR)
 vala_check_package: appindicator3-0.1
@@ -29,6 +29,7 @@ end
 *vala_source: backup.vala
 *vala_source: choose.vala
 *vala_source: cronopete.vala
+*vala_source: fixedlabel.vala
 *vala_source: icons_widget.vala
 *vala_source: menu.vala
 *vala_source: options.vala

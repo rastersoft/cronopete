@@ -1,4 +1,6 @@
 [Desktop Entry]
+Encoding=UTF-8
+Icon=anacronopete.svg
 Type=Application
 Exec=cronopete
 Hidden=false

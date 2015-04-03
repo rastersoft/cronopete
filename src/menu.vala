@@ -79,7 +79,10 @@ class c_main_menu : GLib.Object {
         this.Lnewest = (Label) this.builder.get_object("label_newest_backup");
         this.Lnext = (Label) this.builder.get_object("label_next_backup");
         this.Lspace = (Label) this.builder.get_object("label_free_space");
-        this.text_status = (Label) this.builder.get_object("status_label");
+        var status_alignment = (Gtk.Alignment) this.builder.get_object("status_frame");
+        this.text_status = new fixed_label("",300);
+        status_alignment.add (this.text_status);
+        this.text_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
         this.img = (Image) this.builder.get_object("image_disk");
         this.show_in_bar_ch = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
 
@@ -294,6 +297,7 @@ class c_main_menu : GLib.Object {
         w.add_from_file(GLib.Path.build_filename(this.basepath,"about.ui"));
 
         var about_w = (AboutDialog)w.get_object("aboutdialog1");
+        about_w.set_transient_for(this.main_w);
 
         about_w.set_version(Constants.VERSION);
         about_w.show();
