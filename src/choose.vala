@@ -22,25 +22,31 @@ using Gdk;
 using Posix;
 using UDisks;
 
-[DBus (name = "org.freedesktop.UDisks2")]
-interface UDisk_if : GLib.Object {
-    public abstract void GetManagedObjects(out ObjectPath[] path) throws IOError;
+[DBus (name = "org.freedesktop.DBus.ObjectManager")]
+interface UDisk2_if : GLib.Object {
+    public abstract void GetManagedObjects(out GLib.HashTable<ObjectPath,GLib.HashTable<string,GLib.HashTable<string,Variant>>> path) throws IOError;
 }
 
-[DBus (timeout = 10000000, name = "org.freedesktop.UDisks.Device")]
-interface Device_if : GLib.Object {
-    public abstract string IdLabel { owned get; }
-    public abstract string[] DeviceMountPaths { owned get; }
-    public abstract bool DeviceIsSystemInternal { owned get; }
-    public abstract bool DeviceIsPartition { owned get; }
-    public abstract string IdUuid { owned get; }
-    public signal void JobChanged(bool job_in_progress,string job_id,uint job_initiated_by_uid,bool job_is_cancellable,double job_percentage);
-    public signal void Changed();
+[DBus (timeout = 10000000, name = "org.freedesktop.DBus.Introspectable")]
+interface Introspectable_if : GLib.Object {
 
-    public abstract async void FilesystemUnmount(string[]? options) throws IOError;
-    public abstract async void FilesystemCreate(string type, string[] options) throws IOError;
-    public abstract async void PartitionModify (string type, string label, string[]? options) throws IOError;
-    public abstract async void FilesystemMount(string type, string[]? options, out string mount_path) throws IOError;
+    public abstract async void Introspect(out string xml_data) throws IOError;
+}
+
+[DBus (timeout = 1000000, name = "org.freedesktop.UDisks2.Block")]
+interface Block_if : GLib.Object {
+
+    public abstract string IdLabel { owned get; }
+    public abstract string IdUUID { owned get; }
+
+    public abstract async void Format(string type,GLib.HashTable<string,Variant> options) throws IOError;
+}
+
+[DBus (timeout = 10000000, name = "org.freedesktop.UDisks2.Filesystem")]
+interface Filesystem_if : GLib.Object {
+
+    public abstract async void Mount(GLib.HashTable<string,Variant> options, out string mount_path) throws IOError;
+    public abstract async void Unmount(GLib.HashTable<string,Variant> options) throws IOError;
 }
 
 class c_format : GLib.Object {
@@ -83,51 +89,81 @@ class c_format : GLib.Object {
 
     }
 
-    private async void do_format(string path, string filesystem, string disk_uid) {
+    private async void do_format(string path, string filesystem_type, string disk_uid) {
 
-        UDisks.Block ? block;
-        block = null;
+        GLib.HashTable<ObjectPath,GLib.HashTable<string,GLib.HashTable<string,Variant>>> objects;
+        UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if> (BusType.SYSTEM, "org.freedesktop.UDisks2","/org/freedesktop/UDisks2");
+        udisk.GetManagedObjects(out objects);
+        
+        ObjectPath? disk = null;
+        Block_if? block = null;
+        foreach(var o in objects.get_keys()) {
+            Introspectable_if intro = Bus.get_proxy_sync<Introspectable_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",o);
+            string data;
+            yield intro.Introspect(out data);
+            // check if it has the Block and Filesystem interfaces
+            if (data.contains("org.freedesktop.UDisks2.Block") && data.contains("org.freedesktop.UDisks2.Filesystem")) {
+                block = Bus.get_proxy_sync<Block_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",o);
+                if (block.IdUUID == disk_uid) {
+                    disk = o;
+                    break;
+                }
+            }
+        }
+        
+        if (disk == null) { // Failed to find the disk!!!!!!
+            this.show_error(_("Failed to find the disk!!!!!"));
+            this.retval = -1;
+            return;
+        }
+
+        var filesystem = Bus.get_proxy_sync<Filesystem_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",disk);
+        var hash = new GLib.HashTable<string,Variant>(str_hash,str_equal);
         try {
-            var client = new UDisks.Client.sync();
-            var blocks = client.get_block_for_uuid(disk_uid);
-            foreach (var o in blocks) {
-                block = o;
-                break;
-            }
+            yield filesystem.Unmount(hash);
+        } catch (GLib.Error e) {
+            this.show_error(_("Failed to unmount the disk. Aborting format operation."));
+            this.retval = -1;
+            return;
+        }
         
+        var builder2 = new Builder();
+        builder2.add_from_file(Path.build_filename(path,"formatting.ui"));
+        this.format_window = (Dialog) builder2.get_object("formatting");
+        this.format_window.set_transient_for(this.parent_window);
+        this.retval=2;
+        this.format_window.show_all();
+
+        var boolvariant  = new GLib.Variant.boolean(true);
+        var boolvariant2 = new GLib.Variant.boolean(true);
+        var boolvariant3 = new GLib.Variant.boolean(true);
+        hash = new GLib.HashTable<string,Variant>(str_hash,str_equal);
+        hash.insert("take-ownership",boolvariant);
+        hash.insert("update-partition-type",boolvariant2);
+        hash.insert("erase",boolvariant2);
+
+        try {
+            yield block.Format("ext4",hash);
+        } catch (GLib.Error e) {
+            this.show_error(_("Failed to format the disk (maybe it is needing too much time). Please, try again."));
+            this.retval = -1;
+            return;
+        }
+        this.format_window.hide();
+        this.format_window.destroy();
+        this.format_window = null;
         
-        if (block != null) {
-            var builder2 = new Builder();
-            builder2.add_from_file(Path.build_filename(path,"formatting.ui"));
-            this.format_window = (Dialog) builder2.get_object("formatting");
-            this.format_window.set_transient_for(this.parent_window);
-            this.retval=2;
-            this.format_window.show_all();
-            var strvariant = new GLib.Variant.string("take-ownership");
-            var boolvariant = new GLib.Variant.boolean(true);
-            var array2 = new GLib.Variant.dict_entry(strvariant,boolvariant);
-            print("Entro\n");
-            if (!GLib.VariantType.string_is_valid("{sv}")) {
-                print("No valida\n");
-            }
-            var vtype = new GLib.VariantType("{sv}");
-            print("Sigo\n");
-            var myarray = new GLib.Variant.array(vtype,null);//{array2});
-            print("Sigo 2\n");
-            yield block.call_format("ext4",myarray,null);
-            print("Salgo\n");
-            this.format_window.close();
-            this.format_window.destroy();
-        } else {
-            GLib.stdout.printf("Error, can't find disk %s\n",disk_uid);
-            this.retval=-1;
+        hash = new GLib.HashTable<string,Variant>(str_hash,str_equal);
+        string mount_path;
+        try {
+            yield filesystem.Mount(hash,out mount_path);
+        } catch (GLib.Error e) {
+            this.show_error(_("Failed to mount again the disk. Aborting the format operation."));
+            this.retval = -1;
+            return;
         }
-        } catch (IOError e) {
-            GLib.stdout.printf(e.message);
-        }
-        if (this.ioerror!=null) {
-            this.show_error(this.ioerror);
-        }
+        this.final_path = mount_path;
+        this.retval = 0;
     }
 
     public void run(string path, string filesystem, string disk_path, string disk_uid, bool not_writable) {
