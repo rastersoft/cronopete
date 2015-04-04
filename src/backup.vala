@@ -53,8 +53,8 @@ interface backends : GLib.Object {
 
     public abstract bool available {get;}
     public abstract string? get_uuid {get;}
-    public abstract string? get_path {get;}
-    public signal void status(usbhd_backend b);
+    public abstract bool backup_enabled {get;set;}
+    public signal void status(backends b);
 
     public abstract bool get_filelist(string current_path, time_t backup, out Gee.List<file_info ?> files, out string date);
 

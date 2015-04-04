@@ -69,13 +69,21 @@ class usbhd_backend: Object, backends {
         }
     }
 
-    public string? get_path {
+    private bool _backup_enabled;
+    public bool backup_enabled {
         get {
-            return this.drive_path;
+            return this._backup_enabled;
+        }
+        set {
+            this._backup_enabled = value;
+            if (value) {
+                refresh_connect(); // try to mount the disk if needed
+            }
         }
     }
+
     private VolumeMonitor monitor;
-    public bool _available;
+    private bool _available;
     private string? drive_uuid;
 
     public string? get_uuid {
@@ -170,6 +178,7 @@ class usbhd_backend: Object, backends {
         this.lock_delete.lock();
         this.deleting=backup_date;
         var tmppath=this.get_backup_path_from_time(backup_date);
+
         var final_path=Path.build_filename(this.backup_path,tmppath);
 
         Process.spawn_command_line_sync("rm -rf "+final_path);
@@ -268,8 +277,14 @@ class usbhd_backend: Object, backends {
             if ((this.drive_uuid != "") && (this.drive_uuid == v.get_identifier("uuid"))) {
                 mnt = v.get_mount();
                 if ((mnt is Mount) == false) {
-                    v.mount.begin(GLib.MountMountFlags.NONE,null);
                     this._available = false;
+                    if (this._backup_enabled) {
+                        v.mount.begin(GLib.MountMountFlags.NONE,null); // if the backup is enabled, try to mount it
+                    }
+                    if (this.last_msg != 3) { // we use LAST_MESSAGE to avoid repeating the same message several times
+                        this.last_msg = 3;
+                        this.status(this);
+                    }
                     return;
                 }
                 this._available = true;
@@ -281,8 +296,8 @@ class usbhd_backend: Object, backends {
             }
         }
         this._available=false;
-        if (this.last_msg!=2) {
-            this.last_msg=2;
+        if (this.last_msg != 2) {
+            this.last_msg = 2;
             this.status(this);
         }
     }
@@ -296,11 +311,14 @@ class usbhd_backend: Object, backends {
         }
 
         try {
-            var file = File.new_for_path(this.drive_path);
-            var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE+","+FileAttribute.FILESYSTEM_FREE,null);
-            free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
-            total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
-            return true;
+            var path = this.drive_path;
+            if (path != null) {
+                var file = File.new_for_path(path);
+                var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE+","+FileAttribute.FILESYSTEM_FREE,null);
+                free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+                total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
+                return true;
+            }
         } catch (Error e) {
             GLib.stdout.printf("USBHD_BACKEND: %s\n",e.message);
         }
@@ -324,6 +342,10 @@ class usbhd_backend: Object, backends {
         string dirname;
         time_t backup_time;
 
+        var path = this.backup_path;
+        if (path == null) {
+            return null;
+        }
         var directory = File.new_for_path(this.backup_path);
 
         try {

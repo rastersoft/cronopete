@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.18.3
+// project version=3.18.4
 
 #if !NO_APPINDICATOR
 using AppIndicator;
@@ -80,6 +80,9 @@ class cp_callback : GLib.Object, callbacks {
 
         set {
             this._active = value;
+            if (this.backend != null) {
+                this.backend.backup_enabled = value;
+            }
             this.repaint(this.size);
             this.status_tooltip();
             if (this._active) {
@@ -134,7 +137,7 @@ class cp_callback : GLib.Object, callbacks {
     private bool update_path;
     private string i_backup_path;
 
-    public void refresh_status(usbhd_backend? b) {
+    public void refresh_status(backends? b) {
 
         this.repaint(this.size);
         this.status_tooltip();
