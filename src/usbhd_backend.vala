@@ -266,15 +266,15 @@ class usbhd_backend: Object, backends {
         Mount mnt;
         foreach (Volume v in volumes) {
             if ((this.drive_uuid != "") && (this.drive_uuid == v.get_identifier("uuid"))) {
-                mnt=v.get_mount();
-                if ((mnt is Mount)==false) {
+                mnt = v.get_mount();
+                if ((mnt is Mount) == false) {
                     v.mount.begin(GLib.MountMountFlags.NONE,null);
                     this._available = false;
                     return;
                 }
                 this._available = true;
-                if (this.last_msg!=1) {
-                    this.last_msg=1;
+                if (this.last_msg != 1) {
+                    this.last_msg = 1;
                     this.status(this);
                 }
                 return;
@@ -289,7 +289,7 @@ class usbhd_backend: Object, backends {
 
     public bool get_free_space(out uint64 total_space, out uint64 free_space) {
 
-        if (this._available==false) {
+        if (this._available == false) {
             total_space=0;
             free_space=0;
             return false;
