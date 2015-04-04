@@ -129,7 +129,7 @@ class c_format : GLib.Object {
         hash = new GLib.HashTable<string,Variant>(str_hash,str_equal);
         hash.insert("take-ownership",boolvariant);
         hash.insert("update-partition-type",boolvariant2);
-        hash.insert("erase",boolvariant2);
+        hash.insert("erase",boolvariant3);
 
         try {
             yield block.Format("ext4",hash);
@@ -157,7 +157,7 @@ class c_format : GLib.Object {
         return final_uuid;
     }
 
-    public string? run(string path,string disk_uuid, bool not_writable) {
+    public string? run(string path,string disk_uuid) {
 
         this.uipath=path;
         string? new_uuid = null;
@@ -248,8 +248,6 @@ class c_choose_disk : GLib.Object {
 
         this.choose_w.show();
 
-        bool not_writable;
-
         string? final_disk_uuid = null;
 
         while (true) {
@@ -277,7 +275,6 @@ class c_choose_disk : GLib.Object {
                 var final_uid = suid.get_string().dup();
 
                 // EXT4 is the recomended filesystem for cronopete
-                not_writable=false;
                 if ((fstype == "reiserfs") || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
                     var backup_path=Path.build_filename(final_path,"cronopete");
                     var directory2 = File.new_for_path(backup_path);
@@ -290,7 +287,6 @@ class c_choose_disk : GLib.Object {
                             break;
                         } catch (IOError e) {
                             // if not, the media is not writable by this user, so propose to format it
-                            not_writable=true;
                         }
                     } else {
                         final_disk_uuid = final_uid;
@@ -300,7 +296,7 @@ class c_choose_disk : GLib.Object {
                 this.choose_w.hide();
 
                 var w = new c_format(this.parent_window);
-                final_disk_uuid = w.run(this.basepath,final_uid,not_writable);
+                final_disk_uuid = w.run(this.basepath,final_uid);
                 if (final_disk_uuid != null) {
                     break;
                 }
@@ -324,8 +320,6 @@ class c_choose_disk : GLib.Object {
     }
 
     private bool check_is_external(string uid) {
-
-        ObjectPath[] retval;
 
         if (this.cronopete_settings.get_boolean("all-drives")) {
             return (true);

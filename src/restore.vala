@@ -43,16 +43,6 @@ class restore_iface : GLib.Object {
     private double browser_w;
     private double browser_h;
 
-    private double restore_x;
-    private double restore_y;
-    private double restore_w;
-    private double restore_h;
-
-    private double exit_x;
-    private double exit_y;
-    private double exit_w;
-    private double exit_h;
-
     private double scale_x;
     private double scale_y;
     private double scale_w;
@@ -103,7 +93,6 @@ class restore_iface : GLib.Object {
     private bool capture_done;
     private bool browserhide;
 
-    private double my;
     private double mh;
 
     private double screen_w;
@@ -316,26 +305,26 @@ class restore_iface : GLib.Object {
         var c_base = new Cairo.Context(this.base_surface);
 
         var tonecolor=this.cronopete_settings.get_string("toning-color");
-        Color tonecolor_final;
-        Gdk.Color.parse(tonecolor,out tonecolor_final);
+        
+        Gdk.RGBA tonecolor_final = Gdk.RGBA();
+        tonecolor_final.parse(tonecolor);
 
         int32 final_r;
         int32 final_g;
         int32 final_b;
 
-        final_r=tonecolor_final.red/256;
-        final_g=tonecolor_final.green/256;
-        final_b=tonecolor_final.blue/256;
+        final_r=(int32)(tonecolor_final.red*255.0);
+        final_g=(int32)(tonecolor_final.green*255.0);
+        final_b=(int32)(tonecolor_final.blue*255.0);
+        
+        var list_schemas = GLib.SettingsSchemaSource.get_default();
 
-        var list_schemas = GLib.Settings.list_schemas();
+        bool gnome_found;
 
-        bool gnome_found=false;
-
-        foreach(var v in list_schemas) {
-            if (v=="org.gnome.desktop.background") {
-                gnome_found=true;
-                break;
-            }
+        if (null == list_schemas.lookup("org.gnome.desktop.background",true)) {
+            gnome_found = false;
+        } else {
+            gnome_found = true;
         }
 
         string bgstr;
@@ -360,17 +349,17 @@ class restore_iface : GLib.Object {
             }
         }
 
-        Color bgcolor_final;
-        Gdk.Color.parse(bgcolor,out bgcolor_final);
+        Gdk.RGBA bgcolor_final = Gdk.RGBA();
+        bgcolor_final.parse(bgcolor);
 
         int32 r;
         int32 g;
         int32 b;
         int32 bas;
 
-        r=bgcolor_final.red/256;
-        g=bgcolor_final.green/256;
-        b=bgcolor_final.blue/256;
+        r=(int32)(bgcolor_final.red*255.0);
+        g=(int32)(bgcolor_final.green*255.0);
+        b=(int32)(bgcolor_final.blue*255.0);
 
         bas=(r*3+g*6+b)/10;
         // tone to sepia
@@ -528,7 +517,7 @@ class restore_iface : GLib.Object {
         c_base.restore();
 
         // timeline
-        this.scale_x=this.restore_x;
+        this.scale_x=0;
         this.scale_y=this.browser_y;
         this.scale_w=this.scr_w/28.0;
         this.scale_h=this.browser_h+this.browser_margin;

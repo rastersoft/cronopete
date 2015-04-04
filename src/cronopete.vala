@@ -135,7 +135,6 @@ class cp_callback : GLib.Object, callbacks {
     }
 
     private bool update_path;
-    private string i_backup_path;
 
     public void refresh_status(backends? b) {
 

@@ -32,12 +32,8 @@ class c_options : GLib.Object {
     private SpinButton w_period;
     ListStore backup_listmodel;
     ListStore exclude_listmodel;
-    private Gee.List<string> backup_folders;
-    private Gee.List<string> exclude_folders;
     private Gee.List<string> tmp_backup_folders;
     private Gee.List<string> tmp_exclude_folders;
-    private bool backup_hiden_at_home;
-    private uint period;
 
     private GLib.Settings cronopete_settings;
 

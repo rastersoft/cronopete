@@ -88,7 +88,7 @@ class c_main_menu : GLib.Object {
 
         this.show_in_bar_ch.set_active(this.parent.show_in_bar);
 
-        var cnt = (VBox) this.builder.get_object("vbox_switch");
+        (VBox) this.builder.get_object("vbox_switch");
 
         this.my_widget = (Gtk.Switch) this.builder.get_object("switch_main");
         this.my_widget.notify_property("active");
