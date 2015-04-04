@@ -186,7 +186,6 @@ class cp_callback : GLib.Object, callbacks {
         this.tooltip_value="";
 
         this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
-        var retval=this.read_configuration();
         
         this.backend=new usbhd_backend(this.backup_uid);
         this.backend.status.connect(this.refresh_status);
@@ -223,16 +222,6 @@ class cp_callback : GLib.Object, callbacks {
         this.cronopete_settings.bind("enabled",this,"active",GLib.SettingsBindFlags.DEFAULT);
         this.cronopete_settings.bind("visible",this,"show_in_bar",GLib.SettingsBindFlags.DEFAULT);
         this.cronopete_settings.bind("backup-path",this,"backup-uid",GLib.SettingsBindFlags.DEFAULT);
-
-        if (retval==0) {
-            var builder = new Builder();
-            builder.add_from_file(GLib.Path.build_filename(this.basepath,"config_exported.ui"));
-
-            this.main_w2 = (Gtk.Window) builder.get_object("window1");
-            var btn = (Button)builder.get_object("button1");
-            btn.clicked.connect(this.destroy_exported);
-            this.main_w2.show();
-        }
     }
 
     public void destroy_exported(Button d) {
@@ -494,16 +483,16 @@ class cp_callback : GLib.Object, callbacks {
 
     public void backup_now() {
 
-        if (this.backup_running==SystemStatus.IDLE) {
-            if (this.refresh_timer>0) {
-                Source.remove(this.refresh_timer);
+        if (this.backup_running == SystemStatus.IDLE) {
+            if (this.refresh_timer > 0) {
+                Source.remove (this.refresh_timer);
             }
-            if (this.main_timer>0) {
+            if (this.main_timer > 0) {
                 Source.remove(this.main_timer);
-                this.main_timer=GLib.Timeout.add(3600000,this.timer_f);
+                this.main_timer = GLib.Timeout.add(3600000,this.timer_f);
             }
-            if (this._active==false) {
-                this.backup_forced=true;
+            if (this._active == false) {
+                this.backup_forced = true;
             }
             this.timer_f();
         }
@@ -511,8 +500,8 @@ class cp_callback : GLib.Object, callbacks {
 
     public void stop_backup() {
 
-        if ((this.backup_running==SystemStatus.BACKING_UP)&&(this.basedir!=null)) {
-            this.backup_forced=false;
+        if ((this.backup_running == SystemStatus.BACKING_UP) && (this.basedir != null)) {
+            this.backup_forced = false;
             this.basedir.abort_backup();
         }
     }
@@ -521,16 +510,16 @@ class cp_callback : GLib.Object, callbacks {
 
         if (this.backend.available) {
             var list = this.backend.get_backup_list ();
-            if ((list==null)||(list.size<=0)) {
+            if ((list == null) || (list.size <= 0)) {
                 return;
             }
-            this.restore_w=new restore_iface(this.backend,this.basepath,this.cronopete_settings);
+            this.restore_w = new restore_iface(this.backend,this.basepath,this.cronopete_settings);
         }
     }
 
     public void main_clicked() {
 
-        if ((this.current_status==BackupStatus.WARNING)||(this.current_status==BackupStatus.ERROR)) {
+        if ((this.current_status == BackupStatus.WARNING) || (this.current_status == BackupStatus.ERROR)) {
             this.main_menu.show_main(true,this.messages.str);
         } else {
             this.main_menu.show_main(false,this.messages.str);
@@ -598,7 +587,7 @@ class cp_callback : GLib.Object, callbacks {
             folders+=GLib.Environment.get_home_dir();
         }
 
-        basedir.set_config( folders,
+        basedir.set_config (folders,
                             this.cronopete_settings.get_strv("exclude-folders"),
                             this.cronopete_settings.get_boolean("skip-hiden-at-home"));
 
@@ -628,124 +617,6 @@ class cp_callback : GLib.Object, callbacks {
         }
         this.basedir=null;
         return null;
-    }
-
-    private int read_configuration() {
-
-        /****************************************************************************************
-         * This function will read the configuration from the file ~/.cronopete.cfg             *
-         * and migrate it to GSettings
-         ****************************************************************************************/
-
-        FileInputStream file_read;
-
-        string home=Environment.get_home_dir();
-        var config_file = File.new_for_path (GLib.Path.build_filename(home,".cronopete.cfg"));
-
-        if (!config_file.query_exists (null)) {
-            return -1;
-        }
-
-        try {
-            file_read=config_file.read(null);
-        } catch {
-            return -2;
-        }
-
-        var in_stream = new DataInputStream (file_read);
-        string line;
-        int line_counter=0;
-
-        string[] origin_path_list ={};
-        string[] exclude_path_list = {};
-        string backup_path2 = "";
-        bool skip_hiden_at_home = true;
-        uint new_period=3600;
-
-        bool failed=false;
-        bool is_activated=false;
-
-        while ((line = in_stream.read_line (null, null)) != null) {
-            line_counter++;
-
-            // ignore comments
-            if (line[0]=='#') {
-                continue;
-            }
-
-            // remove unwanted blank spaces
-            line.strip();
-
-            // ignore empty lines
-            if (line.length==0) {
-                continue;
-            }
-
-            if (line.has_prefix("add_directory ")) {
-                origin_path_list+=(line.substring(14).strip());
-                continue;
-            }
-
-            if (line.has_prefix("exclude_directory ")) {
-                exclude_path_list+=(line.substring(18).strip());
-                continue;
-            }
-
-            if (line.has_prefix("backup_directory ")) {
-                backup_path2=line.substring(17).strip();
-                continue;
-            }
-
-            if (line=="backup_hiden_at_home") {
-                skip_hiden_at_home=false;
-                continue;
-            }
-
-            if (line.has_prefix("backup_period ")) {
-                new_period=int.parse(line.substring(14).strip());
-                continue;
-            }
-
-            if (line=="active") {
-                is_activated=true;
-                continue;
-            }
-            if (line=="no_show_in_bar") {
-                continue;
-            }
-
-            failed=true;
-            break;
-        }
-
-        try {
-            in_stream.close(null);
-        } catch {
-        }
-        try {
-            file_read.close(null);
-        } catch {
-        }
-
-        if (failed) {
-            GLib.stderr.printf(_("Invalid parameter in config file %s (line %d)\n"),config_file.get_path(),line_counter);
-            return line_counter;
-        }
-
-        this.cronopete_settings.set_string("backup-uid","");
-        if (origin_path_list.length==0) {
-            origin_path_list+=Environment.get_home_dir();
-        }
-        this.cronopete_settings.set_strv("backup-folders",origin_path_list);
-        this.cronopete_settings.set_strv("exclude-folders",exclude_path_list);
-        this.cronopete_settings.set_boolean("skip-hiden-at-home",skip_hiden_at_home);
-        this.cronopete_settings.set_uint("backup-period",new_period);
-        this.cronopete_settings.set_boolean("enabled",is_activated);
-        in_stream=null;
-        file_read=null;
-        config_file.delete();
-
-        return 0;
     }
 
     public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next, out uint64 total_space, out uint64 free_space) {
