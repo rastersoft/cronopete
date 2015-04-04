@@ -44,7 +44,6 @@ class cp_callback : GLib.Object, callbacks {
 #endif
     private SystemStatus backup_running;
     private BackupStatus current_status;
-    private double angle;
     private int size;
     private unowned Thread <void *> b_thread;
     private uint main_timer;
@@ -91,7 +90,23 @@ class cp_callback : GLib.Object, callbacks {
             }
         }
     }
-    private GLib.Settings cronopete_settings;
+    private string _backup_uid;
+    public string backup_uid {
+        get {
+            this._backup_uid = this.cronopete_settings.get_string("backup-uid");
+            return this._backup_uid;
+        }
+        set {
+            if (value != this._backup_uid) {
+                this.backend=new usbhd_backend(value);
+                this.cronopete_settings.set_string("backup-uid",value);
+                this.backend.status.connect(this.refresh_status);
+                this.fill_last_backup();
+            }
+            this._backup_uid = value;
+        }
+    }
+    public GLib.Settings cronopete_settings;
 
     private bool _show_in_bar;
     public bool show_in_bar {
@@ -116,22 +131,6 @@ class cp_callback : GLib.Object, callbacks {
 
     private bool update_path;
     private string i_backup_path;
-
-    public string backup_path {
-
-        get {
-            return this.i_backup_path;
-        }
-
-        set {
-            this.i_backup_path=value;
-            this.backend=new usbhd_backend(value,this.cronopete_settings.get_string("backup-uid"));
-            this.cronopete_settings.set_string("backup-uid",this.backend.get_uuid);
-            this.cronopete_settings.set_string("backup-path",this.backend.get_path);
-            this.backend.status.connect(this.refresh_status);
-            this.refresh_status(null);
-        }
-    }
 
     public void refresh_status(usbhd_backend? b) {
 
@@ -180,16 +179,16 @@ class cp_callback : GLib.Object, callbacks {
         this.messages = new StringBuilder("");
         this.backup_running = SystemStatus.IDLE;
         this.current_status = BackupStatus.STOPPED;
-        this.angle = 0.0;
         this.size = 0;
         this.refresh_timer = 0;
         this.backup_pending=false;
         this.backup_forced=false;
         this.tooltip_value="";
+
         this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
         var retval=this.read_configuration();
-
-        this.backend=new usbhd_backend(this.cronopete_settings.get_string("backup-path"),this.cronopete_settings.get_string("backup-uid"));
+        
+        this.backend=new usbhd_backend(this.backup_uid);
         this.backend.status.connect(this.refresh_status);
         this.fill_last_backup();
 
@@ -223,7 +222,7 @@ class cp_callback : GLib.Object, callbacks {
         this.main_timer=GLib.Timeout.add(init_delay,this.timer_f);
         this.cronopete_settings.bind("enabled",this,"active",GLib.SettingsBindFlags.DEFAULT);
         this.cronopete_settings.bind("visible",this,"show_in_bar",GLib.SettingsBindFlags.DEFAULT);
-        this.cronopete_settings.bind("backup-path",this,"backup_path",GLib.SettingsBindFlags.DEFAULT);
+        this.cronopete_settings.bind("backup-path",this,"backup-uid",GLib.SettingsBindFlags.DEFAULT);
 
         if (retval==0) {
             var builder = new Builder();
@@ -242,25 +241,25 @@ class cp_callback : GLib.Object, callbacks {
 
     private void fill_last_backup() {
 
-        if (this.backend==null) {
-            this.last_backup=_("Latest backup: %s").printf(_("Not defined"));
+        if (this.backend == null) {
+            this.last_backup = _("Latest backup: %s").printf(_("Not defined"));
             return;
         }
 
         var backups = this.backend.get_backup_list();
-        if (backups==null) {
-            this.last_backup=_("Latest backup: %s").printf(_("None"));
+        if (backups == null) {
+            this.last_backup = _("Latest backup: %s").printf(_("None"));
             return;
         }
 
-        time_t lastb=0;
+        time_t lastb = 0;
         foreach (time_t t in backups) {
-            if (t>lastb) {
-                lastb=t;
+            if (t > lastb) {
+                lastb = t;
             }
         }
-        if (lastb==0) {
-            this.last_backup=_("Latest backup: %s").printf(_("None"));
+        if (lastb == 0) {
+            this.last_backup = _("Latest backup: %s").printf(_("None"));
             return;
         }
         var lb = new DateTime.from_unix_local(lastb);
@@ -300,7 +299,7 @@ class cp_callback : GLib.Object, callbacks {
     public bool timer_f() {
 
         if (this.tooltip_changed) {
-                this.set_tooltip(null);
+            this.set_tooltip(null);
         }
 
         if (this.backup_running==SystemStatus.IDLE) {
@@ -353,8 +352,6 @@ class cp_callback : GLib.Object, callbacks {
         }
 
         this.repaint(this.size);
-        this.angle-=0.50;
-        this.angle%=120.0*Gsl.MathConst.M_PI;
         this.iconpos++;
 
         if (this.backup_running==SystemStatus.ABORTING) {
@@ -640,14 +637,6 @@ class cp_callback : GLib.Object, callbacks {
          * and migrate it to GSettings
          ****************************************************************************************/
 
-        /*this.origin_path_list = new Gee.ArrayList<string>();
-        this.exclude_path_list = new Gee.ArrayList<string>();
-        this.backup_path = "";
-        this.skip_hiden_at_home = true;
-        this._active = false;
-        this._show_in_bar=true;
-        this.new_period=3600;*/
-
         FileInputStream file_read;
 
         string home=Environment.get_home_dir();
@@ -744,7 +733,6 @@ class cp_callback : GLib.Object, callbacks {
         }
 
         this.cronopete_settings.set_string("backup-uid","");
-        this.cronopete_settings.set_string("backup-path",backup_path2);
         if (origin_path_list.length==0) {
             origin_path_list+=Environment.get_home_dir();
         }

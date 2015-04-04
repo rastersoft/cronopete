@@ -171,41 +171,60 @@ or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 <h2>History of versions</h2>
 <ul>
 <li>version 3.18.3 (2015/04/03)></li>
+<ul>
 <li>Migrated to UDisks2, to fix the problems when formating disks</li>
+</ul>
 
 <li>version 3.18.2 (2015/04/03)></li>
+<ul>
 <li>Now doesn't fail if, at startup, the hard disk isn't mounted</li>
 <li>Now the main window doesn't get expanded if the status text is too big</li>
+</ul>
 
 <li>version 3.18.1 (2015/04/03)></li>
+<ul>
 <li>Fixed bugs when choosing a new disk</li>
+</ul>
 
 <li>version 3.18.0 (2015/04/02)></li>
+<ul>
 <li>Now searchs disks using the UUID</li>
+</ul>
 
 <li>version 3.17.0 (2015/02/23)></li>
+<ul>
 <li>Added Czech translation</li>
 <li>Fixed the icon path</li>
 <li>Allows to add several folders simultaneously</li>
+</ul>
 
 <li>version 3.16.0 (2014/08/08)></li>
+<ul>
 <li>Removed GTK2 support</li>
 <li>Fixed the problems when mixing fullscreen and popup windows</li>
+</ul>
 
 <li>Version 3.15.3 (2013/12/14)</li>
+<ul>
 <li>Now uses Gee 0.8</li>
+</ul>
 
 <li>Version 3.15.2 (2013/11/01)</li>
+<ul>
 <li>Fixed galician translation</li>
 <li>Removed the access to GTK from several threads</li>
 <li>The CANCEL button when choosing a folder to (or not) backup now works</li>
 <li>Now doesn't fail if pressing the ACCEPT button in the folder selection dialog without a folder selected</li>
 <li>Now removes the wellcome message also if the user shows the configuration dialog</li>
+</ul>
 
 <li>Version 3.15.1 (2013/10/26)</li>
+<ul>
 <li>Added a Welcome window</li>
+</ul>
 
 <li>Version 3.15.0 (2013/10/26)</li>
+<ul>
 <li>Now doesn't hang when trying to set the partition type during disk formating</li>
 <li>Changed the schema path from <i>apps.cronopete</i> to <i>org.rastersoft.cronopete</i> to be compliant with the Gnome rules (requires reconfiguration!!!)</li>
 <li>Removed formating in ReiserFS; now only formats in Ext4, but still supports ReiserFS if formated manually by the user</li>
@@ -213,58 +232,83 @@ or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
 <li>Now automounts the drive during launch</li>
 <li>Build system migrated to Autovala+CMake</li>
 <li>The code now uses the data automatically detected by Autovala</li>
+</ul>
 
 <li>Version 3.14.0 (2013/06/15)</li>
+<ul>
 <li>Fixed the refresh bug when the timer line has to do a big jump.</li>
+</ul>
 
 <li>Version 3.13.0 (2013/06/09)</li>
+<ul>
 <li>Fixed picture refresh bug in the file restoring system.</li>
 <li>Fixed bug when formating external drives without partition table.</li>
 <li>Removed several deprecated calls.</li>
+</ul>
 
 <li>Version 3.12.0 (2013/05/11)</li>
+<ul>
 <li>Fixed a bug when trying to do a backup in a disk 100% full.</li>
+</ul>
 
 <li>Version 3.11.0 (2013/05/05)</li>
+<ul>
 <li>Added a delay to avoid failure launch in Gnome Shell</li>
 <li>Fixed return value in DRAW y EXPOSE-EVENT callbacks</li>
+</ul>
 
 <li>Version 3.10.0 (2013/01/27)</li>
+<ul>
 <li>Fixed colors in symbolic icons.</li>
+</ul>
 
 <li>Version 3.9.0</li>
+<ul>
 <li>Development version</li>
+</ul>
 
 <li>Version 3.8.0/1 (2013/01/20)</li>
+<ul>
 <li>Fixed the scroll and the icons in the restore interface.</li>
 <li>Fixed the background painting in the restore interface.</li>
 <li>Added texts in the buttons of the restore interface.</li>
 <li>Fixed compilation under Gtk2.</li>
 <li>Added .deb packages for Gtk2.</li>
-
+</ul>
 <li>Version 3.7.0</li>
+
+<ul>
 <li>Development version</li>
+</ul>
 
 <li>Version 3.6.0 (2012/12/21)</li>
+<ul>
 <li>New restoring interface</li>
 <li>Allows to use internal, non-removable drives (for testing)</li>
 <li>Added new icons based in the -symbolic standard</li>
 <li>Fixed the bug that made the restore window to grow each time the user changed the folder</li>
 <li>Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete</li>
+</ul>
 
 <li>Version 3.5.0</li>
+<ul>
 <li>Development version</li>
+</ul>
 
 <li>Version 3.4.6 (2012/10/28)</li>
+<ul>
 <li>The configuration icon in Elementary will keep in the icon window</li>
 <li>Removed sleep during startup because, with libappnotify, it's not needed</li>
 <li>Now doesn't recreate the menu in the system bar each time something changes, but takes advantage of the capabilities of libappindicator (when used)</li>
+</ul>
 
 <li>Version 3.4.5 (2012/10/17)</li>
+<ul>
 <li>Added D-Bus activation, to launch Cronopete when opening the configuration icon</li>
 <li>CMake files modified to ensure that the autostart file is copied in the right place even when using a non-standard folder</li>
 <li>Included the Vala CMake files</li>
 <li>Added control files for PPA repositories with DEB packages for Ubuntu and Elementary OS</li>
+</ul>
 
 <li>Version 3.4.0 (2012/10/13)</li>
 <ul>

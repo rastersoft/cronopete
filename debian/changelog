@@ -1,3 +1,19 @@
+cronopete (3.18.3-ppa2) trusty; urgency=low
+
+  * Fixed dependencies
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 04 Apr 2015 00:40:17 +0100
+
+cronopete (3.18.3-ppa1) trusty; urgency=low
+
+  * Now searchs disks using the UUID
+  * Migrated to UDisks2, to fix the problems when formating disks
+  * Now doesn't fail if, at startup, the hard disk isn't mounted
+  * Now the main window doesn't get expanded if the status text is too big
+  * Fixed little bugs when choosing a new disk
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 03 Apr 2015 20:23:17 +0100
+ 
 cronopete (3.17.0-ppa4) trusty; urgency=low
 
   * Fixed rules file again
