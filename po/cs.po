@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-26 22:04+0100\n"
+"POT-Creation-Date: 2015-04-04 23:10+0200\n"
 "PO-Revision-Date: 2015-01-22 21:00+0100\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <>\n"
@@ -20,56 +20,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: src/backup.vala:286
+#: src/backup.vala:287
 #, c-format
 msgid "Backing up folder %s.\n"
 msgstr "Zálohování složky %s.\n"
 
-#: src/backup.vala:290
+#: src/backup.vala:291
 #, c-format
 msgid "Excluding folder %s.\n"
 msgstr "S vynecháním složky %s.\n"
 
-#: src/backup.vala:296
+#: src/backup.vala:297
 #, c-format
 msgid "Excluding hidden folders in %s.\n"
 msgstr "S vynecháním skrytých složek v %s.\n"
 
-#: src/backup.vala:298
+#: src/backup.vala:299
 #, c-format
 msgid "Backing up hidden folders in %s.\n"
 msgstr "Skryté složky v %s jsou zálohovány.\n"
 
-#: src/backup.vala:346
+#: src/backup.vala:347
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr ""
 "Nelze vytvořit složku pro tuto zálohu. Proces zálohování bude přerušen.\n"
 
-#: src/backup.vala:349
+#: src/backup.vala:350
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 "Nelze vytvořit základní složku pro zálohy. Proces zálohování bude přerušen.\n"
 
-#: src/backup.vala:352
+#: src/backup.vala:353
 msgid "Backup device not available. Aborting backup.\n"
 msgstr ""
 "Zálohovací zařízení není k dispozici. Proces zálohování bude přerušen.\n"
 
-#: src/backup.vala:355
+#: src/backup.vala:356
 msgid "Already started a backup.\n"
 msgstr "Proces zálohování je již v běhu.\n"
 
-#: src/backup.vala:359
+#: src/backup.vala:360
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 "Nezdařilo se uvolnit dostatečný prostor na disku, aby bylo možné zahájit "
 "zálohování. Proces zálohování bude přerušen.\n"
 
-#: src/backup.vala:378
+#: src/backup.vala:379
 msgid "Backup aborted\n"
 msgstr "Proces zálohování byl přerušen.\n"
 
-#: src/backup.vala:392
+#: src/backup.vala:393
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -78,119 +78,135 @@ msgstr ""
 "Odeberte nějaké položky ze seznamu zálohovaných a naopak je přidejte na "
 "seznam vynechaných složek.\n"
 
-#: src/backup.vala:406
+#: src/backup.vala:407
 msgid "Syncing disk\n"
 msgstr "Synchronizace disku…\n"
 
-#: src/backup.vala:408
+#: src/backup.vala:409
 msgid "Can't close the backup. Aborting.\n"
 msgstr "Zálohu nelze uzavřít. Operace bude přerušena.\n"
 
-#: src/backup.vala:414
+#: src/backup.vala:415
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Zálohování dokončeno. Trvalo %ld sekund.\n"
 
-#: src/choose.vala:245
+#: src/choose.vala:107
+msgid "Failed to find the disk!!!!!"
+msgstr ""
+
+#: src/choose.vala:116
+msgid "Failed to unmount the disk. Aborting format operation."
+msgstr ""
+
+#: src/choose.vala:137
 msgid ""
-"The selected drive must be formated to be used for backups. To do it, click "
-"the <i>Format disk</i> button. <b>All the data in the drive will be erased</"
-"b>"
+"Failed to format the disk (maybe it is needing too much time). Please, try "
+"again."
+msgstr ""
+
+#: src/choose.vala:152
+msgid "Failed to mount again the disk. Aborting the format operation."
+msgstr ""
+
+#: src/choose.vala:168
+#, fuzzy
+msgid ""
+"The selected drive must be formated to be used for backups.\n"
+"\n"
+"To do it, click the <i>Format disk</i> button.\n"
+"\n"
+"<b>All the data in the drive will be erased</b>"
 msgstr ""
 "Zvolený disk musí být pro účely zálohování naformátován. Toho je možné "
 "docílit kliknutím na tlačítko <i>Formátovat disk</i>. <b>Pozor! Veškerá "
 "stávající data na tomto disku budou smazána</b>."
 
-#: src/choose.vala:470
+#: src/choose.vala:388
 msgid "Unknown FS"
 msgstr "Neznámý souborový systém"
 
-#: src/cronopete.vala:215 src/cronopete.vala:339 src/cronopete.vala:371
+#: src/cronopete.vala:219 src/cronopete.vala:332 src/cronopete.vala:362
 msgid "Idle"
 msgstr "Nečinné"
 
-#: src/cronopete.vala:245 src/cronopete.vala:251 src/cronopete.vala:262
-#: src/cronopete.vala:266
+#: src/cronopete.vala:238 src/cronopete.vala:244 src/cronopete.vala:255
+#: src/cronopete.vala:259
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Poslední záloha: %s"
 
-#: src/cronopete.vala:245 src/menu.vala:232
+#: src/cronopete.vala:238 src/menu.vala:235
 msgid "Not defined"
 msgstr "Není určeno"
 
-#: src/cronopete.vala:251 src/cronopete.vala:262 src/menu.vala:181
+#: src/cronopete.vala:244 src/cronopete.vala:255 src/menu.vala:184
 msgid "None"
 msgstr "Nic"
 
-#: src/cronopete.vala:368
+#: src/cronopete.vala:359
 msgid "Storage not available"
 msgstr "Úložiště není k dispozici"
 
-#: src/cronopete.vala:373
+#: src/cronopete.vala:364
 msgid "Backup disabled"
 msgstr "Zálohování vypnuto"
 
-#: src/cronopete.vala:444
+#: src/cronopete.vala:435
 msgid "Back Up Now"
 msgstr "Zazálohovat nyní"
 
-#: src/cronopete.vala:447
+#: src/cronopete.vala:438
 msgid "Stop Backing Up"
 msgstr "Zastavit zálohování"
 
-#: src/cronopete.vala:451 src/restore.vala:196
+#: src/cronopete.vala:442 src/restore.vala:196
 msgid "Restore files"
 msgstr "Obnovit soubory"
 
-#: src/cronopete.vala:459
+#: src/cronopete.vala:450
 msgid "Configure backup policies"
 msgstr "Nastavit pravidla zálohování"
 
-#: src/cronopete.vala:544
+#: src/cronopete.vala:535
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Zálohování složky %s…\n"
 
-#: src/cronopete.vala:563
+#: src/cronopete.vala:554
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Nelze zkopírovat soubor %s\n"
 
-#: src/cronopete.vala:568
+#: src/cronopete.vala:559
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Složka %s není přístupná\n"
 
-#: src/cronopete.vala:573
+#: src/cronopete.vala:564
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Složku %s nelze vytvořit\n"
 
-#: src/cronopete.vala:592
+#: src/cronopete.vala:583
 msgid "Starting backup\n"
 msgstr "Spouštění zálohování…\n"
 
-#: src/cronopete.vala:607
+#: src/cronopete.vala:598
 msgid "Erasing old backups"
 msgstr "Mazání starých záloh"
 
-#: src/cronopete.vala:619
+#: src/cronopete.vala:610
 msgid "Backup aborted"
 msgstr "Proces zálohování byl přerušen"
 
-#: src/cronopete.vala:623
+#: src/cronopete.vala:614
 msgid "Can't do backup; disk is too small"
 msgstr "Zálohu nelze provést: disk je příliš malý"
 
-#: src/cronopete.vala:627
+#: src/cronopete.vala:618
 msgid "Can't do backup"
 msgstr "Zálohu nelze provést"
-
-#: src/cronopete.vala:741
-#, c-format
-msgid "Invalid parameter in config file %s (line %d)\n"
-msgstr "Neplatný parametr v souboru s nastaveními %s (řádek %d)\n"
 
 #: src/icons_widget.vala:153
 msgid "Name"
@@ -236,17 +252,17 @@ msgstr "Zobrazit jako ikony"
 msgid "View as list"
 msgstr "Zobrazit jako seznam"
 
-#: src/menu.vala:126
+#: src/menu.vala:129
 #, c-format
 msgid "Status: %s"
 msgstr "Stav: %s"
 
-#: src/menu.vala:240
+#: src/menu.vala:243
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB z %lld GB"
 
-#: src/options.vala:60
+#: src/options.vala:61
 #, c-format
 msgid "Backup hidden files and folders in %s"
 msgstr "Zálohovat skryté soubory a složky v %s"
@@ -417,37 +433,37 @@ msgstr ""
 msgid "cronopete"
 msgstr ""
 
-#: data/interface/main.ui:241
+#: data/interface/main.ui:233
 msgid "Next backup:"
 msgstr "Příští záloha:"
 
-#: data/interface/main.ui:255
+#: data/interface/main.ui:245
 msgid "Latest backup:"
 msgstr "Nejnovější:"
 
-#: data/interface/main.ui:269
+#: data/interface/main.ui:257
 msgid "Oldest backup:"
 msgstr "Nejstarší záloha:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:283
+#: data/interface/main.ui:269
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "K dispozici:"
 
-#: data/interface/main.ui:297
+#: data/interface/main.ui:281
 msgid "Device:"
 msgstr "Zařízení:"
 
-#: data/interface/main.ui:341
+#: data/interface/main.ui:336
 msgid "Change disk..."
 msgstr "Změnit disk…"
 
-#: data/interface/main.ui:357 data/interface/options.ui:16
+#: data/interface/main.ui:352 data/interface/options.ui:16
 msgid "Options"
 msgstr "Možnosti"
 
-#: data/interface/main.ui:385
+#: data/interface/main.ui:380
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -461,15 +477,15 @@ msgstr ""
 " * Zálohy v denních odstupech pro předchozí měsíc\n"
 " * Zálohy v týdenních odstupech až do výše kapacity datového úložiště"
 
-#: data/interface/main.ui:403
+#: data/interface/main.ui:398
 msgid "Show Cronopete in menu bar"
 msgstr "Zobrazit aplikaci Cronopete v liště nabídky"
 
-#: data/interface/main.ui:455
+#: data/interface/main.ui:450
 msgid "Configuration"
 msgstr "Nastavení"
 
-#: data/interface/main.ui:484
+#: data/interface/main.ui:479
 msgid "Log"
 msgstr "Protokol"
 
@@ -536,3 +552,6 @@ msgstr ""
 "Nyní můžete nastavit, které vnější datové úložiště použít pro ukládání "
 "těchto kopií použít a které složky zálohovat. Případně to můžete nechat na "
 "později."
+
+#~ msgid "Invalid parameter in config file %s (line %d)\n"
+#~ msgstr "Neplatný parametr v souboru s nastaveními %s (řádek %d)\n"
