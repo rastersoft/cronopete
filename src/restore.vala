@@ -305,7 +305,7 @@ class restore_iface : GLib.Object {
         var c_base = new Cairo.Context(this.base_surface);
 
         var tonecolor=this.cronopete_settings.get_string("toning-color");
-        
+
         Gdk.RGBA tonecolor_final = Gdk.RGBA();
         tonecolor_final.parse(tonecolor);
 
@@ -316,7 +316,7 @@ class restore_iface : GLib.Object {
         final_r=(int32)(tonecolor_final.red*255.0);
         final_g=(int32)(tonecolor_final.green*255.0);
         final_b=(int32)(tonecolor_final.blue*255.0);
-        
+
         var list_schemas = GLib.SettingsSchemaSource.get_default();
 
         bool gnome_found;
