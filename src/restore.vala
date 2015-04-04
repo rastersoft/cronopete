@@ -181,7 +181,7 @@ class restore_iface : GLib.Object {
         this.current_date=new Label("<span size=\"xx-large\"> </span>");
         this.current_date.use_markup=true;
 
-        var pic1=new Gtk.Image.from_stock(Gtk.Stock.REVERT_TO_SAVED,Gtk.IconSize.DND);
+        var pic1=new Gtk.Image.from_icon_name("document-revert",Gtk.IconSize.DND);
         var label1=new Label("<span size=\"xx-large\">"+_("Restore files")+"</span>");
         label1.use_markup=true;
         container1.pack_start(pic1,false,false,0);
@@ -189,7 +189,7 @@ class restore_iface : GLib.Object {
         var restore_button=new Gtk.Button();
         restore_button.add(container1);
 
-        var pic2=new Gtk.Image.from_stock(Gtk.Stock.QUIT,Gtk.IconSize.DND);
+        var pic2=new Gtk.Image.from_icon_name("application-exit",Gtk.IconSize.DND);
         var label2=new Label("<span size=\"xx-large\">"+_("Exit")+"</span>");
         label2.use_markup=true;
         container2.pack_start(pic2,false,false,0);

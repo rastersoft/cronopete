@@ -203,6 +203,48 @@ namespace FilelistIcons {
 
         }
 
+        private void read_bookmarks_from_file(string file) {
+
+            var config_file = File.new_for_path (file);
+            bookmark_str val = bookmark_str();
+
+            if (config_file.query_exists (null)) {
+                try {
+                    var file_read=config_file.read(null);
+                    var in_stream = new DataInputStream (file_read);
+                    string line;
+                    string folder;
+                    while ((line = in_stream.read_line (null, null)) != null) {
+                        if (line.has_prefix("file://")) {
+                            var pos = line.index_of_char(' ',7);
+                            if (pos>7) {
+                                folder=line.substring(7,pos-7);
+                            } else {
+                                folder=line.substring(7);
+                            }
+                            var folder2 = GLib.Uri.unescape_string(folder);
+                            bool found=false;
+                            foreach (var l in this.bookmarks) {
+                                if (l.name==folder2) {
+                                    found=true;
+                                    break;
+                                }
+                            }
+                            if (found) {
+                                continue;
+                            }
+                            val = bookmark_str();
+                            val.name = folder2;
+                            val.icon = "folder";
+                            this.bookmarks.add(val);
+                        }
+                    }
+                } catch {
+                }
+            }
+
+        }
+
         private bool read_bookmarks() {
 
             TreeIter iter;
@@ -279,42 +321,9 @@ namespace FilelistIcons {
                 }
             }
 
-            config_file = File.new_for_path (GLib.Path.build_filename(home,".gtk-bookmarks"));
+            this.read_bookmarks_from_file(GLib.Path.build_filename(home,".gtk-bookmarks"));
+            this.read_bookmarks_from_file(GLib.Path.build_filename(home,".config/gtk-3.0/bookmarks"));
 
-            if (config_file.query_exists (null)) {
-                try {
-                    var file_read=config_file.read(null);
-                    var in_stream = new DataInputStream (file_read);
-                    string line;
-                    string folder;
-                    while ((line = in_stream.read_line (null, null)) != null) {
-                        if (line.has_prefix("file://")) {
-                            var pos = line.index_of_char(' ',7);
-                            if (pos>7) {
-                                folder=line.substring(7,pos-7);
-                            } else {
-                                folder=line.substring(7);
-                            }
-                            var folder2 = GLib.Uri.unescape_string(folder);
-                            bool found=false;
-                            foreach (var l in this.bookmarks) {
-                                if (l.name==folder2) {
-                                    found=true;
-                                    break;
-                                }
-                            }
-                            if (found) {
-                                continue;
-                            }
-                            val = bookmark_str();
-                            val.name = folder2;
-                            val.icon=Gtk.Stock.DIRECTORY;
-                            this.bookmarks.add(val);
-                        }
-                    }
-                } catch {
-                }
-            }
             string icons;
             foreach(var folder in this.bookmarks) {
                 icons="%s folder".printf(folder.icon);
@@ -840,8 +849,8 @@ namespace FilelistIcons {
             var theme = Gtk.IconTheme.get_default();
             icon_cache_st element_cache;
 
-            Gdk.Pixbuf pbuf=null;
-            Gdk.Pixbuf pbuf2=null;
+            Gdk.Pixbuf? pbuf=null;
+            Gdk.Pixbuf? pbuf2=null;
 
             uint icon_hash;
             foreach (file_info f in files) {
@@ -849,7 +858,7 @@ namespace FilelistIcons {
                     continue;
                 }
 
-                icon_hash=f.icon.hash();
+                icon_hash = f.icon.hash();
                 if ((this.icon_cache.has_key(icon_hash))) {
                     element_cache = this.icon_cache.get(icon_hash);
                     pbuf=element_cache.big;
@@ -869,12 +878,16 @@ namespace FilelistIcons {
                     }
 
                     if (pbuf==null) {
-                        if (f.isdir) {
-                            pbuf = this.path_view.render_icon(Stock.DIRECTORY,IconSize.DIALOG,"");
-                            pbuf2= this.path_view.render_icon(Stock.DIRECTORY,IconSize.SMALL_TOOLBAR,"");
-                        } else {
-                            pbuf = this.path_view.render_icon(Stock.FILE,IconSize.DIALOG,"");
-                            pbuf2= this.path_view.render_icon(Stock.FILE,IconSize.SMALL_TOOLBAR,"");
+                        pbuf2 = null;
+                        string name = f.isdir ? "folder" : "text-x-generic";
+                        try {
+                            var tmp1=theme.lookup_icon(name,48,0);
+                            if (tmp1!=null) {
+                                var tmp2=theme.lookup_icon(name,24,0);
+                                pbuf = tmp1.load_icon();
+                                pbuf2= tmp2.load_icon();
+                            }
+                        } catch {
                         }
                     }
                     element_cache=icon_cache_st();
