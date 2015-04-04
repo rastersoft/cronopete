@@ -97,7 +97,7 @@ class c_main_menu : GLib.Object {
         this.builder.connect_signals(this);
         this.cronopete_settings.bind("enabled",this.my_widget,"active",GLib.SettingsBindFlags.DEFAULT);
         this.cronopete_settings.bind("visible",this.show_in_bar_ch,"active",GLib.SettingsBindFlags.DEFAULT);
-        
+
         int[] fd = new int[2]; // file descriptor
         int ret;
 
@@ -115,7 +115,7 @@ class c_main_menu : GLib.Object {
                 print("Cannot create new IOChannel!\n");
             }
 
-            // The watch calls the gio_in function, if there data is available for 
+            // The watch calls the gio_in function, if there data is available for
             // reading without locking
             if(!(io_read.add_watch(IOCondition.IN | IOCondition.HUP, insert_text_log) != 0)) {
                 print("Cannot add watch on IOChannel!\n");
@@ -275,18 +275,21 @@ class c_main_menu : GLib.Object {
 
         bool not_configured;
 
-        if (this.parent.backup_path=="") {
+        if (this.cronopete_settings.get_string("backup-uid") == "") {
             not_configured=true;
         } else {
             not_configured=false;
         }
-        var tmp = new c_choose_disk(this.main_w);
-        tmp.run(this.basepath,this.parent,this.cronopete_settings);
-        this.refresh_backup_data();
-        if ((this.parent.backup_path!="")&&(not_configured==true)&&(this.parent.active==false)) {
+        var tmp = new c_choose_disk(this.main_w,this.basepath);
+        var new_uuid = tmp.run(this.cronopete_settings);
+        if (new_uuid != null) {
+            this.parent.backup_uid = new_uuid;
+        }
+        if ((new_uuid != "") && (new_uuid != null) && (not_configured==true) && (this.parent.active==false)) {
             this.parent.active=true;
             this.my_widget.active=true;
         }
+        this.refresh_backup_data();
     }
 
     [CCode (instance_pos = -1)]

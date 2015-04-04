@@ -28,99 +28,124 @@ struct file_info {
     int64 size;
 }
 
- 
+
 class usbhd_backend: Object, backends {
 
-    private string backup_path;
     private string? cbackup_path;
     private string? cfinal_path;
     private string? last_backup;
-    private string drive_path;
+    private string? _drive_path;
+    public string? drive_path {
+        get {
+            var volumes = this.monitor.get_volumes();
+
+            foreach (Volume v in volumes) {
+                if (this.drive_uuid != "") {
+                    string ?id=v.get_identifier("uuid");
+                    if (id == this.drive_uuid) {
+                        var mnt=v.get_mount();
+                        if (!(mnt is Mount)) {
+                            return null; // the drive is not mounted!!!!!!
+                        }
+                        this._drive_path = mnt.get_root().get_path();
+                        return this._drive_path;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    private string? _backup_path;
+    private string? backup_path {
+        get {
+            var drpath = this.drive_path;
+            if (drpath == null) {
+                this._backup_path = null;
+            } else {
+                this._backup_path = (Path.build_filename(drpath,"cronopete",Environment.get_user_name()));
+            }
+            return this._backup_path;
+        }
+    }
+
+    private bool _backup_enabled;
+    public bool backup_enabled {
+        get {
+            return this._backup_enabled;
+        }
+        set {
+            this._backup_enabled = value;
+            if (value) {
+                refresh_connect(); // try to mount the disk if needed
+            }
+        }
+    }
+
     private VolumeMonitor monitor;
-    public bool _available;
+    private bool _available;
     private string? drive_uuid;
-    
+
     public string? get_uuid {
         get {
             return (this.drive_uuid);
         }
     }
 
-    public string? get_path {
-        get {
-            return (this.drive_path);
-        }
-    }
-    
+
     public bool available {
         get {
             return (this._available);
         }
     }
-    
+
     private int last_msg;
     private bool locked;
     private bool tried_to_lock;
     private GLib.Mutex lock_delete;
     private time_t deleting;
 
-    private string update_volume_data(string? bpath, string? uuid) {
+    private void update_volume_data(string? uuid) {
+
+        if ((uuid == null) || (uuid == "")) {
+            return;
+        }
 
         var volumes = this.monitor.get_volumes();
-        Mount mnt;
-        string bpath2 = bpath;
 
         foreach (Volume v in volumes) {
-            // If we have an UUID available, use it to mount the partition and discover where it is mounted
-            if ((uuid!=null) && (uuid!="")) {
-                string ?id=v.get_identifier("uuid");
-                if (id==uuid) {
-                    mnt=v.get_mount();
-                    if (!(mnt is Mount)) {
-                        v.mount(GLib.MountMountFlags.NONE,null);
-                        return bpath2; // return; if can be mounted, it will be detected whith the callback
-                    }
-                    var root = mnt.get_root();
-                    bpath2 = root.get_path();
-                    break;
-                }
-            } else {
-                mnt=v.get_mount();
+            // If we have an UUID available, use it to mount the partition
+            string ?id = v.get_identifier("uuid");
+            if (id == uuid) {
+                var mnt = v.get_mount();
                 if (!(mnt is Mount)) {
-                    continue;
+                    this._available = false;
+                    v.mount.begin(GLib.MountMountFlags.NONE,null); // try to mount the disk if it is connected but not mounted
+                } else {
+                    this._available = true;
                 }
-                var root = mnt.get_root();
-                if (root.get_path() == bpath2) {
-                    this.drive_uuid = v.get_identifier("uuid");
-                }
+                return; // return; if can be mounted, it will be detected whith the callback
             }
         }
-        return bpath2;
     }
 
-    public usbhd_backend(string? bpath2, string? uuid) {
+    public usbhd_backend(string? uuid) {
 
         string bpath;
-        
+
         if ((uuid!=null) && (uuid!="")) {
             this.drive_uuid = uuid;
         } else {
             this.drive_uuid="";
         }
 
-        if (bpath2==null) {
-            bpath="";
-        } else {
-            bpath=bpath2;
-        }
-
-        var tmpid=bpath.split("/");
+        bpath="";
 
         this.locked=false;
         this.tried_to_lock=false;
         this.deleting=0;
         this.lock_delete = new GLib.Mutex();
-        
+
         this.cbackup_path=null;
         this.cfinal_path=null;
 
@@ -129,9 +154,7 @@ class usbhd_backend: Object, backends {
         this.monitor.mount_removed.connect_after(this.refresh_connect);
         this.last_msg=0;
 
-        bpath = this.update_volume_data(bpath,uuid);
-        this.drive_path=bpath;
-        this.backup_path=Path.build_filename(bpath,"cronopete",Environment.get_user_name());
+        this.update_volume_data(uuid);
         this.refresh_connect();
     }
 
@@ -140,19 +163,11 @@ class usbhd_backend: Object, backends {
         lock (this.locked) {
             if (lock_in) {
                 this.locked=this.lock_delete.trylock();
-                /*if (this.locked) {
-                    GLib.stdout.printf("Consigo bloquear en lock\n");
-                } else {
-                    GLib.stdout.printf("No consigo bloquear en lock\n");
-                }*/
                 this.tried_to_lock=true;
             } else {
                 if (this.locked) {
                     this.lock_delete.unlock();
-                    //GLib.stdout.printf("Desbloqueo en lock\n");
-                }/* else {
-                    GLib.stdout.printf("No desbloqueo en lock\n");
-                }*/
+                }
                 this.tried_to_lock=false;
             }
         }
@@ -162,7 +177,8 @@ class usbhd_backend: Object, backends {
 
         this.lock_delete.lock();
         this.deleting=backup_date;
-        var tmppath=this.get_backup_path(backup_date);
+        var tmppath=this.get_backup_path_from_time(backup_date);
+
         var final_path=Path.build_filename(this.backup_path,tmppath);
 
         Process.spawn_command_line_sync("rm -rf "+final_path);
@@ -179,7 +195,7 @@ class usbhd_backend: Object, backends {
         return true;
     }
 
-    private string get_backup_path(time_t backup) {
+    private string get_backup_path_from_time(time_t backup) {
 
         var ctime = GLib.Time.local(backup);
         var basepath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup);
@@ -189,7 +205,7 @@ class usbhd_backend: Object, backends {
 
     public async BACKUP_RETVAL restore_file(string filename,time_t backup, string output_filename, FileProgressCallback? cb) {
 
-        var origin_path = Path.build_filename(this.backup_path,this.get_backup_path(backup),filename);
+        var origin_path = Path.build_filename(this.backup_path,this.get_backup_path_from_time(backup),filename);
 
         File origin;
         BACKUP_RETVAL rv;
@@ -218,7 +234,7 @@ class usbhd_backend: Object, backends {
 
             files = new Gee.ArrayList<file_info ?>();
 
-            var basepath=this.get_backup_path(backup);
+            var basepath=this.get_backup_path_from_time(backup);
 
             date=basepath.dup();
 
@@ -258,53 +274,51 @@ class usbhd_backend: Object, backends {
         var volumes = this.monitor.get_volumes();
         Mount mnt;
         foreach (Volume v in volumes) {
-            mnt=v.get_mount();
-            if ((mnt is Mount)==false) {
-                continue;
-            }
-            if (this.drive_uuid == "") {
-                if (this.drive_path==mnt.get_root().get_path()) {
-                    this.drive_uuid=v.get_identifier("uuid");
-                    this._available=true;
-                    if (this.last_msg!=1) {
-                        this.last_msg=1;
+            if ((this.drive_uuid != "") && (this.drive_uuid == v.get_identifier("uuid"))) {
+                mnt = v.get_mount();
+                if ((mnt is Mount) == false) {
+                    this._available = false;
+                    if (this._backup_enabled) {
+                        v.mount.begin(GLib.MountMountFlags.NONE,null); // if the backup is enabled, try to mount it
+                    }
+                    if (this.last_msg != 3) { // we use LAST_MESSAGE to avoid repeating the same message several times
+                        this.last_msg = 3;
                         this.status(this);
                     }
                     return;
                 }
-            } else {
-                if (this.drive_uuid == v.get_identifier("uuid")) {
-                    this.drive_path == mnt.get_root().get_path();
-                    this._available = true;
-                    if (this.last_msg!=1) {
-                        this.last_msg=1;
-                        this.status(this);
-                    }
-                    return;
+                this._available = true;
+                if (this.last_msg != 1) {
+                    this.last_msg = 1;
+                    this.status(this);
                 }
+                return;
             }
         }
         this._available=false;
-        if (this.last_msg!=2) {
-            this.last_msg=2;
+        if (this.last_msg != 2) {
+            this.last_msg = 2;
             this.status(this);
         }
     }
 
     public bool get_free_space(out uint64 total_space, out uint64 free_space) {
 
-        if (this._available==false) {
+        if (this._available == false) {
             total_space=0;
             free_space=0;
             return false;
         }
 
         try {
-            var file = File.new_for_path(this.drive_path);
-            var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE+","+FileAttribute.FILESYSTEM_FREE,null);
-            free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
-            total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
-            return true;
+            var path = this.drive_path;
+            if (path != null) {
+                var file = File.new_for_path(path);
+                var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE+","+FileAttribute.FILESYSTEM_FREE,null);
+                free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+                total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
+                return true;
+            }
         } catch (Error e) {
             GLib.stdout.printf("USBHD_BACKEND: %s\n",e.message);
         }
@@ -328,6 +342,10 @@ class usbhd_backend: Object, backends {
         string dirname;
         time_t backup_time;
 
+        var path = this.backup_path;
+        if (path == null) {
+            return null;
+        }
         var directory = File.new_for_path(this.backup_path);
 
         try {
@@ -396,13 +414,14 @@ class usbhd_backend: Object, backends {
         }
 
         string dirname;
-        var directory = File.new_for_path(this.backup_path);
+        string basepath = this.backup_path;
+        var directory = File.new_for_path(basepath);
         if (directory.query_exists(null)==false) {
             return BACKUP_RETVAL.NOT_AVAILABLE;
         }
 
-        var tmppath=this.get_backup_path(time_t());
-        this.cbackup_path=Path.build_filename(this.backup_path,"B"+tmppath);
+        var tmppath=this.get_backup_path_from_time(time_t());
+        this.cbackup_path=Path.build_filename(basepath,"B"+tmppath);
         this.cfinal_path=tmppath;
 
         string tmp_directory="";
@@ -420,7 +439,7 @@ class usbhd_backend: Object, backends {
 
                 dirname=file_info.get_name();
                 if (dirname[0]=='B') {
-                    Process.spawn_command_line_sync("rm -rf "+Path.build_filename(this.backup_path,dirname));
+                    Process.spawn_command_line_sync("rm -rf "+Path.build_filename(basepath,dirname));
                 } else {
                     tmp_date=dirname.substring(20);
                     if (tmp_directory=="") {
@@ -455,7 +474,7 @@ class usbhd_backend: Object, backends {
             }
         }
 
-        this.last_backup=Path.build_filename(this.backup_path,tmp_directory);
+        this.last_backup=Path.build_filename(basepath,tmp_directory);
 
         var directory2 = File.new_for_path(this.cbackup_path);
         try {

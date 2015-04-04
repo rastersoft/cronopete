@@ -29,7 +29,7 @@ public class fixed_label : Gtk.Label {
     }
 
     public override void get_preferred_width(out int min_width, out int pref_width) {
-    
+
         min_width = this._maxwidth;
         pref_width = this._maxwidth;
     }

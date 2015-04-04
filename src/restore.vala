@@ -277,7 +277,7 @@ class restore_iface : GLib.Object {
         return false;
     }
 
-    public void refresh_status(usbhd_backend? b) {
+    public void refresh_status(backends? b) {
 
         if (b.available==false) {
             this.exit_restore ();
