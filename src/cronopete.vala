@@ -29,7 +29,7 @@ using Gsl;
 #if !NO_APPINDICATOR
 using AppIndicator;
 #endif
- 
+
 enum SystemStatus { IDLE, BACKING_UP, ABORTING, ENDED }
 enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
@@ -90,6 +90,8 @@ class cp_callback : GLib.Object, callbacks {
             }
         }
     }
+
+    // Contains the hard disk UUID
     private string _backup_uid;
     public string backup_uid {
         get {
@@ -186,7 +188,7 @@ class cp_callback : GLib.Object, callbacks {
         this.tooltip_value = "";
 
         this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
-        
+
         this.backend = new usbhd_backend(this.backup_uid);
         this.backend.status.connect(this.refresh_status);
         this.fill_last_backup();

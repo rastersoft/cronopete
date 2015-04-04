@@ -28,7 +28,7 @@ struct file_info {
     int64 size;
 }
 
- 
+
 class usbhd_backend: Object, backends {
 
     private string? cbackup_path;
@@ -77,20 +77,20 @@ class usbhd_backend: Object, backends {
     private VolumeMonitor monitor;
     public bool _available;
     private string? drive_uuid;
-    
+
     public string? get_uuid {
         get {
             return (this.drive_uuid);
         }
     }
 
-   
+
     public bool available {
         get {
             return (this._available);
         }
     }
-    
+
     private int last_msg;
     private bool locked;
     private bool tried_to_lock;
@@ -112,7 +112,7 @@ class usbhd_backend: Object, backends {
                 var mnt = v.get_mount();
                 if (!(mnt is Mount)) {
                     this._available = false;
-                    v.mount.begin(GLib.MountMountFlags.NONE,null);
+                    v.mount.begin(GLib.MountMountFlags.NONE,null); // try to mount the disk if it is connected but not mounted
                 } else {
                     this._available = true;
                 }
@@ -124,7 +124,7 @@ class usbhd_backend: Object, backends {
     public usbhd_backend(string? uuid) {
 
         string bpath;
-        
+
         if ((uuid!=null) && (uuid!="")) {
             this.drive_uuid = uuid;
         } else {
@@ -137,7 +137,7 @@ class usbhd_backend: Object, backends {
         this.tried_to_lock=false;
         this.deleting=0;
         this.lock_delete = new GLib.Mutex();
-        
+
         this.cbackup_path=null;
         this.cfinal_path=null;
 

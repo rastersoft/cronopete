@@ -57,7 +57,7 @@ class c_format : GLib.Object {
     public signal void format_ended(int status);
 
     public c_format(Gtk.Window parent) {
-    
+
         this.parent_window = parent;
     }
 
@@ -85,7 +85,7 @@ class c_format : GLib.Object {
         GLib.HashTable<ObjectPath,GLib.HashTable<string,GLib.HashTable<string,Variant>>> objects;
         UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if> (BusType.SYSTEM, "org.freedesktop.UDisks2","/org/freedesktop/UDisks2");
         udisk.GetManagedObjects(out objects);
-        
+
         ObjectPath? disk = null;
         Block_if? block = null;
 
@@ -102,7 +102,7 @@ class c_format : GLib.Object {
                 }
             }
         }
-        
+
         if (disk == null) { // Failed to find the disk!!!!!!
             this.show_error(_("Failed to find the disk!!!!!"));
             return final_uuid;
@@ -116,7 +116,7 @@ class c_format : GLib.Object {
             this.show_error(_("Failed to unmount the disk. Aborting format operation."));
             return final_uuid;
         }
-        
+
         var builder2 = new Builder();
         builder2.add_from_file(Path.build_filename(this.uipath,"formatting.ui"));
         var format_window = (Dialog) builder2.get_object("formatting");
@@ -143,7 +143,7 @@ class c_format : GLib.Object {
         format_window.hide();
         format_window.destroy();
         format_window = null;
-        
+
         hash = new GLib.HashTable<string,Variant>(str_hash,str_equal);
         string mount_path;
         try {
@@ -249,7 +249,7 @@ class c_choose_disk : GLib.Object {
         this.choose_w.show();
 
         bool not_writable;
-        
+
         string? final_disk_uuid = null;
 
         while (true) {

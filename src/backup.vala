@@ -133,7 +133,7 @@ class path_list:Object {
             // 0, forcing to free its next node, and so on, calling unref()
             // recursively. This can do the stack to grow too much, so we
             // free them starting from the last node.
-             
+
             next=this.last;
             this.last=this.last.prev;
             next.remove();
@@ -335,7 +335,7 @@ class nanockup:Object {
         this.done_backup=new path_list();
 
         if (this.backend.get_backup_id()==null) { // system not configured
-            this.callback.show_message("User didn't specified a device where to store the backups. Aborting backup.\n"); 
+            this.callback.show_message("User didn't specified a device where to store the backups. Aborting backup.\n");
             return -2; // the class isn't configured (don't know where to store the backups)
         }
 
