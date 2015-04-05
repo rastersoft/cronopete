@@ -7,16 +7,16 @@ src/menu.vala
 src/options.vala
 src/restore.vala
 src/usbhd_backend.vala
-data/interface/about.ui
-data/interface/chooser.ui
-data/interface/config_exported.ui
-data/interface/folder_selector.ui
-data/interface/format_error.ui
-data/interface/format_force.ui
-data/interface/formatting.ui
-data/interface/main.ui
-data/interface/options.ui
-data/interface/restore_error.ui
-data/interface/restore_ok.ui
-data/interface/restoring.ui
-data/interface/welcome.ui
+[type: gettext/glade]data/interface/about.ui
+[type: gettext/glade]data/interface/chooser.ui
+[type: gettext/glade]data/interface/config_exported.ui
+[type: gettext/glade]data/interface/folder_selector.ui
+[type: gettext/glade]data/interface/format_error.ui
+[type: gettext/glade]data/interface/format_force.ui
+[type: gettext/glade]data/interface/formatting.ui
+[type: gettext/glade]data/interface/main.ui
+[type: gettext/glade]data/interface/options.ui
+[type: gettext/glade]data/interface/restore_error.ui
+[type: gettext/glade]data/interface/restore_ok.ui
+[type: gettext/glade]data/interface/restoring.ui
+[type: gettext/glade]data/interface/welcome.ui

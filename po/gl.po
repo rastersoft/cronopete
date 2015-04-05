@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-06 01:14+0200\n"
+"POT-Creation-Date: 2015-04-06 01:24+0200\n"
 "PO-Revision-Date: 2013-10-31 10:40+0200\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -356,181 +356,221 @@ msgstr ""
 msgid "Preparing folders to restore"
 msgstr "Preparando os cartafoles para restaurar"
 
+#: ../data/interface/about.ui.h:1
 #, fuzzy
-#~ msgid "©2011-15 Raster Software Vigo"
-#~ msgstr "©2011-13 Raster Software Vigo"
+msgid "©2011-15 Raster Software Vigo"
+msgstr "©2011-13 Raster Software Vigo"
 
-#~ msgid "An Apple's Time Machine clone for Linux"
-#~ msgstr "Un clon para Linux do «Time Machine» de Apple"
+#: ../data/interface/about.ui.h:2
+msgid "An Apple's Time Machine clone for Linux"
+msgstr "Un clon para Linux do «Time Machine» de Apple"
 
-#~ msgid ""
-#~ "In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for "
-#~ "years the first novel with a time-travel machine.\n"
-#~ "\n"
-#~ "But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
-#~ "anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
-#~ "first novel to feature a machine that allows to \"fly against time\".\n"
-#~ "\n"
-#~ "In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
-#~ "Leopard. Several simmilar programs for Linux surged.\n"
-#~ "\n"
-#~ "In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
-#~ "Linux."
-#~ msgstr ""
-#~ "No 1895, H.G. Wells publicou <b>A máquina do tempo</b>, considerada "
-#~ "durante anos como a primeira novela cunha máquina capaz de viaxar no "
-#~ "tempo.\n"
-#~ "\n"
-#~ "Mais en 1887, oito anos antes, Enrique Gaspar y Rimbau tiña publicado "
-#~ "<b>El anacronópete</b>, unha novela en formato de zarzuela que é "
-#~ "realmente a primeira en incorporar unha máquina que permite «voar a "
-#~ "través do tempo».\n"
-#~ "\n"
-#~ "En 2007, Apple publicou <b>Time Machine</b>, un programa de copia de "
-#~ "seguranza para MacOS X Leopard. Pronto xurdiron varios programas "
-#~ "semellantes para Linux.\n"
-#~ "\n"
-#~ "En 2011 chega ana<b>CRONOPETE</b>, O clon para Linux do «Time Machine» de "
-#~ "Apple."
+#: ../data/interface/about.ui.h:3
+msgid ""
+"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
+"the first novel with a time-travel machine.\n"
+"\n"
+"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
+"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
+"first novel to feature a machine that allows to \"fly against time\".\n"
+"\n"
+"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
+"Leopard. Several simmilar programs for Linux surged.\n"
+"\n"
+"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
+"Linux."
+msgstr ""
+"No 1895, H.G. Wells publicou <b>A máquina do tempo</b>, considerada durante "
+"anos como a primeira novela cunha máquina capaz de viaxar no tempo.\n"
+"\n"
+"Mais en 1887, oito anos antes, Enrique Gaspar y Rimbau tiña publicado <b>El "
+"anacronópete</b>, unha novela en formato de zarzuela que é realmente a "
+"primeira en incorporar unha máquina que permite «voar a través do tempo».\n"
+"\n"
+"En 2007, Apple publicou <b>Time Machine</b>, un programa de copia de "
+"seguranza para MacOS X Leopard. Pronto xurdiron varios programas semellantes "
+"para Linux.\n"
+"\n"
+"En 2011 chega ana<b>CRONOPETE</b>, O clon para Linux do «Time Machine» de "
+"Apple."
 
-#~ msgid "Why <i>ana<b>CRONOPETE</b></i>?"
-#~ msgstr "Por que <i>ana<b>CRONOPETE</b></i>?"
+#: ../data/interface/about.ui.h:10
+msgid "Why <i>ana<b>CRONOPETE</b></i>?"
+msgstr "Por que <i>ana<b>CRONOPETE</b></i>?"
 
-#~ msgid "Available USB disks:"
-#~ msgstr "Discos USB dispoñíbeis:"
+#: ../data/interface/chooser.ui.h:1
+msgid "Available USB disks:"
+msgstr "Discos USB dispoñíbeis:"
 
-#~ msgid "Show all disks (except /home)"
-#~ msgstr "Amosar todos os discos (agás /home)"
+#: ../data/interface/chooser.ui.h:2
+msgid "Show all disks (except /home)"
+msgstr "Amosar todos os discos (agás /home)"
 
-#~ msgid "Configuration exported"
-#~ msgstr "Configuración exportada"
+#: ../data/interface/config_exported.ui.h:1
+msgid "Configuration exported"
+msgstr "Configuración exportada"
 
-#~ msgid ""
-#~ "The backup configuration has been exported.\n"
-#~ "Please, check the list of folders to ensure that everything went fine."
-#~ msgstr ""
-#~ "Exportouse a configuración da copia de seguranza.\n"
-#~ "Comprobe a lista de cartafoles para confirmar que todo é correcto."
+#: ../data/interface/config_exported.ui.h:2
+msgid ""
+"The backup configuration has been exported.\n"
+"Please, check the list of folders to ensure that everything went fine."
+msgstr ""
+"Exportouse a configuración da copia de seguranza.\n"
+"Comprobe a lista de cartafoles para confirmar que todo é correcto."
 
-#~ msgid ""
-#~ "There was an error during the\n"
-#~ "formating operation. Aborted."
-#~ msgstr ""
-#~ "Produciuse un erro durante a\n"
-#~ "operación de formatado. Cancelado."
+#: ../data/interface/format_error.ui.h:1
+msgid ""
+"There was an error during the\n"
+"formating operation. Aborted."
+msgstr ""
+"Produciuse un erro durante a\n"
+"operación de formatado. Cancelado."
 
-#~ msgid "<b>Error info</b>"
-#~ msgstr "<b>Información do erro</b>"
+#: ../data/interface/format_error.ui.h:3
+msgid "<b>Error info</b>"
+msgstr "<b>Información do erro</b>"
 
-#~ msgid "Format disk"
-#~ msgstr "Formatar o disco"
+#: ../data/interface/format_force.ui.h:1
+msgid "Format disk"
+msgstr "Formatar o disco"
 
-#~ msgid "Formating disk. Please, wait."
-#~ msgstr "Formatando o disco. Agarde."
+#: ../data/interface/formatting.ui.h:1
+msgid "Formating disk. Please, wait."
+msgstr "Formatando o disco. Agarde."
 
-#~ msgid "anaCRONOPETE"
-#~ msgstr "anaCRONOPETE"
+#: ../data/interface/main.ui.h:1
+msgid "anaCRONOPETE"
+msgstr "anaCRONOPETE"
 
-#~ msgid "ana"
-#~ msgstr "ana"
+#. Don't translate this. Is part of the name in the main window
+#: ../data/interface/main.ui.h:3
+msgid "ana"
+msgstr "ana"
 
-#~ msgid "cronopete"
-#~ msgstr "cronopete"
+#. Don't translate this. Is part of the name in the main window.
+#: ../data/interface/main.ui.h:5
+msgid "cronopete"
+msgstr "cronopete"
 
-#~ msgid "Next backup:"
-#~ msgstr "Próxima copia:"
+#: ../data/interface/main.ui.h:6
+msgid "Next backup:"
+msgstr "Próxima copia:"
 
-#~ msgid "Latest backup:"
-#~ msgstr "Última copia:"
+#: ../data/interface/main.ui.h:7
+msgid "Latest backup:"
+msgstr "Última copia:"
 
-#~ msgid "Oldest backup:"
-#~ msgstr "Primeira copia:"
+#: ../data/interface/main.ui.h:8
+msgid "Oldest backup:"
+msgstr "Primeira copia:"
 
-#~ msgctxt "Refers to the free disk space available in the backup's hard disk"
-#~ msgid "Available:"
-#~ msgstr "Dispoñíbel:"
+#. Refers to the free disk space available in the backup's hard disk
+#: ../data/interface/main.ui.h:10
+msgctxt "Refers to the free disk space available in the backup's hard disk"
+msgid "Available:"
+msgstr "Dispoñíbel:"
 
-#~ msgid "Device:"
-#~ msgstr "Dispositivo:"
+#: ../data/interface/main.ui.h:11
+msgid "Device:"
+msgstr "Dispositivo:"
 
-#~ msgid "Change disk..."
-#~ msgstr "Cambiar o disco..."
+#: ../data/interface/main.ui.h:12
+msgid "Change disk..."
+msgstr "Cambiar o disco..."
 
-#~ msgid "Options"
-#~ msgstr "Opcións"
+#: ../data/interface/main.ui.h:13 ../data/interface/options.ui.h:1
+msgid "Options"
+msgstr "Opcións"
 
-#~ msgid ""
-#~ "Cronopete keeps:\n"
-#~ "\n"
-#~ " * Hourly backups for the past 24 hours\n"
-#~ " * Daily backups for the past month\n"
-#~ " * Weekely backups until your hard disk is full"
-#~ msgstr ""
-#~ "Cronopete mantén:\n"
-#~ "\n"
-#~ " * Unha copia cada hora para as últimas 24 horas\n"
-#~ " * Unha copia diaria para o último mes\n"
-#~ " * Copias semanais ata que se encha o disco"
+#: ../data/interface/main.ui.h:14
+msgid ""
+"Cronopete keeps:\n"
+"\n"
+" * Hourly backups for the past 24 hours\n"
+" * Daily backups for the past month\n"
+" * Weekely backups until your hard disk is full"
+msgstr ""
+"Cronopete mantén:\n"
+"\n"
+" * Unha copia cada hora para as últimas 24 horas\n"
+" * Unha copia diaria para o último mes\n"
+" * Copias semanais ata que se encha o disco"
 
-#~ msgid "Show Cronopete in menu bar"
-#~ msgstr "Amosar Cronopete na barra"
+#: ../data/interface/main.ui.h:19
+msgid "Show Cronopete in menu bar"
+msgstr "Amosar Cronopete na barra"
 
-#~ msgid "Configuration"
-#~ msgstr "Configuración"
+#: ../data/interface/main.ui.h:20
+msgid "Configuration"
+msgstr "Configuración"
 
-#~ msgid "Log"
-#~ msgstr "Rexistro"
+#: ../data/interface/main.ui.h:21
+msgid "Log"
+msgstr "Rexistro"
 
-#~ msgid "Folders to backup"
-#~ msgstr "Cartafoles a copiar"
+#: ../data/interface/options.ui.h:2
+msgid "Folders to backup"
+msgstr "Cartafoles a copiar"
 
-#~ msgid "<b>Backup these folders</b>"
-#~ msgstr "<b>Copiar estes cartafoles</b>"
+#: ../data/interface/options.ui.h:3
+msgid "<b>Backup these folders</b>"
+msgstr "<b>Copiar estes cartafoles</b>"
 
-#~ msgid "<b>Exclude these folders</b>"
-#~ msgstr "<b>Excluír estes cartafoles</b>"
+#: ../data/interface/options.ui.h:4
+msgid "<b>Exclude these folders</b>"
+msgstr "<b>Excluír estes cartafoles</b>"
 
-#~ msgid "Time interval between backups (in hours):"
-#~ msgstr "Tempo entre copias (en horas):"
+#: ../data/interface/options.ui.h:5
+msgid "Time interval between backups (in hours):"
+msgstr "Tempo entre copias (en horas):"
 
-#~ msgid "Ignore"
-#~ msgstr "Ignorar"
+#: ../data/interface/restore_error.ui.h:1
+msgid "Ignore"
+msgstr "Ignorar"
 
-#~ msgid "Ignore all"
-#~ msgstr "Ignorar todos"
+#: ../data/interface/restore_error.ui.h:2
+msgid "Ignore all"
+msgstr "Ignorar todos"
 
-#~ msgid "Restore ended succesfully"
-#~ msgstr "Restauración rematada"
+#: ../data/interface/restore_ok.ui.h:1
+msgid "Restore ended succesfully"
+msgstr "Restauración rematada"
 
-#~ msgid "Restoring files"
-#~ msgstr "Restaurando ficheiros"
+#: ../data/interface/restoring.ui.h:1
+msgid "Restoring files"
+msgstr "Restaurando ficheiros"
 
-#~ msgid "Welcome to Cronopete"
-#~ msgstr "Benvido/a ao Cronopete"
+#: ../data/interface/welcome.ui.h:1
+msgid "Welcome to Cronopete"
+msgstr "Benvido/a ao Cronopete"
 
-#~ msgid "Don't ask me again"
-#~ msgstr "Non preguntar de novo"
+#: ../data/interface/welcome.ui.h:2
+msgid "Don't ask me again"
+msgstr "Non preguntar de novo"
 
-#~ msgid "Ask me later"
-#~ msgstr "Preguntarme máis tarde"
+#: ../data/interface/welcome.ui.h:3
+msgid "Ask me later"
+msgstr "Preguntarme máis tarde"
 
-#~ msgid "Configure now"
-#~ msgstr "Configurar agora"
+#: ../data/interface/welcome.ui.h:4
+msgid "Configure now"
+msgstr "Configurar agora"
 
-#~ msgid ""
-#~ "Cronopete is a backup utility that allows you to make regular copies of "
-#~ "your data, and restore it from several dates.\n"
-#~ "\n"
-#~ "Now, you can configure which external disk use to make the copies and "
-#~ "which folders you want to backup, or you can leave it for later."
-#~ msgstr ""
-#~ "Cronopete é unha utilidade de copia de seguranza que permítelle realizar "
-#~ "copias de seguranza dos seus datos e restauralos a partires de distintas "
-#~ "datas.\n"
-#~ "\n"
-#~ "Agora, pode configurar que disco externo quere empregar para facer as "
-#~ "copias de seguranza e de que cartafoles quere facelas, ou, se o prefire, "
-#~ "pode deixar isto para máis adiante."
+#: ../data/interface/welcome.ui.h:5
+msgid ""
+"Cronopete is a backup utility that allows you to make regular copies of your "
+"data, and restore it from several dates.\n"
+"\n"
+"Now, you can configure which external disk use to make the copies and which "
+"folders you want to backup, or you can leave it for later."
+msgstr ""
+"Cronopete é unha utilidade de copia de seguranza que permítelle realizar "
+"copias de seguranza dos seus datos e restauralos a partires de distintas "
+"datas.\n"
+"\n"
+"Agora, pode configurar que disco externo quere empregar para facer as copias "
+"de seguranza e de que cartafoles quere facelas, ou, se o prefire, pode "
+"deixar isto para máis adiante."
 
 #~ msgid "Invalid parameter in config file %s (line %d)\n"
 #~ msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"

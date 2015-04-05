@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-06 01:14+0200\n"
+"POT-Creation-Date: 2015-04-06 01:24+0200\n"
 "PO-Revision-Date: 2015-01-22 21:00+0100\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <>\n"
@@ -359,168 +359,223 @@ msgstr ""
 msgid "Preparing folders to restore"
 msgstr "Připravování složek pro obnovu"
 
-#~ msgid "An Apple's Time Machine clone for Linux"
-#~ msgstr "Klon aplikace Apple Time Machine, určený pro systém GNU/Linux"
+#: ../data/interface/about.ui.h:1
+msgid "©2011-15 Raster Software Vigo"
+msgstr ""
 
-#~ msgid ""
-#~ "In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for "
-#~ "years the first novel with a time-travel machine.\n"
-#~ "\n"
-#~ "But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
-#~ "anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
-#~ "first novel to feature a machine that allows to \"fly against time\".\n"
-#~ "\n"
-#~ "In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
-#~ "Leopard. Several simmilar programs for Linux surged.\n"
-#~ "\n"
-#~ "In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
-#~ "Linux."
-#~ msgstr ""
-#~ "V roce 1895, H.G. Wells zveřejnil <b>The Time Machine</b> (Stroj času) – "
-#~ "novelu, dlouho považovanou za první dílo s námětem stroje pro cestování "
-#~ "časem.\n"
-#~ "\n"
-#~ "Ale již v roce 1887, tedy devět let předtím, Enrique Gaspar y Rimbau "
-#~ "zveřejnil <b>El anacronópete</b> – operetu, která je skutečně prvním "
-#~ "uměleckým počinem s námětem stroje, který umožňuje „letět proti proudu "
-#~ "času“.\n"
-#~ "\n"
-#~ "V roce 2007, vydala společnost Apple <b>Time Machine</b> (Stroj času) – "
-#~ "zálohovací aplikaci pro operační systém MacOS X (tehdy vydání Leopard). "
-#~ "Pro systém GNU/Linux se pak objevilo několik podobných aplikací.\n"
-#~ "\n"
-#~ "V roce 2011 vzniklo <b>CRONOPETE</b> ‒ skutečný klon aplikace Apple Time "
-#~ "Machine, určený pro operační systém GNU/Linux."
+#: ../data/interface/about.ui.h:2
+msgid "An Apple's Time Machine clone for Linux"
+msgstr "Klon aplikace Apple Time Machine, určený pro systém GNU/Linux"
 
-#~ msgid "Why <i>ana<b>CRONOPETE</b></i>?"
-#~ msgstr "Proč <i>ana<b>CRONOPETE</b></i>?"
+#: ../data/interface/about.ui.h:3
+msgid ""
+"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
+"the first novel with a time-travel machine.\n"
+"\n"
+"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
+"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
+"first novel to feature a machine that allows to \"fly against time\".\n"
+"\n"
+"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
+"Leopard. Several simmilar programs for Linux surged.\n"
+"\n"
+"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
+"Linux."
+msgstr ""
+"V roce 1895, H.G. Wells zveřejnil <b>The Time Machine</b> (Stroj času) – "
+"novelu, dlouho považovanou za první dílo s námětem stroje pro cestování "
+"časem.\n"
+"\n"
+"Ale již v roce 1887, tedy devět let předtím, Enrique Gaspar y Rimbau "
+"zveřejnil <b>El anacronópete</b> – operetu, která je skutečně prvním "
+"uměleckým počinem s námětem stroje, který umožňuje „letět proti proudu "
+"času“.\n"
+"\n"
+"V roce 2007, vydala společnost Apple <b>Time Machine</b> (Stroj času) – "
+"zálohovací aplikaci pro operační systém MacOS X (tehdy vydání Leopard). Pro "
+"systém GNU/Linux se pak objevilo několik podobných aplikací.\n"
+"\n"
+"V roce 2011 vzniklo <b>CRONOPETE</b> ‒ skutečný klon aplikace Apple Time "
+"Machine, určený pro operační systém GNU/Linux."
 
-#~ msgid "Available USB disks:"
-#~ msgstr "Dostupné USB disky:"
+#: ../data/interface/about.ui.h:10
+msgid "Why <i>ana<b>CRONOPETE</b></i>?"
+msgstr "Proč <i>ana<b>CRONOPETE</b></i>?"
 
-#~ msgid "Show all disks (except /home)"
-#~ msgstr "Zobrazit veškeré disky (s výjimkou /home)"
+#: ../data/interface/chooser.ui.h:1
+msgid "Available USB disks:"
+msgstr "Dostupné USB disky:"
 
-#~ msgid "Configuration exported"
-#~ msgstr "Nastavení byla exportována"
+#: ../data/interface/chooser.ui.h:2
+msgid "Show all disks (except /home)"
+msgstr "Zobrazit veškeré disky (s výjimkou /home)"
 
-#~ msgid ""
-#~ "The backup configuration has been exported.\n"
-#~ "Please, check the list of folders to ensure that everything went fine."
-#~ msgstr ""
-#~ "Nastavení zálohování bylo exportováno.\n"
-#~ "Kontrolou seznamu složek ověřte, zda vše proběhlo v pořádku."
+#: ../data/interface/config_exported.ui.h:1
+msgid "Configuration exported"
+msgstr "Nastavení byla exportována"
 
-#~ msgid ""
-#~ "There was an error during the\n"
-#~ "formating operation. Aborted."
-#~ msgstr ""
-#~ "Při vytváření souborového systému\n"
-#~ "došlo k chybě. Operace byla přerušena."
+#: ../data/interface/config_exported.ui.h:2
+msgid ""
+"The backup configuration has been exported.\n"
+"Please, check the list of folders to ensure that everything went fine."
+msgstr ""
+"Nastavení zálohování bylo exportováno.\n"
+"Kontrolou seznamu složek ověřte, zda vše proběhlo v pořádku."
 
-#~ msgid "<b>Error info</b>"
-#~ msgstr "<b>Informace o chybě</b>"
+#: ../data/interface/format_error.ui.h:1
+msgid ""
+"There was an error during the\n"
+"formating operation. Aborted."
+msgstr ""
+"Při vytváření souborového systému\n"
+"došlo k chybě. Operace byla přerušena."
 
-#~ msgid "Format disk"
-#~ msgstr "Formátovat disk"
+#: ../data/interface/format_error.ui.h:3
+msgid "<b>Error info</b>"
+msgstr "<b>Informace o chybě</b>"
 
-#~ msgid "Formating disk. Please, wait."
-#~ msgstr "Probíhá formátování disku. Čekejte prosím"
+#: ../data/interface/format_force.ui.h:1
+msgid "Format disk"
+msgstr "Formátovat disk"
 
-#~ msgid "Next backup:"
-#~ msgstr "Příští záloha:"
+#: ../data/interface/formatting.ui.h:1
+msgid "Formating disk. Please, wait."
+msgstr "Probíhá formátování disku. Čekejte prosím"
 
-#~ msgid "Latest backup:"
-#~ msgstr "Nejnovější:"
+#: ../data/interface/main.ui.h:1
+msgid "anaCRONOPETE"
+msgstr ""
 
-#~ msgid "Oldest backup:"
-#~ msgstr "Nejstarší záloha:"
+#. Don't translate this. Is part of the name in the main window
+#: ../data/interface/main.ui.h:3
+msgid "ana"
+msgstr ""
 
-#~ msgctxt "Refers to the free disk space available in the backup's hard disk"
-#~ msgid "Available:"
-#~ msgstr "K dispozici:"
+#. Don't translate this. Is part of the name in the main window.
+#: ../data/interface/main.ui.h:5
+#, fuzzy
+msgid "cronopete"
+msgstr "Vítejte v aplikaci Cronopete"
 
-#~ msgid "Device:"
-#~ msgstr "Zařízení:"
+#: ../data/interface/main.ui.h:6
+msgid "Next backup:"
+msgstr "Příští záloha:"
 
-#~ msgid "Change disk..."
-#~ msgstr "Změnit disk…"
+#: ../data/interface/main.ui.h:7
+msgid "Latest backup:"
+msgstr "Nejnovější:"
 
-#~ msgid "Options"
-#~ msgstr "Možnosti"
+#: ../data/interface/main.ui.h:8
+msgid "Oldest backup:"
+msgstr "Nejstarší záloha:"
 
-#~ msgid ""
-#~ "Cronopete keeps:\n"
-#~ "\n"
-#~ " * Hourly backups for the past 24 hours\n"
-#~ " * Daily backups for the past month\n"
-#~ " * Weekely backups until your hard disk is full"
-#~ msgstr ""
-#~ "Aplikace Kronopete uchovává:\n"
-#~ "\n"
-#~ " * Zálohy v hodinových odstupech pro předchozích 24 hodin\n"
-#~ " * Zálohy v denních odstupech pro předchozí měsíc\n"
-#~ " * Zálohy v týdenních odstupech až do výše kapacity datového úložiště"
+#. Refers to the free disk space available in the backup's hard disk
+#: ../data/interface/main.ui.h:10
+msgctxt "Refers to the free disk space available in the backup's hard disk"
+msgid "Available:"
+msgstr "K dispozici:"
 
-#~ msgid "Show Cronopete in menu bar"
-#~ msgstr "Zobrazit aplikaci Cronopete v liště nabídky"
+#: ../data/interface/main.ui.h:11
+msgid "Device:"
+msgstr "Zařízení:"
 
-#~ msgid "Configuration"
-#~ msgstr "Nastavení"
+#: ../data/interface/main.ui.h:12
+msgid "Change disk..."
+msgstr "Změnit disk…"
 
-#~ msgid "Log"
-#~ msgstr "Protokol"
+#: ../data/interface/main.ui.h:13 ../data/interface/options.ui.h:1
+msgid "Options"
+msgstr "Možnosti"
 
-#~ msgid "Folders to backup"
-#~ msgstr "Složky k zálohování"
+#: ../data/interface/main.ui.h:14
+msgid ""
+"Cronopete keeps:\n"
+"\n"
+" * Hourly backups for the past 24 hours\n"
+" * Daily backups for the past month\n"
+" * Weekely backups until your hard disk is full"
+msgstr ""
+"Aplikace Kronopete uchovává:\n"
+"\n"
+" * Zálohy v hodinových odstupech pro předchozích 24 hodin\n"
+" * Zálohy v denních odstupech pro předchozí měsíc\n"
+" * Zálohy v týdenních odstupech až do výše kapacity datového úložiště"
 
-#~ msgid "<b>Backup these folders</b>"
-#~ msgstr "<b>Zálohovat tyto složky</b>"
+#: ../data/interface/main.ui.h:19
+msgid "Show Cronopete in menu bar"
+msgstr "Zobrazit aplikaci Cronopete v liště nabídky"
 
-#~ msgid "<b>Exclude these folders</b>"
-#~ msgstr "<b>Vynechat tyto složky</b>"
+#: ../data/interface/main.ui.h:20
+msgid "Configuration"
+msgstr "Nastavení"
 
-#~ msgid "Time interval between backups (in hours):"
-#~ msgstr "Odstup mezi zálohami (v hodinách):"
+#: ../data/interface/main.ui.h:21
+msgid "Log"
+msgstr "Protokol"
 
-#~ msgid "Ignore"
-#~ msgstr "Ignorovat"
+#: ../data/interface/options.ui.h:2
+msgid "Folders to backup"
+msgstr "Složky k zálohování"
 
-#~ msgid "Ignore all"
-#~ msgstr "Ignorovat vše"
+#: ../data/interface/options.ui.h:3
+msgid "<b>Backup these folders</b>"
+msgstr "<b>Zálohovat tyto složky</b>"
 
-#~ msgid "Restore ended succesfully"
-#~ msgstr "Obnova byla úspěšně dokončena"
+#: ../data/interface/options.ui.h:4
+msgid "<b>Exclude these folders</b>"
+msgstr "<b>Vynechat tyto složky</b>"
 
-#~ msgid "Restoring files"
-#~ msgstr "Obnovování souborů"
+#: ../data/interface/options.ui.h:5
+msgid "Time interval between backups (in hours):"
+msgstr "Odstup mezi zálohami (v hodinách):"
 
-#~ msgid "Welcome to Cronopete"
-#~ msgstr "Vítejte v aplikaci Cronopete"
+#: ../data/interface/restore_error.ui.h:1
+msgid "Ignore"
+msgstr "Ignorovat"
 
-#~ msgid "Don't ask me again"
-#~ msgstr "Příště se již neptat"
+#: ../data/interface/restore_error.ui.h:2
+msgid "Ignore all"
+msgstr "Ignorovat vše"
 
-#~ msgid "Ask me later"
-#~ msgstr "Dotázat se později"
+#: ../data/interface/restore_ok.ui.h:1
+msgid "Restore ended succesfully"
+msgstr "Obnova byla úspěšně dokončena"
 
-#~ msgid "Configure now"
-#~ msgstr "Nastavit nyní"
+#: ../data/interface/restoring.ui.h:1
+msgid "Restoring files"
+msgstr "Obnovování souborů"
 
-#~ msgid ""
-#~ "Cronopete is a backup utility that allows you to make regular copies of "
-#~ "your data, and restore it from several dates.\n"
-#~ "\n"
-#~ "Now, you can configure which external disk use to make the copies and "
-#~ "which folders you want to backup, or you can leave it for later."
-#~ msgstr ""
-#~ "Cronopete je zálohovací nástroj, s jehož pomocí můžete pořizovat "
-#~ "pravidelné kopie svých dat a v případě potřeby je obnovit do stavu z "
-#~ "požadovaného data.\n"
-#~ "\n"
-#~ "Nyní můžete nastavit, které vnější datové úložiště použít pro ukládání "
-#~ "těchto kopií použít a které složky zálohovat. Případně to můžete nechat "
-#~ "na později."
+#: ../data/interface/welcome.ui.h:1
+msgid "Welcome to Cronopete"
+msgstr "Vítejte v aplikaci Cronopete"
+
+#: ../data/interface/welcome.ui.h:2
+msgid "Don't ask me again"
+msgstr "Příště se již neptat"
+
+#: ../data/interface/welcome.ui.h:3
+msgid "Ask me later"
+msgstr "Dotázat se později"
+
+#: ../data/interface/welcome.ui.h:4
+msgid "Configure now"
+msgstr "Nastavit nyní"
+
+#: ../data/interface/welcome.ui.h:5
+msgid ""
+"Cronopete is a backup utility that allows you to make regular copies of your "
+"data, and restore it from several dates.\n"
+"\n"
+"Now, you can configure which external disk use to make the copies and which "
+"folders you want to backup, or you can leave it for later."
+msgstr ""
+"Cronopete je zálohovací nástroj, s jehož pomocí můžete pořizovat pravidelné "
+"kopie svých dat a v případě potřeby je obnovit do stavu z požadovaného "
+"data.\n"
+"\n"
+"Nyní můžete nastavit, které vnější datové úložiště použít pro ukládání "
+"těchto kopií použít a které složky zálohovat. Případně to můžete nechat na "
+"později."
 
 #~ msgid "Invalid parameter in config file %s (line %d)\n"
 #~ msgstr "Neplatný parametr v souboru s nastaveními %s (řádek %d)\n"
