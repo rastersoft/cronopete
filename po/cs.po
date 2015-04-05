@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-04 23:14+0200\n"
+"POT-Creation-Date: 2015-04-06 01:14+0200\n"
 "PO-Revision-Date: 2015-01-22 21:00+0100\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <>\n"
@@ -123,92 +123,92 @@ msgstr ""
 "docílit kliknutím na tlačítko <i>Formátovat disk</i>. <b>Pozor! Veškerá "
 "stávající data na tomto disku budou smazána</b>."
 
-#: ../src/choose.vala:388
+#: ../src/choose.vala:382
 msgid "Unknown FS"
 msgstr "Neznámý souborový systém"
 
-#: ../src/cronopete.vala:219 ../src/cronopete.vala:332
-#: ../src/cronopete.vala:362
+#: ../src/cronopete.vala:218 ../src/cronopete.vala:331
+#: ../src/cronopete.vala:361
 msgid "Idle"
 msgstr "Nečinné"
 
-#: ../src/cronopete.vala:238 ../src/cronopete.vala:244
-#: ../src/cronopete.vala:255 ../src/cronopete.vala:259
+#: ../src/cronopete.vala:237 ../src/cronopete.vala:243
+#: ../src/cronopete.vala:254 ../src/cronopete.vala:258
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Poslední záloha: %s"
 
 #. This text means that the user still has not selected a hard disk where to do the backups
-#: ../src/cronopete.vala:238 ../src/menu.vala:235
+#: ../src/cronopete.vala:237 ../src/menu.vala:235
 msgid "Not defined"
 msgstr "Není určeno"
 
 #. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../src/cronopete.vala:244 ../src/cronopete.vala:255 ../src/menu.vala:184
+#: ../src/cronopete.vala:243 ../src/cronopete.vala:254 ../src/menu.vala:184
 msgid "None"
 msgstr "Nic"
 
-#: ../src/cronopete.vala:359
+#: ../src/cronopete.vala:358
 msgid "Storage not available"
 msgstr "Úložiště není k dispozici"
 
-#: ../src/cronopete.vala:364
+#: ../src/cronopete.vala:363
 msgid "Backup disabled"
 msgstr "Zálohování vypnuto"
 
-#: ../src/cronopete.vala:435
+#: ../src/cronopete.vala:434
 msgid "Back Up Now"
 msgstr "Zazálohovat nyní"
 
-#: ../src/cronopete.vala:438
+#: ../src/cronopete.vala:437
 msgid "Stop Backing Up"
 msgstr "Zastavit zálohování"
 
-#: ../src/cronopete.vala:442 ../src/restore.vala:196
+#: ../src/cronopete.vala:441 ../src/restore.vala:185
 msgid "Restore files"
 msgstr "Obnovit soubory"
 
-#: ../src/cronopete.vala:450
+#: ../src/cronopete.vala:449
 msgid "Configure backup policies"
 msgstr "Nastavit pravidla zálohování"
 
-#: ../src/cronopete.vala:535
+#: ../src/cronopete.vala:534
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Zálohování složky %s…\n"
 
-#: ../src/cronopete.vala:554
+#: ../src/cronopete.vala:553
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Nelze zkopírovat soubor %s\n"
 
-#: ../src/cronopete.vala:559
+#: ../src/cronopete.vala:558
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Složka %s není přístupná\n"
 
-#: ../src/cronopete.vala:564
+#: ../src/cronopete.vala:563
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Složku %s nelze vytvořit\n"
 
-#: ../src/cronopete.vala:583
+#: ../src/cronopete.vala:582
 msgid "Starting backup\n"
 msgstr "Spouštění zálohování…\n"
 
-#: ../src/cronopete.vala:598
+#: ../src/cronopete.vala:597
 msgid "Erasing old backups"
 msgstr "Mazání starých záloh"
 
-#: ../src/cronopete.vala:610
+#: ../src/cronopete.vala:609
 msgid "Backup aborted"
 msgstr "Proces zálohování byl přerušen"
 
-#: ../src/cronopete.vala:614
+#: ../src/cronopete.vala:613
 msgid "Can't do backup; disk is too small"
 msgstr "Zálohu nelze provést: disk je příliš malý"
 
-#: ../src/cronopete.vala:618
+#: ../src/cronopete.vala:617
 msgid "Can't do backup"
 msgstr "Zálohu nelze provést"
 
@@ -224,35 +224,35 @@ msgstr "Velikost"
 msgid "Modification date"
 msgstr "Datum úpravy"
 
-#: ../src/icons_widget.vala:374
+#: ../src/icons_widget.vala:383
 msgid "Show hidden files"
 msgstr "Zobrazit skryté soubory"
 
-#: ../src/icons_widget.vala:382
+#: ../src/icons_widget.vala:391
 msgid "Reverse order"
 msgstr "Obrácené pořadí"
 
-#: ../src/icons_widget.vala:390
+#: ../src/icons_widget.vala:399
 msgid "Sort by name"
 msgstr "Seřadit dle názvu"
 
-#: ../src/icons_widget.vala:394
+#: ../src/icons_widget.vala:403
 msgid "Sort by type"
 msgstr "Seřadit dle typu"
 
-#: ../src/icons_widget.vala:398
+#: ../src/icons_widget.vala:407
 msgid "Sort by size"
 msgstr "Seřadit dle velikosti"
 
-#: ../src/icons_widget.vala:402
+#: ../src/icons_widget.vala:411
 msgid "Sort by date"
 msgstr "Seřadit dle data"
 
-#: ../src/icons_widget.vala:424
+#: ../src/icons_widget.vala:433
 msgid "View as icons"
 msgstr "Zobrazit jako ikony"
 
-#: ../src/icons_widget.vala:428
+#: ../src/icons_widget.vala:437
 msgid "View as list"
 msgstr "Zobrazit jako seznam"
 
@@ -269,19 +269,19 @@ msgstr "Stav: %s"
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB z %lld GB"
 
-#: ../src/options.vala:61
+#: ../src/options.vala:57
 #, c-format
 msgid "Backup hidden files and folders in %s"
 msgstr "Zálohovat skryté soubory a složky v %s"
 
-#: ../src/restore.vala:204
+#: ../src/restore.vala:193
 msgid "Exit"
 msgstr "Ukončit"
 
 #. / This string is used to show the date of a backup when it is in today;
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:707
+#: ../src/restore.vala:696
 msgid "Today, at %H:%M"
 msgid_plural "Today, at %H:%M"
 msgstr[0] "Dnes, v %H:%M"
@@ -290,7 +290,7 @@ msgstr[1] "Dnes, v %H:%M"
 #. / This string is used to show the date of a backup when it is in yesterday;
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:712
+#: ../src/restore.vala:701
 msgid "Yesterday, at %H:%M"
 msgid_plural "Yesterday, at %H:%M"
 msgstr[0] "Včera, v %H:%M"
@@ -301,7 +301,7 @@ msgstr[1] "Včera, v %H:%M"
 #. / %B by the month (in letters); %Y by the year in four-digits format
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:720
+#: ../src/restore.vala:709
 msgid "%A, %d %B %Y at %H:%M"
 msgid_plural "%A, %d %B %Y at %H:%M"
 msgstr[0] "%A, %d %B %Y v %H:%M"
@@ -312,13 +312,13 @@ msgstr[1] "%A, %d %B %Y v %H:%M"
 #. / %d by the day (in number); %Y by the year in four-digits format
 #. / %H gets replaced by the hour, and %M by the minute of the backup
 #. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:727
+#: ../src/restore.vala:716
 msgid "%A, %B %d %Y at %H:%M"
 msgid_plural "%A, %B %d %Y at %H:%M"
 msgstr[0] "%A, %B %d %Y v %H:%M"
 msgstr[1] "%A, %B %d %Y v %H:%M"
 
-#: ../src/restore.vala:972
+#: ../src/restore.vala:961
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -329,7 +329,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:984
+#: ../src/restore.vala:973
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -344,7 +344,7 @@ msgstr ""
 "\n"
 "Není zde dostatek volného prostoru"
 
-#: ../src/restore.vala:986
+#: ../src/restore.vala:975
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -355,7 +355,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:1052
+#: ../src/restore.vala:1041
 msgid "Preparing folders to restore"
 msgstr "Připravování složek pro obnovu"
 

@@ -1,3 +1,14 @@
+cronopete (3.18.4-ppa1) trusty; urgency=low
+
+  * Now uses only the UUID to find disks, to guarantee that the path used is the right one, even if it changes after launching cronopete
+  * If the backup is enabled, cronopete will remount the disk if it is unmounted; if the backup is disabled, the disk can be removed
+  * Now shows the GTK2 and GTK3 bookmarks in the Restore files window
+  * The window asking for formating a disk now has the right size
+  * Code cleanup
+  * Removed deprecated GTK and GDK methods, like Gtk.Stock
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 Apr 2015 00:40:17 +0100
+
 cronopete (3.18.3-ppa2) trusty; urgency=low
 
   * Fixed dependencies
