@@ -1,3 +1,9 @@
+cronopete (3.18.4-ppa2) trusty; urgency=low
+
+  * Now includes all the translated strings
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 06 Apr 2015 00:40:17 +0100
+
 cronopete (3.18.4-ppa1) trusty; urgency=low
 
   * Now uses only the UUID to find disks, to guarantee that the path used is the right one, even if it changes after launching cronopete
