@@ -347,7 +347,6 @@ class c_choose_disk : GLib.Object {
     private void refresh_list() {
 
         TreeIter iter;
-        //string tmp;
         Mount mnt;
         File root;
         string path;
@@ -356,6 +355,7 @@ class c_choose_disk : GLib.Object {
         string fsystem;
         string uid;
         bool first;
+        bool had_error;
 
         var volumes = this.monitor.get_volumes();
 
@@ -370,7 +370,17 @@ class c_choose_disk : GLib.Object {
             }
 
             root=mnt.get_root();
-            var info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
+            had_error = false;
+            FileInfo info = null;
+            try {
+                info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
+            } catch (GLib.Error e) {
+                print ("Failed to get filesystem data");
+                had_error = true;
+            }
+            if (had_error) {
+                continue;
+            }
             fsystem = info.get_attribute_string("filesystem::type");
             uid = v.get_identifier("uuid");
 
