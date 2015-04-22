@@ -370,18 +370,17 @@ class c_choose_disk : GLib.Object {
             }
 
             root=mnt.get_root();
-            had_error = false;
             FileInfo info = null;
+            fsystem = null;
+            uint64 size = 0;
             try {
                 info = root.query_filesystem_info("filesystem::type,filesystem::size",null);
+                fsystem = info.get_attribute_string("filesystem::type");
+                size = info.get_attribute_uint64("filesystem::size");
             } catch (GLib.Error e) {
+                fsystem = null;
                 print ("Failed to get filesystem data");
-                had_error = true;
             }
-            if (had_error) {
-                continue;
-            }
-            fsystem = info.get_attribute_string("filesystem::type");
             uid = v.get_identifier("uuid");
 
             if (fsystem=="isofs") {
@@ -406,7 +405,6 @@ class c_choose_disk : GLib.Object {
             this.disk_listmodel.set (iter,0,tmp);
             this.disk_listmodel.set (iter,1,bpath);
             this.disk_listmodel.set (iter,2,fsystem);
-            var size = info.get_attribute_uint64("filesystem::size");
             if (size >= 1000000000) {
                 ssize = "%lld GB".printf((size+500000000)/1000000000);
             } else if (size >= 1000000) {
