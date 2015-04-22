@@ -1,3 +1,27 @@
+cronopete (3.18.5-ppa5) trusty; urgency=low
+
+  * Set the right VALAC version
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:47:17 +0100
+
+cronopete (3.18.5-ppa4) trusty; urgency=low
+
+  * Added fields SECTION and HOMEPAGE in the CONTROL file
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:41:17 +0100
+
+cronopete (3.18.5-ppa3) trusty; urgency=low
+
+  * Fixed description in CONTROL file
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:35:17 +0100
+
+cronopete (3.18.5-ppa2) trusty; urgency=low
+
+  * Fixed version number in CONTROL file
+
+ -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:31:17 +0100
+
 cronopete (3.18.5-ppa1) trusty; urgency=low
 
   * Added extra checks to avoid a problem when disk permissions aren't good

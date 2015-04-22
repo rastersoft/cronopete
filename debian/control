@@ -1,11 +1,12 @@
 Source: cronopete
 Maintainer: Sergio Costas Rodriguez <raster@rastersoft.com>
+Section: misc
 Priority: optional
-Build-Depends: build-essential, po-debconf, valac-0.26, libc6-dev, libappindicator3-dev, libatk1.0-dev, libcairo2-dev, libgtk-3-dev, libgdk-pixbuf2.0-dev, libgee-0.8-dev, libglib2.0-dev, libgsl0-dev, libpango1.0-dev, libudisks2-dev, libx11-dev, cmake, gettext, pkg-config
+Homepage: http://www.rastersoft.com
+Build-Depends: build-essential, po-debconf, valac-0.20, libc6-dev, libappindicator3-dev, libatk1.0-dev, libcairo2-dev, libgtk-3-dev, libgdk-pixbuf2.0-dev, libgee-0.8-dev, libglib2.0-dev, libgsl0-dev, libpango1.0-dev, libudisks2-dev, libx11-dev, cmake, gettext, pkg-config
 
 Package: cronopete
-Version: 3.18.4
+Version: 3.18.5
 Architecture: any
 Depends: libappindicator3-1, libdbusmenu-glib4, libgtk-3-0, libpangocairo-1.0-0, libpango-1.0-0, libatk1.0-0, libcairo-gobject2, libcairo2, libgdk-pixbuf2.0-0, libglib2.0-0, libgee-0.8-2, libgsl0ldbl, libc6, libudisks2-0, libx11-6
-Description: Cronopete is a backup utility for Linux, modeled after Apple's Time Machine.
- .
+Description: A backup utility for Linux.
