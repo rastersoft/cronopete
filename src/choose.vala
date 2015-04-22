@@ -405,7 +405,9 @@ class c_choose_disk : GLib.Object {
             this.disk_listmodel.set (iter,0,tmp);
             this.disk_listmodel.set (iter,1,bpath);
             this.disk_listmodel.set (iter,2,fsystem);
-            if (size >= 1000000000) {
+            if (size == 0) {
+                ssize = _("Unknown size");
+            } else if (size >= 1000000000) {
                 ssize = "%lld GB".printf((size+500000000)/1000000000);
             } else if (size >= 1000000) {
                 ssize = "%lld MB".printf((size+500000)/1000000);
