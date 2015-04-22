@@ -1,14 +1,14 @@
 /*
- Copyright 2011-14 (C) Raster Software Vigo (Sergio Costas)
+ Copyright 2011-2015 (C) Raster Software Vigo (Sergio Costas)
 
  This file is part of Cronopete
 
- Nanockup is free software; you can redistribute it and/or modify
+ Cronopete is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 3 of the License, or
  (at your option) any later version.
 
- Nanockup is distributed in the hope that it will be useful,
+ Cronopete is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.18.4
+// project version=3.18.5
 
 #if !NO_APPINDICATOR
 using AppIndicator;
