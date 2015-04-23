@@ -12,6 +12,7 @@ vala_binary: src/cronopete
 if (NOT NO_APPINDICATOR)
 vala_check_package: appindicator3-0.1
 end
+compile_options: -g
 *vala_check_package: atk
 *vala_check_package: cairo
 *vala_check_package: gdk-3.0
