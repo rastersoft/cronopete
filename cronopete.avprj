@@ -1,7 +1,7 @@
 ### AutoVala Project ###
 autovala_version: 16
 project_name: cronopete
-vala_version: 0.20
+vala_version: 0.26
 
 *define: NO_APPINDICATOR
 
@@ -12,7 +12,6 @@ vala_binary: src/cronopete
 if (NOT NO_APPINDICATOR)
 vala_check_package: appindicator3-0.1
 end
-compile_options: -g
 *vala_check_package: atk
 *vala_check_package: cairo
 *vala_check_package: gdk-3.0
