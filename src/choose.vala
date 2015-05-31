@@ -192,7 +192,7 @@ class c_format : GLib.Object {
 class c_choose_disk : GLib.Object {
 
     private Builder builder;
-    ListStore disk_listmodel;
+    Gtk.ListStore disk_listmodel;
     private Button ok_button;
     private VolumeMonitor monitor;
     private TreeView disk_list;
@@ -231,7 +231,7 @@ class c_choose_disk : GLib.Object {
         this.show_all.set_active(this.cronopete_settings.get_boolean("all-drives"));
         this.show_all.toggled.connect(this.show_all_toggled);
 
-        this.disk_listmodel = new ListStore (6, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string), typeof (string));
+        this.disk_listmodel = new Gtk.ListStore (6, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string), typeof (string));
         this.disk_list.set_model(this.disk_listmodel);
         var crpb = new CellRendererPixbuf();
         crpb.stock_size = IconSize.DIALOG;

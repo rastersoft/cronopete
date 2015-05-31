@@ -58,6 +58,8 @@ if (NO_APPINDICATOR)
 	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_APPINDICATOR " )
 endif ()
 
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g " )
+
 vala_precompile(VALA_C cronopete
 	${APP_SOURCES}
 PACKAGES

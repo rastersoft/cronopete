@@ -30,8 +30,8 @@ class c_options : GLib.Object {
     private TreeView exclude_view;
     private CheckButton b_hiden;
     private SpinButton w_period;
-    ListStore backup_listmodel;
-    ListStore exclude_listmodel;
+    Gtk.ListStore backup_listmodel;
+    Gtk.ListStore exclude_listmodel;
     private Gee.List<string> tmp_backup_folders;
     private Gee.List<string> tmp_exclude_folders;
 
@@ -75,11 +75,11 @@ class c_options : GLib.Object {
             this.tmp_exclude_folders.add(s);
         }
 
-        this.backup_listmodel = new ListStore (1, typeof (string));
+        this.backup_listmodel = new Gtk.ListStore (1, typeof (string));
         this.backup_view.set_model(this.backup_listmodel);
         this.backup_view.insert_column_with_attributes (-1, "Folders to backup", new CellRendererText (), "text", 0);
 
-        this.exclude_listmodel = new ListStore (1, typeof (string));
+        this.exclude_listmodel = new Gtk.ListStore (1, typeof (string));
         this.exclude_view.set_model(this.exclude_listmodel);
         this.exclude_view.insert_column_with_attributes (-1, "Folders to exclude", new CellRendererText (), "text", 0);
 

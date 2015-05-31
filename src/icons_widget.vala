@@ -39,7 +39,7 @@ namespace FilelistIcons {
 
         private Box main_container;
         private Box buttons_path;
-        private ListStore path_model;
+        private Gtk.ListStore path_model;
         private IconView path_view;
         private ScrolledWindow scroll;
         private Gtk.TreeView path_view2;
@@ -54,7 +54,7 @@ namespace FilelistIcons {
         private Gtk.Menu menu;
         private Gee.List<bookmark_str ?> bookmarks;
         private Gtk.TreeView bookmark_view;
-        private ListStore bookmark_model;
+        private Gtk.ListStore bookmark_model;
 
         private e_sort_by sort_by;
         private bool reverse_sort;
@@ -97,7 +97,7 @@ namespace FilelistIcons {
 
             var scroll3= new ScrolledWindow(null,null);
             scroll3.hscrollbar_policy=PolicyType.NEVER;
-            this.bookmark_model=new ListStore(3,typeof(GLib.Icon),typeof(string),typeof(string));
+            this.bookmark_model=new Gtk.ListStore(3,typeof(GLib.Icon),typeof(string),typeof(string));
             this.bookmark_view=new Gtk.TreeView.with_model(this.bookmark_model);
             var crpb = new CellRendererPixbuf();
             crpb.stock_size = IconSize.SMALL_TOOLBAR;
@@ -130,7 +130,7 @@ namespace FilelistIcons {
                  - icon (string)
                  - is_folder (boolean)
             */
-            this.path_model=new ListStore(6,typeof(string),typeof(Gdk.Pixbuf),typeof(bool),typeof(Gdk.Pixbuf),typeof(string),typeof(string));
+            this.path_model=new Gtk.ListStore(6,typeof(string),typeof(Gdk.Pixbuf),typeof(bool),typeof(Gdk.Pixbuf),typeof(string),typeof(string));
             this.path_view=new IconView.with_model(this.path_model);
             this.path_view.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
             this.path_view.button_press_event.connect(this.on_click);
