@@ -56,3 +56,4 @@ add_subdirectory(data/pixmaps)
 add_subdirectory(data)
 add_subdirectory(data/icons)
 add_subdirectory(data/interface)
+
