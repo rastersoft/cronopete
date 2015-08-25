@@ -45,7 +45,7 @@ class cp_callback : GLib.Object, callbacks {
     private SystemStatus backup_running;
     private BackupStatus current_status;
     private int size;
-    private unowned Thread <void *> b_thread;
+    private Thread <int> b_thread;
     private uint main_timer;
     private uint refresh_timer;
     private StringBuilder messages;
@@ -314,7 +314,7 @@ class cp_callback : GLib.Object, callbacks {
             this.backup_pending = false;
 
             this.backup_running = SystemStatus.BACKING_UP;
-            b_thread = Thread.create <void *>(this.do_backup, false);
+            b_thread = new Thread <int>.try("Backup thread",this.do_backup);
             if (this.refresh_timer!=0) {
                 Source.remove(this.refresh_timer);
             }
@@ -573,7 +573,7 @@ class cp_callback : GLib.Object, callbacks {
         this.main_menu.insert_log(msg,false);
     }
 
-    private void* do_backup() {
+    private int do_backup() {
 
         int retval;
 
@@ -619,7 +619,7 @@ class cp_callback : GLib.Object, callbacks {
         break;
         }
         this.basedir = null;
-        return null;
+        return 0;
     }
 
     public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next, out uint64 total_space, out uint64 free_space) {

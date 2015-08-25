@@ -144,7 +144,7 @@ class usbhd_backend: Object, backends {
         this.locked=false;
         this.tried_to_lock=false;
         this.deleting=0;
-        this.lock_delete = new GLib.Mutex();
+        this.lock_delete = GLib.Mutex();
 
         this.cbackup_path=null;
         this.cfinal_path=null;
