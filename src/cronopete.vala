@@ -48,7 +48,6 @@ class cp_callback : GLib.Object, callbacks {
     private Thread <int> b_thread;
     private uint main_timer;
     private uint refresh_timer;
-    private StringBuilder messages;
     private string basepath;
     private Gtk.Menu? menuSystem;
     private Gtk.MenuItem? menuDate;
@@ -180,7 +179,6 @@ class cp_callback : GLib.Object, callbacks {
 
         this.menuSystem = null;
         this.update_path = true;
-        this.messages = new StringBuilder("");
         this.backup_running = SystemStatus.IDLE;
         this.current_status = BackupStatus.STOPPED;
         this.size = 0;
@@ -523,9 +521,9 @@ class cp_callback : GLib.Object, callbacks {
     public void main_clicked() {
 
         if ((this.current_status == BackupStatus.WARNING) || (this.current_status == BackupStatus.ERROR)) {
-            this.main_menu.show_main(true,this.messages.str);
+            this.main_menu.show_main(true);
         } else {
-            this.main_menu.show_main(false,this.messages.str);
+            this.main_menu.show_main(false);
         }
     }
 
@@ -533,7 +531,6 @@ class cp_callback : GLib.Object, callbacks {
 
         var msg = _("Backing up folder %s\n").printf(dirpath);
         this.set_tooltip(msg,true);
-        //this.show_message(msg);
     }
 
     public void backup_file(string filepath) {
@@ -569,7 +566,6 @@ class cp_callback : GLib.Object, callbacks {
 
     public void show_message(string msg) {
 
-        this.messages.append(msg);
         this.main_menu.insert_log(msg,false);
     }
 
@@ -579,8 +575,7 @@ class cp_callback : GLib.Object, callbacks {
 
         this.basedir = new nanockup(this,this.backend);
 
-        this.messages = new StringBuilder(_("Starting backup\n"));
-        this.main_menu.insert_log(this.messages.str,true);
+        this.main_menu.insert_log(_("Starting backup\n"),true);
 
         this.current_status = BackupStatus.ALLFINE;
 
@@ -619,6 +614,7 @@ class cp_callback : GLib.Object, callbacks {
         break;
         }
         this.basedir = null;
+        this.b_thread.exit(0);
         return 0;
     }
 
