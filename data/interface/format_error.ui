@@ -76,7 +76,6 @@ formating operation. Aborted.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="wrap">True</property>
-                        <property name="xalign">0</property>
                       </object>
                     </child>
                   </object>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.8"/>
   <object class="GtkTextBuffer" id="textbuffer1"/>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
@@ -46,12 +46,12 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes" comments="Don't translate this. Is part of the name in the main window">ana</property>
-                        <property name="xalign">1</property>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -59,23 +59,23 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes" comments="Don't translate this. Is part of the name in the main window.">cronopete</property>
-                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                           <attribute name="scale" value="2"/>
                         </attributes>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -168,13 +168,11 @@
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">4</property>
-                        <property name="margin_right">4</property>
                         <child>
                           <object class="GtkLabel" id="label_volume">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -185,7 +183,7 @@
                           <object class="GtkLabel" id="label_free_space">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -196,7 +194,7 @@
                           <object class="GtkLabel" id="label_oldest_backup">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -207,7 +205,7 @@
                           <object class="GtkLabel" id="label_newest_backup">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -218,7 +216,7 @@
                           <object class="GtkLabel" id="label_next_backup">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -229,8 +227,9 @@
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Next backup:</property>
-                            <property name="xalign">1</property>
+                            <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -241,8 +240,9 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Latest backup:</property>
-                            <property name="xalign">1</property>
+                            <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -253,8 +253,9 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Oldest backup:</property>
-                            <property name="xalign">1</property>
+                            <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -265,8 +266,9 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes" context="Refers to the free disk space available in the backup's hard disk" comments="Refers to the free disk space available in the backup's hard disk">Available:</property>
-                            <property name="xalign">1</property>
+                            <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -277,8 +279,9 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Device:</property>
-                            <property name="xalign">1</property>
+                            <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -309,8 +312,6 @@
                       <object class="GtkAlignment" id="status_frame">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">4</property>
-                        <property name="margin_right">4</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -323,6 +324,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">4</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -365,8 +367,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -374,18 +376,17 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">8</property>
-                    <property name="ypad">4</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Cronopete keeps:
 
  * Hourly backups for the past 24 hours
  * Daily backups for the past month
  * Weekely backups until your hard disk is full</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
+                    <property name="padding">4</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -400,7 +401,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
+                        <property name="valign">end</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -421,7 +423,7 @@
                         <signal name="clicked" handler="c_main_menu_cronopete_about_clicked" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="padding">3</property>
                         <property name="position">1</property>
