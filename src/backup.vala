@@ -64,7 +64,7 @@ interface backends : GLib.Object {
     public signal void restore_ended(backends b, string file_ended, BACKUP_RETVAL status);
 }
 
-class path_node:Object {
+class path_node:GLib.Object {
 
     // Only the NEXT pointer uses reference count. That way we can
     // slightly improve performance and avoid circular lists
@@ -106,7 +106,7 @@ class path_node:Object {
     }
 }
 
-class path_list:Object {
+class path_list:GLib.Object {
 
     // This is a double-linked list class. I use this instead of
     // GLib.list or Gee's ones to ensure that it allows to add elements
@@ -185,7 +185,7 @@ class path_list:Object {
     }
 }
 
-class nanockup:Object {
+class nanockup:GLib.Object {
 
     // This is the backup class itself
 

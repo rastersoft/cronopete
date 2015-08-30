@@ -673,12 +673,10 @@ copy of the Program in return for a fee.
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">In 1895, H.G. Wells published &lt;b&gt;The Time Machine&lt;/b&gt;, considerer for years the first novel with a time-travel machine.
 
 But in 1887, eight years before, Enrique Gaspar y Rimbau published &lt;b&gt;El anacronópete&lt;/b&gt;, a novel in the format of a zarzuela, which is the truly first novel to feature a machine that allows to "fly against time".

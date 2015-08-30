@@ -40,6 +40,7 @@ class c_main_menu : GLib.Object {
     private TextView log_view;
     private string last_status;
     private Switch my_widget;
+    private StringBuilder messages;
 
     public bool is_visible;
     private GLib.Settings cronopete_settings;
@@ -64,6 +65,7 @@ class c_main_menu : GLib.Object {
         this.parent = p;
         this.basepath=path;
         this.cronopete_settings = q;
+        this.messages = new StringBuilder("");
 
         this.builder = new Builder();
         this.builder.add_from_file(Path.build_filename(this.basepath,"main.ui"));
@@ -134,18 +136,20 @@ class c_main_menu : GLib.Object {
 
     public void insert_log(string msg,bool reset) {
 
-        if (this.is_visible) {
-            if (reset) {
-                TextIter iter;
-                this.log.set_text(msg,-1);
-                this.log.get_end_iter(out iter);
-                this.mark = this.log.create_mark("end", iter, false);
-                this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
-            } else {
-                // From another thread, use the pipe
-                size_t len;
-                this.io_write.write_chars((char[])msg,out len);
-            }
+        if (reset) {
+            this.messages = new StringBuilder(msg);
+            if (this.is_visible) {
+	            TextIter iter;
+	            this.log.set_text(msg,-1);
+	            this.log.get_end_iter(out iter);
+	            this.mark = this.log.create_mark("end", iter, false);
+	            this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
+	        }
+        } else {
+            // From another thread, use the pipe
+            size_t len;
+            this.io_write.write_chars((char[])msg,out len);
+            this.io_write.flush();
         }
     }
 
@@ -162,16 +166,19 @@ class c_main_menu : GLib.Object {
             ret = gio.read_line(out msg, out len, null);
         }
         catch(IOChannelError e) {
-            print("Error reading: %s\n", e.message);
+            print("Error reading: %s\n".printf(e.message));
         }
         catch(ConvertError e) {
-            print("Error reading: %s\n", e.message);
+            print("Error reading: %s\n".printf(e.message));
         }
-        TextIter iter;
-        this.log.insert_at_cursor(msg,(int)len);
-        this.log.get_end_iter(out iter);
-        this.mark = this.log.create_mark("end", iter, false);
-        this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
+        this.messages.append(msg);
+        if (this.is_visible) {
+	        TextIter iter;
+	        this.log.insert_at_cursor(msg,(int)len);
+	        this.log.get_end_iter(out iter);
+	        this.mark = this.log.create_mark("end", iter, false);
+	        this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
+	    }
         return true;
     }
 
@@ -197,11 +204,11 @@ class c_main_menu : GLib.Object {
         return retval;
     }
 
-    public void show_main(bool show_log, string log) {
+    public void show_main(bool show_log) {
 
         this.refresh_backup_data();
 
-        this.log.set_text(log,-1);
+        this.log.set_text(this.messages.str,-1);
         this.cronopete_settings.set_boolean("show-welcome",false);
         this.main_w.show_all();
         this.main_w.present();

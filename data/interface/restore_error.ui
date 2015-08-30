@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkWindow" id="restore_error">
     <property name="width_request">400</property>
     <property name="height_request">250</property>
@@ -10,7 +11,6 @@
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="icon">anacronopete.svg</property>
-    <property name="has_resize_grip">False</property>
     <signal name="delete-event" handler="restore_iface_on_delete_event" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -41,7 +41,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="restore_iface_on_cancel_restore_error_clicked" swapped="no"/>
               </object>
@@ -58,7 +57,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="restore_iface_on_ignore_restore_error_clicked" swapped="no"/>
               </object>
               <packing>
@@ -74,7 +72,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="restore_iface_on_ignore_all_restore_error_clicked" swapped="no"/>
               </object>
               <packing>

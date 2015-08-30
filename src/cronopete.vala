@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.18.5
+// project version=3.18.6
 
 #if !NO_APPINDICATOR
 using AppIndicator;
@@ -45,10 +45,9 @@ class cp_callback : GLib.Object, callbacks {
     private SystemStatus backup_running;
     private BackupStatus current_status;
     private int size;
-    private unowned Thread <void *> b_thread;
+    private Thread <int> b_thread;
     private uint main_timer;
     private uint refresh_timer;
-    private StringBuilder messages;
     private string basepath;
     private Gtk.Menu? menuSystem;
     private Gtk.MenuItem? menuDate;
@@ -180,7 +179,6 @@ class cp_callback : GLib.Object, callbacks {
 
         this.menuSystem = null;
         this.update_path = true;
-        this.messages = new StringBuilder("");
         this.backup_running = SystemStatus.IDLE;
         this.current_status = BackupStatus.STOPPED;
         this.size = 0;
@@ -314,7 +312,7 @@ class cp_callback : GLib.Object, callbacks {
             this.backup_pending = false;
 
             this.backup_running = SystemStatus.BACKING_UP;
-            b_thread = Thread.create <void *>(this.do_backup, false);
+            b_thread = new Thread <int>.try("Backup thread",this.do_backup);
             if (this.refresh_timer!=0) {
                 Source.remove(this.refresh_timer);
             }
@@ -523,9 +521,9 @@ class cp_callback : GLib.Object, callbacks {
     public void main_clicked() {
 
         if ((this.current_status == BackupStatus.WARNING) || (this.current_status == BackupStatus.ERROR)) {
-            this.main_menu.show_main(true,this.messages.str);
+            this.main_menu.show_main(true);
         } else {
-            this.main_menu.show_main(false,this.messages.str);
+            this.main_menu.show_main(false);
         }
     }
 
@@ -533,7 +531,6 @@ class cp_callback : GLib.Object, callbacks {
 
         var msg = _("Backing up folder %s\n").printf(dirpath);
         this.set_tooltip(msg,true);
-        //this.show_message(msg);
     }
 
     public void backup_file(string filepath) {
@@ -569,18 +566,16 @@ class cp_callback : GLib.Object, callbacks {
 
     public void show_message(string msg) {
 
-        this.messages.append(msg);
         this.main_menu.insert_log(msg,false);
     }
 
-    private void* do_backup() {
+    private int do_backup() {
 
         int retval;
 
         this.basedir = new nanockup(this,this.backend);
 
-        this.messages = new StringBuilder(_("Starting backup\n"));
-        this.main_menu.insert_log(this.messages.str,true);
+        this.main_menu.insert_log(_("Starting backup\n"),true);
 
         this.current_status = BackupStatus.ALLFINE;
 
@@ -619,7 +614,8 @@ class cp_callback : GLib.Object, callbacks {
         break;
         }
         this.basedir = null;
-        return null;
+        this.b_thread.exit(0);
+        return 0;
     }
 
     public void get_backup_data(out string id, out time_t oldest, out time_t newest, out time_t next, out uint64 total_space, out uint64 free_space) {
