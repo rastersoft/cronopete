@@ -589,7 +589,7 @@ class cp_callback : GLib.Object, callbacks {
                             this.cronopete_settings.get_strv("exclude-folders"),
                             this.cronopete_settings.get_boolean("skip-hiden-at-home"));
 
-        this.set_tooltip(_("Erasing old backups"));
+        this.set_tooltip(_("Erasing old backups"),true);
         this.basedir.delete_old_backups();
 
         retval = basedir.do_backup();
@@ -601,15 +601,15 @@ class cp_callback : GLib.Object, callbacks {
             this.current_status = BackupStatus.WARNING;
         break;
         case -6:
-            this.set_tooltip (_("Backup aborted"));
+            this.set_tooltip (_("Backup aborted"),true);
             this.current_status = BackupStatus.ERROR;
         break;
         case -7:
-            this.set_tooltip (_("Can't do backup; disk is too small"));
+            this.set_tooltip (_("Can't do backup; disk is too small"),true);
             this.current_status = BackupStatus.ERROR;
         break;
         default:
-            this.set_tooltip (_("Can't do backup"));
+            this.set_tooltip (_("Can't do backup"),true);
             this.current_status = BackupStatus.ERROR;
         break;
         }
