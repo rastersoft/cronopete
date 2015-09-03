@@ -32,6 +32,7 @@ end
 *vala_source: cronopete.vala
 *vala_source: fixedlabel.vala
 *vala_source: icons_widget.vala
+*vala_source: ipc.vala
 *vala_source: menu.vala
 *vala_source: options.vala
 *vala_source: restore.vala

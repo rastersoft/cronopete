@@ -49,7 +49,7 @@ interface Filesystem_if : GLib.Object {
     public abstract async void Unmount(GLib.HashTable<string,Variant> options) throws IOError;
 }
 
-class c_format : GLib.Object {
+public class c_format : GLib.Object {
 
     private string uipath;
     private Gtk.Window parent_window;
@@ -189,7 +189,7 @@ class c_format : GLib.Object {
 }
 
 
-class c_choose_disk : GLib.Object {
+public class c_choose_disk : GLib.Object {
 
     private Builder builder;
     Gtk.ListStore disk_listmodel;
@@ -355,7 +355,6 @@ class c_choose_disk : GLib.Object {
         string fsystem;
         string uid;
         bool first;
-        bool had_error;
 
         var volumes = this.monitor.get_volumes();
 

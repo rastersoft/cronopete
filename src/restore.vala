@@ -27,7 +27,7 @@ struct path_filename {
     string restored_file;
 }
 
-class restore_iface : GLib.Object {
+public class restore_iface : GLib.Object {
 
     private backends backend;
     private uint timer;
@@ -585,7 +585,7 @@ class restore_iface : GLib.Object {
         }
     }
 
-    private bool repaint_draw(EventExpose ev) {
+    public bool repaint_draw(EventExpose ev) {
         this.repaint_draw2();
         return false;
     }

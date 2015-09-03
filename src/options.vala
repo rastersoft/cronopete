@@ -20,7 +20,7 @@ using GLib;
 using Gtk;
 using Gdk;
 
-class c_options : GLib.Object {
+public class c_options : GLib.Object {
 
     private cp_callback parent;
     private string basepath;
