@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-04 23:13+0200\n"
+"POT-Creation-Date: 2015-09-05 22:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,49 +16,90 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /home/raster/workspace/cronopete/po/../src/menu.vala:129
-msgid "Status: %s"
+#: src/backup.vala:287
+#, c-format
+msgid "Backing up folder %s.\n"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/menu.vala:184
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:244
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:255
-msgid "None"
+#: src/backup.vala:291
+#, c-format
+msgid "Excluding folder %s.\n"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/menu.vala:235
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:238
-msgid "Not defined"
+#: src/backup.vala:297
+#, c-format
+msgid "Excluding hidden folders in %s.\n"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/menu.vala:243
-msgid "%lld GB of %lld GB"
+#: src/backup.vala:299
+#, c-format
+msgid "Backing up hidden folders in %s.\n"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/options.vala:61
-msgid "Backup hidden files and folders in %s"
+#: src/backup.vala:347
+msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/choose.vala:107
+#: src/backup.vala:350
+msgid "Can't create the base folders to do backups. Aborting backup.\n"
+msgstr ""
+
+#: src/backup.vala:353
+msgid "Backup device not available. Aborting backup.\n"
+msgstr ""
+
+#: src/backup.vala:356
+msgid "Already started a backup.\n"
+msgstr ""
+
+#: src/backup.vala:360
+msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+msgstr ""
+
+#: src/backup.vala:379
+msgid "Backup aborted\n"
+msgstr ""
+
+#: src/backup.vala:393
+msgid ""
+"The disk is too small to hold a single backup.\n"
+"Adjust the list of backup and exclude folders.\n"
+msgstr ""
+
+#: src/backup.vala:407
+msgid "Syncing disk\n"
+msgstr ""
+
+#: src/backup.vala:409
+msgid "Can't close the backup. Aborting.\n"
+msgstr ""
+
+#: src/backup.vala:415
+#, c-format
+msgid "Backup done. Needed %ld seconds.\n"
+msgstr ""
+
+#: src/choose.vala:107
 msgid "Failed to find the disk!!!!!"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/choose.vala:116
+#: src/choose.vala:116
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/choose.vala:137
+#: src/choose.vala:137
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/choose.vala:152
+#: src/choose.vala:152
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/choose.vala:168
+#: src/choose.vala:168
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -67,85 +108,193 @@ msgid ""
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/choose.vala:388
+#: src/choose.vala:391
 msgid "Unknown FS"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:287
-msgid "Backing up folder %s.\n"
+#: src/choose.vala:409
+msgid "Unknown size"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:291
-msgid "Excluding folder %s.\n"
+#: src/cronopete.vala:216 src/cronopete.vala:329 src/cronopete.vala:359
+msgid "Idle"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:297
-msgid "Excluding hidden folders in %s.\n"
+#: src/cronopete.vala:235 src/cronopete.vala:241 src/cronopete.vala:252
+#: src/cronopete.vala:256
+#, c-format
+msgid "Latest backup: %s"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:299
-msgid "Backing up hidden folders in %s.\n"
+#: src/cronopete.vala:235 src/menu.vala:242
+msgid "Not defined"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:347
-msgid "Can't create the folder for this backup. Aborting backup.\n"
+#: src/cronopete.vala:241 src/cronopete.vala:252 src/menu.vala:191
+msgid "None"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:350
-msgid "Can't create the base folders to do backups. Aborting backup.\n"
+#: src/cronopete.vala:356
+msgid "Storage not available"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:353
-msgid "Backup device not available. Aborting backup.\n"
+#: src/cronopete.vala:361
+msgid "Backup disabled"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:356
-msgid "Already started a backup.\n"
+#: src/cronopete.vala:432
+msgid "Back Up Now"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:360
-msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+#: src/cronopete.vala:435
+msgid "Stop Backing Up"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:379
-msgid "Backup aborted\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:393
-msgid ""
-"The disk is too small to hold a single backup.\n"
-"Adjust the list of backup and exclude folders.\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:407
-msgid "Syncing disk\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:409
-msgid "Can't close the backup. Aborting.\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/backup.vala:415
-msgid "Backup done. Needed %ld seconds.\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/restore.vala:196
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:442
+#: src/cronopete.vala:439 src/restore.vala:185
 msgid "Restore files"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/restore.vala:204
+#: src/cronopete.vala:447
+msgid "Configure backup policies"
+msgstr ""
+
+#: src/cronopete.vala:532
+#, c-format
+msgid "Backing up folder %s\n"
+msgstr ""
+
+#: src/cronopete.vala:550
+#, c-format
+msgid "Can't copy file %s\n"
+msgstr ""
+
+#: src/cronopete.vala:555
+#, c-format
+msgid "Can't access directory %s\n"
+msgstr ""
+
+#: src/cronopete.vala:560
+#, c-format
+msgid "Can't create directory %s\n"
+msgstr ""
+
+#: src/cronopete.vala:578
+msgid "Starting backup\n"
+msgstr ""
+
+#: src/cronopete.vala:592
+msgid "Erasing old backups"
+msgstr ""
+
+#: src/cronopete.vala:604
+msgid "Backup aborted"
+msgstr ""
+
+#: src/cronopete.vala:608
+msgid "Can't do backup; disk is too small"
+msgstr ""
+
+#: src/cronopete.vala:612
+msgid "Can't do backup"
+msgstr ""
+
+#: src/icons_widget.vala:153
+msgid "Name"
+msgstr ""
+
+#: src/icons_widget.vala:156
+msgid "Size"
+msgstr ""
+
+#: src/icons_widget.vala:157
+msgid "Modification date"
+msgstr ""
+
+#: src/icons_widget.vala:383
+msgid "Show hidden files"
+msgstr ""
+
+#: src/icons_widget.vala:391
+msgid "Reverse order"
+msgstr ""
+
+#: src/icons_widget.vala:399
+msgid "Sort by name"
+msgstr ""
+
+#: src/icons_widget.vala:403
+msgid "Sort by type"
+msgstr ""
+
+#: src/icons_widget.vala:407
+msgid "Sort by size"
+msgstr ""
+
+#: src/icons_widget.vala:411
+msgid "Sort by date"
+msgstr ""
+
+#: src/icons_widget.vala:433
+msgid "View as icons"
+msgstr ""
+
+#: src/icons_widget.vala:437
+msgid "View as list"
+msgstr ""
+
+#: src/menu.vala:131
+#, c-format
+msgid "Status: %s"
+msgstr ""
+
+#: src/menu.vala:250
+#, c-format
+msgid "%lld GB of %lld GB"
+msgstr ""
+
+#: src/options.vala:57
+#, c-format
+msgid "Backup hidden files and folders in %s"
+msgstr ""
+
+#: src/restore.vala:193
 msgid "Exit"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/restore.vala:972
+#: src/restore.vala:696
+msgid "Today, at %H:%M"
+msgid_plural "Today, at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/restore.vala:701
+msgid "Yesterday, at %H:%M"
+msgid_plural "Yesterday, at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/restore.vala:709
+msgid "%A, %d %B %Y at %H:%M"
+msgid_plural "%A, %d %B %Y at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/restore.vala:716
+msgid "%A, %B %d %Y at %H:%M"
+msgid_plural "%A, %B %d %Y at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/restore.vala:961
+#, c-format
 msgid ""
 "Restoring file:\n"
 "\n"
 "%s"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/restore.vala:984
+#: src/restore.vala:973
+#, c-format
 msgid ""
 "Failed to restore file\n"
 "\n"
@@ -154,149 +303,27 @@ msgid ""
 "There's not enought free space"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/restore.vala:986
+#: src/restore.vala:975
+#, c-format
 msgid ""
 "Failed to restore file\n"
 "\n"
 "%s"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/restore.vala:1052
+#: src/restore.vala:1042
 msgid "Preparing folders to restore"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:219
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:332
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:362
-msgid "Idle"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:238
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:244
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:255
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:259
-msgid "Latest backup: %s"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:359
-msgid "Storage not available"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:364
-msgid "Backup disabled"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:435
-msgid "Back Up Now"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:438
-msgid "Stop Backing Up"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:450
-msgid "Configure backup policies"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:535
-msgid "Backing up folder %s\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:554
-msgid "Can't copy file %s\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:559
-msgid "Can't access directory %s\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:564
-msgid "Can't create directory %s\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:583
-msgid "Starting backup\n"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:598
-msgid "Erasing old backups"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:610
-msgid "Backup aborted"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:614
-msgid "Can't do backup; disk is too small"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/cronopete.vala:618
-msgid "Can't do backup"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:153
-msgid "Name"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:156
-msgid "Size"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:157
-msgid "Modification date"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:374
-msgid "Show hidden files"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:382
-msgid "Reverse order"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:390
-msgid "Sort by name"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:394
-msgid "Sort by type"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:398
-msgid "Sort by size"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:402
-msgid "Sort by date"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:424
-msgid "View as icons"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../src/icons_widget.vala:428
-msgid "View as list"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/format_error.ui:50
-msgid ""
-"There was an error during the\n"
-"formating operation. Aborted."
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/format_error.ui:89
-msgid "<b>Error info</b>"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/about.ui:15
+#: data/interface/about.ui:15
 msgid "©2011-15 Raster Software Vigo"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/about.ui:16
+#: data/interface/about.ui:16
 msgid "An Apple's Time Machine clone for Linux"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/about.ui:682
+#: data/interface/about.ui:680
 msgid ""
 "In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
 "the first novel with a time-travel machine.\n"
@@ -312,130 +339,110 @@ msgid ""
 "Linux."
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/about.ui:704
+#: data/interface/about.ui:702
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/restoring.ui:9
-msgid "Restoring files"
+#: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
+#: data/interface/format_force.ui:31 data/interface/options.ui:35
+#: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
+msgid "Cancel"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/format_force.ui:31
-msgid "Format disk"
+#: data/interface/chooser.ui:40
+msgid "Select"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/options.ui:16
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:352
-msgid "Options"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/options.ui:98
-msgid "Folders to backup"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/options.ui:162
-msgid "<b>Backup these folders</b>"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/options.ui:257
-msgid "<b>Exclude these folders</b>"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/options.ui:293
-msgid "Time interval between backups (in hours):"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/restore_ok.ui:8
-#: /home/raster/workspace/cronopete/po/../data/interface/restore_ok.ui:22
-msgid "Restore ended succesfully"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/restore_error.ui:56
-msgid "Ignore"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/restore_error.ui:72
-msgid "Ignore all"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/formatting.ui:52
-msgid "Formating disk. Please, wait."
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/welcome.ui:20
-msgid "Welcome to Cronopete"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/welcome.ui:35
-msgid "Don't ask me again"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/welcome.ui:50
-msgid "Ask me later"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/welcome.ui:64
-msgid "Configure now"
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/welcome.ui:105
-msgid ""
-"Cronopete is a backup utility that allows you to make regular copies of your "
-"data, and restore it from several dates.\n"
-"\n"
-"Now, you can configure which external disk use to make the copies and which "
-"folders you want to backup, or you can leave it for later."
-msgstr ""
-
-#: /home/raster/workspace/cronopete/po/../data/interface/chooser.ui:69
+#: data/interface/chooser.ui:68
 msgid "Available USB disks:"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/chooser.ui:104
+#: data/interface/chooser.ui:103
 msgid "Show all disks (except /home)"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:8
+#: data/interface/config_exported.ui:7
+msgid "Configuration exported"
+msgstr ""
+
+#: data/interface/config_exported.ui:34
+msgid ""
+"The backup configuration has been exported.\n"
+"Please, check the list of folders to ensure that everything went fine."
+msgstr ""
+
+#: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
+#: data/interface/options.ui:49 data/interface/restore_ok.ui:33
+msgid "Ok"
+msgstr ""
+
+#: data/interface/folder_selector.ui:41
+msgid "Add folder(s)"
+msgstr ""
+
+#: data/interface/format_error.ui:50
+msgid ""
+"There was an error during the\n"
+"formating operation. Aborted."
+msgstr ""
+
+#: data/interface/format_error.ui:88
+msgid "<b>Error info</b>"
+msgstr ""
+
+#: data/interface/format_force.ui:46
+msgid "Format disk"
+msgstr ""
+
+#: data/interface/formatting.ui:52
+msgid "Formating disk. Please, wait."
+msgstr ""
+
+#: data/interface/main.ui:8
 msgid "anaCRONOPETE"
 msgstr ""
 
 #. Don't translate this. Is part of the name in the main window
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:50
+#: data/interface/main.ui:50
 msgid "ana"
 msgstr ""
 
 #. Don't translate this. Is part of the name in the main window.
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:63
+#: data/interface/main.ui:63
 msgid "cronopete"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:233
+#: data/interface/main.ui:233
 msgid "Next backup:"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:245
+#: data/interface/main.ui:246
 msgid "Latest backup:"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:257
+#: data/interface/main.ui:259
 msgid "Oldest backup:"
 msgstr ""
 
 #. Refers to the free disk space available in the backup's hard disk
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:269
+#: data/interface/main.ui:272
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:281
+#: data/interface/main.ui:285
 msgid "Device:"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:336
+#: data/interface/main.ui:340
 msgid "Change disk..."
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:380
+#: data/interface/main.ui:356 data/interface/options.ui:17
+msgid "Options"
+msgstr ""
+
+#: data/interface/main.ui:382
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -444,24 +451,83 @@ msgid ""
 " * Weekely backups until your hard disk is full"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:398
+#: data/interface/main.ui:401
 msgid "Show Cronopete in menu bar"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:450
+#: data/interface/main.ui:419
+msgid "About"
+msgstr ""
+
+#: data/interface/main.ui:453
 msgid "Configuration"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/main.ui:479
+#: data/interface/main.ui:482
 msgid "Log"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/config_exported.ui:6
-msgid "Configuration exported"
+#: data/interface/options.ui:95
+msgid "Folders to backup"
 msgstr ""
 
-#: /home/raster/workspace/cronopete/po/../data/interface/config_exported.ui:33
+#: data/interface/options.ui:114 data/interface/options.ui:205
+msgid "Add"
+msgstr ""
+
+#: data/interface/options.ui:129 data/interface/options.ui:220
+msgid "Remove"
+msgstr ""
+
+#: data/interface/options.ui:155
+msgid "<b>Backup these folders</b>"
+msgstr ""
+
+#: data/interface/options.ui:246
+msgid "<b>Exclude these folders</b>"
+msgstr ""
+
+#: data/interface/options.ui:280
+msgid "Time interval between backups (in hours):"
+msgstr ""
+
+#: data/interface/restore_error.ui:55
+msgid "Ignore"
+msgstr ""
+
+#: data/interface/restore_error.ui:70
+msgid "Ignore all"
+msgstr ""
+
+#: data/interface/restore_ok.ui:9 data/interface/restore_ok.ui:23
+msgid "Restore ended succesfully"
+msgstr ""
+
+#: data/interface/restoring.ui:9
+msgid "Restoring files"
+msgstr ""
+
+#: data/interface/welcome.ui:23
+msgid "Don't ask me again"
+msgstr ""
+
+#: data/interface/welcome.ui:38
+msgid "Ask me later"
+msgstr ""
+
+#: data/interface/welcome.ui:52
+msgid "Configure now"
+msgstr ""
+
+#: data/interface/welcome.ui:76
+msgid "Welcome to Cronopete"
+msgstr ""
+
+#: data/interface/welcome.ui:105
 msgid ""
-"The backup configuration has been exported.\n"
-"Please, check the list of folders to ensure that everything went fine."
+"Cronopete is a backup utility that allows you to make regular copies of your "
+"data, and restore it from several dates.\n"
+"\n"
+"Now, you can configure which external disk use to make the copies and which "
+"folders you want to backup, or you can leave it for later."
 msgstr ""

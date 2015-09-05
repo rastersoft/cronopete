@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">12</property>
@@ -32,12 +32,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">Cancel</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -47,12 +46,11 @@
             </child>
             <child>
               <object class="GtkButton" id="button2">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">Ok</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -113,12 +111,11 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="add_backup">
-                        <property name="label">gtk-add</property>
+                        <property name="label" translatable="yes">Add</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="c_options_on_add_backup_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -129,12 +126,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="remove_backup">
-                        <property name="label">gtk-remove</property>
+                        <property name="label" translatable="yes">Remove</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="c_options_on_remove_backup_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -206,12 +202,11 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="add_exclude">
-                        <property name="label">gtk-add</property>
+                        <property name="label" translatable="yes">Add</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="c_options_on_add_exclude_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -222,12 +217,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="remove_exclude">
-                        <property name="label">gtk-remove</property>
+                        <property name="label" translatable="yes">Remove</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="c_options_on_remove_exclude_clicked" swapped="no"/>
                       </object>
                       <packing>

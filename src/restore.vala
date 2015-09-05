@@ -1019,6 +1019,7 @@ class restore_iface : GLib.Object {
         rok.hide();
         rok.destroy();
         this.mywindow.show();
+        this.mywindow.fullscreen();
         return;
     }
 
@@ -1056,6 +1057,7 @@ class restore_iface : GLib.Object {
                 this.restore_files.clear();
                 this.restore_window.destroy();
                 this.mywindow.show();
+                this.mywindow.fullscreen();
                 this.mywindow.get_window().set_cursor(null);
             }
         });
@@ -1152,6 +1154,7 @@ class restore_iface : GLib.Object {
         this.error_window.destroy();
         this.cancel_restoring=true;
         this.mywindow.show();
+        this.mywindow.fullscreen();
         this.restoring_ended.begin();
     }
 
@@ -1159,6 +1162,7 @@ class restore_iface : GLib.Object {
     public void on_ignore_restore_error_clicked(Button source) {
         this.error_window.destroy();
         this.mywindow.show();
+        this.mywindow.fullscreen();
         this.restoring_ended.begin();
     }
 
@@ -1167,6 +1171,7 @@ class restore_iface : GLib.Object {
         this.ignore_restoring_all=true;
         this.error_window.destroy();
         this.mywindow.show();
+        this.mywindow.fullscreen();
         this.restoring_ended.begin();
     }
 

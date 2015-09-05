@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="dialog1">
     <property name="width_request">550</property>
     <property name="height_request">350</property>
