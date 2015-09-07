@@ -184,6 +184,7 @@ public class c_options : GLib.Object {
         var tmp_builder = new Builder();
         tmp_builder.add_from_file(Path.build_filename(this.basepath,"folder_selector.ui"));
         var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
+        selector.set_transient_for(this.main_w);
         selector.show_all();
         retval = selector.run();
         if (retval==-6) {
@@ -213,6 +214,7 @@ public class c_options : GLib.Object {
         var tmp_builder = new Builder();
         tmp_builder.add_from_file(Path.build_filename(this.basepath,"folder_selector.ui"));
         var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
+        selector.set_transient_for(this.main_w);
         selector.show_all();
         retval = selector.run();
         if (retval==-6) {

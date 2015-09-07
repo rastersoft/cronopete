@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="restore_status">
     <property name="width_request">400</property>
     <property name="height_request">250</property>
@@ -56,12 +56,11 @@
         </child>
         <child>
           <object class="GtkButton" id="cancel">
-            <property name="label">gtk-cancel</property>
+            <property name="label" translatable="yes">Cancel</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_stock">True</property>
             <signal name="clicked" handler="restore_iface_on_cancel_clicked" swapped="no"/>
           </object>
           <packing>

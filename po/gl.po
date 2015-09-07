@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-06 01:24+0200\n"
+"POT-Creation-Date: 2015-09-05 22:45+0200\n"
 "PO-Revision-Date: 2013-10-31 10:40+0200\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -20,54 +20,54 @@ msgstr ""
 "X-Generator: Virtaal 0.7.0\n"
 "X-Poedit-Language: Galician\n"
 
-#: ../src/backup.vala:287
+#: src/backup.vala:287
 #, c-format
 msgid "Backing up folder %s.\n"
 msgstr "Copiando o cartafol %s.\n"
 
-#: ../src/backup.vala:291
+#: src/backup.vala:291
 #, c-format
 msgid "Excluding folder %s.\n"
 msgstr "Excluindo o cartafol %s.\n"
 
-#: ../src/backup.vala:297
+#: src/backup.vala:297
 #, c-format
 msgid "Excluding hidden folders in %s.\n"
 msgstr "Excluindo cartafoles agochados en %s.\n"
 
-#: ../src/backup.vala:299
+#: src/backup.vala:299
 #, c-format
 msgid "Backing up hidden folders in %s.\n"
 msgstr "Copiando cartafoles agochados en %s.\n"
 
-#: ../src/backup.vala:347
+#: src/backup.vala:347
 msgid "Can't create the folder for this backup. Aborting backup.\n"
 msgstr "Non foi posíbel crear o cartafol para esta copia. Interrompendo.\n"
 
-#: ../src/backup.vala:350
+#: src/backup.vala:350
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
 msgstr ""
 "Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
 
-#: ../src/backup.vala:353
+#: src/backup.vala:353
 msgid "Backup device not available. Aborting backup.\n"
 msgstr "Non está dispoñíbel o disco externo para as copias. Interrompendo.\n"
 
-#: ../src/backup.vala:356
+#: src/backup.vala:356
 msgid "Already started a backup.\n"
 msgstr "Xa está a facerse unha copia.\n"
 
-#: ../src/backup.vala:360
+#: src/backup.vala:360
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: ../src/backup.vala:379
+#: src/backup.vala:379
 msgid "Backup aborted\n"
 msgstr "Copia cancelada.\n"
 
-#: ../src/backup.vala:393
+#: src/backup.vala:393
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -75,39 +75,38 @@ msgstr ""
 "O disco é demasiado pequeno para poder copiar todo.\n"
 "Axuste a lista de cartafoles a copiar e a excluír.\n"
 
-#: ../src/backup.vala:407
+#: src/backup.vala:407
 msgid "Syncing disk\n"
 msgstr "Sincronizando o disco\n"
 
-#: ../src/backup.vala:409
+#: src/backup.vala:409
 msgid "Can't close the backup. Aborting.\n"
 msgstr "Non foi posíbel pechar a copia. Interrompendo.\n"
 
-#: ../src/backup.vala:415
+#: src/backup.vala:415
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Copia rematada. levou %ld segundos.\n"
 
-#. Failed to find the disk!!!!!!
-#: ../src/choose.vala:107
+#: src/choose.vala:107
 msgid "Failed to find the disk!!!!!"
 msgstr ""
 
-#: ../src/choose.vala:116
+#: src/choose.vala:116
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr ""
 
-#: ../src/choose.vala:137
+#: src/choose.vala:137
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
 
-#: ../src/choose.vala:152
+#: src/choose.vala:152
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
 
-#: ../src/choose.vala:168
+#: src/choose.vala:168
 #, fuzzy
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
@@ -120,202 +119,185 @@ msgstr ""
 "Para elo, prema o botón <i>Formatar o disco</i>. <b>Perderanse todos os "
 "datos contidos no disco</b>."
 
-#: ../src/choose.vala:382
+#: src/choose.vala:391
 msgid "Unknown FS"
 msgstr "Sistema de ficheiros descoñecido"
 
-#: ../src/cronopete.vala:218 ../src/cronopete.vala:331
-#: ../src/cronopete.vala:361
+#: src/choose.vala:409
+#, fuzzy
+msgid "Unknown size"
+msgstr "Sistema de ficheiros descoñecido"
+
+#: src/cronopete.vala:216 src/cronopete.vala:329 src/cronopete.vala:359
 msgid "Idle"
 msgstr "En repouso"
 
-#: ../src/cronopete.vala:237 ../src/cronopete.vala:243
-#: ../src/cronopete.vala:254 ../src/cronopete.vala:258
+#: src/cronopete.vala:235 src/cronopete.vala:241 src/cronopete.vala:252
+#: src/cronopete.vala:256
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
 
-#. This text means that the user still has not selected a hard disk where to do the backups
-#: ../src/cronopete.vala:237 ../src/menu.vala:235
+#: src/cronopete.vala:235 src/menu.vala:242
 msgid "Not defined"
 msgstr "Non definida"
 
-#. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-#: ../src/cronopete.vala:243 ../src/cronopete.vala:254 ../src/menu.vala:184
+#: src/cronopete.vala:241 src/cronopete.vala:252 src/menu.vala:191
 msgid "None"
 msgstr "Ningunha"
 
-#: ../src/cronopete.vala:358
+#: src/cronopete.vala:356
 msgid "Storage not available"
 msgstr "O almacenamento non está dispoñíbel "
 
-#: ../src/cronopete.vala:363
+#: src/cronopete.vala:361
 msgid "Backup disabled"
 msgstr "Copias desactivadas"
 
-#: ../src/cronopete.vala:434
+#: src/cronopete.vala:432
 msgid "Back Up Now"
 msgstr "Copiar agora"
 
-#: ../src/cronopete.vala:437
+#: src/cronopete.vala:435
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: ../src/cronopete.vala:441 ../src/restore.vala:185
+#: src/cronopete.vala:439 src/restore.vala:185
 msgid "Restore files"
 msgstr "Restaurar ficheiros"
 
-#: ../src/cronopete.vala:449
+#: src/cronopete.vala:447
 msgid "Configure backup policies"
 msgstr "Configurar a copia de seguranza"
 
-#: ../src/cronopete.vala:534
+#: src/cronopete.vala:532
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Copiando o cartafol %s\n"
 
-#: ../src/cronopete.vala:553
+#: src/cronopete.vala:550
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Non é posíbel copiar o ficheiro %s\n"
 
-#: ../src/cronopete.vala:558
+#: src/cronopete.vala:555
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr "Non é posíbel acceder ao cartafol %s\n"
 
-#: ../src/cronopete.vala:563
+#: src/cronopete.vala:560
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Non é posíbel crear o cartafol %s\n"
 
-#: ../src/cronopete.vala:582
+#: src/cronopete.vala:578
 msgid "Starting backup\n"
 msgstr "Comezando a copia\n"
 
-#: ../src/cronopete.vala:597
+#: src/cronopete.vala:592
 msgid "Erasing old backups"
 msgstr "Borrando copias antigas"
 
-#: ../src/cronopete.vala:609
+#: src/cronopete.vala:604
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: ../src/cronopete.vala:613
+#: src/cronopete.vala:608
 msgid "Can't do backup; disk is too small"
 msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
 
-#: ../src/cronopete.vala:617
+#: src/cronopete.vala:612
 msgid "Can't do backup"
 msgstr "Non é posíbel facer a copia"
 
-#: ../src/icons_widget.vala:153
+#: src/icons_widget.vala:153
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/icons_widget.vala:156
+#: src/icons_widget.vala:156
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../src/icons_widget.vala:157
+#: src/icons_widget.vala:157
 msgid "Modification date"
 msgstr "Data da modificación"
 
-#: ../src/icons_widget.vala:383
+#: src/icons_widget.vala:383
 msgid "Show hidden files"
 msgstr "Amosar os ficheiros agochados"
 
-#: ../src/icons_widget.vala:391
+#: src/icons_widget.vala:391
 msgid "Reverse order"
 msgstr "Inverter a orde"
 
-#: ../src/icons_widget.vala:399
+#: src/icons_widget.vala:399
 msgid "Sort by name"
 msgstr "Ordenar por nome"
 
-#: ../src/icons_widget.vala:403
+#: src/icons_widget.vala:403
 msgid "Sort by type"
 msgstr "Ordenar por tipo"
 
-#: ../src/icons_widget.vala:407
+#: src/icons_widget.vala:407
 msgid "Sort by size"
 msgstr "Ordenar por tamaño"
 
-#: ../src/icons_widget.vala:411
+#: src/icons_widget.vala:411
 msgid "Sort by date"
 msgstr "Ordenar por data"
 
-#: ../src/icons_widget.vala:433
+#: src/icons_widget.vala:433
 msgid "View as icons"
 msgstr "Ver como iconas"
 
-#: ../src/icons_widget.vala:437
+#: src/icons_widget.vala:437
 msgid "View as list"
 msgstr "Ver como lista"
 
-#. This string shows the current status of Cronopete. It could be
-#. Status: idle, or Status: copying file...
-#: ../src/menu.vala:129
+#: src/menu.vala:131
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
-#. This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
-#: ../src/menu.vala:243
+#: src/menu.vala:250
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
 
-#: ../src/options.vala:57
+#: src/options.vala:57
 #, c-format
 msgid "Backup hidden files and folders in %s"
 msgstr "Copiar ficheiros e cartafoles agochados en %s"
 
-#: ../src/restore.vala:193
+#: src/restore.vala:193
 msgid "Exit"
 msgstr "Saír"
 
-#. / This string is used to show the date of a backup when it is in today;
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:696
+#: src/restore.vala:696
 msgid "Today, at %H:%M"
 msgid_plural "Today, at %H:%M"
 msgstr[0] "Hoxe, á %H:%M"
 msgstr[1] "Hoxe, ás %H:%M"
 
-#. / This string is used to show the date of a backup when it is in yesterday;
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:701
+#: src/restore.vala:701
 msgid "Yesterday, at %H:%M"
 msgid_plural "Yesterday, at %H:%M"
 msgstr[0] "Onte, á %H:%M"
 msgstr[1] "Onte, ás %H:%M"
 
-#. / This string is used to show the date of a backup in european format (day/month/year);
-#. / %A gets replaced by the day's name; %d by the day (in number);
-#. / %B by the month (in letters); %Y by the year in four-digits format
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:709
+#: src/restore.vala:709
 msgid "%A, %d %B %Y at %H:%M"
 msgid_plural "%A, %d %B %Y at %H:%M"
 msgstr[0] "%A, %d %B %Y á %H:%M"
 msgstr[1] "%A, %d %B %Y ás %H:%M"
 
-#. / This string is used to show the date of a backup in USA format (month/day/year);
-#. / %A gets replaced by the day's name; %B by the month (in letters);
-#. / %d by the day (in number); %Y by the year in four-digits format
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:716
+#: src/restore.vala:716
 msgid "%A, %B %d %Y at %H:%M"
 msgid_plural "%A, %B %d %Y at %H:%M"
 msgstr[0] "%A, %B %d %Y á %H:%M"
 msgstr[1] "%A, %B %d %Y ás %H:%M"
 
-#: ../src/restore.vala:961
+#: src/restore.vala:961
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -326,7 +308,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:973
+#: src/restore.vala:973
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -341,7 +323,7 @@ msgstr ""
 "\n"
 "Non hai espazo baleiro abondo"
 
-#: ../src/restore.vala:975
+#: src/restore.vala:975
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -352,20 +334,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:1041
+#: src/restore.vala:1042
 msgid "Preparing folders to restore"
 msgstr "Preparando os cartafoles para restaurar"
 
-#: ../data/interface/about.ui.h:1
+#: data/interface/about.ui:15
 #, fuzzy
 msgid "©2011-15 Raster Software Vigo"
 msgstr "©2011-13 Raster Software Vigo"
 
-#: ../data/interface/about.ui.h:2
+#: data/interface/about.ui:16
 msgid "An Apple's Time Machine clone for Linux"
 msgstr "Un clon para Linux do «Time Machine» de Apple"
 
-#: ../data/interface/about.ui.h:3
+#: data/interface/about.ui:680
 msgid ""
 "In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
 "the first novel with a time-travel machine.\n"
@@ -394,23 +376,33 @@ msgstr ""
 "En 2011 chega ana<b>CRONOPETE</b>, O clon para Linux do «Time Machine» de "
 "Apple."
 
-#: ../data/interface/about.ui.h:10
+#: data/interface/about.ui:702
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr "Por que <i>ana<b>CRONOPETE</b></i>?"
 
-#: ../data/interface/chooser.ui.h:1
+#: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
+#: data/interface/format_force.ui:31 data/interface/options.ui:35
+#: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
+msgid "Cancel"
+msgstr ""
+
+#: data/interface/chooser.ui:40
+msgid "Select"
+msgstr ""
+
+#: data/interface/chooser.ui:68
 msgid "Available USB disks:"
 msgstr "Discos USB dispoñíbeis:"
 
-#: ../data/interface/chooser.ui.h:2
+#: data/interface/chooser.ui:103
 msgid "Show all disks (except /home)"
 msgstr "Amosar todos os discos (agás /home)"
 
-#: ../data/interface/config_exported.ui.h:1
+#: data/interface/config_exported.ui:7
 msgid "Configuration exported"
 msgstr "Configuración exportada"
 
-#: ../data/interface/config_exported.ui.h:2
+#: data/interface/config_exported.ui:34
 msgid ""
 "The backup configuration has been exported.\n"
 "Please, check the list of folders to ensure that everything went fine."
@@ -418,7 +410,16 @@ msgstr ""
 "Exportouse a configuración da copia de seguranza.\n"
 "Comprobe a lista de cartafoles para confirmar que todo é correcto."
 
-#: ../data/interface/format_error.ui.h:1
+#: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
+#: data/interface/options.ui:49 data/interface/restore_ok.ui:33
+msgid "Ok"
+msgstr ""
+
+#: data/interface/folder_selector.ui:41
+msgid "Add folder(s)"
+msgstr ""
+
+#: data/interface/format_error.ui:50
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
@@ -426,63 +427,63 @@ msgstr ""
 "Produciuse un erro durante a\n"
 "operación de formatado. Cancelado."
 
-#: ../data/interface/format_error.ui.h:3
+#: data/interface/format_error.ui:88
 msgid "<b>Error info</b>"
 msgstr "<b>Información do erro</b>"
 
-#: ../data/interface/format_force.ui.h:1
+#: data/interface/format_force.ui:46
 msgid "Format disk"
 msgstr "Formatar o disco"
 
-#: ../data/interface/formatting.ui.h:1
+#: data/interface/formatting.ui:52
 msgid "Formating disk. Please, wait."
 msgstr "Formatando o disco. Agarde."
 
-#: ../data/interface/main.ui.h:1
+#: data/interface/main.ui:8
 msgid "anaCRONOPETE"
 msgstr "anaCRONOPETE"
 
 #. Don't translate this. Is part of the name in the main window
-#: ../data/interface/main.ui.h:3
+#: data/interface/main.ui:50
 msgid "ana"
 msgstr "ana"
 
 #. Don't translate this. Is part of the name in the main window.
-#: ../data/interface/main.ui.h:5
+#: data/interface/main.ui:63
 msgid "cronopete"
 msgstr "cronopete"
 
-#: ../data/interface/main.ui.h:6
+#: data/interface/main.ui:233
 msgid "Next backup:"
 msgstr "Próxima copia:"
 
-#: ../data/interface/main.ui.h:7
+#: data/interface/main.ui:246
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: ../data/interface/main.ui.h:8
+#: data/interface/main.ui:259
 msgid "Oldest backup:"
 msgstr "Primeira copia:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: ../data/interface/main.ui.h:10
+#: data/interface/main.ui:272
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Dispoñíbel:"
 
-#: ../data/interface/main.ui.h:11
+#: data/interface/main.ui:285
 msgid "Device:"
 msgstr "Dispositivo:"
 
-#: ../data/interface/main.ui.h:12
+#: data/interface/main.ui:340
 msgid "Change disk..."
 msgstr "Cambiar o disco..."
 
-#: ../data/interface/main.ui.h:13 ../data/interface/options.ui.h:1
+#: data/interface/main.ui:356 data/interface/options.ui:17
 msgid "Options"
 msgstr "Opcións"
 
-#: ../data/interface/main.ui.h:14
+#: data/interface/main.ui:382
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -496,67 +497,79 @@ msgstr ""
 " * Unha copia diaria para o último mes\n"
 " * Copias semanais ata que se encha o disco"
 
-#: ../data/interface/main.ui.h:19
+#: data/interface/main.ui:401
 msgid "Show Cronopete in menu bar"
 msgstr "Amosar Cronopete na barra"
 
-#: ../data/interface/main.ui.h:20
+#: data/interface/main.ui:419
+msgid "About"
+msgstr ""
+
+#: data/interface/main.ui:453
 msgid "Configuration"
 msgstr "Configuración"
 
-#: ../data/interface/main.ui.h:21
+#: data/interface/main.ui:482
 msgid "Log"
 msgstr "Rexistro"
 
-#: ../data/interface/options.ui.h:2
+#: data/interface/options.ui:95
 msgid "Folders to backup"
 msgstr "Cartafoles a copiar"
 
-#: ../data/interface/options.ui.h:3
+#: data/interface/options.ui:114 data/interface/options.ui:205
+msgid "Add"
+msgstr ""
+
+#: data/interface/options.ui:129 data/interface/options.ui:220
+msgid "Remove"
+msgstr ""
+
+#: data/interface/options.ui:155
 msgid "<b>Backup these folders</b>"
 msgstr "<b>Copiar estes cartafoles</b>"
 
-#: ../data/interface/options.ui.h:4
+#: data/interface/options.ui:246
 msgid "<b>Exclude these folders</b>"
 msgstr "<b>Excluír estes cartafoles</b>"
 
-#: ../data/interface/options.ui.h:5
+#: data/interface/options.ui:280
 msgid "Time interval between backups (in hours):"
 msgstr "Tempo entre copias (en horas):"
 
-#: ../data/interface/restore_error.ui.h:1
+#: data/interface/restore_error.ui:55
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: ../data/interface/restore_error.ui.h:2
+#: data/interface/restore_error.ui:70
 msgid "Ignore all"
 msgstr "Ignorar todos"
 
-#: ../data/interface/restore_ok.ui.h:1
+#: data/interface/restore_ok.ui:9 data/interface/restore_ok.ui:23
 msgid "Restore ended succesfully"
 msgstr "Restauración rematada"
 
-#: ../data/interface/restoring.ui.h:1
+#: data/interface/restoring.ui:9
 msgid "Restoring files"
 msgstr "Restaurando ficheiros"
 
-#: ../data/interface/welcome.ui.h:1
-msgid "Welcome to Cronopete"
-msgstr "Benvido/a ao Cronopete"
-
-#: ../data/interface/welcome.ui.h:2
+#: data/interface/welcome.ui:23
 msgid "Don't ask me again"
 msgstr "Non preguntar de novo"
 
-#: ../data/interface/welcome.ui.h:3
+#: data/interface/welcome.ui:38
 msgid "Ask me later"
 msgstr "Preguntarme máis tarde"
 
-#: ../data/interface/welcome.ui.h:4
+#: data/interface/welcome.ui:52
 msgid "Configure now"
 msgstr "Configurar agora"
 
-#: ../data/interface/welcome.ui.h:5
+#: data/interface/welcome.ui:76
+msgid "Welcome to Cronopete"
+msgstr "Benvido/a ao Cronopete"
+
+#: data/interface/welcome.ui:105
 msgid ""
 "Cronopete is a backup utility that allows you to make regular copies of your "
 "data, and restore it from several dates.\n"
