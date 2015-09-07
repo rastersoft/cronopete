@@ -1,3 +1,9 @@
+cronopete (3.19.0-Debian1) sid; urgency=low
+
+  * Changes made
+
+ -- Sergio Costas <rastersoft@gmail.com>  Mon, 07 Sep 2015 00:27:38 +0200
+
 cronopete (3.18.5-ppa5) trusty; urgency=low
 
   * Set the right VALAC version
