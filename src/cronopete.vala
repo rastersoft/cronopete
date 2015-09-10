@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.19.0
+// project version=3.20.0
 
 #if !NO_APPINDICATOR
 using AppIndicator;
@@ -275,6 +275,11 @@ public class cp_callback : GLib.Object, callbacks {
                 this.trayicon.set_tooltip_text (message);
 #endif
                 this.main_menu.set_status(message);
+            } else {
+#if NO_APPINDICATOR
+                this.trayicon.set_tooltip_text ("");
+#endif
+	            this.main_menu.set_status("");
             }
         }
     }
