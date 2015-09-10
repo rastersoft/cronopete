@@ -7,7 +7,7 @@ vala_version: 0.26
 
 
 vala_binary: src/cronopete
-*version: 3.19.0
+*version: 3.20.0
 compile_options: --target-glib 2.32
 *vala_package: posix
 if (NOT NO_APPINDICATOR)
