@@ -20,7 +20,7 @@ using GLib;
 using Posix;
 using Gee;
 
-interface callbacks : GLib.Object {
+public interface callbacks : GLib.Object {
 
     public abstract void backup_folder(string foldername);
     public abstract void backup_file(string filename);
@@ -34,10 +34,10 @@ interface callbacks : GLib.Object {
 
 }
 
-enum BACKUP_RETVAL { OK, CANT_COPY, CANT_LINK, NO_STARTED, CANT_CREATE_FOLDER, ALREADY_STARTED,
+public enum BACKUP_RETVAL { OK, CANT_COPY, CANT_LINK, NO_STARTED, CANT_CREATE_FOLDER, ALREADY_STARTED,
     NOT_AVAILABLE, NOT_WRITABLE, NO_SPC, CANT_CREATE_BASE, NOT_EXISTS, IN_PROCCESS, ERROR, ABORTED }
 
-interface backends : GLib.Object {
+public interface backends : GLib.Object {
 
     public abstract string? get_backup_id();
     public abstract Gee.List<time_t?>? get_backup_list();

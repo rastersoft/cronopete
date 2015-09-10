@@ -24,7 +24,7 @@ using Gdk;
 using Cairo;
 using Gsl;
 
-// project version=3.19.0
+// project version=3.20.0
 
 #if !NO_APPINDICATOR
 using AppIndicator;
@@ -35,7 +35,7 @@ enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
 cp_callback callback_object;
 
-class cp_callback : GLib.Object, callbacks {
+public class cp_callback : GLib.Object, callbacks {
 
 #if !NO_APPINDICATOR
     private Indicator appindicator;
@@ -62,10 +62,10 @@ class cp_callback : GLib.Object, callbacks {
     private bool backup_forced;
     private time_t next_backup;
     private uint cur_period;
-    private bool tooltip_changed;
     private string tooltip_value;
     private uint iconpos;
     private Gtk.Window main_w2;
+    private pipe_ipc messages;
 
     public restore_iface restore_w;
 
@@ -187,6 +187,10 @@ class cp_callback : GLib.Object, callbacks {
         this.backup_forced = false;
         this.tooltip_value = "";
 
+        this.messages = new pipe_ipc();
+        this.messages.received_data.connect(this.set_message);
+
+
         this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 
         this.backend = new usbhd_backend(this.backup_uid);
@@ -260,37 +264,31 @@ class cp_callback : GLib.Object, callbacks {
 
         if (backup_thread) {
             // this function can be called both from the main thread and the backup thread, so is mandatory to take precautions
-            lock (this.tooltip_value) {
-                if (message == null) {
-                    this.tooltip_value = "";
-                } else {
-                    this.tooltip_value = message.dup();
-                }
-                this.tooltip_changed = true;
+            if (message == null) {
+            	this.messages.send_data("");
+            } else {
+            	this.messages.send_data(message);
             }
         } else {
-            lock (this.tooltip_value) {
-                if (message == null) {
+            if (message != null) {
 #if NO_APPINDICATOR
-                    this.trayicon.set_tooltip_text (this.tooltip_value);
+                this.trayicon.set_tooltip_text (message);
 #endif
-                    this.main_menu.set_status(this.tooltip_value);
-                    this.tooltip_changed = false;
-                } else {
+                this.main_menu.set_status(message);
+            } else {
 #if NO_APPINDICATOR
-                    this.trayicon.set_tooltip_text (message);
+                this.trayicon.set_tooltip_text ("");
 #endif
-                    this.main_menu.set_status(message);
-                }
+	            this.main_menu.set_status("");
             }
         }
     }
 
-    public bool timer_f() {
+	public void set_message(string msg, size_t len) {
+		this.set_tooltip(msg);
+	}
 
-        if (this.tooltip_changed) {
-            this.set_tooltip(null);
-        }
+    public bool timer_f() {
 
         if (this.backup_running == SystemStatus.IDLE) {
             uint new_period = this.cronopete_settings.get_uint("backup-period");
@@ -566,7 +564,7 @@ class cp_callback : GLib.Object, callbacks {
 
     public void show_message(string msg) {
 
-        this.main_menu.insert_log(msg,false);
+        this.main_menu.insert_log(msg);
     }
 
     private int do_backup() {
@@ -575,7 +573,8 @@ class cp_callback : GLib.Object, callbacks {
 
         this.basedir = new nanockup(this,this.backend);
 
-        this.main_menu.insert_log(_("Starting backup\n"),true);
+		this.main_menu.insert_log(_("\n"));
+        this.main_menu.insert_log(_("Starting backup\n"));
 
         this.current_status = BackupStatus.ALLFINE;
 
@@ -614,7 +613,7 @@ class cp_callback : GLib.Object, callbacks {
         break;
         }
         this.basedir = null;
-        this.b_thread.exit(0);
+        GLib.Thread.exit(0);
         return 0;
     }
 

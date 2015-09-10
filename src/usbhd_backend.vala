@@ -20,7 +20,7 @@ using GLib;
 using Posix;
 using Gee;
 
-struct file_info {
+public struct file_info {
     string name;
     GLib.ThemedIcon icon;
     bool isdir;

@@ -3,6 +3,7 @@ src/choose.vala
 src/cronopete.vala
 src/fixedlabel.vala
 src/icons_widget.vala
+src/ipc.vala
 src/menu.vala
 src/options.vala
 src/restore.vala

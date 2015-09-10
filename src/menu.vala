@@ -19,7 +19,7 @@
 using GLib;
 using Gtk;
 
-class c_main_menu : GLib.Object {
+public class c_main_menu : GLib.Object {
 
     private weak TextBuffer log;
     private string basepath;
@@ -44,8 +44,8 @@ class c_main_menu : GLib.Object {
 
     public bool is_visible;
     private GLib.Settings cronopete_settings;
-    private IOChannel io_read;
-    private IOChannel io_write;
+
+	public pipe_ipc ipc_register;
 
     public bool switch_enabler {
         get {
@@ -100,30 +100,10 @@ class c_main_menu : GLib.Object {
         this.cronopete_settings.bind("enabled",this.my_widget,"active",GLib.SettingsBindFlags.DEFAULT);
         this.cronopete_settings.bind("visible",this.show_in_bar_ch,"active",GLib.SettingsBindFlags.DEFAULT);
 
-        int[] fd = new int[2]; // file descriptor
-        int ret;
-
-        // setup a pipe
-        ret = Posix.pipe(fd);
-        if(ret == -1) {
-            print("Creating pipe failed: %s\n", strerror(errno));
-        } else {
-
-            // setup iochannels
-            io_read  = new IOChannel.unix_new(fd[0]);
-            io_write = new IOChannel.unix_new(fd[1]);
-
-            if((io_read == null) || (io_write == null)) {
-                print("Cannot create new IOChannel!\n");
-            }
-
-            // The watch calls the gio_in function, if there data is available for
-            // reading without locking
-            if(!(io_read.add_watch(IOCondition.IN | IOCondition.HUP, insert_text_log) != 0)) {
-                print("Cannot add watch on IOChannel!\n");
-            }
-        }
+		this.ipc_register = new pipe_ipc();
+        this.ipc_register.received_data.connect (this.insert_text_log);
     }
+
     public void set_status(string msg) {
 
         /* This string shows the current status of Cronopete. It could be
@@ -134,44 +114,20 @@ class c_main_menu : GLib.Object {
         }
     }
 
-    public void insert_log(string msg,bool reset) {
+    public void insert_log(string msg) {
 
-        if (reset) {
-            this.messages = new StringBuilder(msg);
-            if (this.is_visible) {
-	            TextIter iter;
-	            this.log.set_text(msg,-1);
-	            this.log.get_end_iter(out iter);
-	            this.mark = this.log.create_mark("end", iter, false);
-	            this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
-	        }
-        } else {
-            // From another thread, use the pipe
-            size_t len;
-            this.io_write.write_chars((char[])msg,out len);
-            this.io_write.flush();
-        }
+        // From another thread, use the pipe
+        this.ipc_register.send_data(msg);
     }
 
-    private bool insert_text_log(IOChannel gio, IOCondition condition) {
-        IOStatus ret;
-        string msg;
-        size_t len;
+    public void insert_text_log(string msg,size_t len) {
 
-        if((condition & IOCondition.HUP) == IOCondition.HUP) {
-            print("Read end of pipe died!\n");
-        }
+		if (msg == "\n") {
+			this.messages = new StringBuilder("");
+		} else {
+	        this.messages.append(msg);
+	    }
 
-        try {
-            ret = gio.read_line(out msg, out len, null);
-        }
-        catch(IOChannelError e) {
-            print("Error reading: %s\n".printf(e.message));
-        }
-        catch(ConvertError e) {
-            print("Error reading: %s\n".printf(e.message));
-        }
-        this.messages.append(msg);
         if (this.is_visible) {
 	        TextIter iter;
 	        this.log.insert_at_cursor(msg,(int)len);
@@ -179,7 +135,6 @@ class c_main_menu : GLib.Object {
 	        this.mark = this.log.create_mark("end", iter, false);
 	        this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 	    }
-        return true;
     }
 
     private string parse_date(time_t val) {
