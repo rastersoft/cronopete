@@ -1,0 +1,339 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-05 22:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ../src/backup.vala:287
+#, c-format
+msgid "Backing up folder %s.\n"
+msgstr ""
+
+#: ../src/backup.vala:291
+#, c-format
+msgid "Excluding folder %s.\n"
+msgstr ""
+
+#: ../src/backup.vala:297
+#, c-format
+msgid "Excluding hidden folders in %s.\n"
+msgstr ""
+
+#: ../src/backup.vala:299
+#, c-format
+msgid "Backing up hidden folders in %s.\n"
+msgstr ""
+
+#: ../src/backup.vala:347
+msgid "Can't create the folder for this backup. Aborting backup.\n"
+msgstr ""
+
+#: ../src/backup.vala:350
+msgid "Can't create the base folders to do backups. Aborting backup.\n"
+msgstr ""
+
+#: ../src/backup.vala:353
+msgid "Backup device not available. Aborting backup.\n"
+msgstr ""
+
+#: ../src/backup.vala:356
+msgid "Already started a backup.\n"
+msgstr ""
+
+#: ../src/backup.vala:360
+msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+msgstr ""
+
+#: ../src/backup.vala:379
+msgid "Backup aborted\n"
+msgstr ""
+
+#: ../src/backup.vala:393
+msgid ""
+"The disk is too small to hold a single backup.\n"
+"Adjust the list of backup and exclude folders.\n"
+msgstr ""
+
+#: ../src/backup.vala:407
+msgid "Syncing disk\n"
+msgstr ""
+
+#: ../src/backup.vala:409
+msgid "Can't close the backup. Aborting.\n"
+msgstr ""
+
+#: ../src/backup.vala:415
+#, c-format
+msgid "Backup done. Needed %ld seconds.\n"
+msgstr ""
+
+#. Failed to find the disk!!!!!!
+#: ../src/choose.vala:107
+msgid "Failed to find the disk!!!!!"
+msgstr ""
+
+#: ../src/choose.vala:116
+msgid "Failed to unmount the disk. Aborting format operation."
+msgstr ""
+
+#: ../src/choose.vala:137
+msgid ""
+"Failed to format the disk (maybe it is needing too much time). Please, try "
+"again."
+msgstr ""
+
+#: ../src/choose.vala:152
+msgid "Failed to mount again the disk. Aborting the format operation."
+msgstr ""
+
+#: ../src/choose.vala:168
+msgid ""
+"The selected drive must be formated to be used for backups.\n"
+"\n"
+"To do it, click the <i>Format disk</i> button.\n"
+"\n"
+"<b>All the data in the drive will be erased</b>"
+msgstr ""
+
+#: ../src/choose.vala:391
+msgid "Unknown FS"
+msgstr ""
+
+#: ../src/choose.vala:409
+msgid "Unknown size"
+msgstr ""
+
+#: ../src/cronopete.vala:216 ../src/cronopete.vala:329
+#: ../src/cronopete.vala:359
+msgid "Idle"
+msgstr ""
+
+#: ../src/cronopete.vala:235 ../src/cronopete.vala:241
+#: ../src/cronopete.vala:252 ../src/cronopete.vala:256
+#, c-format
+msgid "Latest backup: %s"
+msgstr ""
+
+#. This text means that the user still has not selected a hard disk where to do the backups
+#: ../src/cronopete.vala:235 ../src/menu.vala:242
+msgid "Not defined"
+msgstr ""
+
+#. This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
+#: ../src/cronopete.vala:241 ../src/cronopete.vala:252 ../src/menu.vala:191
+msgid "None"
+msgstr ""
+
+#: ../src/cronopete.vala:356
+msgid "Storage not available"
+msgstr ""
+
+#: ../src/cronopete.vala:361
+msgid "Backup disabled"
+msgstr ""
+
+#: ../src/cronopete.vala:432
+msgid "Back Up Now"
+msgstr ""
+
+#: ../src/cronopete.vala:435
+msgid "Stop Backing Up"
+msgstr ""
+
+#: ../src/cronopete.vala:439 ../src/restore.vala:185
+msgid "Restore files"
+msgstr ""
+
+#: ../src/cronopete.vala:447
+msgid "Configure backup policies"
+msgstr ""
+
+#: ../src/cronopete.vala:532
+#, c-format
+msgid "Backing up folder %s\n"
+msgstr ""
+
+#: ../src/cronopete.vala:550
+#, c-format
+msgid "Can't copy file %s\n"
+msgstr ""
+
+#: ../src/cronopete.vala:555
+#, c-format
+msgid "Can't access directory %s\n"
+msgstr ""
+
+#: ../src/cronopete.vala:560
+#, c-format
+msgid "Can't create directory %s\n"
+msgstr ""
+
+#: ../src/cronopete.vala:578
+msgid "Starting backup\n"
+msgstr ""
+
+#: ../src/cronopete.vala:592
+msgid "Erasing old backups"
+msgstr ""
+
+#: ../src/cronopete.vala:604
+msgid "Backup aborted"
+msgstr ""
+
+#: ../src/cronopete.vala:608
+msgid "Can't do backup; disk is too small"
+msgstr ""
+
+#: ../src/cronopete.vala:612
+msgid "Can't do backup"
+msgstr ""
+
+#: ../src/icons_widget.vala:153
+msgid "Name"
+msgstr ""
+
+#: ../src/icons_widget.vala:156
+msgid "Size"
+msgstr ""
+
+#: ../src/icons_widget.vala:157
+msgid "Modification date"
+msgstr ""
+
+#: ../src/icons_widget.vala:383
+msgid "Show hidden files"
+msgstr ""
+
+#: ../src/icons_widget.vala:391
+msgid "Reverse order"
+msgstr ""
+
+#: ../src/icons_widget.vala:399
+msgid "Sort by name"
+msgstr ""
+
+#: ../src/icons_widget.vala:403
+msgid "Sort by type"
+msgstr ""
+
+#: ../src/icons_widget.vala:407
+msgid "Sort by size"
+msgstr ""
+
+#: ../src/icons_widget.vala:411
+msgid "Sort by date"
+msgstr ""
+
+#: ../src/icons_widget.vala:433
+msgid "View as icons"
+msgstr ""
+
+#: ../src/icons_widget.vala:437
+msgid "View as list"
+msgstr ""
+
+#. This string shows the current status of Cronopete. It could be
+#. Status: idle, or Status: copying file...
+#: ../src/menu.vala:131
+#, c-format
+msgid "Status: %s"
+msgstr ""
+
+#. This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
+#: ../src/menu.vala:250
+#, c-format
+msgid "%lld GB of %lld GB"
+msgstr ""
+
+#: ../src/options.vala:57
+#, c-format
+msgid "Backup hidden files and folders in %s"
+msgstr ""
+
+#: ../src/restore.vala:193
+msgid "Exit"
+msgstr ""
+
+#. / This string is used to show the date of a backup when it is in today;
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:696
+msgid "Today, at %H:%M"
+msgid_plural "Today, at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#. / This string is used to show the date of a backup when it is in yesterday;
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:701
+msgid "Yesterday, at %H:%M"
+msgid_plural "Yesterday, at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#. / This string is used to show the date of a backup in european format (day/month/year);
+#. / %A gets replaced by the day's name; %d by the day (in number);
+#. / %B by the month (in letters); %Y by the year in four-digits format
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:709
+msgid "%A, %d %B %Y at %H:%M"
+msgid_plural "%A, %d %B %Y at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#. / This string is used to show the date of a backup in USA format (month/day/year);
+#. / %A gets replaced by the day's name; %B by the month (in letters);
+#. / %d by the day (in number); %Y by the year in four-digits format
+#. / %H gets replaced by the hour, and %M by the minute of the backup
+#. / Singular and plurar forms are chosen based on the hour's value (%H)
+#: ../src/restore.vala:716
+msgid "%A, %B %d %Y at %H:%M"
+msgid_plural "%A, %B %d %Y at %H:%M"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/restore.vala:961
+#, c-format
+msgid ""
+"Restoring file:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../src/restore.vala:973
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s\n"
+"\n"
+"There's not enought free space"
+msgstr ""
+
+#: ../src/restore.vala:975
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../src/restore.vala:1042
+msgid "Preparing folders to restore"
+msgstr ""
