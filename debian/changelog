@@ -1,52 +1,26 @@
 cronopete (3.20.0-Debian1) sid; urgency=low
 
-  * Changes made
+  * The multithreading race condition that made cronopete to crash randomly seems to be fixed
+  * Removed deprecated GTK functions and properties
 
- -- Sergio Costas <rastersoft@gmail.com>  Thu, 10 Sep 2015 11:49:15 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Thu, 10 Sep 2015 23:55:00 +0200
 
 cronopete (3.19.0-Debian1) sid; urgency=low
 
-  * Changes made
+  * Updated to Vala 0.26
+  * Now uses the new Thread and Mutex syntax
+  * Removed deprecated parameters in glade files
+  * Now does all the string processing in the main thread
 
- -- Sergio Costas <rastersoft@gmail.com>  Mon, 07 Sep 2015 00:27:38 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 30 Aug 2015 23:55:00 +0200
 
-cronopete (3.18.5-ppa5) trusty; urgency=low
+cronopete (3.18.5-Debian1) sid; urgency=low
 
-  * Set the right VALAC version
+  * Fixed a bug when detecting and listing hard disks
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:47:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Thu, 23 Apr 2015 23:55:00 +0200
 
-cronopete (3.18.5-ppa4) trusty; urgency=low
-
-  * Added fields SECTION and HOMEPAGE in the CONTROL file
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:41:17 +0100
-
-cronopete (3.18.5-ppa3) trusty; urgency=low
-
-  * Fixed description in CONTROL file
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:35:17 +0100
-
-cronopete (3.18.5-ppa2) trusty; urgency=low
-
-  * Fixed version number in CONTROL file
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:31:17 +0100
-
-cronopete (3.18.5-ppa1) trusty; urgency=low
-
-  * Added extra checks to avoid a problem when disk permissions aren't good
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 22 Apr 2015 12:20:17 +0100
-
-cronopete (3.18.4-ppa2) trusty; urgency=low
-
-  * Now includes all the translated strings
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 06 Apr 2015 00:40:17 +0100
-
-cronopete (3.18.4-ppa1) trusty; urgency=low
+cronopete (3.18.4-Debian1) sid; urgency=low
 
   * Now uses only the UUID to find disks, to guarantee that the path used is the right one, even if it changes after launching cronopete
   * If the backup is enabled, cronopete will remount the disk if it is unmounted; if the backup is disabled, the disk can be removed
@@ -55,130 +29,55 @@ cronopete (3.18.4-ppa1) trusty; urgency=low
   * Code cleanup
   * Removed deprecated GTK and GDK methods, like Gtk.Stock
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 Apr 2015 00:40:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 04 Apr 2015 23:55:00 +0200
 
-cronopete (3.18.3-ppa2) trusty; urgency=low
+cronopete (3.18.3-Debian1) sid; urgency=low
 
-  * Fixed dependencies
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 04 Apr 2015 00:40:17 +0100
-
-cronopete (3.18.3-ppa1) trusty; urgency=low
-
-  * Now searchs disks using the UUID
   * Migrated to UDisks2, to fix the problems when formating disks
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 03 Apr 2015 23:55:00 +0200
+
+cronopete (3.18.2-Debian1) sid; urgency=low
+
   * Now doesn't fail if, at startup, the hard disk isn't mounted
   * Now the main window doesn't get expanded if the status text is too big
-  * Fixed little bugs when choosing a new disk
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 03 Apr 2015 20:23:17 +0100
- 
-cronopete (3.17.0-ppa4) trusty; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 03 Apr 2015 23:50:00 +0200
 
-  * Fixed rules file again
+cronopete (3.18.1-Debian1) sid; urgency=low
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 26 Feb 2015 20:23:17 +0100
+  * Fixed bugs when choosing a new disk
 
-cronopete (3.17.0-ppa3) trusty; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 03 Apr 2015 23:45:00 +0200
 
-  * Fixed rules file to compile POT files
+cronopete (3.18.0-Debian1) sid; urgency=low
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 26 Feb 2015 20:22:17 +0100
+  * Now searchs disks using the UUID
 
-cronopete (3.17.0-ppa2) trusty; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Thu, 02 Apr 2015 23:55:00 +0200
 
-  * Fixed rules file
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 23 Feb 2015 20:22:17 +0100
-
-cronopete (3.17.0-ppa1) trusty; urgency=low
+cronopete (3.17.0-Debian1) sid; urgency=low
 
   * Added Czech translation
-  * Allows to select several folders simultaneously
-  * Fixed the icon's paths
+  * Fixed the icon path
+  * Allows to add several folders simultaneously
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 23 Feb 2015 20:21:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Mon, 23 Feb 2015 23:55:00 +0200
 
-cronopete (3.16.0-ppa5) trusty; urgency=low
-
-  * Fixed a typo in the .deb building scripts
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 27 Sep 2014 20:21:17 +0100
-
-cronopete (3.16.0-ppa4) trusty; urgency=low
-
-  * Another try to fix the .deb building scripts
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 27 Sep 2014 20:19:17 +0100
-
-cronopete (3.16.0-ppa3) trusty; urgency=low
-
-  * Fixed the .deb building scripts
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 27 Sep 2014 20:17:17 +0100
-
-cronopete (3.16.0-ppa2) trusty; urgency=low
-
-  * Fixed the Vala compiler version to allow to compile under trusty
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 08 Aug 2014 20:17:17 +0100
-
-cronopete (3.16.0-ppa1) trusty; urgency=low
+cronopete (3.16.0-Debian1) sid; urgency=low
 
   * Removed GTK2 support
-  * Fixed the problem when mixing fullscreen and popup windows
+  * Fixed the problems when mixing fullscreen and popup windows
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 08 Aug 2014 20:17:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 08 Aug 2014 23:55:00 +0200
 
-cronopete (3.15.3-ppa8) saucy; urgency=low
+cronopete (3.15.3-Debian1) sid; urgency=low
 
-  * Removed TMP folder from the source package
+  * Now uses Gee 0.8
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 15 Dec 2013 20:17:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 14 Dec 2013 23:55:00 +0200
 
-cronopete (3.15.3-ppa7) saucy; urgency=low
-
-  * Trying to use DESTDIR again(2)
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.3-ppa6) saucy; urgency=low
-
-  * Trying to use DESTDIR again
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.3-ppa5) saucy; urgency=low
-
-  * Trying to use DESTDIR
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.3-ppa4) saucy; urgency=low
-
-  * Updated dependencies to use Vala 0.20
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.3-ppa3) saucy; urgency=low
-
-  * Updated to Saucy, to use Vala 0.20
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.3-ppa2) raring; urgency=low
-
-  * Set again Vala compiler version to 0.20
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.3-ppa1) raring; urgency=low
-
-  * Updated to Gee 0.8
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 14 Dec 2013 20:17:17 +0100
-
-cronopete (3.15.2-ppa1) raring; urgency=low
+cronopete (3.15.2-Debian1) sid; urgency=low
 
   * Fixed galician translation
   * Removed the access to GTK from several threads
@@ -186,148 +85,183 @@ cronopete (3.15.2-ppa1) raring; urgency=low
   * Now doesn't fail if pressing the ACCEPT button in the folder selection dialog without a folder selected
   * Now removes the wellcome message also if the user shows the configuration dialog
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Fri, 1 Nov 2013 20:17:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 01 Nov 2013 23:55:00 +0200
 
-cronopete (3.15.1-ppa2) raring; urgency=low
+cronopete (3.15.1-Debian1) sid; urgency=low
 
-  * Changed vala version needed to 0.18
+  * Added a Welcome window
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 26 Oct 2013 20:17:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 26 Oct 2013 23:55:00 +0200
 
-cronopete (3.15.1-ppa1) raring; urgency=low
+cronopete (3.15.0-Debian1) sid; urgency=low
 
-  * Added a welcome window
   * Now doesn't hang when trying to set the partition type during disk formating
-  * Changed the schema path from apps.cronopete to org.rastersoft.cronopete to be compliant with the Gnome rules (requires reconfiguration!!!)
+  * Changed the schema path from <i>apps.cronopete</i> to <i>org.rastersoft.cronopete</i> to be compliant with the Gnome rules (requires reconfiguration!!!)
   * Removed formating in ReiserFS; now only formats in Ext4, but still supports ReiserFS if formated manually by the user
   * Allows to show the non-usb disks directly from the interface
   * Now automounts the drive during launch
   * Build system migrated to Autovala+CMake
   * The code now uses the data automatically detected by Autovala
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Sat, 26 Oct 2013 16:52:17 +0100
-  
-cronopete (3.14.0-ppa1) raring; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 26 Oct 2013 23:50:00 +0200
 
-  * Fixes the refresh bug when the timer line has to do a big jump
+cronopete (3.14.0-Debian1) sid; urgency=low
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 15 Jun 2013 14:15:17 +0100
+  * Fixed the refresh bug when the timer line has to do a big jump.
 
-cronopete (3.13.0-ppa3) raring; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 15 Jun 2013 23:55:00 +0200
 
-  * Updated dependencies to make it compatible with Raring (3)
+cronopete (3.13.0-Debian1) sid; urgency=low
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 8 Jun 2013 14:15:17 +0100
+  * Fixed picture refresh bug in the file restoring system.
+  * Fixed bug when formating external drives without partition table.
+  * Removed several deprecated calls.
 
-cronopete (3.13.0-ppa2) raring; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 09 Jun 2013 23:55:00 +0200
 
-  * Updated dependencies to make it compatible with Raring (2)
+cronopete (3.12.0-Debian1) sid; urgency=low
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 1 Jun 2013 14:15:17 +0100
+  * Fixed a bug when trying to do a backup in a disk 100% full.
 
-cronopete (3.13.0-ppa1) precise; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 11 May 2013 23:55:00 +0200
 
-  * Updated dependencies to make it compatible with Raring
+cronopete (3.11.0-Debian1) sid; urgency=low
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 31 May 2013 14:15:17 +0100
+  * Added a delay to avoid failure launch in Gnome Shell
+  * Fixed return value in DRAW y EXPOSE-EVENT callbacks
 
-cronopete (3.13.0-ppa0) precise; urgency=low
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 05 May 2013 23:55:00 +0200
 
-  * Fixed bug in GTK3 when refreshing the restore interface
+cronopete (3.10.0-Debian1) sid; urgency=low
 
-  * Removed several deprecated calls in GTK3
+  * Fixed colors in symbolic icons.
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 30 May 2013 14:15:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 27 Jan 2013 23:55:00 +0200
 
-cronopete (3.12.0-ppa0) precise; urgency=low
+cronopete (3.8.0/1-Debian1) sid; urgency=low
 
-  * Fixed bug when the backup hard disk is 100% full before starting a backup
+  * Fixed the scroll and the icons in the restore interface.
+  * Fixed the background painting in the restore interface.
+  * Added texts in the buttons of the restore interface.
+  * Fixed compilation under Gtk2.
+  * Added .deb packages for Gtk2.
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 11 May 2013 14:15:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 20 Jan 2013 23:55:00 +0200
 
-cronopete (3.11.1-ppa0) precise; urgency=low
+cronopete (3.6.0-Debian1) sid; urgency=low
 
-  * Fixed return value at DRAW and EXPOSE-EVENT callbacks
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 May 2013 14:15:17 +0100
-
-cronopete (3.11.0-ppa0) precise; urgency=low
-
-  * Added delay at startup to avoid problems between gnome shell and libappindicator
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 05 May 2013 12:15:17 +0100
-
-cronopete (3.10.0-ppa0) precise; urgency=low
-
-  * Fixed colors in symbolic icons
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 27 Jan 2013 12:15:17 +0100
-
-cronopete (3.8.1-ppa0) precise; urgency=low
-
-  * Fixed compilation under Gtk2
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 20 Jan 2013 12:15:17 +0100
-
-cronopete (3.8.0-ppa0) precise; urgency=low
-
-  * Fixed icons and scrolling in the recovery interface
-  * Fixed background painting in the recovery interface
-  * Added texts in the buttons of the recovery interface
-  * Can render background pictures stored in folders with UTF-8 characters
-
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 20 Jan 2013 12:10:17 +0100
-
-cronopete (3.6.0-0ppa0) precise; urgency=low
-
-  * Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete
-  * Support to allow using internal, non-removable drives (for testing)
+  * New restoring interface
+  * Allows to use internal, non-removable drives (for testing)
   * Added new icons based in the -symbolic standard
   * Fixed the bug that made the restore window to grow each time the user changed the folder
-  * New restoring interface
+  * Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 20 Dec 2012 08:17:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 21 Dec 2012 23:55:00 +0200
 
-cronopete (3.4.5-0ppa1) precise; urgency=low
+cronopete (3.4.6-Debian1) sid; urgency=low
 
-  * Set permissions in postinst and postrm files
+  * The configuration icon in Elementary will keep in the icon window
+  * Removed sleep during startup because, with libappnotify, it's not needed
+  * Now doesn't recreate the menu in the system bar each time something changes, but takes advantage of the capabilities of libappindicator (when used)
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 16 Oct 2012 08:17:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 28 Oct 2012 23:55:00 +0200
 
-cronopete (3.4.5-0ppa0) precise; urgency=low
+cronopete (3.4.5-Debian1) sid; urgency=low
 
-  * Added D-Bus activation when calling settings or restore without cronopete running
+  * Added D-Bus activation, to launch Cronopete when opening the configuration icon
+  * CMake files modified to ensure that the autostart file is copied in the right place even when using a non-standard folder
+  * Included the Vala CMake files
+  * Added control files for PPA repositories with DEB packages for Ubuntu and Elementary OS
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 16 Oct 2012 00:05:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Wed, 17 Oct 2012 23:55:00 +0200
 
-cronopete (3.4.4-0ppa0) precise; urgency=low
+cronopete (3.4.0-Debian1) sid; urgency=low
 
-  * Fixed pre-compilation of GSchemas
-  * Now warns to reboot the system after installing
+  * Changed to CMake
+  * Optional support for libappindicator
+  * Simplified messages
+  * New graphics
+  * Added a progress bar for each file being restored
+  * Now uses GConf to store the configuration
+  * Now shows only external devices when asking for a drive
+  * Added a .PLUG file for Elementary OS compatibility
+  * Allows to show or hide the icon in the main bar
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 15 Oct 2012 21:20:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 13 Oct 2012 23:55:00 +0200
 
-cronopete (3.4.3-0ppa0) precise; urgency=low
+cronopete (3.2.0-Debian1) sid; urgency=low
 
-  * Fixed dependencies
+  * Now compiles with Vala 0.16 (compatible with Debian)
+  * Now new disks are formatted right, without returning a false error
+  * Disks are also formatted when the access rights are incorrect
+  * Added icons in windows and in window manager
+  * Now it uses asynchronous calls when restoring files, instead of a thread
+  * Reduced FPS in clock animation to reduce CPU usage
+  * Added a "Restored ended successfully" message at the end of file restoration
+  * Now also shows the date in the windows titlebar during file restoring
+  * Updated animation during restoring to do it more efficient and smooth when not having GPU acceleration
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 23:16:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 09 Sep 2012 23:55:00 +0200
 
-cronopete (3.4.2-0ppa0) precise; urgency=low
+cronopete (3.0.0-Debian1) sid; urgency=low
 
-  * Changed rules file to allow final compilation
+  * Added support for GTK3 (GTK2 still supported)
+  * Now keeps the file extension when restoring a file
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 22:21:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 18 Dec 2011 23:55:00 +0200
 
-cronopete (3.4.1-0ppa0) precise; urgency=low
+cronopete (2.3.0-Debian1) sid; urgency=low
 
-  * Changed paths for autorun file
+  * Added launcher from main menu, for systems without systray
+  * Added Dbus remote control
+  * Added icon cache to speed up the restoring interface
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 22:01:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 02 Dec 2011 23:55:00 +0200
 
-cronopete (3.4.0-0ppa0) precise; urgency=low
+cronopete (2.2.0-Debian1) sid; urgency=low
 
-  * Renamed numbering
+  * It made a window capture when changing the restore view to list or icons. Fixed.
+  * Fixed a core dump when unmounting the hard disk after launching the restore interface.
 
- -- Sergio Costas Rodriguez (Raster Software Vigo) <raster@rastersoft.com>  Mon, 14 Oct 2012 11:43:17 +0100
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 18 Nov 2011 23:55:00 +0200
+
+cronopete (2.1.0-Debian1) sid; urgency=low
+
+  * Little modification to ensure that the zoom effect works better in slow computers.
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 13 Nov 2011 23:55:00 +0200
+
+cronopete (2.0.0-Debian1) sid; urgency=low
+
+  * Added an interface to restore files from the backups.
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 11 Nov 2011 23:55:00 +0200
+
+cronopete (1.3.0-Debian1) sid; urgency=low
+
+  * Cronopete closes when trying to format a NTFS-formated external drive. Fixed.
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 23 Oct 2011 23:55:00 +0200
+
+cronopete (1.2.0-Debian1) sid; urgency=low
+
+  * Now keeps the modified date and time of the folders in the backups
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 07 Oct 2011 23:55:00 +0200
+
+cronopete (1.1.0-Debian1) sid; urgency=low
+
+  * Allows to set the time interval between backups
+  * Allows to choose the installation folder in the Makefile
+  * Fixed a bug that produced a clock skew of five minutes; now the backups are done precisely at time
+  * Now the popup menu is shown under the main bar, not over it
+  * Some little adjustments in the interface
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 17 Sep 2011 23:55:00 +0200
+
+cronopete (1.0.0-Debian1) sid; urgency=low
+
+  * First public version
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 03 Sep 2011 23:55:00 +0200
 
