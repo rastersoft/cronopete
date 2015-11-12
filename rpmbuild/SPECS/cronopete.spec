@@ -8,13 +8,16 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: vala
 BuildRequires: glibc-headers
+BuildRequires: libappindicator-gtk3-devel
 BuildRequires: atk-devel
 BuildRequires: cairo-devel
 BuildRequires: gtk3-devel
 BuildRequires: gdk-pixbuf2-devel
 BuildRequires: libgee-devel
 BuildRequires: glib2-devel
+BuildRequires: gsl-devel
 BuildRequires: pango-devel
+BuildRequires: libudisks2-devel
 BuildRequires: libX11-devel
 BuildRequires: cmake
 BuildRequires: gettext
@@ -22,14 +25,19 @@ BuildRequires: pkgconfig
 BuildRequires: make
 BuildRequires: intltool
 
-Requires: atk
-Requires: glib2
-Requires: cairo
+Requires: libappindicator-gtk3
+Requires: libdbusmenu
 Requires: gtk3
 Requires: pango
-Requires: gdk-pixbuf2
+Requires: atk
 Requires: cairo-gobject
+Requires: cairo
+Requires: gdk-pixbuf2
+Requires: glib2
 Requires: libgee
+Requires: gsl
+Requires: glibc-devel
+Requires: libudisks2
 Requires: libX11
 
 %description
