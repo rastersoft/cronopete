@@ -638,6 +638,9 @@ copy of the Program in return for a fee.
 
                      END OF TERMS AND CONDITIONS</property>
     <property name="authors">Sergio Costas Rodriguez</property>
+    <property name="translator_credits">Sergio Costas Rodríguez &lt;rastersoft@gmail.com&gt;(es)
+Miguel Anxo Bouzada &lt;mbouzada@gmail.com&gt; (gl)
+Pavel Borecki &lt;pavel.borecki@gmail.com&gt; (cz)</property>
     <property name="logo">anacronopete.svg</property>
     <property name="license_type">gpl-3-0</property>
     <child internal-child="vbox">
