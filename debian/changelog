@@ -1,8 +1,14 @@
+cronopete (3.20.2-Debian1) sid; urgency=low
+
+  * Fixed again the cathegories in the .desktop files
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 05 Dec 2015 23:55:00 +0200
+
 cronopete (3.20.1-Debian1) sid; urgency=low
 
   * Fixed the cathegories in the .desktop files
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 05 Dec 2015 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 05 Dec 2015 23:50:00 +0200
 
 cronopete (3.20.0-Debian1) sid; urgency=low
 
