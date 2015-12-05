@@ -1,3 +1,9 @@
+cronopete (3.20.1-Debian1) sid; urgency=low
+
+  * Fixed the cathegories in the .desktop files
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 05 Dec 2015 23:55:00 +0200
+
 cronopete (3.20.0-Debian1) sid; urgency=low
 
   * The multithreading race condition that made cronopete to crash randomly seems to be fixed
