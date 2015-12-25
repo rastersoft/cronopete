@@ -1,3 +1,4 @@
 build_dir
 debian/tmp
 debian/files
+po/cronopete.pot
