@@ -1,4 +1,6 @@
 ## History of versions ##
+* Version 3.21.0 (2015/12/05)
+   * Now launches cronopete automagically when calling "restore" or "settings" icons from the launch menu (DBUS activation works again)
 * Version 3.20.2 (2015/12/05)
    * Fixed again the cathegories in the .desktop files
 * Version 3.20.1 (2015/12/05)
