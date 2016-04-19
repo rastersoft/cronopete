@@ -1,0 +1,586 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Sergey <>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cronopete 3.21.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-18 17:45+0200\n"
+"PO-Revision-Date: 2016-04-18 17:45+0200\n"
+"Last-Translator: Sergey <>\n"
+"Language-Team: Russian; Sergey <>\n"
+"Language: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: \n"
+
+#: src/backup.vala:287
+#, c-format
+msgid "Backing up folder %s.\n"
+msgstr "Папка резервирования %s.\n"
+
+#: src/backup.vala:291
+#, c-format
+msgid "Excluding folder %s.\n"
+msgstr "Исключить папку %s.\n"
+
+#: src/backup.vala:297
+#, c-format
+msgid "Excluding hidden folders in %s.\n"
+msgstr "Исключить скрытые папки в %s.\n"
+
+#: src/backup.vala:299
+#, c-format
+msgid "Backing up hidden folders in %s.\n"
+msgstr "Резервировать скрытые папки в %s.\n"
+
+#: src/backup.vala:347
+msgid "Can't create the folder for this backup. Aborting backup.\n"
+msgstr "Невозможно создать папку для резервной копии. Операция прервана.\n"
+
+#: src/backup.vala:350
+msgid "Can't create the base folders to do backups. Aborting backup.\n"
+msgstr ""
+"Невозможно создать базовые папки для резервной копии. Операция прервана.\n"
+
+#: src/backup.vala:353
+msgid "Backup device not available. Aborting backup.\n"
+msgstr "Устройство резервной копии. Операция прервана.\n"
+
+#: src/backup.vala:356
+msgid "Already started a backup.\n"
+msgstr "Все готово к созданию резервной копии.\n"
+
+#: src/backup.vala:360
+msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+msgstr ""
+"Нет свободного места на диске для запуска резервирования. "
+"Операция прервана.\n"
+
+#: src/backup.vala:379
+msgid "Backup aborted\n"
+msgstr "Операция прервана.\n"
+
+#: src/backup.vala:393
+msgid ""
+"The disk is too small to hold a single backup.\n"
+"Adjust the list of backup and exclude folders.\n"
+msgstr ""
+"Емкость диска слишком мала для резервной копии.\n"
+"Измените настройки резервной копии и исключите папки.\n"
+
+#: src/backup.vala:407
+msgid "Syncing disk\n"
+msgstr "Синхронизация диска\n"
+
+#: src/backup.vala:409
+msgid "Can't close the backup. Aborting.\n"
+msgstr "Невозможно завершить резервирование. Операция отменена.\n"
+
+#: src/backup.vala:415
+#, c-format
+msgid "Backup done. Needed %ld seconds.\n"
+msgstr "Резервирование завершено. Потребовалось %ld секунд.\n"
+
+#: src/choose.vala:107
+msgid "Failed to find the disk!!!!!"
+msgstr "Ошибка в чтении диска!!!!!"
+
+#: src/choose.vala:116
+msgid "Failed to unmount the disk. Aborting format operation."
+msgstr ""
+"Ошибка при отключении диска. Отмена операции."
+
+#: src/choose.vala:137
+msgid ""
+"Failed to format the disk (maybe it is needing too much time). Please, try "
+"again."
+msgstr ""
+"Ошибка форматирования диска (возможно требуется больше времени). "
+"Попробуйте еще раз."
+
+#: src/choose.vala:152
+msgid "Failed to mount again the disk. Aborting the format operation."
+msgstr "Ошибка при подключении диска. Отмена операции."
+
+#: src/choose.vala:168
+msgid ""
+"The selected drive must be formated to be used for backups.\n"
+"\n"
+"To do it, click the <i>Format disk</i> button.\n"
+"\n"
+"<b>All the data in the drive will be erased</b>"
+msgstr ""
+"Выберите диск который хотите использовать для резервных копий.\n"
+"\n"
+"Затем, нажмите кнопку <i>Форматировать</i>.\n"
+"\n"
+"<b>Все данные на диске будут уничтожены</b>"
+
+#: src/choose.vala:391
+msgid "Unknown FS"
+msgstr "Неизвестная ФС"
+
+#: src/choose.vala:409
+msgid "Unknown size"
+msgstr "Неизвестный размер"
+
+#: src/cronopete.vala:216 src/cronopete.vala:329 src/cronopete.vala:359
+msgid "Idle"
+msgstr "Бездействие"
+
+#: src/cronopete.vala:235 src/cronopete.vala:241 src/cronopete.vala:252
+#: src/cronopete.vala:256
+#, c-format
+msgid "Latest backup: %s"
+msgstr "Последняя: %s"
+
+#: src/cronopete.vala:235 src/menu.vala:242
+msgid "Not defined"
+msgstr "Не выбран"
+
+#: src/cronopete.vala:241 src/cronopete.vala:252 src/menu.vala:191
+msgid "None"
+msgstr "Никогда"
+
+#: src/cronopete.vala:356
+msgid "Storage not available"
+msgstr "Хранилище недоступно"
+
+#: src/cronopete.vala:361
+msgid "Backup disabled"
+msgstr "Резервирование отключено"
+
+#: src/cronopete.vala:432
+msgid "Back Up Now"
+msgstr "Начать резервировать"
+
+#: src/cronopete.vala:435
+msgid "Stop Backing Up"
+msgstr "Остановить резервирование"
+
+#: src/cronopete.vala:439 src/restore.vala:185
+msgid "Restore files"
+msgstr "Восстановить файлы"
+
+#: src/cronopete.vala:447
+msgid "Configure backup policies"
+msgstr "Настройте резервное копирование"
+
+#: src/cronopete.vala:532
+#, c-format
+msgid "Backing up folder %s\n"
+msgstr "Резервирование папки %s\n"
+
+#: src/cronopete.vala:550
+#, c-format
+msgid "Can't copy file %s\n"
+msgstr "Невозможно скопировать файл %s\n"
+
+#: src/cronopete.vala:555
+#, c-format
+msgid "Can't access directory %s\n"
+msgstr "Нет доступа к дериктории %s\n"
+
+#: src/cronopete.vala:560
+#, c-format
+msgid "Can't create directory %s\n"
+msgstr "Невозможно создать дерикторию %s\n"
+
+#: src/cronopete.vala:578
+msgid "Starting backup\n"
+msgstr "Резервирование\n"
+
+#: src/cronopete.vala:592
+msgid "Erasing old backups"
+msgstr "Удаление старых резервных копий"
+
+#: src/cronopete.vala:604
+msgid "Backup aborted"
+msgstr "Резервирование прекращено"
+
+#: src/cronopete.vala:608
+msgid "Can't do backup; disk is too small"
+msgstr "Невозможно сделать резервирование; емкость диска слишком мала"
+
+#: src/cronopete.vala:612
+msgid "Can't do backup"
+msgstr "Невозможно создать резервную копию"
+
+#: src/icons_widget.vala:153
+msgid "Name"
+msgstr "Имя"
+
+#: src/icons_widget.vala:156
+msgid "Size"
+msgstr "Размер"
+
+#: src/icons_widget.vala:157
+msgid "Modification date"
+msgstr "Дата изменения"
+
+#: src/icons_widget.vala:383
+msgid "Show hidden files"
+msgstr "Показать скрытые файлы"
+
+#: src/icons_widget.vala:391
+msgid "Reverse order"
+msgstr "Обратный порядок"
+
+#: src/icons_widget.vala:399
+msgid "Sort by name"
+msgstr "Сортировать по имени"
+
+#: src/icons_widget.vala:403
+msgid "Sort by type"
+msgstr "Сортировать по типу"
+
+#: src/icons_widget.vala:407
+msgid "Sort by size"
+msgstr "Сортировать по размеру"
+
+#: src/icons_widget.vala:411
+msgid "Sort by date"
+msgstr "Сортировать по дате"
+
+#: src/icons_widget.vala:433
+msgid "View as icons"
+msgstr "Отобразить иконками"
+
+#: src/icons_widget.vala:437
+msgid "View as list"
+msgstr "Отобразить списком"
+
+#: src/menu.vala:131
+#, c-format
+msgid "Status: %s"
+msgstr "Состояние: %s"
+
+#: src/menu.vala:250
+#, c-format
+msgid "%lld GB of %lld GB"
+msgstr "%lld Гб из %lld Гб"
+
+#: src/options.vala:57
+#, c-format
+msgid "Backup hidden files and folders in %s"
+msgstr "Резервировать скрытые файлы и папки в %s"
+
+#: src/restore.vala:193
+msgid "Exit"
+msgstr "Выход"
+
+#: src/restore.vala:696
+msgid "Today, at %H:%M"
+msgid_plural "Today, at %H:%M"
+msgstr[0] "Сегодня, в %H:%M"
+msgstr[1] "Сегодня, в %H:%M"
+
+#: src/restore.vala:701
+msgid "Yesterday, at %H:%M"
+msgid_plural "Yesterday, at %H:%M"
+msgstr[0] "Вчера, в %H:%M"
+msgstr[1] "Вчера, в %H:%M"
+
+#: src/restore.vala:709
+msgid "%A, %d %B %Y at %H:%M"
+msgid_plural "%A, %d %B %Y at %H:%M"
+msgstr[0] "%A, %d %B %Y в %H:%M"
+msgstr[1] "%A, %d %B %Y в %H:%M"
+
+#: src/restore.vala:716
+msgid "%A, %B %d %Y at %H:%M"
+msgid_plural "%A, %B %d %Y at %H:%M"
+msgstr[0] "%A, %B %d %Y в %H:%M"
+msgstr[1] "%A, %B %d %Y в %H:%M"
+
+#: src/restore.vala:961
+#, c-format
+msgid ""
+"Restoring file:\n"
+"\n"
+"%s"
+msgstr ""
+"Восстановление файла:\n"
+"\n"
+"%s"
+
+#: src/restore.vala:973
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s\n"
+"\n"
+"There's not enought free space"
+msgstr ""
+"Ошибка восстановления файла\n"
+"\n"
+"%s\n"
+"\n"
+"Недостаточно свободного места"
+
+#: src/restore.vala:975
+#, c-format
+msgid ""
+"Failed to restore file\n"
+"\n"
+"%s"
+msgstr ""
+"Ошибка восстановления файла\n"
+"\n"
+"%s"
+
+#: src/restore.vala:1042
+msgid "Preparing folders to restore"
+msgstr "Подготовка папок для восстановления"
+
+#: data/interface/about.ui:15
+msgid "©2011-15 Raster Software Vigo"
+msgstr "©2011-15 Raster Software Vigo"
+
+#: data/interface/about.ui:16
+msgid "An Apple's Time Machine clone for Linux"
+msgstr "Это клон Time Machine от Apple для Linux"
+
+#: data/interface/about.ui:680
+msgid ""
+"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
+"the first novel with a time-travel machine.\n"
+"\n"
+"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
+"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
+"first novel to feature a machine that allows to \"fly against time\".\n"
+"\n"
+"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
+"Leopard. Several simmilar programs for Linux surged.\n"
+"\n"
+"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
+"Linux."
+msgstr ""
+"В 1895, Герберт Уэллс опубликовал <b>Машина времени</b>, одно из первых "
+"литературных произведений, в которых описывается путешествие человека "
+"во времени с помощью техники\n"
+"\n"
+"Но в 1887, за восемь лет до этого, Enrique Gaspar y Rimbau опубликовал <b>El "
+"anacronópete</b>, это научно-фантастический роман, который является "
+"первым романом о путешествиях во времени.\n"
+"\n"
+"В 2007, Apple показала <b>Time Machine</b>, программу для резервного копирования "
+"MacOS X Leopard. Потом появились несколько программ для Linux.\n"
+"\n"
+"В 2011, появилась ana<b>CRONOPETE</b>, это клон Time Machine от Apple для "
+"Linux."
+
+#: data/interface/about.ui:702
+msgid "Why <i>ana<b>CRONOPETE</b></i>?"
+msgstr "Почему <i>ana<b>CRONOPETE</b></i>?"
+
+#: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
+#: data/interface/format_force.ui:31 data/interface/options.ui:35
+#: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
+msgid "Cancel"
+msgstr "Отмена"
+
+#: data/interface/chooser.ui:40
+msgid "Select"
+msgstr "Выбрать"
+
+#: data/interface/chooser.ui:68
+msgid "Available USB disks:"
+msgstr "Доступные носители:"
+
+#: data/interface/chooser.ui:103
+msgid "Show all disks (except /home)"
+msgstr "Показать все диски (кроме /home)"
+
+#: data/interface/config_exported.ui:7
+msgid "Configuration exported"
+msgstr "Экспортировать конфигурацию"
+
+#: data/interface/config_exported.ui:34
+msgid ""
+"The backup configuration has been exported.\n"
+"Please, check the list of folders to ensure that everything went fine."
+msgstr ""
+"Конфигурация резервирования была успешна экспортирована.\n"
+"Пожалуйста проверьте список папок, что-бы убедиться, что все "
+"прошло хорошо."
+
+#: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
+#: data/interface/options.ui:49 data/interface/restore_ok.ui:33
+msgid "Ok"
+msgstr "Да"
+
+#: data/interface/folder_selector.ui:41
+msgid "Add folder(s)"
+msgstr "Добавить папку(и)"
+
+#: data/interface/format_error.ui:50
+msgid ""
+"There was an error during the\n"
+"formating operation. Aborted."
+msgstr ""
+"Во время форматирования произошла\n"
+"ошибка. Операция прервана."
+
+#: data/interface/format_error.ui:88
+msgid "<b>Error info</b>"
+msgstr "<b>Информация об ошибке</b>"
+
+#: data/interface/format_force.ui:46
+msgid "Format disk"
+msgstr "Форматировать диск"
+
+#: data/interface/formatting.ui:52
+msgid "Formating disk. Please, wait."
+msgstr "Идет форматирование. Ожидайте."
+
+#: data/interface/main.ui:8
+msgid "anaCRONOPETE"
+msgstr "anaCRONOPETE"
+
+#. Don't translate this. Is part of the name in the main window
+#: data/interface/main.ui:50
+msgid "ana"
+msgstr "ana"
+
+#. Don't translate this. Is part of the name in the main window.
+#: data/interface/main.ui:63
+msgid "cronopete"
+msgstr "cronopete"
+
+#: data/interface/main.ui:233
+msgid "Next backup:"
+msgstr "Следующее:"
+
+#: data/interface/main.ui:246
+msgid "Latest backup:"
+msgstr "Последнее:"
+
+#: data/interface/main.ui:259
+msgid "Oldest backup:"
+msgstr "Первое:"
+
+#. Refers to the free disk space available in the backup's hard disk
+#: data/interface/main.ui:272
+msgctxt "Refers to the free disk space available in the backup's hard disk"
+msgid "Available:"
+msgstr "Свободно:"
+
+#: data/interface/main.ui:285
+msgid "Device:"
+msgstr "Устройство:"
+
+#: data/interface/main.ui:340
+msgid "Change disk..."
+msgstr "Сменить диск..."
+
+#: data/interface/main.ui:356 data/interface/options.ui:17
+msgid "Options"
+msgstr "Настройки"
+
+#: data/interface/main.ui:382
+msgid ""
+"Cronopete keeps:\n"
+"\n"
+" * Hourly backups for the past 24 hours\n"
+" * Daily backups for the past month\n"
+" * Weekely backups until your hard disk is full"
+msgstr ""
+"Схема Cronopete:\n"
+"\n"
+" * Ежечасные копии за последние 24 часа\n"
+" * Ежедневные копии за последний месяц\n"
+" * Еженедельные копии пока ваш диск не заполнится"
+
+#: data/interface/main.ui:401
+msgid "Show Cronopete in menu bar"
+msgstr "Отобразить Cronopete в строке состояния (трее)"
+
+#: data/interface/main.ui:419
+msgid "About"
+msgstr "Об Cronopete"
+
+#: data/interface/main.ui:453
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#: data/interface/main.ui:482
+msgid "Log"
+msgstr "Журнал"
+
+#: data/interface/options.ui:95
+msgid "Папки для резервирования"
+msgstr "Carpetas a copiar"
+
+#: data/interface/options.ui:114 data/interface/options.ui:205
+msgid "Add"
+msgstr "Добавить"
+
+#: data/interface/options.ui:129 data/interface/options.ui:220
+msgid "Remove"
+msgstr "Удалить"
+
+#: data/interface/options.ui:155
+msgid "<b>Backup these folders</b>"
+msgstr "<b>Резервировать эти папки</b>"
+
+#: data/interface/options.ui:246
+msgid "<b>Exclude these folders</b>"
+msgstr "<b>Исключить эти папки</b>"
+
+#: data/interface/options.ui:280
+msgid "Time interval between backups (in hours):"
+msgstr "Интервал резервирования (в часах):"
+
+#: data/interface/restore_error.ui:55
+msgid "Ignore"
+msgstr "Игнорировать"
+
+#: data/interface/restore_error.ui:70
+msgid "Ignore all"
+msgstr "Игнорировать все"
+
+#: data/interface/restore_ok.ui:9 data/interface/restore_ok.ui:23
+msgid "Restore ended succesfully"
+msgstr "Восстановление прошло успешно"
+
+#: data/interface/restoring.ui:9
+msgid "Restoring files"
+msgstr "Восстановление файлов"
+
+#: data/interface/welcome.ui:23
+msgid "Don't ask me again"
+msgstr "Больше не спрашивать"
+
+#: data/interface/welcome.ui:38
+msgid "Ask me later"
+msgstr "Спросить позже"
+
+#: data/interface/welcome.ui:52
+msgid "Configure now"
+msgstr "Настроить сейчас"
+
+#: data/interface/welcome.ui:76
+msgid "Welcome to Cronopete"
+msgstr "Добро пожаловать в cronopete"
+
+#: data/interface/welcome.ui:105
+msgid ""
+"Cronopete is a backup utility that allows you to make regular copies of your "
+"data, and restore it from several dates.\n"
+"\n"
+"Now, you can configure which external disk use to make the copies and which "
+"folders you want to backup, or you can leave it for later."
+msgstr ""
+"Cronopete это программа для создания регулярных резервных копий ваших данных "
+"и восстановление их в нужный момент времени.\n"
+"\n"
+"Сейчас вы можете настроить ваши внешние диски для резервного копирования данных, "
+"или можете сделать это позже."
