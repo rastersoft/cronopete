@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Cronopete 3.21.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-18 17:45+0200\n"
-"PO-Revision-Date: 2016-04-18 17:45+0200\n"
+"PO-Revision-Date: 2016-04-21 17:45+0200\n"
 "Last-Translator: Sergey <>\n"
 "Language-Team: Russian; Sergey <>\n"
 "Language: Russian\n"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: src/backup.vala:353
 msgid "Backup device not available. Aborting backup.\n"
-msgstr "Устройство резервной копии. Операция прервана.\n"
+msgstr "Устройство резервной копии недоступно. Операция прервана.\n"
 
 #: src/backup.vala:356
 msgid "Already started a backup.\n"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: src/backup.vala:379
 msgid "Backup aborted\n"
-msgstr "Операция прервана.\n"
+msgstr "Операция прервана\n"
 
 #: src/backup.vala:393
 msgid ""
@@ -138,7 +138,7 @@ msgstr "Бездействие"
 #: src/cronopete.vala:256
 #, c-format
 msgid "Latest backup: %s"
-msgstr "Последняя: %s"
+msgstr "Последняя копия: %s"
 
 #: src/cronopete.vala:235 src/menu.vala:242
 msgid "Not defined"
@@ -457,15 +457,15 @@ msgstr "cronopete"
 
 #: data/interface/main.ui:233
 msgid "Next backup:"
-msgstr "Следующее:"
+msgstr "Следующая копия:"
 
 #: data/interface/main.ui:246
 msgid "Latest backup:"
-msgstr "Последнее:"
+msgstr "Последняя копия:"
 
 #: data/interface/main.ui:259
 msgid "Oldest backup:"
-msgstr "Первое:"
+msgstr "Первая копия:"
 
 #. Refers to the free disk space available in the backup's hard disk
 #: data/interface/main.ui:272
@@ -493,7 +493,7 @@ msgid ""
 " * Daily backups for the past month\n"
 " * Weekely backups until your hard disk is full"
 msgstr ""
-"Схема Cronopete:\n"
+"Cronopete запоминает:\n"
 "\n"
 " * Ежечасные копии за последние 24 часа\n"
 " * Ежедневные копии за последний месяц\n"
@@ -516,8 +516,8 @@ msgid "Log"
 msgstr "Журнал"
 
 #: data/interface/options.ui:95
-msgid "Папки для резервирования"
-msgstr "Carpetas a copiar"
+msgid "Folders to backup"
+msgstr "Папки для копий"
 
 #: data/interface/options.ui:114 data/interface/options.ui:205
 msgid "Add"
@@ -529,7 +529,7 @@ msgstr "Удалить"
 
 #: data/interface/options.ui:155
 msgid "<b>Backup these folders</b>"
-msgstr "<b>Резервировать эти папки</b>"
+msgstr "<b>Копировать эти папки</b>"
 
 #: data/interface/options.ui:246
 msgid "<b>Exclude these folders</b>"
@@ -569,7 +569,7 @@ msgstr "Настроить сейчас"
 
 #: data/interface/welcome.ui:76
 msgid "Welcome to Cronopete"
-msgstr "Добро пожаловать в cronopete"
+msgstr "Добро пожаловать в Cronopete"
 
 #: data/interface/welcome.ui:105
 msgid ""
