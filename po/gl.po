@@ -2,22 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Cronopete package.
 # Sergio Costas <raster@rastersoft.com>, 2011, 2012.
-# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2011, 2012, 2013.
+# Miguel Anxo Bouzada <mbouzada@gmail.com>, 2011, 2012, 2013, 2016.
 # raster <raster@rastersoft.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-05 22:45+0200\n"
-"PO-Revision-Date: 2013-10-31 10:40+0200\n"
+"PO-Revision-Date: 2016-04-29 15:00+0200\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
-"Language-Team: Galician <proxecto@trasno.net>\n"
+"Language-Team: Proxecto Trasno <proxecto@trasno.net>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Poedit-Language: Galician\n"
 
 #: src/backup.vala:287
@@ -90,24 +90,26 @@ msgstr "Copia rematada. levou %ld segundos.\n"
 
 #: src/choose.vala:107
 msgid "Failed to find the disk!!!!!"
-msgstr ""
+msgstr "Non foi posíbel atopar o disco!"
 
 #: src/choose.vala:116
 msgid "Failed to unmount the disk. Aborting format operation."
-msgstr ""
+msgstr "Non foi posíbel desmontar o disco. Cancelase a operación de formatado."
 
 #: src/choose.vala:137
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
+"Non foi posíbel formatar o disco (é probábel que precise moito tempo). "
+"Ténteo outra vez."
 
 #: src/choose.vala:152
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
+"Non foi posíbel montar de novo o disco. Cancelase a operación de formatado."
 
 #: src/choose.vala:168
-#, fuzzy
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -115,18 +117,20 @@ msgid ""
 "\n"
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
-"É preciso formatar a unidade escollida para poder facer copias de seguranza. "
-"Para elo, prema o botón <i>Formatar o disco</i>. <b>Perderanse todos os "
-"datos contidos no disco</b>."
+"É preciso formatar a unidade escollida para poder facer copias de seguranza."
+"\n"
+"\n"
+"Para elo, prema o botón <i>Formatar o disco</i>.\n"
+"\n"
+"<b>Perderanse todos os datos contidos no disco</b>."
 
 #: src/choose.vala:391
 msgid "Unknown FS"
 msgstr "Sistema de ficheiros descoñecido"
 
 #: src/choose.vala:409
-#, fuzzy
 msgid "Unknown size"
-msgstr "Sistema de ficheiros descoñecido"
+msgstr "Tamaño descoñecido"
 
 #: src/cronopete.vala:216 src/cronopete.vala:329 src/cronopete.vala:359
 msgid "Idle"
@@ -339,9 +343,8 @@ msgid "Preparing folders to restore"
 msgstr "Preparando os cartafoles para restaurar"
 
 #: data/interface/about.ui:15
-#, fuzzy
 msgid "©2011-15 Raster Software Vigo"
-msgstr "©2011-13 Raster Software Vigo"
+msgstr "©2011-15 Raster Software Vigo"
 
 #: data/interface/about.ui:16
 msgid "An Apple's Time Machine clone for Linux"
@@ -384,11 +387,11 @@ msgstr "Por que <i>ana<b>CRONOPETE</b></i>?"
 #: data/interface/format_force.ui:31 data/interface/options.ui:35
 #: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: data/interface/chooser.ui:40
 msgid "Select"
-msgstr ""
+msgstr "Seleccionar"
 
 #: data/interface/chooser.ui:68
 msgid "Available USB disks:"
@@ -413,11 +416,11 @@ msgstr ""
 #: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
 #: data/interface/options.ui:49 data/interface/restore_ok.ui:33
 msgid "Ok"
-msgstr ""
+msgstr "Aceptar"
 
 #: data/interface/folder_selector.ui:41
 msgid "Add folder(s)"
-msgstr ""
+msgstr "Engadir cartafol(es)"
 
 #: data/interface/format_error.ui:50
 msgid ""
@@ -503,7 +506,7 @@ msgstr "Amosar Cronopete na barra"
 
 #: data/interface/main.ui:419
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: data/interface/main.ui:453
 msgid "Configuration"
@@ -519,11 +522,11 @@ msgstr "Cartafoles a copiar"
 
 #: data/interface/options.ui:114 data/interface/options.ui:205
 msgid "Add"
-msgstr ""
+msgstr "Engadir"
 
 #: data/interface/options.ui:129 data/interface/options.ui:220
 msgid "Remove"
-msgstr ""
+msgstr "Retirar"
 
 #: data/interface/options.ui:155
 msgid "<b>Backup these folders</b>"
