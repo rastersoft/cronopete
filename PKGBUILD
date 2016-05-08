@@ -14,7 +14,7 @@ build() {
 	mkdir ${startdir}/install
 	cd ${startdir}/install
 	cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=/usr/lib
-	make
+	make -j1
 }
 
 package() {
