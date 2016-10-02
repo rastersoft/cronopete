@@ -106,8 +106,7 @@ macro(ensure_vala_version ensure_version)
 		endif(NOT VALA_VERSION)
 
 		# this code allows to identify development versions as the right version
-		# e.g. 0.19.1 -> 0.20 ; 0.20.1 -> 0.20 ;
-		# But this code seems to not be fine 0.24.0.2-2235 -> 0.26
+		# e.g. 0.19.1 -> 0.20 ; 0.20.1 -> 0.20 ; 0.24.0.2-2235 -> 0.26
 		# Thanks to Yannick Inizan
 		string(REPLACE "Vala" "" "VALA_VERSION" ${VALA_VERSION})
 		string(STRIP ${VALA_VERSION} "VALA_VERSION")
@@ -117,11 +116,11 @@ macro(ensure_vala_version ensure_version)
 		list(GET VALA_LIST 2 rev_ver)
 		math(EXPR is_odd "${min_ver} % 2")
 		list(LENGTH VALA_LIST len)
-		#if((${is_odd} EQUAL 1))
-		#	math(EXPR min_ver "${min_ver} + 1")
-		#elseif(len GREATER 3)
-		#	math(EXPR min_ver "${min_ver} + 2")
-		#endif()
+		if((${is_odd} EQUAL 1))
+			math(EXPR min_ver "${min_ver} + 1")
+		elseif(len GREATER 3)
+			math(EXPR min_ver "${min_ver} + 2")
+		endif()
 
 		set(VALA_SVERSION "${maj_ver}.${min_ver}" CACHE INTERNAL "")
 
