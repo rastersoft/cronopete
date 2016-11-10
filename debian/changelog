@@ -1,3 +1,9 @@
+cronopete (3.22.0-Debian1) sid; urgency=low
+
+  * Now ensures that it doesn't die accidentally
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Thu, 10 Nov 2016 23:55:00 +0200
+
 cronopete (3.21.0-Debian1) sid; urgency=low
 
   * Now launches cronopete automagically when calling "restore" or "settings" icons from the launch menu (DBUS activation works again)
