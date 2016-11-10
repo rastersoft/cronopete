@@ -7,13 +7,13 @@ set (GETTEXT_PACKAGE "cronopete")
 set (RELEASE_NAME "cronopete")
 set (CMAKE_C_FLAGS "")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
-set (VERSION "3.21.0")
+set (VERSION "3.22.0")
 set (TESTSRCDIR "${CMAKE_SOURCE_DIR}")
 set (DOLLAR "$")
 
 configure_file (${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
-set (VERSION "3.21.0")
+set (VERSION "3.22.0")
 add_definitions (${DEPS_CFLAGS})
 link_libraries ( ${DEPS_LIBRARIES} )
 link_directories ( ${DEPS_LIBRARY_DIRS} )
@@ -58,6 +58,11 @@ if (NO_APPINDICATOR)
 	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNO_APPINDICATOR " )
 	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_APPINDICATOR " )
 endif ()
+
+if ((${CMAKE_BUILD_TYPE} STREQUAL "Debug") OR (${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo"))
+	set(COMPILE_OPTIONS ${COMPILE_OPTIONS} "-g")
+endif()
+
 set (COMPILE_OPTIONS ${COMPILE_OPTIONS} --target-glib 2.32 )
 
 vala_precompile(VALA_C cronopete

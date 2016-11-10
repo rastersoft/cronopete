@@ -10,6 +10,10 @@ option(ICON_UPDATE "Update the icon cache after installing" ON)
 option(BUILD_VALADOC "Build API documentation if Valadoc is available" OFF)
 option(NO_APPINDICATOR "NO_APPINDICATOR" OFF)
 
+if( NOT CMAKE_BUILD_TYPE )
+	set(CMAKE_BUILD_TYPE Release)
+endif()
+
 include(GNUInstallDirs)
 if( ( ${CMAKE_INSTALL_PREFIX} MATCHES "^/usr/local" ) )
 	# A workaround to ensure that works 'out of the box' in Debian-based systems
@@ -49,11 +53,12 @@ set(MODULES_TO_CHECK ${MODULES_TO_CHECK} x11)
 
 pkg_check_modules(DEPS REQUIRED ${MODULES_TO_CHECK})
 
-add_subdirectory(src)
+
 add_subdirectory(doc)
 add_subdirectory(po)
 add_subdirectory(data/pixmaps)
 add_subdirectory(data)
 add_subdirectory(data/icons)
 add_subdirectory(data/interface)
+add_subdirectory(src)
 

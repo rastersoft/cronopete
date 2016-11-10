@@ -1,13 +1,12 @@
 ### AutoVala Project ###
-autovala_version: 19
+autovala_version: 24
 project_name: cronopete
 vala_version: 0.26
 
 *define: NO_APPINDICATOR
 
-
 vala_binary: src/cronopete
-*version: 3.21.0
+*version: 3.22.0
 compile_options: --target-glib 2.32
 *vala_package: posix
 if (NOT NO_APPINDICATOR)
@@ -38,7 +37,32 @@ end
 *vala_source: restore.vala
 *vala_source: usbhd_backend.vala
 
+
 *po: po
+
+*translate: glade data/interface/about.ui
+*translate: glade data/interface/chooser.ui
+*translate: glade data/interface/config_exported.ui
+*translate: glade data/interface/folder_selector.ui
+*translate: glade data/interface/format_error.ui
+*translate: glade data/interface/format_force.ui
+*translate: glade data/interface/formatting.ui
+*translate: glade data/interface/main.ui
+*translate: glade data/interface/options.ui
+*translate: glade data/interface/restore_error.ui
+*translate: glade data/interface/restore_ok.ui
+*translate: glade data/interface/restoring.ui
+*translate: glade data/interface/welcome.ui
+*translate: vala src/backup.vala
+*translate: vala src/choose.vala
+*translate: vala src/cronopete.vala
+*translate: vala src/fixedlabel.vala
+*translate: vala src/icons_widget.vala
+*translate: vala src/ipc.vala
+*translate: vala src/menu.vala
+*translate: vala src/options.vala
+*translate: vala src/restore.vala
+*translate: vala src/usbhd_backend.vala
 
 *data: data/local
 
