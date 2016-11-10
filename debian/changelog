@@ -1,6 +1,7 @@
 cronopete (3.22.0-Debian1) sid; urgency=low
 
   * Now ensures that it doesn't die accidentally
+  * Fixed a coding bug with internal IPC
 
  -- Sergio Costas Rodriguez <raster@rastersoft.com>  Thu, 10 Nov 2016 23:55:00 +0200
 

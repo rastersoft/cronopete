@@ -24,13 +24,13 @@ public class pipe_ipc:GLib.Object {
 
 	private int[] fd;
 	private IOChannel io_read;
-    private IOChannel io_write;
+   private IOChannel io_write;
 
 	public signal void received_data(string msg,size_t len);
 
 	public pipe_ipc() {
 
-        this.fd = new int[2];
+      this.fd = new int[2];
 		fd[0] = -1;
 		fd[1] = -1;
 		this.init_pipes();
@@ -38,7 +38,7 @@ public class pipe_ipc:GLib.Object {
 	
 	private void init_pipes() {
 
-        int ret;
+   	int ret;
 
 		if (fd[0] != -1) {
 			Posix.close(fd[0]);
@@ -47,58 +47,62 @@ public class pipe_ipc:GLib.Object {
 			Posix.close(fd[1]);
 		}
 
-        // setup a pipe
-        ret = Posix.pipe(this.fd);
-        if(ret == -1) {
-            print("Creating pipe failed: %s\n", Posix.strerror(Posix.errno));
-        } else {
-            // setup iochannels
-            this.io_read  = new IOChannel.unix_new(fd[0]);
-            this.io_write = new IOChannel.unix_new(fd[1]);
+      // setup a pipe
+      ret = Posix.pipe(this.fd);
+      if(ret == -1) {
+         print("Creating pipe failed: %s\n", Posix.strerror(Posix.errno));
+      } else {
+         // setup iochannels
+         this.io_read  = new IOChannel.unix_new(fd[0]);
+			//this.io_read.set_encoding("ISO8859-1");
+			this.io_read.set_encoding(null);
+         this.io_write = new IOChannel.unix_new(fd[1]);
+			//this.io_write.set_encoding("ISO8859-1");
+			this.io_write.set_encoding(null);
 
-            if((this.io_read == null) || (this.io_write == null)) {
-                print("Cannot create new IOChannel!\n");
-            } else {
-	            // The watch calls the gio_in function, if there data is available for
-	            // reading without locking
-	            if(!(this.io_read.add_watch(IOCondition.IN | IOCondition.HUP, this.receive_data) != 0)) {
-	                print("Cannot add watch on IOChannel!\n");
-    	        }
-    	    }
-        }
-    }
+         if((this.io_read == null) || (this.io_write == null)) {
+            print("Cannot create new IOChannel!\n");
+         } else {
+	         // The watch calls the gio_in function, if there data is available for
+	         // reading without locking
+	         if(!(this.io_read.add_watch(IOCondition.IN | IOCondition.HUP, this.receive_data) != 0)) {
+	         	print("Cannot add watch on IOChannel!\n");
+    	      }
+    	   }
+      }
+   }
 
 	private bool receive_data(IOChannel gio, IOCondition condition) {
 
-        IOStatus ret;
-        string msg;
-        size_t len;
+      IOStatus ret;
+      string msg;
+      size_t len;
 
-        if ((condition & IOCondition.HUP) == IOCondition.HUP) {
-            print("Read end of pipe died!\n");
-            this.init_pipes();
-            return false;
-        }
+      if ((condition & IOCondition.HUP) == IOCondition.HUP) {
+         print("Read end of pipe died!\n");
+         this.init_pipes();
+         return false;
+      }
 
-        try {
-            ret = gio.read_line(out msg, out len, null);
-        }
-        catch(IOChannelError e) {
-            print("Error reading: %s\n".printf(e.message));
-            return true;
-        }
-        catch(ConvertError e) {
-            print("Error reading: %s\n".printf(e.message));
-            return true;
-        }
+      try {
+         ret = gio.read_line(out msg, out len, null);
+      }
+      catch(IOChannelError e) {
+         print("Error reading: %s\n".printf(e.message));
+         return true;
+      }
+      catch(ConvertError e) {
+         print("Error reading: %s\n".printf(e.message));
+         return true;
+      }
 		
 		this.received_data(msg.substring(0,(long)(len-1)).replace("\r","\n"),len);
-        return true;
-    }
+      return true;
+   }
 
 	public void send_data(string msg) {
 		size_t len;
-        this.io_write.write_chars((char[])((msg.replace("\n","\r"))+"\n"),out len);
-        this.io_write.flush();
+      this.io_write.write_chars((char[])((msg.replace("\n","\r"))+"\n"),out len);
+      this.io_write.flush();
 	}
 }

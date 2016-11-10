@@ -1,6 +1,7 @@
 ## History of versions ##
 * Version 3.22.0 (2016/11/10)
    * Now ensures that it doesn't die accidentally
+	* Fixed a coding bug with internal IPC
 * Version 3.21.0 (2015/12/05)
    * Now launches cronopete automagically when calling "restore" or "settings" icons from the launch menu (DBUS activation works again)
 * Version 3.20.2 (2015/12/05)
