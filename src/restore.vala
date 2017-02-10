@@ -921,14 +921,18 @@ public class restore_iface : GLib.Object {
             }
         }
 
-        string newfilename="%s.restored%s".printf(preffix,suffix);
-        int counter=1;
+        string newfilename="%s%s".printf(preffix,suffix);
+        int counter=0;
         File fs;
 
         while(true) {
             fs = File.new_for_path(GLib.Path.build_filename(path,newfilename));
             if (fs.query_exists()) {
-                newfilename="%s.restored.%d%s".printf(preffix,counter,suffix);
+				if (counter == 0) {
+					newfilename="%s.restored%s".printf(preffix,suffix);
+				} else {
+					newfilename="%s.restored.%d%s".printf(preffix,counter,suffix);
+				}
                 counter++;
             } else {
                 break;
