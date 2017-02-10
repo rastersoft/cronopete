@@ -1,0 +1,1 @@
+option('NO_APPINDICATOR',type : 'string', value: '')
