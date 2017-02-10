@@ -607,6 +607,8 @@ namespace FilelistIcons {
                 b.destroy();
             }
 
+			this.path_list = new Gee.ArrayList<Gtk.ToggleButton>();
+
             var btn = new Button.with_label("/");
             btn.show();
             btn.clicked.connect(this.change_path);
@@ -634,7 +636,6 @@ namespace FilelistIcons {
                 this.path_model.clear();
                 this.changed_path_list();
             }
-
         }
 
         private void set_scroll_top() {
@@ -652,21 +653,19 @@ namespace FilelistIcons {
             bool found;
 
             found = false;
-
             Button btn2=(Button)btn;
 
             foreach (Button b in this.path_list) {
-
                 if (!found) {
                     fpath = Path.build_filename(fpath,b.label);
                 } else {
-                    b.destroy();
+					b.destroy();
                 }
                 if (b==btn2) {
                     found=true;
                 }
             }
-            this.current_path=fpath;
+            this.current_path = fpath;
             this.to_refresh=true;
             this.path_model.clear();
             this.changed_path_list();
