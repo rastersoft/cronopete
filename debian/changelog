@@ -1,3 +1,9 @@
+cronopete (3.23.0-Debian1) sid; urgency=low
+
+  * Now supports external drives with blank spaces in their name
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 10 Feb 2017 23:55:00 +0200
+
 cronopete (3.22.0-Debian1) sid; urgency=low
 
   * Now ensures that it doesn't die accidentally
