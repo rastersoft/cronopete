@@ -283,38 +283,47 @@ namespace FilelistIcons {
                             if (folder.has_prefix("$HOME")) {
                                 folder=GLib.Path.build_filename(home,folder.substring(6));
                             }
-                            val = bookmark_str();
-                            val.name = folder.dup();
-                            switch (type) {
-                            case "DESKTOP":
-                                val.icon="user-desktop";
-                            break;
-                            case "DOWNLOAD":
-                                val.icon="user-download folder-download folder-downloads";
-                            break;
-                            case "TEMPLATES":
-                                val.icon="user-templates folder-templates";
-                            break;
-                            case "PUBLICSHARE":
-                                val.icon="user-publicshare folder-publicshare";
-                            break;
-                            case "DOCUMENTS":
-                                val.icon="user-documents folder-documents";
-                            break;
-                            case "MUSIC":
-                                val.icon="user-music folder-music";
-                            break;
-                            case "PICTURES":
-                                val.icon="user-pictures folder-pictures";
-                            break;
-                            case "VIDEOS":
-                                val.icon="user-videos folder-videos";
-                            break;
-                            default:
-                                val.icon="folder";
-                            break;
-                            }
-                            this.bookmarks.add(val);
+							bool found = false;
+							foreach(var bookmark in this.bookmarks) {
+								if (bookmark.name == folder) {
+									found = true;
+									break;
+								}
+							}
+							if (!found) {
+	                            val = bookmark_str();
+	                            val.name = folder.dup();
+	                            switch (type) {
+	                            case "DESKTOP":
+	                                val.icon="user-desktop";
+	                            break;
+	                            case "DOWNLOAD":
+	                                val.icon="user-download folder-download folder-downloads";
+	                            break;
+	                            case "TEMPLATES":
+	                                val.icon="user-templates folder-templates";
+	                            break;
+	                            case "PUBLICSHARE":
+	                                val.icon="user-publicshare folder-publicshare";
+	                            break;
+	                            case "DOCUMENTS":
+	                                val.icon="user-documents folder-documents";
+	                            break;
+	                            case "MUSIC":
+	                                val.icon="user-music folder-music";
+	                            break;
+	                            case "PICTURES":
+	                                val.icon="user-pictures folder-pictures";
+	                            break;
+	                            case "VIDEOS":
+	                                val.icon="user-videos folder-videos";
+	                            break;
+	                            default:
+	                                val.icon="folder";
+	                            break;
+	                            }
+	                            this.bookmarks.add(val);
+							}
                         }
                     }
                 } catch {

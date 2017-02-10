@@ -673,7 +673,7 @@ int main(string[] args) {
 
 	int fork_pid;
 	int status;
-	
+
 	while(true) {
 
 		fork_pid = Posix.fork();
