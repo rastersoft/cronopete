@@ -126,6 +126,7 @@ public class restore_iface : GLib.Object {
         this.backend=p_backend;
         this.backend.lock_delete_backup(true);
         this.basepath=paths;
+		this.error_window = null;
 
         this.topmargin=0;
         this.scale_current_value=-1;
@@ -970,7 +971,7 @@ public class restore_iface : GLib.Object {
             if (this.cancel_restoring) {
                 this.restore_files.clear();
 
-            } else if ((rv!=BACKUP_RETVAL.OK)&&(this.ignore_restoring_all==false)) {
+            } else if ((rv != BACKUP_RETVAL.OK) && (this.ignore_restoring_all == false)) {
 
                 string error_msg;
                 if (rv==BACKUP_RETVAL.NO_SPC) {
@@ -986,9 +987,30 @@ public class restore_iface : GLib.Object {
                 this.error_window = (Gtk.Window)w2.get_object("restore_error");
                 var error_label = (Gtk.Label)w2.get_object("error_msg");
                 error_label.label=error_msg;
+				var cancel_restore = (Gtk.Button)w2.get_object("cancel_restore");
+				cancel_restore.clicked.connect(() => {
+					this.error_window.destroy();
+					this.error_window = null;
+					this.cancel_restoring=true;
+					this.restoring_ended.callback();
+				});
+				var ignore_restore = (Gtk.Button)w2.get_object("ignore_restore");
+				ignore_restore.clicked.connect(() => {
+					this.error_window.destroy();
+					this.error_window = null;
+					this.restoring_ended.callback();
+				});
+				var ignore_all_restore = (Gtk.Button)w2.get_object("ignore_all_restore");
+				ignore_all_restore.clicked.connect(() => {
+					this.ignore_restoring_all=true;
+					this.error_window.destroy();
+					this.error_window = null;
+					this.restoring_ended.callback();
+				});
 
                 error_window.show_all();
-                this.restore_files.clear();
+                //this.restore_files.clear();
+				yield;
             } else {
                 var current_time=time_t();
                 var f=File.new_for_path(filename.restored_file);
@@ -1150,33 +1172,6 @@ public class restore_iface : GLib.Object {
     [CCode (instance_pos = -1)]
     public void on_cancel_clicked(Button source) {
         this.cancel_restoring=true;
-    }
-
-    [CCode (instance_pos = -1)]
-    public void on_cancel_restore_error_clicked(Button source) {
-
-        this.error_window.destroy();
-        this.cancel_restoring=true;
-        this.mywindow.show();
-        this.mywindow.fullscreen();
-        this.restoring_ended.begin();
-    }
-
-    [CCode (instance_pos = -1)]
-    public void on_ignore_restore_error_clicked(Button source) {
-        this.error_window.destroy();
-        this.mywindow.show();
-        this.mywindow.fullscreen();
-        this.restoring_ended.begin();
-    }
-
-    [CCode (instance_pos = -1)]
-    public void on_ignore_all_restore_error_clicked(Button source) {
-        this.ignore_restoring_all=true;
-        this.error_window.destroy();
-        this.mywindow.show();
-        this.mywindow.fullscreen();
-        this.restoring_ended.begin();
     }
 
     [CCode (instance_pos = -1)]

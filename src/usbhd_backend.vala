@@ -207,19 +207,22 @@ class usbhd_backend: Object, backends {
 
         var origin_path = Path.build_filename(this.backup_path,this.get_backup_path_from_time(backup),filename);
 
-        File origin;
         BACKUP_RETVAL rv;
 
-        origin=File.new_for_path(origin_path);
+        File origin = File.new_for_path(origin_path);
+		File origin_folder = File.new_for_path(Path.get_dirname(output_filename));
         try {
+			origin_folder.make_directory_with_parents();
+		} catch (IOError e2) {}
+		try {
             yield origin.copy_async(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,cb);
-            rv=BACKUP_RETVAL.OK;
+            rv = BACKUP_RETVAL.OK;
         } catch (IOError e2) {
             if (e2 is IOError.NO_SPACE) {
                 Posix.unlink(output_filename);
-                rv=BACKUP_RETVAL.NO_SPC;
+                rv = BACKUP_RETVAL.NO_SPC;
             } else {
-                rv=BACKUP_RETVAL.CANT_COPY;
+                rv = BACKUP_RETVAL.CANT_COPY;
             }
         }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="restore_error">
@@ -36,13 +36,11 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="cancel_restore">
                 <property name="label" translatable="yes">Cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="restore_iface_on_cancel_restore_error_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -51,13 +49,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="ignore_restore">
                 <property name="label" translatable="yes">Ignore</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="restore_iface_on_ignore_restore_error_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -66,13 +62,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button3">
+              <object class="GtkButton" id="ignore_all_restore">
                 <property name="label" translatable="yes">Ignore all</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="restore_iface_on_ignore_all_restore_error_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
