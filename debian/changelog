@@ -1,8 +1,16 @@
+cronopete (3.24.0-Debian1) sid; urgency=low
+
+  * Now the restored file is the original one if there is no file with that name in the destination folder
+  * Fixed the bookmarks and the path buttons in the restore interface
+  * Now doesn't fail to restore files when the destination folder doesn't exist
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 10 Feb 2017 23:55:00 +0200
+
 cronopete (3.23.0-Debian1) sid; urgency=low
 
   * Now supports external drives with blank spaces in their name
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 10 Feb 2017 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 10 Feb 2017 23:50:00 +0200
 
 cronopete (3.22.0-Debian1) sid; urgency=low
 

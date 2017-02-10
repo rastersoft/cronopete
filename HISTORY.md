@@ -1,4 +1,8 @@
 ## History of versions ##
+* Version 3.24.0 (2017/02/10)
+   * Now the restored file is the original one if there is no file with that name in the destination folder
+   * Fixed the bookmarks and the path buttons in the restore interface
+   * Now doesn't fail to restore files when the destination folder doesn't exist
 * Version 3.23.0 (2017/02/10)
    * Now supports external drives with blank spaces in their name
 * Version 3.22.0 (2016/11/10)
