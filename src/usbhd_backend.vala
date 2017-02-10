@@ -181,7 +181,7 @@ class usbhd_backend: Object, backends {
 
         var final_path=Path.build_filename(this.backup_path,tmppath);
 
-        Process.spawn_command_line_sync("rm -rf "+final_path);
+        Process.spawn_command_line_sync("rm -rf \"%s\"".printf(final_path));
         lock(this.locked) {
             if (this.tried_to_lock) {
                 this.locked=true;
@@ -439,7 +439,7 @@ class usbhd_backend: Object, backends {
 
                 dirname=file_info.get_name();
                 if (dirname[0]=='B') {
-                    Process.spawn_command_line_sync("rm -rf "+Path.build_filename(basepath,dirname));
+                    Process.spawn_command_line_sync("rm -rf \"%s\"".printf(Path.build_filename(basepath,dirname)));
                 } else {
                     tmp_date=dirname.substring(20);
                     if (tmp_directory=="") {

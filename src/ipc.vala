@@ -15,7 +15,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>. */
- 
+
 using GLib;
 using Posix;
 using Gee;
@@ -35,10 +35,10 @@ public class pipe_ipc:GLib.Object {
 		fd[1] = -1;
 		this.init_pipes();
 	}
-	
+
 	private void init_pipes() {
 
-   	int ret;
+		int ret;
 
 		if (fd[0] != -1) {
 			Posix.close(fd[0]);
@@ -95,7 +95,7 @@ public class pipe_ipc:GLib.Object {
          print("Error reading: %s\n".printf(e.message));
          return true;
       }
-		
+
 		this.received_data(msg.substring(0,(long)(len-1)).replace("\r","\n"),len);
       return true;
    }
