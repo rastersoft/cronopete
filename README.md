@@ -38,7 +38,7 @@ library:
 
 ## CONTACTING THE AUTHOR
 
-Sergio Costas Rodriguez (Raster Software Vigo) 
-raster@rastersoft.com 
-http://www.rastersoft.com 
-GIT: git://github.com/rastersoft/cronopete.git 
+Sergio Costas Rodriguez (Raster Software Vigo)  
+raster@rastersoft.com  
+http://www.rastersoft.com  
+GIT: git://github.com/rastersoft/cronopete.git  
