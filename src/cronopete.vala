@@ -512,9 +512,16 @@ public class cp_callback : GLib.Object, callbacks {
 		if (this.backend.available) {
 			var list = this.backend.get_backup_list ();
 			if ((list == null) || (list.size <= 0)) {
+				var tmp = new error_window(this.basepath,"No backups yet","""The backup disk still doesn't have backups.
+There are no files to recover yet.""");
 				return;
 			}
 			this.restore_w = new restore_iface(this.backend,this.basepath,this.cronopete_settings);
+		} else {
+			var tmp = new error_window(this.basepath,"Backup disk not connected", """The backup disk is not connected.
+Can't restore files.
+
+Please, connect the disk and try again.""");
 		}
 	}
 

@@ -1,4 +1,7 @@
 ## History of versions ##
+* Version 3.25.0 (2017/04/04)
+   * Now shows an error if trying to restore files without the backup disk
+   * Updated Czech translation
 * Version 3.24.0 (2017/02/10)
    * Now the restored file is the original one if there is no file with that name in the destination folder
    * Fixed the bookmarks and the path buttons in the restore interface

@@ -54,6 +54,7 @@ meson.add_install_script('meson_scripts/install_schemas.py')
 	install_data('data/interface/format_force.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/formatting.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/main.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
+	install_data('data/interface/nodisk.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/options.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/restore_error.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/restore_ok.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
@@ -144,6 +145,7 @@ cronopete_sources = [cfgfile_3]
 cronopete_sources += ['src/backup.vala']
 cronopete_sources += ['src/choose.vala']
 cronopete_sources += ['src/cronopete.vala']
+cronopete_sources += ['src/error_window.vala']
 cronopete_sources += ['src/fixedlabel.vala']
 cronopete_sources += ['src/icons_widget.vala']
 cronopete_sources += ['src/ipc.vala']

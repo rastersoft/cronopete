@@ -1,6 +1,7 @@
 src/backup.vala
 src/choose.vala
 src/cronopete.vala
+src/error_window.vala
 src/fixedlabel.vala
 src/icons_widget.vala
 src/ipc.vala
@@ -16,6 +17,7 @@ data/interface/format_error.ui
 data/interface/format_force.ui
 data/interface/formatting.ui
 data/interface/main.ui
+data/interface/nodisk.ui
 data/interface/options.ui
 data/interface/restore_error.ui
 data/interface/restore_ok.ui

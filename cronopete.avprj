@@ -29,6 +29,7 @@ end
 *vala_source: backup.vala
 *vala_source: choose.vala
 *vala_source: cronopete.vala
+*vala_source: error_window.vala
 *vala_source: fixedlabel.vala
 *vala_source: icons_widget.vala
 *vala_source: ipc.vala
@@ -48,6 +49,7 @@ end
 *translate: glade data/interface/format_force.ui
 *translate: glade data/interface/formatting.ui
 *translate: glade data/interface/main.ui
+*translate: glade data/interface/nodisk.ui
 *translate: glade data/interface/options.ui
 *translate: glade data/interface/restore_error.ui
 *translate: glade data/interface/restore_ok.ui
@@ -56,6 +58,7 @@ end
 *translate: vala src/backup.vala
 *translate: vala src/choose.vala
 *translate: vala src/cronopete.vala
+*translate: vala src/error_window.vala
 *translate: vala src/fixedlabel.vala
 *translate: vala src/icons_widget.vala
 *translate: vala src/ipc.vala
@@ -90,6 +93,7 @@ end
 *glade: data/interface/format_force.ui
 *glade: data/interface/formatting.ui
 *glade: data/interface/main.ui
+*glade: data/interface/nodisk.ui
 *glade: data/interface/options.ui
 *glade: data/interface/restore_error.ui
 *glade: data/interface/restore_ok.ui
