@@ -25,7 +25,6 @@ using Cairo;
 public class error_window : GLib.Object {
 
 	private Gtk.Label content;
-	private Gtk.Button okbutton;
 	private Gtk.Dialog error_window;
 
 	public error_window(string basepath, string title, string error) {
