@@ -1,3 +1,10 @@
+cronopete (3.25.0-Debian1) sid; urgency=low
+
+  * Now shows an error if trying to restore files without the backup disk
+  * Updated Czech translation
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Tue, 04 Apr 2017 23:55:00 +0200
+
 cronopete (3.24.0-Debian1) sid; urgency=low
 
   * Now the restored file is the original one if there is no file with that name in the destination folder
