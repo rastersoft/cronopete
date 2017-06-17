@@ -1,4 +1,6 @@
 ## History of versions ##
+* Version 3.26.0 (2017/06/17)
+   * Code cleanup that should fix the folders with odd names
 * Version 3.25.0 (2017/04/04)
    * Now shows an error if trying to restore files without the backup disk
    * Updated Czech translation
