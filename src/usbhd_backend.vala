@@ -214,6 +214,7 @@ class usbhd_backend: Object, backends {
         try {
 			origin_folder.make_directory_with_parents();
 		} catch (IOError e2) {}
+
 		try {
             yield origin.copy_async(File.new_for_path(output_filename),FileCopyFlags.OVERWRITE,GLib.Priority.DEFAULT,null,cb);
             rv = BACKUP_RETVAL.OK;
@@ -350,6 +351,13 @@ class usbhd_backend: Object, backends {
             return null;
         }
         var directory = File.new_for_path(this.backup_path);
+        if (false == directory.query_exists()) {
+            try {
+                directory.make_directory_with_parents();
+            } catch (Error e) {
+                return null; // Error: can't create the base directory
+            }
+        }
 
         try {
             var myenum = directory.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
@@ -372,13 +380,8 @@ class usbhd_backend: Object, backends {
                 }
             }
         } catch (Error e) {
-
-            // The main directory doesn't exist, so we create it
-            try {
-                directory.make_directory_with_parents(null);
-            } catch (Error e) {
-                return null; // Error: can't create the base directory
-            }
+            print("Error in main folder backup: %s".printf(directory.get_uri()));
+            return null; // Error: can't create the base directory
         }
         return blist;
     }
@@ -419,18 +422,19 @@ class usbhd_backend: Object, backends {
         string dirname;
         string basepath = this.backup_path;
         var directory = File.new_for_path(basepath);
-        if (directory.query_exists(null)==false) {
+        if (directory.query_exists(null) == false) {
             return BACKUP_RETVAL.NOT_AVAILABLE;
         }
 
-        var tmppath=this.get_backup_path_from_time(time_t());
-        this.cbackup_path=Path.build_filename(basepath,"B"+tmppath);
-        this.cfinal_path=tmppath;
+        var tmppath = this.get_backup_path_from_time(time_t());
+        this.cbackup_path = Path.build_filename(basepath,"B"+tmppath);
+        this.cfinal_path = tmppath;
 
         string tmp_directory="";
         string tmp_date="";
         string last_date="";
 
+        // Find the last backup
         try {
             var myenum = directory.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
             FileInfo file_info;
@@ -438,19 +442,22 @@ class usbhd_backend: Object, backends {
             while ((file_info = myenum.next_file (null)) != null) {
 
                 // If the directory starts with 'B', it's a temporary directory from an
-                 // unfinished backup, so remove it
+                // unfinished backup, so remove it
 
-                dirname=file_info.get_name();
+                dirname = file_info.get_name();
                 if (dirname[0]=='B') {
                     Process.spawn_command_line_sync("rm -rf \"%s\"".printf(Path.build_filename(basepath,dirname)));
                 } else {
-                    tmp_date=dirname.substring(20);
-                    if (tmp_directory=="") {
+                    if (dirname.length < 22) {
+                        continue;
+                    }
+                    tmp_date = dirname.substring(20);
+                    if (tmp_directory == "") {
 
                         /* If this is the first path we read, just store it as-is. */
 
-                        tmp_directory=dirname;
-                        last_date=tmp_date;
+                        tmp_directory = dirname;
+                        last_date = tmp_date;
                         last_backup_time = int64.parse(tmp_date);
                     } else {
 
@@ -458,30 +465,24 @@ class usbhd_backend: Object, backends {
                          * We use the time from the epoch to avoid problems when a backup is done
                          * just during the winter or summer time change */
 
-                        if (last_date.collate(tmp_date)<0) {
-                            tmp_directory=dirname;
-                            last_date=tmp_date;
+                        if (last_date.collate(tmp_date) < 0) {
+                            tmp_directory = dirname;
+                            last_date = tmp_date;
                             last_backup_time = int64.parse(tmp_date);
                         }
                     }
                 }
             }
+            this.last_backup = Path.build_filename(basepath,tmp_directory);
         } catch (Error e) {
-            // The main directory doesn't exist, so we create it
-            try {
-                this.last_backup=null;
-                last_backup_time=0;
-                directory.make_directory_with_parents(null);
-            } catch (Error e) {
-                return BACKUP_RETVAL.CANT_CREATE_BASE; // Error: can't create the base directory
-            }
+            // There are no old backups
+            this.last_backup = null;
+            last_backup_time = 0;
         }
-
-        this.last_backup=Path.build_filename(basepath,tmp_directory);
 
         var directory2 = File.new_for_path(this.cbackup_path);
         try {
-            directory2.make_directory_with_parents(null);
+            directory2.make_directory_with_parents();
         } catch (Error e) {
             return BACKUP_RETVAL.NOT_WRITABLE; // can't create the folder for the current backup
         }
@@ -515,8 +516,8 @@ class usbhd_backend: Object, backends {
         var dest_path=Path.build_filename(this.cbackup_path,path);
         var retval=link(Path.build_filename(this.last_backup,path),dest_path);
 
-        if (retval!=0) {
-            if (retval==Posix.ENOSPC) {
+        if (retval < 0) {
+            if (Posix.errno == Posix.ENOSPC) {
                 return BACKUP_RETVAL.NO_SPC;
             } else {
                 return BACKUP_RETVAL.CANT_LINK;
@@ -531,7 +532,7 @@ class usbhd_backend: Object, backends {
 
         try {
             dir2 = File.new_for_path(Path.build_filename(this.cbackup_path,path));
-            dir2.make_directory_with_parents(null);
+            dir2.make_directory_with_parents();
         } catch (IOError e) {
             if (e is IOError.NO_SPACE) {
                 return BACKUP_RETVAL.NO_SPC;

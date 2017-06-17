@@ -1135,8 +1135,8 @@ public class restore_iface : GLib.Object {
         string new_rpath;
 
         try {
-            var dir2 = File.new_for_path(GLib.Path.build_filename(f_path));
-            dir2.make_directory_with_parents(null);
+            var dir2 = File.new_for_path(f_path);
+            dir2.make_directory_with_parents();
         } catch (IOError e) {
             if (e is IOError.NO_SPACE) {
                 return BACKUP_RETVAL.NO_SPC;
