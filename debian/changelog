@@ -1,3 +1,9 @@
+cronopete (3.26.1-Debian1) sid; urgency=low
+
+  * Added french translation
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sat, 26 Aug 2017 23:55:00 +0200
+
 cronopete (3.26.0-Debian1) sid; urgency=low
 
   * Code cleanup that should fix the folders with odd names
