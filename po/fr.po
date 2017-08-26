@@ -2,114 +2,113 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Sergio <raster@rastersoft.com>, 2011.
-# Sergio Costas <raster@rastersoft.com>, 2012.
-# raster <raster@rastersoft.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Cronopete 0.92\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-26 02:02+0200\n"
-"PO-Revision-Date: 2015-11-11 17:22+0100\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <>\n"
-"Language: Czech\n"
+"PO-Revision-Date: 2017-08-24 14:30+0200\n"
+"Last-Translator: Jörg BUCHMANN <jorg.buchmann@gmail.com>\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: src/backup.vala:287
 #, c-format
 msgid "Backing up folder %s.\n"
-msgstr "Zálohování složky %s.\n"
+msgstr "Sauvegarde du dossier %s.\n"
 
 #: src/backup.vala:291
 #, c-format
 msgid "Excluding folder %s.\n"
-msgstr "Vynechání složky %s.\n"
+msgstr "Exclusion du dossier %s.\n"
 
 #: src/backup.vala:297
 #, c-format
 msgid "Excluding hidden folders in %s.\n"
-msgstr "Vynechání skrytých složek v %s.\n"
+msgstr "Exclusion des dossiers cachés dans %s.\n"
 
 #: src/backup.vala:299
 #, c-format
 msgid "Backing up hidden folders in %s.\n"
-msgstr "Zálohování skrytých složek v %s.\n"
+msgstr "Sauvegarde des dossiers cachés dans %s.\n"
 
 #: src/backup.vala:347
 msgid "Can't create the folder for this backup. Aborting backup.\n"
-msgstr "Nedaří se vytvořit složku pro tuto zálohu. Přerušení zálohování.\n"
+msgstr ""
+"Ne peut pas créer le dossier pour cette sauvegarde. Interruption de la "
+"sauvegarde.\n"
 
 #: src/backup.vala:350
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
-msgstr "Nedaří se vytvořit základní složky pro zálohy. Přerušení zálohování.\n"
+msgstr ""
+"Ne peut pas créer les dossiers de base pour exécuter cette sauvegarde. "
+"Interruption de la sauvegarde.\n"
 
 #: src/backup.vala:353
 msgid "Backup device not available. Aborting backup.\n"
-msgstr "Zálohovací zařízení není k dispozici. Přerušení zálohování.\n"
+msgstr "Unité de sauvegarde non disponible. Interruption de la sauvegarde.\n"
 
 #: src/backup.vala:356
 msgid "Already started a backup.\n"
-msgstr "Zálohování už probíhá.\n"
+msgstr "Une sauvegarde est déjà démarrée.\n"
 
 #: src/backup.vala:360
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
 msgstr ""
-"Nepodařilo se uvolnit dostatečný prostor pro zahájení zálohování. Přerušení "
-"zálohování.\n"
+"Impossible de libérer de l’espace disque pour démarrer une sauvegarde. "
+"Interruption de la sauvegarde.\n"
 
 #: src/backup.vala:379
 msgid "Backup aborted\n"
-msgstr "Přerušení zálohování\n"
+msgstr "Sauvegarde abandonnée\n"
 
 #: src/backup.vala:393
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
 msgstr ""
-"Kapacita tohoto (flash)disku je příliš malá pro byť i jedinou zálohu.\n"
-"Odeberte nějaké položky ze seznamu zálohovaných a případně naopak rozšiřte "
-"ten vynechaných složek.\n"
+"Le disque est trop petit pour contenir une seule sauvegarde.\n"
+"Adapter la liste de sauvegarde et excluez des dossiers.\n"
 
 #: src/backup.vala:407
 msgid "Syncing disk\n"
-msgstr "Synchronizace (flash)disku\n"
+msgstr "Synchronisation du disque\n"
 
 #: src/backup.vala:409
 msgid "Can't close the backup. Aborting.\n"
-msgstr "Zálohu nelze uzavřít. Přerušení.\n"
+msgstr "Ne peut pas fermer la sauvegarde. Abandon.\n"
 
 #: src/backup.vala:415
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
-msgstr "Zálohování dokončeno. Trvalo %ld sekund.\n"
+msgstr "Sauvegarde effectuée. Durée %ld secondes.\n"
 
 #: src/choose.vala:107
 msgid "Failed to find the disk!!!!!"
-msgstr "Nepodařilo se najít (flash)disk!!!"
+msgstr "Impossible de trouver le disque !!!!"
 
 #: src/choose.vala:116
 msgid "Failed to unmount the disk. Aborting format operation."
-msgstr ""
-"Nepodařilo se odpojit (umount) stávající souborový systém na flash(disku). "
-"Přerušení formátování."
+msgstr "Impossible de démonter le disque. Abandon de l’opération de formatage."
 
 #: src/choose.vala:137
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
-"(Flash)disk se nepodařilo naformátovat (možná trvalo příliš dlouho). Zkuste "
-"to znovu."
+"Impossible de formater le disque (peut-être cela a nécessité trop de temps). "
+"Essayez à nouveau, s’il vous plaît."
 
 #: src/choose.vala:152
 msgid "Failed to mount again the disk. Aborting the format operation."
-msgstr "Nepodařilo se znovupřipojit (flash)disk. Formátování přerušeno."
+msgstr ""
+"Impossible de re-monter le disque. Abandon de l’opération de formatage."
 
 #: src/choose.vala:168
 msgid ""
@@ -119,81 +118,82 @@ msgid ""
 "\n"
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
-"Zvolený (flash)disk je třeba pro účely zálohování zformátovat.\n"
+"Le disque sélectionné doit être formaté pour être utilisé pour des "
+"sauvegarde.\n"
 "\n"
-"Udělejte to kliknutím na tlačítko <i>Formátovat (flash)disk</i>.\n"
+"Pour faire cela, cliquez sur le bouton <i>Formater le disque</i>.\n"
 "\n"
-"<b>Veškerá data na tomto (flash)disku budou smazána!</b>."
+"<b>Toutes les données sur le disque seront effacées</b>"
 
 #: src/choose.vala:390
 msgid "Unknown FS"
-msgstr "Neznámý souborový systém"
+msgstr "Système de fichier inconnu"
 
 #: src/choose.vala:408
 msgid "Unknown size"
-msgstr "Neznámá velikost"
+msgstr "Taille inconnue"
 
 #: src/cronopete.vala:221 src/cronopete.vala:328 src/cronopete.vala:358
 msgid "Idle"
-msgstr "Nečinné"
+msgstr "Prêt"
 
 #: src/cronopete.vala:240 src/cronopete.vala:246 src/cronopete.vala:257
 #: src/cronopete.vala:261
 #, c-format
 msgid "Latest backup: %s"
-msgstr "Nejnovější záloha: %s"
+msgstr "Dernière sauvegarde : %s"
 
 #: src/cronopete.vala:240 src/menu.vala:197
 msgid "Not defined"
-msgstr "Není určeno"
+msgstr "Non défini"
 
 #: src/cronopete.vala:246 src/cronopete.vala:257 src/menu.vala:146
 msgid "None"
-msgstr "Nic"
+msgstr "Nul"
 
 #: src/cronopete.vala:355
 msgid "Storage not available"
-msgstr "Úložiště není k dispozici"
+msgstr "Stockage non disponible"
 
 #: src/cronopete.vala:360
 msgid "Backup disabled"
-msgstr "Zálohování vypnuto"
+msgstr "Sauvegarde désactivée"
 
 #: src/cronopete.vala:432
 msgid "Back Up Now"
-msgstr "Zazálohovat nyní"
+msgstr "Sauvegarder maintenant"
 
 #: src/cronopete.vala:435
 msgid "Stop Backing Up"
-msgstr "Zastavit zálohování"
+msgstr "Arrêter la sauvegarde"
 
 #: src/cronopete.vala:439 src/restore.vala:186
 msgid "Restore files"
-msgstr "Obnovit soubory"
+msgstr "Restaurer des fichiers"
 
 #: src/cronopete.vala:447
 msgid "Configure backup policies"
-msgstr "Nastavit pravidla zálohování"
+msgstr "Configurer des stratégies de sauvegarde"
 
 #: src/cronopete.vala:539
 #, c-format
 msgid "Backing up folder %s\n"
-msgstr "Zálohování složky %s\n"
+msgstr "Sauvegarde du dossier %s\n"
 
 #: src/cronopete.vala:557
 #, c-format
 msgid "Can't copy file %s\n"
-msgstr "Nedaří se zkopírovat soubor %s\n"
+msgstr "Ne peut pas copier le fichier %s\n"
 
 #: src/cronopete.vala:562
 #, c-format
 msgid "Can't access directory %s\n"
-msgstr "Není přístupná složka %s\n"
+msgstr "Ne peut pas accéder le répertoire %s\n"
 
 #: src/cronopete.vala:567
 #, c-format
 msgid "Can't create directory %s\n"
-msgstr "Nedaří se vytvořit složku %s\n"
+msgstr "Ne peut pas créer le répertoire %s\n"
 
 #: src/cronopete.vala:585
 msgid "\n"
@@ -201,110 +201,110 @@ msgstr ""
 
 #: src/cronopete.vala:586
 msgid "Starting backup\n"
-msgstr "Spouštění zálohování\n"
+msgstr "Démarrage de la sauvegarde\n"
 
 #: src/cronopete.vala:600
 msgid "Erasing old backups"
-msgstr "Mazání starých záloh"
+msgstr "Suppression d’anciennes sauvegardes"
 
 #: src/cronopete.vala:612
 msgid "Backup aborted"
-msgstr "Zálohování přerušeno"
+msgstr "Sauvegarde abandonnée"
 
 #: src/cronopete.vala:616
 msgid "Can't do backup; disk is too small"
-msgstr "Zálohu nelze provést: (flash)disk má příliš malou kapacitu"
+msgstr "Ne peut pas effectuer la sauvegarde; le disque est trop petit"
 
 #: src/cronopete.vala:620
 msgid "Can't do backup"
-msgstr "Zálohu se nedaří provést"
+msgstr "Ne peut pas effectuer la sauvegarde"
 
 #: src/icons_widget.vala:153
 msgid "Name"
-msgstr "Název"
+msgstr "Nom"
 
 #: src/icons_widget.vala:156
 msgid "Size"
-msgstr "Velikost"
+msgstr "Taille"
 
 #: src/icons_widget.vala:157
 msgid "Modification date"
-msgstr "Datum úpravy"
+msgstr "Date de modification"
 
 #: src/icons_widget.vala:392
 msgid "Show hidden files"
-msgstr "Zobrazit skryté soubory"
+msgstr "Afficher les fichiers cachés"
 
 #: src/icons_widget.vala:400
 msgid "Reverse order"
-msgstr "Obrácené pořadí"
+msgstr "Inverser l’ordre"
 
 #: src/icons_widget.vala:408
 msgid "Sort by name"
-msgstr "Seřadit dle názvu"
+msgstr "Trier par nom"
 
 #: src/icons_widget.vala:412
 msgid "Sort by type"
-msgstr "Seřadit dle typu"
+msgstr "Trier par type"
 
 #: src/icons_widget.vala:416
 msgid "Sort by size"
-msgstr "Seřadit dle velikosti"
+msgstr "Trier par taille"
 
 #: src/icons_widget.vala:420
 msgid "Sort by date"
-msgstr "Seřadit dle data"
+msgstr "Trier par date"
 
 #: src/icons_widget.vala:442
 msgid "View as icons"
-msgstr "Zobrazit jako ikony"
+msgstr "Afficher comme icônes"
 
 #: src/icons_widget.vala:446
 msgid "View as list"
-msgstr "Zobrazit jako seznam"
+msgstr "Afficher comme liste"
 
 #: src/menu.vala:111
 #, c-format
 msgid "Status: %s"
-msgstr "Stav: %s"
+msgstr "État : %s"
 
 #: src/menu.vala:205
 #, c-format
 msgid "%lld GB of %lld GB"
-msgstr "%lld GiB z %lld GiB"
+msgstr "%lld Go de %lld Go"
 
 #: src/options.vala:57
 #, c-format
 msgid "Backup hidden files and folders in %s"
-msgstr "Zálohovat skryté soubory a složky v %s"
+msgstr "Sauvegarde des fichiers et dossiers cachés dans %s"
 
 #: src/restore.vala:194
 msgid "Exit"
-msgstr "Ukončit"
+msgstr "Sortie"
 
 #: src/restore.vala:697
 msgid "Today, at %H:%M"
 msgid_plural "Today, at %H:%M"
-msgstr[0] "Dnes, v %H:%M"
-msgstr[1] "Dnes, v %H:%M"
+msgstr[0] "Aujourd’hui, à %S:%M"
+msgstr[1] "Aujourd’hui, à %H:%M"
 
 #: src/restore.vala:702
 msgid "Yesterday, at %H:%M"
 msgid_plural "Yesterday, at %H:%M"
-msgstr[0] "Včera, v %H:%M"
-msgstr[1] "Včera, v %H:%M"
+msgstr[0] "Hier, à %H:%M"
+msgstr[1] "Hier, à %H:%M"
 
 #: src/restore.vala:710
 msgid "%A, %d %B %Y at %H:%M"
 msgid_plural "%A, %d %B %Y at %H:%M"
-msgstr[0] "%A, %d %B %Y v %H:%M"
-msgstr[1] "%A, %d %B %Y v %H:%M"
+msgstr[0] "%A, %d %B %Y à %H:%M"
+msgstr[1] "%A, %d %B %Y à %H:%M"
 
 #: src/restore.vala:717
 msgid "%A, %B %d %Y at %H:%M"
 msgid_plural "%A, %B %d %Y at %H:%M"
-msgstr[0] "%A, %B %d %Y v %H:%M"
-msgstr[1] "%A, %B %d %Y v %H:%M"
+msgstr[0] "%A, %d %B %Y à %H:%M"
+msgstr[1] "%A, %d %B %Y à %H:%M"
 
 #: src/restore.vala:966
 #, c-format
@@ -313,7 +313,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Obnovování souboru:\n"
+"Restauration du fichier:\n"
 "\n"
 "%s"
 
@@ -326,11 +326,11 @@ msgid ""
 "\n"
 "There's not enought free space"
 msgstr ""
-"Nezdařilo se obnovit soubor\n"
+"Impossible de restaurer le fichier\n"
 "\n"
 "%s\n"
 "\n"
-"Není zde dostatek volného místa"
+"Il n’y a pas assez d’espace libre"
 
 #: src/restore.vala:980
 #, c-format
@@ -339,21 +339,21 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Nezdařilo se obnovit soubor\n"
+"Impossible de restaurer le fichier\n"
 "\n"
 "%s"
 
 #: src/restore.vala:1068
 msgid "Preparing folders to restore"
-msgstr "Připravování složek pro obnovu"
+msgstr "Préparation des dossier à restaurer"
 
 #: data/interface/about.ui:15
 msgid "©2011-15 Raster Software Vigo"
-msgstr ""
+msgstr "©2011-15 Raster Software Vigo"
 
 #: data/interface/about.ui:16
 msgid "An Apple's Time Machine clone for Linux"
-msgstr "Klon aplikace Apple Time Machine, určený pro systém GNU/Linux"
+msgstr "Un clone pour Linux de la Time Machine d’Appel"
 
 #: data/interface/about.ui:683
 msgid ""
@@ -370,129 +370,125 @@ msgid ""
 "In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
 "Linux."
 msgstr ""
-"V roce 1895, H.G. Wells zveřejnil <b>The Time Machine</b> (Stroj času) – "
-"novelu, dlouho považovanou za první dílo s námětem stroje pro cestování "
-"časem.\n"
+"En 1895, H.G. Wells a publié <b>The Time Machine</b>, considéré pendant des "
+"années comme première nouvelle avec une machine à voyager dans le temps.\n"
 "\n"
-"Ale již v roce 1887, tedy devět let předtím, Enrique Gaspar y Rimbau "
-"zveřejnil <b>El anacronópete</b> – operetu, která je skutečně prvním "
-"uměleckým počinem s námětem stroje, který umožňuje „letět proti proudu "
-"času“.\n"
+"Mais en 1887, huit ans avant, Enrique Gaspar y Rimbau a publié <b>El "
+"anacronópete</b>, une nouvelle dans le format d’une Zarzuela, qui est la "
+"vraie première nouvelle de mettre en scène une machine qui permet de « voler "
+"contre le temps ».\n"
 "\n"
-"V roce 2007, vydala společnost Apple <b>Time Machine</b> (Stroj času) – "
-"zálohovací aplikaci pro operační systém MacOS X (tehdy vydání Leopard). Pro "
-"systém GNU/Linux se pak objevilo několik podobných aplikací.\n"
+"En 2007, Apple a lancé <b>Time Machine</b>, un programme de sauvegarde pour "
+"MacOS X Leopard. Plusieurs programmes similaires pour Linux ont émergé.\n"
 "\n"
-"V roce 2011 vzniklo ana<b>CRONOPETE</b> ‒ skutečný klon aplikace Apple Time "
-"Machine, určený pro operační systém GNU/Linux."
+"En 2011, arrive ana<b>CRONOPETE</b>. LE clone pour Linux de la Time Machine "
+"d’Appel."
 
 #: data/interface/about.ui:705
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
-msgstr "Proč <i>ana<b>CRONOPETE</b></i>?"
+msgstr "Pourquoi <i>ana<b>CRONOPETE</b></i>?"
 
 #: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
 #: data/interface/format_force.ui:26 data/interface/options.ui:35
 #: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
 msgid "Cancel"
-msgstr "Zrušit"
+msgstr "Annuler"
 
 #: data/interface/chooser.ui:40
 msgid "Select"
-msgstr "Vybrat"
+msgstr "Sélectionner"
 
 #: data/interface/chooser.ui:68
 msgid "Available USB disks:"
-msgstr "USB (flash)disky k dispozici:"
+msgstr "Disques USB disponibles :"
 
 #: data/interface/chooser.ui:103
 msgid "Show all disks (except /home)"
-msgstr ""
-"Zobrazit veškeré (flash)disky (s výjimkou toho, na které se nachází /home)"
+msgstr "Afficher tous les disques (sauf /home)"
 
 #: data/interface/config_exported.ui:7
 msgid "Configuration exported"
-msgstr "Nastavení bylo exportováno"
+msgstr "Configuration exportée"
 
 #: data/interface/config_exported.ui:34
 msgid ""
 "The backup configuration has been exported.\n"
 "Please, check the list of folders to ensure that everything went fine."
 msgstr ""
-"Nastavení zálohování bylo exportováno.\n"
-"Kontrolou seznamu složek ověřte, zda vše proběhlo v pořádku."
+"La configuration de sauvegarde a été exportée.\n"
+"Merci de vérifier la liste des dossiers pour assurer que tout s’est bien "
+"passé."
 
 #: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
 #: data/interface/options.ui:49 data/interface/restore_ok.ui:33
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: data/interface/folder_selector.ui:41
 msgid "Add folder(s)"
-msgstr "Přidat složky"
+msgstr "Ajout de dossier(s)"
 
 #: data/interface/format_error.ui:50
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
-msgstr ""
-"Při formátování došlo k chybě.\n"
-"Přerušeno."
+msgstr "Il y avait une erreur lors du processus de formatage. Annulation."
 
 #: data/interface/format_error.ui:88
 msgid "<b>Error info</b>"
-msgstr "<b>Informace o chybě</b>"
+msgstr "<b>Information sur l’erreur</b>"
 
 #: data/interface/format_force.ui:41
 msgid "Format disk"
-msgstr "Formátovat (flash)disk"
+msgstr "Formater le disque"
 
 #: data/interface/formatting.ui:52
 msgid "Formating disk. Please, wait."
-msgstr "Formátování (flash)disku – čekejte…"
+msgstr "Formatage du disque en cours. Merci de patienter."
 
 #: data/interface/main.ui:8
 msgid "anaCRONOPETE"
-msgstr ""
+msgstr "anaCRONOPETE"
 
 #. Don't translate this. Is part of the name in the main window
 #: data/interface/main.ui:50
 msgid "ana"
-msgstr ""
+msgstr "ana"
 
 #. Don't translate this. Is part of the name in the main window.
 #: data/interface/main.ui:63
 msgid "cronopete"
-msgstr ""
+msgstr "cronopete"
 
 #: data/interface/main.ui:233
 msgid "Next backup:"
-msgstr "Příští záloha:"
+msgstr "Sauvegarde suivante :"
 
 #: data/interface/main.ui:246
 msgid "Latest backup:"
-msgstr "Nejnovější záloha:"
+msgstr "Dernière sauvegarde :"
 
 #: data/interface/main.ui:259
 msgid "Oldest backup:"
-msgstr "Nejstarší záloha:"
+msgstr "Sauvegarde la plus ancienne :"
 
 #. Refers to the free disk space available in the backup's hard disk
 #: data/interface/main.ui:272
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
-msgstr "K dispozici (volné):"
+msgstr "Disponible :"
 
 #: data/interface/main.ui:285
 msgid "Device:"
-msgstr "Zařízení:"
+msgstr "Disque :"
 
 #: data/interface/main.ui:340
 msgid "Change disk..."
-msgstr "Změnit (flash)disk…"
+msgstr "Changer de disque…"
 
 #: data/interface/main.ui:356 data/interface/options.ui:17
 msgid "Options"
-msgstr "Možnosti"
+msgstr "Options"
 
 #: data/interface/main.ui:382
 msgid ""
@@ -502,51 +498,51 @@ msgid ""
 " * Daily backups for the past month\n"
 " * Weekely backups until your hard disk is full"
 msgstr ""
-"Kronopete uchovává:\n"
+"Cronopete garde des sauvegardes :\n"
 "\n"
-" * Zálohu z každé nastavené hodiny za předchozích 24 hodin\n"
-" * Zálohu z každého dne za minulý měsíc\n"
-" * Zálohu z každého týdne až do výše kapacity datového úložiště"
+"* de chaque heure des 24 dernières heures\n"
+"* journalières du dernier mois\n"
+"* hebdomadaires jusqu’à ce que votre disque dur est plein"
 
 #: data/interface/main.ui:401
 msgid "Show Cronopete in menu bar"
-msgstr "Zobrazovat ikonu Cronopete v oznamovací oblasti systémového panelu"
+msgstr "Afficher Cronopete dans la barre de menu"
 
 #: data/interface/main.ui:420
 msgid "About"
-msgstr "O aplikaci"
+msgstr "À propos"
 
 #: data/interface/main.ui:454
 msgid "Configuration"
-msgstr "Nastavení"
+msgstr "Configuration"
 
 #: data/interface/main.ui:483
 msgid "Log"
-msgstr "Záznam událostí"
+msgstr "Logiciel"
 
 #: data/interface/options.ui:95
 msgid "Folders to backup"
-msgstr "Složky k zálohování"
+msgstr "Dossiers à sauvegarder"
 
 #: data/interface/options.ui:115 data/interface/options.ui:207
 msgid "Add"
-msgstr "Přidat"
+msgstr "Ajouter"
 
 #: data/interface/options.ui:130 data/interface/options.ui:222
 msgid "Remove"
-msgstr "Odebrat"
+msgstr "Supprimer"
 
 #: data/interface/options.ui:156
 msgid "<b>Backup these folders</b>"
-msgstr "<b>Zálohovat tyto složky</b>"
+msgstr "<b>Sauvegarder ces dossiers</b>"
 
 #: data/interface/options.ui:248
 msgid "<b>Exclude these folders</b>"
-msgstr "<b>Vynechat tyto složky</b>"
+msgstr "<b>Exclure ces dossiers</b>"
 
 #: data/interface/options.ui:283
 msgid "Time interval between backups (in hours):"
-msgstr "Interval mezi zálohami (v hodinách):"
+msgstr "Intervalle de temps entre les sauvegardes (en heures) :"
 
 #: data/interface/options.ui:296
 msgid "1"
@@ -554,35 +550,35 @@ msgstr ""
 
 #: data/interface/restore_error.ui:53
 msgid "Ignore"
-msgstr "Ignorovat"
+msgstr "Ignorer"
 
 #: data/interface/restore_error.ui:66
 msgid "Ignore all"
-msgstr "Ignorovat vše"
+msgstr "Tout ignorer"
 
 #: data/interface/restore_ok.ui:9 data/interface/restore_ok.ui:23
 msgid "Restore ended succesfully"
-msgstr "Obnova byla úspěšně dokončena"
+msgstr "Restauration terminée avec succès"
 
 #: data/interface/restoring.ui:9
 msgid "Restoring files"
-msgstr "Obnovování souborů"
+msgstr "Restauration de fichiers"
 
 #: data/interface/welcome.ui:23
 msgid "Don't ask me again"
-msgstr "Příště se již neptat"
+msgstr "Ne plus me demander"
 
 #: data/interface/welcome.ui:38
 msgid "Ask me later"
-msgstr "Dotázat se později"
+msgstr "Me demander plus tard"
 
 #: data/interface/welcome.ui:52
 msgid "Configure now"
-msgstr "Nastavit nyní"
+msgstr "Paramétrer maintenant"
 
 #: data/interface/welcome.ui:76
 msgid "Welcome to Cronopete"
-msgstr "Vítejte v aplikaci Cronopete"
+msgstr "Bienvenu à Cronopete"
 
 #: data/interface/welcome.ui:105
 msgid ""
@@ -592,12 +588,10 @@ msgid ""
 "Now, you can configure which external disk use to make the copies and which "
 "folders you want to backup, or you can leave it for later."
 msgstr ""
-"Cronopete je zálohovací nástroj, s jehož pomocí můžete pravidelně pořizovat "
-"kopie svých dat a v případě potřeby je obnovit do stavu z požadovaného "
-"data.\n"
+"Cronopete est un utilitaire de sauvegarde qui vous permet de faire des "
+"copies régulières de vos données et de les restaurer à partir de plusieurs "
+"dates.\n"
 "\n"
-"Nyní můžete nastavit, který externí (flash)disk použít pro ukládání těchto "
-"kopií a které složky takto zálohovat. Případně to můžete nechat na později."
-
-#~ msgid "Invalid parameter in config file %s (line %d)\n"
-#~ msgstr "Neplatný parametr v souboru s nastaveními %s (řádek %d)\n"
+"Maintenant, vous pouvez paramétrer quel disque externe à utiliser pour faire "
+"des copies et quels dossiers vous souhaitez sauvegarder, ou vous pouvez le "
+"faire plus tard."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-05 22:45+0200\n"
+"POT-Creation-Date: 2017-08-26 02:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,37 +108,37 @@ msgid ""
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
 
-#: src/choose.vala:391
+#: src/choose.vala:390
 msgid "Unknown FS"
 msgstr ""
 
-#: src/choose.vala:409
+#: src/choose.vala:408
 msgid "Unknown size"
 msgstr ""
 
-#: src/cronopete.vala:216 src/cronopete.vala:329 src/cronopete.vala:359
+#: src/cronopete.vala:221 src/cronopete.vala:328 src/cronopete.vala:358
 msgid "Idle"
 msgstr ""
 
-#: src/cronopete.vala:235 src/cronopete.vala:241 src/cronopete.vala:252
-#: src/cronopete.vala:256
+#: src/cronopete.vala:240 src/cronopete.vala:246 src/cronopete.vala:257
+#: src/cronopete.vala:261
 #, c-format
 msgid "Latest backup: %s"
 msgstr ""
 
-#: src/cronopete.vala:235 src/menu.vala:242
+#: src/cronopete.vala:240 src/menu.vala:197
 msgid "Not defined"
 msgstr ""
 
-#: src/cronopete.vala:241 src/cronopete.vala:252 src/menu.vala:191
+#: src/cronopete.vala:246 src/cronopete.vala:257 src/menu.vala:146
 msgid "None"
 msgstr ""
 
-#: src/cronopete.vala:356
+#: src/cronopete.vala:355
 msgid "Storage not available"
 msgstr ""
 
-#: src/cronopete.vala:361
+#: src/cronopete.vala:360
 msgid "Backup disabled"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Stop Backing Up"
 msgstr ""
 
-#: src/cronopete.vala:439 src/restore.vala:185
+#: src/cronopete.vala:439 src/restore.vala:186
 msgid "Restore files"
 msgstr ""
 
@@ -158,43 +158,47 @@ msgstr ""
 msgid "Configure backup policies"
 msgstr ""
 
-#: src/cronopete.vala:532
+#: src/cronopete.vala:539
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr ""
 
-#: src/cronopete.vala:550
+#: src/cronopete.vala:557
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr ""
 
-#: src/cronopete.vala:555
+#: src/cronopete.vala:562
 #, c-format
 msgid "Can't access directory %s\n"
 msgstr ""
 
-#: src/cronopete.vala:560
+#: src/cronopete.vala:567
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr ""
 
-#: src/cronopete.vala:578
+#: src/cronopete.vala:585
+msgid "\n"
+msgstr ""
+
+#: src/cronopete.vala:586
 msgid "Starting backup\n"
 msgstr ""
 
-#: src/cronopete.vala:592
+#: src/cronopete.vala:600
 msgid "Erasing old backups"
 msgstr ""
 
-#: src/cronopete.vala:604
+#: src/cronopete.vala:612
 msgid "Backup aborted"
 msgstr ""
 
-#: src/cronopete.vala:608
+#: src/cronopete.vala:616
 msgid "Can't do backup; disk is too small"
 msgstr ""
 
-#: src/cronopete.vala:612
+#: src/cronopete.vala:620
 msgid "Can't do backup"
 msgstr ""
 
@@ -210,44 +214,44 @@ msgstr ""
 msgid "Modification date"
 msgstr ""
 
-#: src/icons_widget.vala:383
+#: src/icons_widget.vala:392
 msgid "Show hidden files"
 msgstr ""
 
-#: src/icons_widget.vala:391
+#: src/icons_widget.vala:400
 msgid "Reverse order"
 msgstr ""
 
-#: src/icons_widget.vala:399
+#: src/icons_widget.vala:408
 msgid "Sort by name"
 msgstr ""
 
-#: src/icons_widget.vala:403
+#: src/icons_widget.vala:412
 msgid "Sort by type"
 msgstr ""
 
-#: src/icons_widget.vala:407
+#: src/icons_widget.vala:416
 msgid "Sort by size"
 msgstr ""
 
-#: src/icons_widget.vala:411
+#: src/icons_widget.vala:420
 msgid "Sort by date"
 msgstr ""
 
-#: src/icons_widget.vala:433
+#: src/icons_widget.vala:442
 msgid "View as icons"
 msgstr ""
 
-#: src/icons_widget.vala:437
+#: src/icons_widget.vala:446
 msgid "View as list"
 msgstr ""
 
-#: src/menu.vala:131
+#: src/menu.vala:111
 #, c-format
 msgid "Status: %s"
 msgstr ""
 
-#: src/menu.vala:250
+#: src/menu.vala:205
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr ""
@@ -257,35 +261,35 @@ msgstr ""
 msgid "Backup hidden files and folders in %s"
 msgstr ""
 
-#: src/restore.vala:193
+#: src/restore.vala:194
 msgid "Exit"
 msgstr ""
 
-#: src/restore.vala:696
+#: src/restore.vala:697
 msgid "Today, at %H:%M"
 msgid_plural "Today, at %H:%M"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/restore.vala:701
+#: src/restore.vala:702
 msgid "Yesterday, at %H:%M"
 msgid_plural "Yesterday, at %H:%M"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/restore.vala:709
+#: src/restore.vala:710
 msgid "%A, %d %B %Y at %H:%M"
 msgid_plural "%A, %d %B %Y at %H:%M"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/restore.vala:716
+#: src/restore.vala:717
 msgid "%A, %B %d %Y at %H:%M"
 msgid_plural "%A, %B %d %Y at %H:%M"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/restore.vala:961
+#: src/restore.vala:966
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -293,7 +297,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/restore.vala:973
+#: src/restore.vala:978
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -303,7 +307,7 @@ msgid ""
 "There's not enought free space"
 msgstr ""
 
-#: src/restore.vala:975
+#: src/restore.vala:980
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -311,7 +315,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/restore.vala:1042
+#: src/restore.vala:1068
 msgid "Preparing folders to restore"
 msgstr ""
 
@@ -323,7 +327,7 @@ msgstr ""
 msgid "An Apple's Time Machine clone for Linux"
 msgstr ""
 
-#: data/interface/about.ui:680
+#: data/interface/about.ui:683
 msgid ""
 "In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
 "the first novel with a time-travel machine.\n"
@@ -339,12 +343,12 @@ msgid ""
 "Linux."
 msgstr ""
 
-#: data/interface/about.ui:702
+#: data/interface/about.ui:705
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr ""
 
 #: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
-#: data/interface/format_force.ui:31 data/interface/options.ui:35
+#: data/interface/format_force.ui:26 data/interface/options.ui:35
 #: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
 msgid "Cancel"
 msgstr ""
@@ -390,7 +394,7 @@ msgstr ""
 msgid "<b>Error info</b>"
 msgstr ""
 
-#: data/interface/format_force.ui:46
+#: data/interface/format_force.ui:41
 msgid "Format disk"
 msgstr ""
 
@@ -455,15 +459,15 @@ msgstr ""
 msgid "Show Cronopete in menu bar"
 msgstr ""
 
-#: data/interface/main.ui:419
+#: data/interface/main.ui:420
 msgid "About"
 msgstr ""
 
-#: data/interface/main.ui:453
+#: data/interface/main.ui:454
 msgid "Configuration"
 msgstr ""
 
-#: data/interface/main.ui:482
+#: data/interface/main.ui:483
 msgid "Log"
 msgstr ""
 
@@ -471,31 +475,35 @@ msgstr ""
 msgid "Folders to backup"
 msgstr ""
 
-#: data/interface/options.ui:114 data/interface/options.ui:205
+#: data/interface/options.ui:115 data/interface/options.ui:207
 msgid "Add"
 msgstr ""
 
-#: data/interface/options.ui:129 data/interface/options.ui:220
+#: data/interface/options.ui:130 data/interface/options.ui:222
 msgid "Remove"
 msgstr ""
 
-#: data/interface/options.ui:155
+#: data/interface/options.ui:156
 msgid "<b>Backup these folders</b>"
 msgstr ""
 
-#: data/interface/options.ui:246
+#: data/interface/options.ui:248
 msgid "<b>Exclude these folders</b>"
 msgstr ""
 
-#: data/interface/options.ui:280
+#: data/interface/options.ui:283
 msgid "Time interval between backups (in hours):"
 msgstr ""
 
-#: data/interface/restore_error.ui:55
+#: data/interface/options.ui:296
+msgid "1"
+msgstr ""
+
+#: data/interface/restore_error.ui:53
 msgid "Ignore"
 msgstr ""
 
-#: data/interface/restore_error.ui:70
+#: data/interface/restore_error.ui:66
 msgid "Ignore all"
 msgstr ""
 
