@@ -383,7 +383,7 @@
 
  * Hourly backups for the past 24 hours
  * Daily backups for the past month
- * Weekely backups until your hard disk is full</property>
+ * Weekly backups until your hard disk is full</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>

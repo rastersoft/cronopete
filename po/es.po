@@ -4,14 +4,14 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Sergio <raster@rastersoft.com>, 2011.
 # raster <raster@rastersoft.com>, 2012.
-# Sergio Costas <rastersoft@gmail.com>, 2012, 2015.
+# Sergio Costas <rastersoft@gmail.com>, 2012, 2015, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-26 02:02+0200\n"
-"PO-Revision-Date: 2015-09-05 22:46+0200\n"
+"POT-Creation-Date: 2017-09-14 00:11+0200\n"
+"PO-Revision-Date: 2017-09-14 00:13+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: \n"
@@ -199,7 +199,7 @@ msgstr "Se produjo un fallo al crear la carpeta %s\n"
 
 #: src/cronopete.vala:585
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: src/cronopete.vala:586
 msgid "Starting backup\n"
@@ -501,7 +501,7 @@ msgid ""
 "\n"
 " * Hourly backups for the past 24 hours\n"
 " * Daily backups for the past month\n"
-" * Weekely backups until your hard disk is full"
+" * Weekly backups until your hard disk is full"
 msgstr ""
 "Cronopete mantiene:\n"
 "\n"
@@ -551,7 +551,7 @@ msgstr "Tiempo entre copias (en horas):"
 
 #: data/interface/options.ui:296
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: data/interface/restore_error.ui:53
 msgid "Ignore"

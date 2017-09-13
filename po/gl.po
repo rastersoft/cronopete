@@ -1,23 +1,24 @@
 # Galician translation.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Cronopete package.
-# Sergio Costas <raster@rastersoft.com>, 2011, 2012.
 # Miguel Anxo Bouzada <mbouzada@gmail.com>, 2011, 2012, 2013, 2016.
 # raster <raster@rastersoft.com>, 2012.
+# Sergio Costas <rastersoft@gmail.com>, 2011, 2012, 2017.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-26 02:02+0200\n"
-"PO-Revision-Date: 2016-04-29 15:00+0200\n"
-"Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
-"Language-Team: Proxecto Trasno <proxecto@trasno.net>\n"
+"POT-Creation-Date: 2017-09-14 00:11+0200\n"
+"PO-Revision-Date: 2017-09-14 00:12+0200\n"
+"Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
+"Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Gtranslator 2.91.7\n"
 "X-Poedit-Language: Galician\n"
 
 #: src/backup.vala:287
@@ -196,7 +197,7 @@ msgstr "Non é posíbel crear o cartafol %s\n"
 
 #: src/cronopete.vala:585
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: src/cronopete.vala:586
 msgid "Starting backup\n"
@@ -496,7 +497,7 @@ msgid ""
 "\n"
 " * Hourly backups for the past 24 hours\n"
 " * Daily backups for the past month\n"
-" * Weekely backups until your hard disk is full"
+" * Weekly backups until your hard disk is full"
 msgstr ""
 "Cronopete mantén:\n"
 "\n"
@@ -546,7 +547,7 @@ msgstr "Tempo entre copias (en horas):"
 
 #: data/interface/options.ui:296
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: data/interface/restore_error.ui:53
 msgid "Ignore"
