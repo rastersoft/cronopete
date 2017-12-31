@@ -12,6 +12,7 @@ To build Cronopete, you need to install CMAKE and Vala-0.20
 
 Now, type
 
+    apt install valac-0.26 libappindicator3-dev libatk1.0-dev libpango1.0-dev libpangocairo-1.0-0 libgtk2.0-dev libgtk-3-dev libgee-0.8-dev libgsl0-dev libudisks2-dev
     mkdir BUILD
     cd BUILD
     cmake ..
