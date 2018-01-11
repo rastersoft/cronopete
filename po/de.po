@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-05 22:14+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Project-Id-Version:\n"
+"Report-Msgid-Bugs-To:\n"
+"POT-Creation-Date: 2018-11-01 22:14+0200\n"
+"PO-Revision-Date: 2018-11-01 22:00+0200\n"
+"Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
+"Language-Team: Deutsch <dev@taubenheim.biz>\n"
+"Language: german\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/backup.vala:287
 #, c-format
@@ -60,7 +60,7 @@ msgstr "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten
 
 #: ../src/backup.vala:379
 msgid "Backup aborted\n"
-msgstr "Sicherung abgebrochen"
+msgstr "Sicherung abgebrochen\n"
 
 #: ../src/backup.vala:393
 msgid ""
@@ -179,7 +179,7 @@ msgstr "Ordner sichern %s\n"
 #: ../src/cronopete.vala:550
 #, c-format
 msgid "Can't copy file %s\n"
-msgstr "Datei kann nicht kopiert werden %s\n."
+msgstr "Datei kann nicht kopiert werden %s\n"
 
 #: ../src/cronopete.vala:555
 #, c-format
