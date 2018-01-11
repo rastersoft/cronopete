@@ -161,7 +161,7 @@ msgstr "jetzt sichern"
 
 #: ../src/cronopete.vala:435
 msgid "Stop Backing Up"
-msgstr "Sicherung anhelten"
+msgstr "Sicherung anhalten"
 
 #: ../src/cronopete.vala:439 ../src/restore.vala:185
 msgid "Restore files"
@@ -275,7 +275,7 @@ msgstr "sichere versteckte Dateien und Ordner in %s"
 
 #: ../src/restore.vala:193
 msgid "Exit"
-msgstr "Ausgang"
+msgstr "Exit"
 
 #. / This string is used to show the date of a backup when it is in today;
 #. / %H gets replaced by the hour, and %M by the minute of the backup
@@ -337,7 +337,7 @@ msgid ""
 "\n"
 "There's not enought free space"
 msgstr ""
-"Datei konnte nich zurück gesichert werden\n"
+"Datei konnte nicht zurück gesichert werden\n"
 "\n"
 "%s\n"
 "\n"
