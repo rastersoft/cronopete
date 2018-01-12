@@ -178,11 +178,6 @@ msgstr "Ordner sichern %s\n"
 msgid "Can't copy file %s\n"
 msgstr "Datei kann nicht kopiert werden %s\n"
 
-#: ../src/cronopete.vala:555
-#, c-format
-msgid "Can't access directory %s\n"
-msgstr "Auf Verzeichniss kann nicht zugegriffen werden %s\n"
-
 #: src/cronopete.vala:562
 #, c-format
 msgid "Can't access directory %s\n"
@@ -476,7 +471,7 @@ msgstr "cronopete"
 
 #: data/interface/main.ui:233
 msgid "Next backup:"
-msgstr "Nächste Sicherung":"
+msgstr "Nächste Sicherung:"
 
 #: data/interface/main.ui:246
 msgid "Latest backup:"
