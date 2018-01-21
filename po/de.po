@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version:\n"
-"Report-Msgid-Bugs-To:\n"
-"POT-Creation-Date: 2018-11-01 22:14+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-21 13:23+0100\n"
 "PO-Revision-Date: 2018-11-01 22:00+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
@@ -18,51 +18,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/backup.vala:287
+#: src/backup.vala:287
 #, c-format
 msgid "Backing up folder %s.\n"
 msgstr "Zu sichender Ordner %s.\n"
 
-#: ../src/backup.vala:291
+#: src/backup.vala:291
 #, c-format
 msgid "Excluding folder %s.\n"
 msgstr "Ordner die ausgeschlossen werden %s.\n"
 
-#: ../src/backup.vala:297
+#: src/backup.vala:297
 #, c-format
 msgid "Excluding hidden folders in %s.\n"
 msgstr "Versteckte Ordner %s werden ausgeschlossen.\n"
 
-#: ../src/backup.vala:299
+#: src/backup.vala:299
 #, c-format
 msgid "Backing up hidden folders in %s.\n"
 msgstr "Versteckte Ordner werden in %s gesichert.\n"
 
-#: ../src/backup.vala:347
+#: src/backup.vala:347
 msgid "Can't create the folder for this backup. Aborting backup.\n"
-msgstr "Dieser Ordner für die Sicherung kann nicht erstellt werden. Sicherung wird abgebrochen.\n"
+msgstr ""
+"Dieser Ordner für die Sicherung kann nicht erstellt werden. Sicherung wird "
+"abgebrochen.\n"
 
-#: ../src/backup.vala:350
+#: src/backup.vala:350
 msgid "Can't create the base folders to do backups. Aborting backup.\n"
-msgstr "Es kann nicht der Basisordner für die Backups erstellt werden. Sicherung wird abgebrochen.\n"
+msgstr ""
+"Es kann nicht der Basisordner für die Backups erstellt werden. Sicherung "
+"wird abgebrochen.\n"
 
-#: ../src/backup.vala:353
+#: src/backup.vala:353
 msgid "Backup device not available. Aborting backup.\n"
 msgstr "Sicherungsgerät ist nicht vorhanden. Sicherung wird angebrochen.\n"
 
-#: ../src/backup.vala:356
+#: src/backup.vala:356
 msgid "Already started a backup.\n"
 msgstr "Sicherung wurde gestartet.\n"
 
-#: ../src/backup.vala:360
+#: src/backup.vala:360
 msgid "Failed to free disk space to start a backup. Aborting backup.\n"
-msgstr "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. Sicherung wird abgebrochen.\n"
+msgstr ""
+"Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
+"Sicherung wird abgebrochen.\n"
 
-#: ../src/backup.vala:379
+#: src/backup.vala:379
 msgid "Backup aborted\n"
 msgstr "Sicherung abgebrochen\n"
 
-#: ../src/backup.vala:393
+#: src/backup.vala:393
 msgid ""
 "The disk is too small to hold a single backup.\n"
 "Adjust the list of backup and exclude folders.\n"
@@ -70,41 +76,42 @@ msgstr ""
 "Die Festplatte ist zu klein um für eine einzelene Sicherung.\n"
 "Korrigieren sie die Liste der Sicherung und schließen Sie Ordner aus.\n"
 
-#: ../src/backup.vala:407
+#: src/backup.vala:407
 msgid "Syncing disk\n"
 msgstr "Synchronisiere Festplatte\n"
 
-#: ../src/backup.vala:409
+#: src/backup.vala:409
 msgid "Can't close the backup. Aborting.\n"
 msgstr "Die Sicherung kann nicht abgeschlossen werden. Abbruch.\n"
 
-#: ../src/backup.vala:415
+#: src/backup.vala:415
 #, c-format
 msgid "Backup done. Needed %ld seconds.\n"
 msgstr "Sicherung fertig. Sie dauerte %ld Sekunden.\n"
 
-#. Failed to find the disk!!!!!!
-#: ../src/choose.vala:107
+#: src/choose.vala:107
 msgid "Failed to find the disk!!!!!"
 msgstr "Die Festplatte konnte nicht gefunden werden!"
 
-#: ../src/choose.vala:116
+#: src/choose.vala:116
 msgid "Failed to unmount the disk. Aborting format operation."
-msgstr "Die Festplatte kann nicht ausgehängt werden. Formatierung wird abgebrochen."
+msgstr ""
+"Die Festplatte kann nicht ausgehängt werden. Formatierung wird abgebrochen."
 
-#: ../src/choose.vala:137
+#: src/choose.vala:137
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
-"Es ist ein Fehler bei der Formatierung der Festplatte aufgetretten."
-"Bitte versuchen Sie es noch einmal."
+"Es ist ein Fehler bei der Formatierung der Festplatte aufgetretten.Bitte "
+"versuchen Sie es noch einmal."
 
-#: ../src/choose.vala:152
+#: src/choose.vala:152
 msgid "Failed to mount again the disk. Aborting the format operation."
-msgstr "Die Festplatte konnte nich eingehängt werden. Formatierung abgebrochen."
+msgstr ""
+"Die Festplatte konnte nich eingehängt werden. Formatierung abgebrochen."
 
-#: ../src/choose.vala:168
+#: src/choose.vala:168
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -112,17 +119,17 @@ msgid ""
 "\n"
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
-"Das ausgewählt Laufwerk muss formatiert werden, damit es benutzt werden kann.\n"
+"Das ausgewählt Laufwerk muss formatiert werden, damit es benutzt werden "
+"kann.\n"
 "\n"
-"Um das zu tun, drücken Sie den <i>Laufwerk formatieren</i> Knopf."
-"\n"
+"Um das zu tun, drücken Sie den <i>Laufwerk formatieren</i> Knopf.\n"
 "<b>Alle Daten werden auf dem Laufwerk gelöscht!</b>"
 
-#: ../src/choose.vala:390
+#: src/choose.vala:390
 msgid "Unknown FS"
 msgstr "Unbekanntes Dateisystem"
 
-#: ../src/choose.vala:408
+#: src/choose.vala:408
 msgid "Unknown size"
 msgstr "Unbekannte Größe"
 
@@ -144,36 +151,36 @@ msgstr "Nicht definiert"
 msgid "None"
 msgstr "Nein"
 
-#: ../src/cronopete.vala:355
+#: src/cronopete.vala:355
 msgid "Storage not available"
 msgstr "Speicher nicht verfügbar"
 
-#: ../src/cronopete.vala:360
+#: src/cronopete.vala:360
 msgid "Backup disabled"
 msgstr "Backup ausgeschaltet"
 
-#: ../src/cronopete.vala:432
+#: src/cronopete.vala:432
 msgid "Back Up Now"
 msgstr "jetzt sichern"
 
-#: ../src/cronopete.vala:435
+#: src/cronopete.vala:435
 msgid "Stop Backing Up"
 msgstr "Sicherung anhalten"
 
-#: ../src/cronopete.vala:439 ../src/restore.vala:186
+#: src/cronopete.vala:439 src/restore.vala:186
 msgid "Restore files"
 msgstr "Dateien wieder herstellen"
 
-#: ../src/cronopete.vala:447
+#: src/cronopete.vala:447
 msgid "Configure backup policies"
 msgstr "Backupregeln einstellen"
 
-#: ../src/cronopete.vala:539
+#: src/cronopete.vala:539
 #, c-format
 msgid "Backing up folder %s\n"
 msgstr "Ordner sichern %s\n"
 
-#: ../src/cronopete.vala:557
+#: src/cronopete.vala:557
 #, c-format
 msgid "Can't copy file %s\n"
 msgstr "Datei kann nicht kopiert werden %s\n"
@@ -183,7 +190,7 @@ msgstr "Datei kann nicht kopiert werden %s\n"
 msgid "Can't access directory %s\n"
 msgstr "Es kann nicht auf das Verzeichnis %s zugegriffen werden\n"
 
-#: ../src/cronopete.vala:567
+#: src/cronopete.vala:567
 #, c-format
 msgid "Can't create directory %s\n"
 msgstr "Verzeichnis kann nicht erstellt werden %s\n"
@@ -192,35 +199,35 @@ msgstr "Verzeichnis kann nicht erstellt werden %s\n"
 msgid "\n"
 msgstr "\n"
 
-#: ../src/cronopete.vala:586
+#: src/cronopete.vala:586
 msgid "Starting backup\n"
 msgstr "Sicherung starten\n"
 
-#: ../src/cronopete.vala:600
+#: src/cronopete.vala:600
 msgid "Erasing old backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: ../src/cronopete.vala:612
+#: src/cronopete.vala:612
 msgid "Backup aborted"
 msgstr "Sicherung abbrechen"
 
-#: ../src/cronopete.vala:616
+#: src/cronopete.vala:616
 msgid "Can't do backup; disk is too small"
 msgstr "Sicherung kann nicht erstellt werden, Festplatte ist zu klein."
 
-#: ../src/cronopete.vala:620
+#: src/cronopete.vala:620
 msgid "Can't do backup"
 msgstr "Sicherung kann nicht erstellt werden."
 
-#: ../src/icons_widget.vala:153
+#: src/icons_widget.vala:153
 msgid "Name"
 msgstr "Name"
 
-#: ../src/icons_widget.vala:156
+#: src/icons_widget.vala:156
 msgid "Size"
 msgstr "Größe"
 
-#: ../src/icons_widget.vala:157
+#: src/icons_widget.vala:157
 msgid "Modification date"
 msgstr "Änderungsdatum"
 
@@ -275,47 +282,31 @@ msgstr "sichere versteckte Dateien und Ordner in %s"
 msgid "Exit"
 msgstr "Exit"
 
-#. / This string is used to show the date of a backup when it is in today;
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:696
+#: src/restore.vala:697
 msgid "Today, at %H:%M"
 msgid_plural "Today, at %H:%M"
 msgstr[0] "Heute, um %H:%M"
 msgstr[1] "Heute, um %H:%M"
 
-#. / This string is used to show the date of a backup when it is in yesterday;
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:701
+#: src/restore.vala:702
 msgid "Yesterday, at %H:%M"
 msgid_plural "Yesterday, at %H:%M"
 msgstr[0] "Gestern, um %H:%M"
 msgstr[1] "Gestern, um %H:%M"
 
-#. / This string is used to show the date of a backup in european format (day/month/year);
-#. / %A gets replaced by the day's name; %d by the day (in number);
-#. / %B by the month (in letters); %Y by the year in four-digits format
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:709
+#: src/restore.vala:710
 msgid "%A, %d %B %Y at %H:%M"
 msgid_plural "%A, %d %B %Y at %H:%M"
 msgstr[0] "%A, %d %B %Y um %H:%M"
 msgstr[1] "%A, %d %B %Y um %H:%M"
 
-#. / This string is used to show the date of a backup in USA format (month/day/year);
-#. / %A gets replaced by the day's name; %B by the month (in letters);
-#. / %d by the day (in number); %Y by the year in four-digits format
-#. / %H gets replaced by the hour, and %M by the minute of the backup
-#. / Singular and plurar forms are chosen based on the hour's value (%H)
-#: ../src/restore.vala:716
+#: src/restore.vala:717
 msgid "%A, %B %d %Y at %H:%M"
 msgid_plural "%A, %B %d %Y at %H:%M"
 msgstr[0] "%A, %B %d %Y um %H:%M"
 msgstr[1] "%A, %B %d %Y um %H:%M"
 
-#: ../src/restore.vala:961
+#: src/restore.vala:966
 #, c-format
 msgid ""
 "Restoring file:\n"
@@ -326,7 +317,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:973
+#: src/restore.vala:978
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -341,7 +332,7 @@ msgstr ""
 "\n"
 "Es ist nicht genug freier Speicher vorhanden"
 
-#: ../src/restore.vala:975
+#: src/restore.vala:980
 #, c-format
 msgid ""
 "Failed to restore file\n"
@@ -352,7 +343,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/restore.vala:1042
+#: src/restore.vala:1068
 msgid "Preparing folders to restore"
 msgstr "Ordner werden vorbereitet für die Wiederherstellung"
 
@@ -424,7 +415,8 @@ msgid ""
 "Please, check the list of folders to ensure that everything went fine."
 msgstr ""
 "Die Schierungseinstellungen wurden exportiert.\n"
-"Bitte überprüfen Sie die Liste der Ordner, um sicherzustellen, dass alles in Ordnung ist."
+"Bitte überprüfen Sie die Liste der Ordner, um sicherzustellen, dass alles in "
+"Ordnung ist."
 
 #: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
 #: data/interface/options.ui:49 data/interface/restore_ok.ui:33
@@ -600,8 +592,8 @@ msgstr ""
 "Cronopete ist ein Sicherungswerkzeug das es erlaubt regelmäßig Kopieen "
 "deiner Daten zu erstellen und zu jedem Zeitpunkt wieder herzustellen.\n"
 "\n"
-"Du kannst jetzt eine externe Festplatte für die Sicherungen konfigurieren und "
-"angeben welche Ordner gesichert werden sollen, oder du tust es später."
+"Du kannst jetzt eine externe Festplatte für die Sicherungen konfigurieren "
+"und angeben welche Ordner gesichert werden sollen, oder du tust es später."
 
 #~ msgid "Invalid parameter in config file %s (line %d)\n"
 #~ msgstr "Falscher Parameter in der Konfigurationsdatei %s (Zeile %d)\n"
