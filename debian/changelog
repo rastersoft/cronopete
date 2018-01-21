@@ -1,3 +1,9 @@
+cronopete (3.26.2-Debian1) sid; urgency=low
+
+  * Added German translation
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 21 Jan 2018 23:55:00 +0200
+
 cronopete (3.26.1-Debian1) sid; urgency=low
 
   * Added french translation

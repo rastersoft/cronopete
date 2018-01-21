@@ -25,7 +25,7 @@ using Cairo;
 using Gsl;
 using Posix;
 
-// project version=3.26.1
+// project version=3.26.2
 
 #if !NO_APPINDICATOR
 using AppIndicator;

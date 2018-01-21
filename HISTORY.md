@@ -1,4 +1,6 @@
 ## History of versions ##
+* Version 3.26.2 (2018/01/21)
+   * Added German translation
 * Version 3.26.1 (2017/08/26)
    * Added french translation
 * Version 3.26.0 (2017/06/17)
