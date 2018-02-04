@@ -198,7 +198,7 @@ class usbhd_backend: Object, backends {
     private string get_backup_path_from_time(time_t backup) {
 
         var ctime = GLib.Time.local(backup);
-        var basepath="%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900+ctime.year,ctime.month+1,ctime.day,ctime.hour,ctime.minute,ctime.second,backup);
+        var basepath = "%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, backup);
         return basepath;
 
     }
@@ -359,6 +359,8 @@ class usbhd_backend: Object, backends {
             }
         }
 
+        time_t now = time_t();
+
         try {
             var myenum = directory.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
 
@@ -374,7 +376,7 @@ class usbhd_backend: Object, backends {
                 dirname=file_info.get_name();
                 if (dirname[0]!='B') {
                     backup_time=long.parse(dirname.substring(20));
-                    if (backup_time!=this.deleting) {
+                    if ((backup_time != this.deleting) && (backup_time <= now) && (backup_time != 0)) {
                         blist.add(backup_time);
                     }
                 }
@@ -426,7 +428,9 @@ class usbhd_backend: Object, backends {
             return BACKUP_RETVAL.NOT_AVAILABLE;
         }
 
-        var tmppath = this.get_backup_path_from_time(time_t());
+        time_t now = time_t();
+
+        var tmppath = this.get_backup_path_from_time(now);
         this.cbackup_path = Path.build_filename(basepath,"B"+tmppath);
         this.cfinal_path = tmppath;
 
@@ -452,23 +456,30 @@ class usbhd_backend: Object, backends {
                         continue;
                     }
                     tmp_date = dirname.substring(20);
+                    int64 tmpd = int64.parse(tmp_date);
+                    if (tmpd == 0) {
+                        continue;
+                    }
+                    if (tmpd >= now) {
+                        continue;
+                    }
                     if (tmp_directory == "") {
 
                         /* If this is the first path we read, just store it as-is. */
 
                         tmp_directory = dirname;
                         last_date = tmp_date;
-                        last_backup_time = int64.parse(tmp_date);
+                        last_backup_time = tmpd;
                     } else {
 
                         /* If not, compare it with the current one, and, if is newer, replace it.
                          * We use the time from the epoch to avoid problems when a backup is done
                          * just during the winter or summer time change */
 
-                        if (last_date.collate(tmp_date) < 0) {
+                        if (tmpd > last_backup_time) {
                             tmp_directory = dirname;
                             last_date = tmp_date;
-                            last_backup_time = int64.parse(tmp_date);
+                            last_backup_time = tmpd;
                         }
                     }
                 }
