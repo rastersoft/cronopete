@@ -1,5 +1,5 @@
 pkgname=cronopete
-pkgver=3.26.2
+pkgver=3.27.0
 pkgrel=1
 pkgdesc="A backup utility for Linux.
 

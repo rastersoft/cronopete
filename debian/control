@@ -6,7 +6,7 @@ Build-Depends: build-essential, po-debconf, valac, libc6-dev, libappindicator3-d
 
 Package: cronopete
 Architecture: any
-Version: 3.26.2
+Version: 3.27.0
 Depends: libappindicator3-1, libdbusmenu-glib4, libgtk-3-0, libpangocairo-1.0-0, libpango-1.0-0, libatk1.0-0, libcairo-gobject2, libcairo2, libgdk-pixbuf2.0-0, libglib2.0-0, libgee-0.8-2, libgsl23, libc6-dev, libudisks2-0, libx11-6
 Description: A backup utility for Linux.
  .
