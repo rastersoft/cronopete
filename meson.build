@@ -38,7 +38,7 @@ if (get_option('prefix').startswith('/home/'))
 else
 	install_data('data/cronopete.desktop',install_dir: '/etc/xdg/autostart')
 endif
-dbus_cfg_com_rastersoft_cronopete_service_base = configure_file(input: 'data/com.rastersoft.cronopete.service.base',output: 'com.rastersoft.cronopete.service', configuration: cfg_dbus_data)
+dbus_cfg_com_rastersoft_cronopete_service_base = configure_file(input: 'data/dbus/com.rastersoft.cronopete.service.base',output: 'com.rastersoft.cronopete.service', configuration: cfg_dbus_data)
 install_data(dbus_cfg_com_rastersoft_cronopete_service_base,install_dir: join_paths(get_option('prefix'),get_option('datadir'),'dbus-1','services'))
 eos_plug_cfg_cronopete_plug = configure_file(input: 'data/cronopete.plug',output: 'cronopete.plug', configuration: cfg_dbus_data)
 install_data(eos_plug_cfg_cronopete_plug,install_dir: join_paths(get_option('prefix'),'lib','plugs','cronopete'))
