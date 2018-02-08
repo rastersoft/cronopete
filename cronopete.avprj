@@ -25,6 +25,8 @@ end
 *vala_check_package: pangocairo
 *vala_check_package: udisks2
 *vala_source: backup.vala
+*vala_source: backup_base.vala
+*vala_source: backup_rsync.vala
 *vala_source: choose.vala
 *vala_source: cronopete.vala
 *vala_source: error_window.vala
@@ -54,6 +56,8 @@ end
 *translate: glade data/interface/restoring.ui
 *translate: glade data/interface/welcome.ui
 *translate: vala src/backup.vala
+*translate: vala src/backup_base.vala
+*translate: vala src/backup_rsync.vala
 *translate: vala src/choose.vala
 *translate: vala src/cronopete.vala
 *translate: vala src/error_window.vala

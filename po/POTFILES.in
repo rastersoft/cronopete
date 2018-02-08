@@ -1,4 +1,6 @@
 src/backup.vala
+src/backup_base.vala
+src/backup_rsync.vala
 src/choose.vala
 src/cronopete.vala
 src/error_window.vala

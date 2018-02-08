@@ -680,6 +680,13 @@ int main(string[] args) {
 
 	int fork_pid;
 	int status;
+	Gtk.init(ref args);
+
+	backup_base tmp = new cronopete.backup_rsync();
+	tmp.do_backup();
+	Gtk.main();
+	print("Hecho\n");
+	Posix.exit(0);
 
 	while(true) {
 

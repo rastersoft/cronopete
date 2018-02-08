@@ -41,6 +41,8 @@ set (VALA_PACKAGES ${VALA_PACKAGES} udisks2)
 
 set (APP_SOURCES ${APP_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Config.vala)
 set (APP_SOURCES ${APP_SOURCES} backup.vala)
+set (APP_SOURCES ${APP_SOURCES} backup_base.vala)
+set (APP_SOURCES ${APP_SOURCES} backup_rsync.vala)
 set (APP_SOURCES ${APP_SOURCES} choose.vala)
 set (APP_SOURCES ${APP_SOURCES} cronopete.vala)
 set (APP_SOURCES ${APP_SOURCES} error_window.vala)
