@@ -4,7 +4,7 @@ cfg_cronopete.set('PKGDATADIR', join_paths(get_option('prefix'),get_option('data
 cfg_cronopete.set('GETTEXT_PACKAGE', 'cronopete')
 cfg_cronopete.set('RELEASE_NAME', 'cronopete')
 cfg_cronopete.set('PREFIX', get_option('prefix'))
-cfg_cronopete.set('VERSION', '3.27.0')
+cfg_cronopete.set('VERSION', '3.28.0')
 cfg_cronopete.set('TESTSRCDIR', meson.source_root())
 
 cfgfile_3 = configure_file(input: 'Config.vala.base',output: 'Config.vala',configuration: cfg_cronopete)

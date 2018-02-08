@@ -77,7 +77,7 @@ class usbhd_backend: Object, backends {
         set {
             this._backup_enabled = value;
             if (value) {
-                refresh_connect(); // try to mount the disk if needed
+                refresh_connect(null); // try to mount the disk if needed
             }
         }
     }
@@ -155,7 +155,7 @@ class usbhd_backend: Object, backends {
         this.last_msg=0;
 
         this.update_volume_data(uuid);
-        this.refresh_connect();
+        this.refresh_connect(null);
     }
 
     public void lock_delete_backup (bool lock_in) {
@@ -273,7 +273,7 @@ class usbhd_backend: Object, backends {
         }
     }
 
-    public void refresh_connect() {
+    public void refresh_connect(Mount? mount) {
 
         var volumes = this.monitor.get_volumes();
         Mount mnt;

@@ -1,4 +1,6 @@
 ## History of versions ##
+* Version 3.28.0 (2018/02/09)
+   * Added missing parameter in callback
 * Version 3.27.0 (2018/02/04)
    * Now ignores backups "from the future" to avoid troubles when creating new backups or listing them
 * Version 3.26.2 (2018/01/21)

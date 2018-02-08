@@ -1,3 +1,9 @@
+cronopete (3.28.0-Ubuntu1) sid; urgency=low
+
+  * Added missing parameter in callback
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 09 Feb 2018 23:55:00 +0200
+
 cronopete (3.27.0-Ubuntu1) sid; urgency=low
 
   * Now ignores backups "from the future" to avoid troubles when creating new backups or listing them
