@@ -682,8 +682,16 @@ int main(string[] args) {
 	int status;
 	Gtk.init(ref args);
 
+	print("Entro\n");
 	backup_base tmp = new cronopete.backup_rsync();
+	var lista = tmp.get_backup_list();
+	foreach(var l in lista) {
+		var ctime = l.local_time;
+		print("%04d_%02d_%02d_%02d:%02d:%02d_%ld\n".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, l.utc_time));
+	}
+	print("Salgo\n");
 	tmp.do_backup();
+	print("Salgo2\n");
 	Gtk.main();
 	print("Hecho\n");
 	Posix.exit(0);

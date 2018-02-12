@@ -25,7 +25,7 @@ public abstract class backup_base : GLib.Object {
 	protected GLib.Settings cronopete_settings;
 
 	public abstract void do_backup();
-	public abstract backup_element[] get_backup_list();
+	public abstract backup_element[]? get_backup_list();
 	public abstract bool storage_is_available();
 
 	public backup_base() {
@@ -35,5 +35,11 @@ public abstract class backup_base : GLib.Object {
 }
 
 public class backup_element : GLib.Object {
-	
+	public time_t utc_time;
+	public GLib.Time local_time;
+
+	public backup_element(time_t t) {
+		this.utc_time = t;
+		this.local_time = GLib.Time.local(t);
+	}
 }
