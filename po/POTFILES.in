@@ -1,16 +1,6 @@
-src/backup.vala
 src/backup_base.vala
 src/backup_rsync.vala
-src/choose.vala
 src/cronopete.vala
-src/error_window.vala
-src/fixedlabel.vala
-src/icons_widget.vala
-src/ipc.vala
-src/menu.vala
-src/options.vala
-src/restore.vala
-src/usbhd_backend.vala
 data/interface/about.ui
 data/interface/chooser.ui
 data/interface/config_exported.ui

@@ -37,22 +37,11 @@ set (VALA_PACKAGES ${VALA_PACKAGES} gobject-2.0)
 set (VALA_PACKAGES ${VALA_PACKAGES} gsl)
 set (VALA_PACKAGES ${VALA_PACKAGES} pango)
 set (VALA_PACKAGES ${VALA_PACKAGES} pangocairo)
-set (VALA_PACKAGES ${VALA_PACKAGES} udisks2)
 
 set (APP_SOURCES ${APP_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Config.vala)
-set (APP_SOURCES ${APP_SOURCES} backup.vala)
 set (APP_SOURCES ${APP_SOURCES} backup_base.vala)
 set (APP_SOURCES ${APP_SOURCES} backup_rsync.vala)
-set (APP_SOURCES ${APP_SOURCES} choose.vala)
 set (APP_SOURCES ${APP_SOURCES} cronopete.vala)
-set (APP_SOURCES ${APP_SOURCES} error_window.vala)
-set (APP_SOURCES ${APP_SOURCES} fixedlabel.vala)
-set (APP_SOURCES ${APP_SOURCES} icons_widget.vala)
-set (APP_SOURCES ${APP_SOURCES} ipc.vala)
-set (APP_SOURCES ${APP_SOURCES} menu.vala)
-set (APP_SOURCES ${APP_SOURCES} options.vala)
-set (APP_SOURCES ${APP_SOURCES} restore.vala)
-set (APP_SOURCES ${APP_SOURCES} usbhd_backend.vala)
 
 if (NO_APPINDICATOR)
 	set (COMPILE_OPTIONS ${COMPILE_OPTIONS} -D NO_APPINDICATOR)
@@ -66,7 +55,7 @@ endif()
 
 set (COMPILE_OPTIONS ${COMPILE_OPTIONS} --target-glib 2.32 )
 
-vala_precompile(VALA_C cronopete
+vala_precompile(VALA_C cronopete2
 	${APP_SOURCES}
 PACKAGES
 	${VALA_PACKAGES}
@@ -74,17 +63,17 @@ OPTIONS
 	${COMPILE_OPTIONS}
 )
 
-add_executable(cronopete ${VALA_C})
+add_executable(cronopete2 ${VALA_C})
 
 
 install(TARGETS
-	cronopete
+	cronopete2
 RUNTIME DESTINATION
 	${CMAKE_INSTALL_BINDIR}
 )
 if(HAVE_VALADOC)
-	valadoc(cronopete
-		${CMAKE_BINARY_DIR}/valadoc/cronopete
+	valadoc(cronopete2
+		${CMAKE_BINARY_DIR}/valadoc/cronopete2
 		${APP_SOURCES}
 	PACKAGES
 		${VALA_PACKAGES}
