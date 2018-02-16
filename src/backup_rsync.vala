@@ -97,11 +97,12 @@ namespace cronopete {
 		}
 
 		public override bool do_backup() {
+
 			this.folders = new Gee.ArrayList<folder_container?>();
 			string[] folder_list = this.cronopete_settings.get_strv("backup-folders");
 			string[] exclude_list = this.cronopete_settings.get_strv("exclude-folders");
 			foreach(var folder in folder_list) {
-				var container = folder_container(folder, exclude_list);
+				var container = folder_container(folder, exclude_list, this.cronopete_settings.get_boolean("skip-hiden-at-home"));
 				if (container.valid) {
 					this.folders.add(container);
 				}
@@ -313,7 +314,7 @@ namespace cronopete {
 		public string[] exclude;
 		public bool valid;
 
-		public folder_container(string folder, string[] exclude_list) {
+		public folder_container(string folder, string[] exclude_list, bool skip_hidden_at_home) {
 			this.valid = true;
 			if (!folder.has_suffix("/")) {
 				this.folder = folder + "/";
@@ -330,8 +331,14 @@ namespace cronopete {
 					break;
 				}
 				if (x.has_prefix(this.folder)) {
+					// "-1" to include the path separator before
 					this.exclude += x.substring(this.folder.length - 1);
 				}
+			}
+			// If this folder is the home folder, check if the hidden files/folders must be copied or not
+			var home_folder = Path.build_filename("/home", Environment.get_user_name()) + "/";
+			if ((this.folder == home_folder) && (skip_hidden_at_home)) {
+				this.exclude += "/.*";
 			}
 		}
 	}
