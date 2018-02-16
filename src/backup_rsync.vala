@@ -29,6 +29,10 @@ namespace cronopete {
 		private VolumeMonitor monitor;
 		// the current disk path (or null if the drive is not available)
 		private string? drive_path;
+		// the last backup path if there is one, or null if there are no previous backups
+		private string? last_backup;
+		// the current backup name
+		private string? current_backup;
 
 		public backup_rsync() {
 			this.monitor = VolumeMonitor.get();
@@ -36,6 +40,8 @@ namespace cronopete {
 			this.monitor.mount_removed.connect_after(this.refresh_connect);
 			this.refresh_connect_in();
 			this.folders = null;
+			this.last_backup = null;
+			this.current_backup = null;
 		}
 
 		public override Gee.List<backup_element>? get_backup_list() {
@@ -49,6 +55,7 @@ namespace cronopete {
 				try {
 					main_folder.make_directory_with_parents();
 				} catch (Error e) {
+					this.send_error(_("Can't create the base folder in the backup disk"));
 					return null; // Error: can't create the base directory
 				}
 			}
@@ -80,7 +87,6 @@ namespace cronopete {
 					}
 				}
 			} catch (Error e) {
-				print("Error in main folder backup: %s".printf(main_folder.get_uri()));
 				return null; // Error: can't read the backups list
 			}
 			return folder_list;
@@ -92,8 +98,8 @@ namespace cronopete {
 
 		public override bool do_backup() {
 			this.folders = new Gee.ArrayList<folder_container?>();
-			string[] folder_list = {"/home/raster/Descargas", "/home/raster/Documentos"};//this.cronopete_settings.get_strv("backup-folders");
-			string[] exclude_list = {};//this.cronopete_settings.get_strv("exclude-folders");
+			string[] folder_list = this.cronopete_settings.get_strv("backup-folders");
+			string[] exclude_list = this.cronopete_settings.get_strv("exclude-folders");
 			foreach(var folder in folder_list) {
 				var container = folder_container(folder, exclude_list);
 				if (container.valid) {
@@ -104,44 +110,173 @@ namespace cronopete {
 			if (backups == null) {
 				return false;
 			}
-			rsync_element last_backup = null;
+			rsync_element last_backup_element = null;
 			foreach(var backup in backups) {
 				var backup2 = (rsync_element)backup;
-				if (last_backup == null) {
-					last_backup = backup2;
+				if (last_backup_element == null) {
+					last_backup_element = backup2;
 				} else {
-					if (backup2.utc_time > last_backup.utc_time) {
-						last_backup = backup2;
+					if (backup2.utc_time > last_backup_element.utc_time) {
+						last_backup_element = backup2;
 					}
 				}
 			}
+			if (last_backup_element == null) {
+				this.last_backup = null;
+			} else {
+				this.last_backup = last_backup_element.full_path;
+			}
+			var t = time_t();
+			var ctime = GLib.Time.local(t);
+			this.current_backup = "%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, t);
 			this.current_status = backup_current_status.RUNNING;
 			this.do_backup_folder();
 			return true;
 		}
 
+		/**
+		 * This method backs up one folder
+		 */
 		private void do_backup_folder() {
+
 			Pid child_pid;
+			int standard_output;
+
 			if (this.folders.size == 0) {
-				this.current_status = backup_current_status.IDLE;
+				this.do_first_sync();
 				return;
 			}
 			var folder = this.folders.get(0);
 			this.folders.remove_at(0);
-			print("Backing up %s\n".printf(folder.folder));
-			string out_folder = Path.build_filename(this.drive_path, "prueba", folder.folder);
+			this.send_message(_("Backing up %s").printf(folder.folder));
+			/* The backup is done to a temporary folder called like the final one, but preppended with a 'B' letter
+			 * This way, if there is an big error (like if the computer hangs, or the electric suply fails), it will
+			 * be easily identified as an incomplete backup and won't be used
+			 */
+
+			string out_folder = Path.build_filename(this.drive_path, "B" + this.current_backup, folder.folder);
 			var out_folder_f = File.new_for_path(out_folder);
 			try {
 				out_folder_f.make_directory_with_parents();
 			} catch(Error e) {
 			}
-			string[] command = {"rsync", "-aX", "--progress", folder.folder, out_folder};
+			string[] command = {"rsync", "-aXv"};
+			if (this.last_backup != null) {
+				command += "--link-dest";
+				command += Path.build_filename(this.last_backup, folder.folder);
+			}
+			foreach(var exclude in folder.exclude) {
+				command += "--exclude";
+				command += exclude;
+			}
+			command += folder.folder;
+			command += out_folder;
 			string[] env = Environ.get();
-			GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid);
+			this.debug_command(command);
+			try {
+				GLib.Process.spawn_async_with_pipes("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid, null, out standard_output, null);
+			} catch (GLib.SpawnError error) {
+				this.send_error(_("Failed to launch rsync for '%s'. Aborting backup.").printf(folder.folder));
+				this.current_status = backup_current_status.IDLE;
+				return;
+			}
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
+				if (status != 0) {
+					this.send_warning(_("There was a problem when backing up the folder '%s'").printf(folder.folder));
+				}
 				this.do_backup_folder();
 			});
+			IOChannel output = new IOChannel.unix_new (standard_output);
+			output.add_watch (IOCondition.IN | IOCondition.HUP, (channel, condition) => {
+				if (condition == IOCondition.HUP) {
+					return false;
+				}
+				try {
+					string line;
+					channel.read_line (out line, null, null);
+					var line2 = line.strip();
+					this.send_file_backed_up(Path.build_filename(folder.folder, line2));
+				} catch (IOChannelError e) {
+					return false;
+				} catch (ConvertError e) {
+					return false;
+				}
+				return true;
+			});
+		}
+
+		/**
+		 * When the backup is done, do a sync to ensure that the data is physically stored in the disk
+		 */
+		private void do_first_sync() {
+			Pid child_pid;
+			string[] command = {"sync"};
+			string[] env = Environ.get();
+			this.send_message(_("Syncing disk"));
+			this.debug_command(command);
+			this.current_status = backup_current_status.SYNCING;
+			try {
+				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out 
+				child_pid);
+			} catch (GLib.SpawnError error) {
+				this.send_warning(_("Failed to launch sync command"));
+				this.do_rename_backup();
+				return;
+			}
+			ChildWatch.add (child_pid, (pid, status) => {
+				Process.close_pid (pid);
+				this.do_rename_backup();
+			});
+		}
+
+		/**
+		 * After the data has been physically stored, rename the directory
+		 */
+		private void do_rename_backup() {
+			Pid child_pid;
+			string[] command = {"mv", Path.build_filename(this.drive_path, "B" + this.current_backup), Path.build_filename(this.drive_path, this.current_backup)};
+			string[] env = Environ.get();
+			this.debug_command(command);
+			try {
+				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid);
+			} catch (GLib.SpawnError error) {
+				this.send_error(_("Failed to rename backup folder. Aborting backup."));
+				this.current_status = backup_current_status.IDLE;
+				return;
+			}
+			ChildWatch.add (child_pid, (pid, status) => {
+				Process.close_pid (pid);
+				this.do_second_sync();
+			});
+		}
+		/**
+		 * And when the directory has been renamed to its final name, sync again and finish the backup
+		 */
+		private void do_second_sync() {
+			Pid child_pid;
+			string[] command = {"sync"};
+			string[] env = Environ.get();
+			this.debug_command(command);
+			try {
+				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid);
+			} catch (GLib.SpawnError error) {
+				this.send_warning(_("Failed to launch final sync command."));
+				this.current_status = backup_current_status.IDLE;
+				return;
+			}
+			ChildWatch.add (child_pid, (pid, status) => {
+				Process.close_pid (pid);
+				this.current_status = backup_current_status.IDLE;
+			});
+		}
+
+		private void debug_command(string[] command_list) {
+			string debug_msg = "Launching command: ";
+			foreach(var c in command_list) {
+				debug_msg += c + " ";
+			}
+			this.send_debug(debug_msg);
 		}
 
 		private void refresh_connect(Mount mount) {
@@ -195,7 +330,7 @@ namespace cronopete {
 					break;
 				}
 				if (x.has_prefix(this.folder)) {
-					this.exclude += x.substring(this.folder.length);
+					this.exclude += x.substring(this.folder.length - 1);
 				}
 			}
 		}
@@ -204,12 +339,12 @@ namespace cronopete {
 	public class rsync_element : backup_element {
 
 		private FileInfo file_info;
-		private string path;
+		public string full_path;
 
 		public rsync_element(time_t t, string path, FileInfo f) {
 			this.set_common_data(t);
 			this.file_info = f;
-			this.path = path;
+			this.full_path = Path.build_filename(path, f.get_name());
 		}
 	}
 }

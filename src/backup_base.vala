@@ -18,7 +18,7 @@
 
 using GLib;
 
-public enum backup_current_status {IDLE, RUNNING}
+public enum backup_current_status {IDLE, RUNNING, SYNCING}
 
 public abstract class backup_base : GLib.Object {
 
@@ -30,9 +30,38 @@ public abstract class backup_base : GLib.Object {
 
 	/**
 	 * This signal is emitted every time the status of the backup
-	 * changes
+	 * changes.
 	 */
-	 public signal void current_status_changed(backup_current_status status);
+	public signal void current_status_changed(backup_current_status status);
+
+	/**
+	 * This signal is emitted every time a message must be sent to
+	 * the parent.
+	 */
+	public signal void send_message(string message);
+
+	/**
+	 * This signal is emitted every time a warning message must be sent to
+	 * the parent.
+	 */
+	public signal void send_warning(string warning_msg);
+
+	/**
+	 * This signal is emitted every time an error message must be sent to
+	 * the parent.
+	 */
+	public signal void send_error(string error_msg);
+
+	/**
+	 * This signal is emitted every time a debug message must be sent to
+	 * the parent.
+	 */
+	public signal void send_debug(string debug_msg);
+
+	/**
+	 * This signal is emitted every time a new file is being backed up
+	 */
+	public signal void send_file_backed_up(string full_path);
 
 	protected GLib.Settings cronopete_settings;
 	protected backup_current_status _current_status;
@@ -66,7 +95,7 @@ public abstract class backup_base : GLib.Object {
 	public abstract bool storage_is_available();
 
 	public backup_base() {
-		this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
+		this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete2");
 	}
 
 }
