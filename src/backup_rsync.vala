@@ -33,6 +33,11 @@ namespace cronopete {
 		private string? last_backup;
 		// the current backup name
 		private string? current_backup;
+		// contains the base regexp to identify a backup folder
+		private string regex_backup = "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]:[0-9][0-9]:[0-9][0-9]_[0-9]+";
+
+		// contains the type of delete we are doing, to now what do call at the end
+		private int deleting_mode;
 
 		public backup_rsync() {
 			this.monitor = VolumeMonitor.get();
@@ -42,6 +47,7 @@ namespace cronopete {
 			this.folders = null;
 			this.last_backup = null;
 			this.current_backup = null;
+			this.deleting_mode = -1;
 		}
 
 		public override Gee.List<backup_element>? get_backup_list() {
@@ -49,7 +55,7 @@ namespace cronopete {
 			if (this.drive_path == null) {
 				return null;
 			}
-			Gee.List<backup_element> folder_list = new Gee.ArrayList<backup_element>();;
+			Gee.List<backup_element> folder_list = new Gee.ArrayList<backup_element>();
 			var main_folder = File.new_for_path(this.drive_path);
 			if (false == main_folder.query_exists()) {
 				try {
@@ -60,6 +66,7 @@ namespace cronopete {
 				}
 			}
 			try {
+				GLib.Regex regexBackups = new GLib.Regex(this.regex_backup);
 				var folder_content = main_folder.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
 
 				FileInfo file_info;
@@ -71,19 +78,20 @@ namespace cronopete {
 					// unfinished backup, or one being removed, so don't append it
 
 					var dirname = file_info.get_name();
-					if (dirname[0] != 'B') {
-						if (dirname.length < 21) {
-							continue;
-						}
-						var date_value = dirname.substring(20);
-						if (date_value == null) {
-							continue;
-						}
-						time_t backup_time = (time_t) uint64.parse(dirname.substring(20));
-						// Also never append backups "from the future"
-						if ((backup_time <= now) && (backup_time != 0)) {
-							folder_list.add(new rsync_element(backup_time, this.drive_path, file_info));
-						}
+					if (! regexBackups.match(dirname)) {
+						continue;
+					}
+					if (dirname.length < 21) {
+						continue;
+					}
+					var date_value = dirname.substring(20);
+					if (date_value == null) {
+						continue;
+					}
+					time_t backup_time = (time_t) uint64.parse(dirname.substring(20));
+					// Also never append backups "from the future"
+					if ((backup_time <= now) && (backup_time != 0)) {
+						folder_list.add(new rsync_element(backup_time, this.drive_path, file_info));
 					}
 				}
 			} catch (Error e) {
@@ -113,7 +121,7 @@ namespace cronopete {
 			}
 			rsync_element last_backup_element = null;
 			foreach(var backup in backups) {
-				var backup2 = (rsync_element)backup;
+				var backup2 = backup as rsync_element;
 				if (last_backup_element == null) {
 					last_backup_element = backup2;
 				} else {
@@ -128,11 +136,92 @@ namespace cronopete {
 				this.last_backup = last_backup_element.full_path;
 			}
 			var t = time_t();
-			var ctime = GLib.Time.local(t);
-			this.current_backup = "%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, t);
+			
+			this.current_backup = this.date_to_folder_name(t);
 			this.current_status = backup_current_status.RUNNING;
-			this.do_backup_folder();
+			this.deleting_mode = 0;
+			// delete aborted backups first
+			this.delete_backup_folders("B");
 			return true;
+		}
+
+		private string date_to_folder_name(time_t t) {
+			var ctime = GLib.Time.local(t);
+			return "%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, t);
+		}
+
+		private void ended_deleting_old_backups() {
+			switch(this.deleting_mode) {
+				case 0: // we are deleting aborted backups
+				case 1: // we are freeing disk space because we ran out of it
+					this.deleting_mode = -1;
+					this.do_backup_folder();
+					break;
+				case 2: // we are deleting old backups
+					this.deleting_mode = -1;
+					this.current_status = backup_current_status.IDLE;
+					break;
+			}
+		}
+
+		/**
+		 * This method deletes any backup with a name that starts with 'B' or 'C'
+		 * because that's an aborted backup
+		 */
+		private void delete_backup_folders(string prefix) {
+
+			var main_folder = File.new_for_path(this.drive_path);
+			if (false == main_folder.query_exists()) {
+				try {
+					main_folder.make_directory_with_parents();
+				} catch (Error e) {
+					this.send_error(_("Can't create the base folder in the backup disk"));
+					return; // Error: can't create the base directory
+				}
+			}
+			// find the next folder to delete
+			string? to_delete = null;
+			try {
+				var folder_regexp = new GLib.Regex(prefix + this.regex_backup);
+				var folder_content = main_folder.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
+
+				FileInfo file_info;
+				while ((file_info = folder_content.next_file (null)) != null) {
+
+					// If the directory starts with 'B', it's a temporary directory from an
+					// unfinished backup, or one being removed, so don't append it
+
+					var dirname = file_info.get_name();
+					if (!folder_regexp.match(dirname)) {
+						continue;
+					}
+					to_delete = dirname;
+					break;
+				}
+			} catch(Error e) {
+				to_delete = null;
+			}
+
+			if (to_delete == null) {
+				this.ended_deleting_old_backups();
+				return;
+			}
+
+			Pid child_pid;
+			string[] command = {"bash", "-c", "rm -rf " + Path.build_filename(this.drive_path, to_delete)};
+			string[] env = Environ.get();
+			this.debug_command(command);
+			try {
+				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid);
+			} catch (GLib.SpawnError error) {
+				this.send_error(_("Failed to delete aborted backups: " + error.message));
+				this.ended_deleting_old_backups();
+				return;
+			}
+			ChildWatch.add (child_pid, (pid, status) => {
+				Process.close_pid (pid);
+				this.delete_backup_folders(prefix);
+			});
 		}
 
 		/**
@@ -148,7 +237,6 @@ namespace cronopete {
 				return;
 			}
 			var folder = this.folders.get(0);
-			this.folders.remove_at(0);
 			this.send_message(_("Backing up %s").printf(folder.folder));
 			/* The backup is done to a temporary folder called like the final one, but preppended with a 'B' letter
 			 * This way, if there is an big error (like if the computer hangs, or the electric suply fails), it will
@@ -184,8 +272,15 @@ namespace cronopete {
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
 				if (status != 0) {
+					if (status == 11) {
+						// if there is no free disk space, delete the oldest backup and try again
+						this.deleting_mode = 1;
+						this.delete_old_backups(true);
+						return;
+					}
 					this.send_warning(_("There was a problem when backing up the folder '%s'").printf(folder.folder));
 				}
+				this.folders.remove_at(0); // next folder
 				this.do_backup_folder();
 			});
 			IOChannel output = new IOChannel.unix_new (standard_output);
@@ -268,9 +363,54 @@ namespace cronopete {
 			}
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
-				this.current_status = backup_current_status.IDLE;
+				this.current_status = backup_current_status.CLEANING;
+				this.deleting_mode = 2;
+				this.delete_old_backups(false);
 			});
 		}
+
+		/**
+		 * Deletes old backups, ensuring that all the backups in the last 24 hours are kept,
+		 * also one daily backup for the last mont, and one backup each week for the rest of
+		 * the time.
+		 * 
+		 * @param free_space If true, if no backup is deleted, the last backup will be deleted
+		 * to make space for the current backup
+		 */
+		public void delete_old_backups(bool free_space) {
+
+			var backups = this.eval_backups_to_delete(free_space);
+
+			if (backups == null) {
+				this.ended_deleting_old_backups();
+				return;
+			}
+
+			bool found_backup_to_delete = false;
+			foreach(var backup_tmp in backups) {
+				if (backup_tmp.keep) {
+					continue;
+				}
+				found_backup_to_delete = true;
+				var backup = backup_tmp as rsync_element;
+				this.send_message(_("Deleting old backup %s").printf(backup.path));
+				File remove_folder = File.new_for_path(backup.full_path);
+				// First rename every backup that must be deleted, by preppending a 'C' letter
+				// This allows to mark them fast as "not usable" to avoid the recovery utility to list them
+				try {
+					remove_folder.set_display_name("C" + backup.path);
+				} catch (GLib.Error e) {
+					this.send_warning(_("Failed to delete old backup %s: %s").printf(backup.path, e.message));
+				}
+			}
+			// and now we delete those folders
+			if (found_backup_to_delete) {
+				this.delete_backup_folders("C");
+			} else {
+				this.ended_deleting_old_backups();
+			}
+		}
+
 
 		private void debug_command(string[] command_list) {
 			string debug_msg = "Launching command: ";
@@ -346,12 +486,14 @@ namespace cronopete {
 	public class rsync_element : backup_element {
 
 		private FileInfo file_info;
+		public string path;
 		public string full_path;
 
 		public rsync_element(time_t t, string path, FileInfo f) {
 			this.set_common_data(t);
 			this.file_info = f;
-			this.full_path = Path.build_filename(path, f.get_name());
+			this.path = f.get_name();
+			this.full_path = Path.build_filename(path, this.path);
 		}
 	}
 }

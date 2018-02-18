@@ -42,22 +42,33 @@ void print_file(string filename) {
 	//print("copiando "+filename+"\n");
 }
 
+void print_message(string msg) {
+	print("Mensaje "+msg+"\n");
+}
+
+void print_warning(string msg) {
+	print("WARNING "+msg+"\n");
+}
+
+void print_error(string msg) {
+	print("ERROR "+msg+"\n");
+}
+
 int main(string[] args) {
 
 	/*int fork_pid;
 	int status;*/
 	Gtk.init(ref args);
 
-	backup_base tmp = new cronopete.backup_rsync();
+	var tmp = new cronopete.backup_rsync();
 	tmp.send_debug.connect(print_debug);
+	tmp.send_message.connect(print_message);
+	tmp.send_warning.connect(print_warning);
+	tmp.send_error.connect(print_error);
 	tmp.send_file_backed_up.connect(print_file);
-	var lista = tmp.get_backup_list();
-	if (lista != null) {
-		foreach(var l in lista) {
-			var ctime = l.local_time;
-			print("%04d_%02d_%02d_%02d:%02d:%02d_%ld\n".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, l.utc_time));
-		}
-	}
+	tmp.delete_old_backups(false);
+	Gtk.main();
+	return 0;
 	tmp.do_backup();
 	Gtk.main();
 	return 0;

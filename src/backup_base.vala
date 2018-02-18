@@ -18,7 +18,15 @@
 
 using GLib;
 
-public enum backup_current_status {IDLE, RUNNING, SYNCING}
+/**
+ * These are the possible statuses:
+ * IDLE: no action is being performed
+ * RUNNING: a backup is being made
+ * SYNCING: the backup has been done and the system is syncing the disks
+ * CLEANING: the system is removing old backups
+ */
+
+public enum backup_current_status {IDLE, RUNNING, SYNCING, CLEANING}
 
 public abstract class backup_base : GLib.Object {
 
@@ -63,9 +71,9 @@ public abstract class backup_base : GLib.Object {
 	 */
 	public signal void send_file_backed_up(string full_path);
 
-	protected GLib.Settings cronopete_settings;
-	protected backup_current_status _current_status;
-
+	/**
+	 * Allows to get or set the current status
+	 */
 	public backup_current_status current_status {
 		get {
 			return this._current_status;
@@ -75,6 +83,9 @@ public abstract class backup_base : GLib.Object {
 			this.current_status_changed(value);
 		}
 	}
+
+	protected GLib.Settings cronopete_settings;
+	protected backup_current_status _current_status;
 
 	/**
 	 * Creates a new backup.
@@ -94,6 +105,122 @@ public abstract class backup_base : GLib.Object {
 	 */
 	public abstract bool storage_is_available();
 
+	/**
+	 * Returns a list with all the current backups, and will set the "keep" property as TRUE if
+	 * that backup must be kept, or will set it to FALSE if it must be deleted to reclaim its
+	 * disk space.
+	 * 
+	 * It follows these rules:
+	 * - keep all the backups made in the last 24 hours
+	 * - keep a daily backup made in the last month
+	 * - keep a weekly backup for every other cases
+	 * 
+	 * @param free_space If TRUE, if there are no old backups marked to be deleted after following
+	 * the previous rules, it will delete the oldest backup (this is used when there is no free
+	 * space when doing a backup); if FALSE, it will only delete the backups that don't follow the
+	 * rules.
+	 * 
+	 * @return A list of backup_elements with the "keep" property specifying if each backup must
+	 * be kept or must be deleted.
+	 */
+	protected Gee.List<backup_element>? eval_backups_to_delete(bool free_space) {
+
+		var backups = this.get_backup_list();
+		if (backups == null) {
+			return null;
+		}
+		time_t now_t = time_t();
+		/*
+			// Test for the code
+		backups = new Gee.ArrayList<backup_element?>();
+		var rnd = new GLib.Rand();
+		for(int i=0;i<4000;i++) {
+			var tiempo = (3600 * i) + rnd.int_range(0,500);
+			var f = new FileInfo();
+			f.set_name(this.date_to_folder_name(tiempo));
+			backups.add(new rsync_element(tiempo,"",f));
+		}
+		now_t = 4000 * 3600;
+		*/
+
+		// Some constants
+		time_t day_duration = 60*60*24;
+		time_t week_duration = day_duration * 7;
+		time_t month_duration = day_duration * 30; // use 30-day months
+
+		// time interval to keep all backups
+		time_t day = now_t - day_duration;
+		// time interval to keep a daily backup
+		time_t month = now_t - month_duration;
+
+		// temporary list where to store the backups to keep
+		Gee.List<backup_element?> to_keep = new Gee.ArrayList<backup_element?>();
+		foreach(var backup in backups) {
+			backup.keep = false;
+			if (backup.utc_time >= day) {
+				// this backup belongs to the last 24 hours
+				// so keep it unconditionally
+				to_keep.add(backup);
+				backup.keep = true;
+				continue;
+			}
+			time_t duration;
+			if (backup.utc_time >= month) {
+				duration = day_duration;
+			} else {
+				duration = week_duration;
+			}
+			var interval = backup.utc_time / duration;
+			backup_element? found = null;
+			// check if there is already a backup in that day/week
+			foreach(var b in to_keep) {
+				if (b.utc_time / duration == interval) {
+					found = b;
+					break;
+				}
+			}
+			if (found == null) {
+				// if in that day/week there are no backups, add this one
+				to_keep.add(backup);
+				backup.keep = true;
+				continue;
+			} else {
+				int64 distance1 = ((backup.utc_time % duration) - (duration / 2));
+				int64 distance2 = ((found.utc_time % duration) - (duration / 2));
+				distance1 = distance1.abs();
+				distance2 = distance2.abs();
+				if (distance1 < distance2) {
+					// the new backup is nearer the center of the interval than the old one, so
+					// replace the old with the new
+					to_keep.remove(found);
+					to_keep.add(backup);
+					backup.keep = true;
+					found.keep = false;
+				}
+			}
+		}
+		if (free_space) {
+			bool there_are_to_remove = false;
+			backup_element? oldest_element = null;
+			foreach(var b in backups) {
+				if (b.keep == false) {
+					there_are_to_remove = true;
+				}
+				if (oldest_element == null) {
+					oldest_element = b;
+					continue;
+				}
+				if (b.utc_time < oldest_element.utc_time) {
+					oldest_element = b;
+				}
+			}
+			if ((there_are_to_remove == false) && (oldest_element != null)) {
+				oldest_element.keep = false;
+			}
+		}
+		return backups;
+	}
+
 	public backup_base() {
 		this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete2");
 	}
@@ -103,9 +230,33 @@ public abstract class backup_base : GLib.Object {
 public abstract class backup_element : GLib.Object {
 	public time_t utc_time;
 	public GLib.Time local_time;
+	// used in eval_backups_to_delete to specify if this backup must be kept or
+	// should be deleted to free space
+	public bool keep;
 
 	protected void set_common_data(time_t t) {
 		this.utc_time = t;
 		this.local_time = GLib.Time.local(t);
+		this.keep = true;
 	}
+}
+
+public int sort_backup_elements_older_to_newer(backup_element a, backup_element b) {
+	if (a.utc_time < b.utc_time) {
+		return -1;
+	}
+	if (a.utc_time > b.utc_time) {
+		return 1;
+	}
+	return 0;
+}
+
+public int sort_backup_elements_newer_to_older(backup_element a, backup_element b) {
+	if (a.utc_time < b.utc_time) {
+		return 1;
+	}
+	if (a.utc_time > b.utc_time) {
+		return -1;
+	}
+	return 0;
 }
