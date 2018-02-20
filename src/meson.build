@@ -4,7 +4,7 @@ cfg_cronopete2.set('PKGDATADIR', join_paths(get_option('prefix'),get_option('dat
 cfg_cronopete2.set('GETTEXT_PACKAGE', 'cronopete')
 cfg_cronopete2.set('RELEASE_NAME', 'cronopete')
 cfg_cronopete2.set('PREFIX', get_option('prefix'))
-cfg_cronopete2.set('VERSION', '3.27.0')
+cfg_cronopete2.set('VERSION', '4.0.0')
 cfg_cronopete2.set('TESTSRCDIR', meson.source_root())
 
 cfgfile_3 = configure_file(input: 'Config.vala.base',output: 'Config.vala',configuration: cfg_cronopete2)
@@ -27,6 +27,9 @@ cronopete2_sources = [cfgfile_3]
 cronopete2_sources += ['backup_base.vala']
 cronopete2_sources += ['backup_rsync.vala']
 cronopete2_sources += ['cronopete.vala']
+cronopete2_sources += ['fixedlabel.vala']
+cronopete2_sources += ['menu.vala']
+cronopete2_sources += ['options.vala']
 cronopete2_vala_args = ['--pkg','posix']
 cronopete2_vala_args += ['--target-glib', '2.32']
 cronopete2_c_args = []

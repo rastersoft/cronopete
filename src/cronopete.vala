@@ -24,76 +24,118 @@ using Gdk;
 using Cairo;
 using Gsl;
 using Posix;
-
-// project version=3.27.0
-
-#if !NO_APPINDICATOR
 using AppIndicator;
-#endif
 
-enum SystemStatus { IDLE, BACKING_UP, ABORTING, ENDED }
-enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
+// project version=4.0.0
 
-void print_debug(string debug) {
-	print(debug+"\n");
-}
+namespace cronopete {
 
-void print_file(string filename) {
-	//print("copiando "+filename+"\n");
-}
+	cronopete_class callback_object;
 
-void print_message(string msg) {
-	print("Mensaje "+msg+"\n");
-}
+	enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
-void print_warning(string msg) {
-	print("WARNING "+msg+"\n");
-}
+	class cronopete_class : GLib.Object {
 
-void print_error(string msg) {
-	print("ERROR "+msg+"\n");
-}
+		private backup_base backup_backend;
+		private Indicator appindicator;
+		private GLib.Settings cronopete_settings;
+		private c_main_menu main_menu;
 
-int main(string[] args) {
+		public cronopete_class() {
+			// currently there is only the RSYNC backend
+			this.backup_backend = new backup_rsync();
+			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
+			this.main_menu = new c_main_menu(this.backup_backend);
+		}
 
-	/*int fork_pid;
-	int status;*/
-	Gtk.init(ref args);
+		public void check_welcome() {
+			if(this.cronopete_settings.get_boolean("show-welcome") == false) {
+				return;
+			}
 
-	var tmp = new cronopete.backup_rsync();
-	tmp.send_debug.connect(print_debug);
-	tmp.send_message.connect(print_message);
-	tmp.send_warning.connect(print_warning);
-	tmp.send_error.connect(print_error);
-	tmp.send_file_backed_up.connect(print_file);
-	tmp.delete_old_backups(false);
-	Gtk.main();
-	return 0;
-	tmp.do_backup();
-	Gtk.main();
-	return 0;
-}
+			var w = new Builder();
+			w.add_from_file(GLib.Path.build_filename(Constants.PKGDATADIR,"welcome.ui"));
+			var welcome_w = (Dialog)w.get_object("dialog1");
+			welcome_w.show();
+			var retval = welcome_w.run();
+			welcome_w.hide();
+			welcome_w.destroy();
+			switch(retval) {
+			case 1: // ask me later
+			break;
+			case 2: // configure now
+				this.cronopete_settings.set_boolean("show-welcome",false);
+				this.show_configuration();
+			break;
+			case 3: // don't ask again
+				this.cronopete_settings.set_boolean("show-welcome",false);
+			break;
+			}
+		}
 
-[DBus (name = "com.rastersoft.cronopete2")]
-public class DetectServer : GLib.Object {
-
-	public int do_ping(int v) {
-		return (v+1);
+		public void show_configuration() {
+			this.main_menu.show_main();
+		}
 	}
 
-	public void do_backup() {
-		//callback_object.backup_now();
+	void on_bus_aquired (DBusConnection conn) {
+		try {
+			conn.register_object ("/com/rastersoft/cronopete", new DetectServer ());
+		} catch (IOError e) {
+			GLib.stderr.printf ("Could not register service\n");
+		}
 	}
 
-	public void stop_backup() {
-		//callback_object.stop_backup();
+	int main(string[] args) {
+
+		int fork_pid;
+		int status;
+
+		while(true) {
+			// Create a child and run cronopete there
+			// If the child dies, launch cronopete again, to ensure that the backup always work
+			fork_pid = Posix.fork();
+			if (fork_pid == 0) {
+				nice(19); // Minimum priority
+				Intl.bindtextdomain(Constants.GETTEXT_PACKAGE, GLib.Path.build_filename(Constants.DATADIR,"locale"));
+				Intl.textdomain("cronopete");
+				Intl.bind_textdomain_codeset("cronopete", "UTF-8" );	
+				Gtk.init(ref args);
+				callback_object = new cronopete_class();
+				Bus.own_name (BusType.SESSION, "com.rastersoft.cronopete", BusNameOwnerFlags.NONE, on_bus_aquired, () => {}, () => {
+					GLib.stderr.printf ("Cronopete is already running\n");
+					Posix.exit(1);
+				});
+	
+				callback_object.check_welcome();
+				Gtk.main();
+				return 0;
+			}
+		Posix.waitpid (fork_pid, out status, 0);
+		}
 	}
 
-	public void show_preferences() {
-		//callback_object.main_clicked ();
-	}
+	[DBus (name = "com.rastersoft.cronopete")]
+	public class DetectServer : GLib.Object {
 
-	public void restore_files() {
-		//callback_object.enter_clicked ();
+		public int do_ping(int v) {
+			return (v+1);
+		}
+
+		public void do_backup() {
+			//callback_object.backup_now();
+		}
+
+		public void stop_backup() {
+			//callback_object.stop_backup();
+		}
+
+		public void show_preferences() {
+			callback_object.show_configuration();
+		}
+
+		public void restore_files() {
+			//callback_object.enter_clicked ();
+		}
 	}
 }

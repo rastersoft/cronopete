@@ -1,6 +1,9 @@
 src/backup_base.vala
 src/backup_rsync.vala
 src/cronopete.vala
+src/fixedlabel.vala
+src/menu.vala
+src/options.vala
 data/interface/about.ui
 data/interface/chooser.ui
 data/interface/config_exported.ui

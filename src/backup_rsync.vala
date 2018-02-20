@@ -35,36 +35,86 @@ namespace cronopete {
 		private string? current_backup;
 		// contains the base regexp to identify a backup folder
 		private string regex_backup = "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]:[0-9][0-9]:[0-9][0-9]_[0-9]+";
-
 		// contains the type of delete we are doing, to now what do call at the end
 		private int deleting_mode;
+		// contains the last backup time
+		private time_t last_backup_time;
+		// contains the current backup time
+		private time_t current_backup_time;
 
 		public backup_rsync() {
-			this.monitor = VolumeMonitor.get();
-			this.monitor.mount_added.connect_after(this.refresh_connect);
-			this.monitor.mount_removed.connect_after(this.refresh_connect);
-			this.refresh_connect_in();
 			this.folders = null;
 			this.last_backup = null;
 			this.current_backup = null;
 			this.deleting_mode = -1;
+			this.monitor = VolumeMonitor.get();
+			this.last_backup_time = 0;
+			this.monitor.mount_added.connect_after(this.refresh_connect);
+			this.monitor.mount_removed.connect_after(this.refresh_connect);
+			this.refresh_connect_in();
 		}
 
-		public override Gee.List<backup_element>? get_backup_list() {
-
-			if (this.drive_path == null) {
-				return null;
+		public override time_t get_last_backup() {
+			if (this.last_backup_time == 0) {
+				time_t v1, v2;
+				// get the value
+				this.get_backup_list(out v1, out v2);
 			}
-			Gee.List<backup_element> folder_list = new Gee.ArrayList<backup_element>();
+			return this.last_backup_time;
+		}
+
+		public override bool get_backup_data(out string? id, out time_t oldest, out time_t newest, out uint64 total_space, out uint64 free_space, out string? icon) {
+
+			id = cronopete_settings.get_string("backup-uid");
+			icon = "drive-harddisk";
+			oldest = 0;
+			this.last_backup_time = 0;
+			newest = 0;
+			total_space = 0;
+			free_space = 0;
+			if (this.drive_path != null) {
+				this.get_backup_list(out oldest, out newest);
+				try {
+					if (this.drive_path != null) {
+						var file = File.new_for_path(this.drive_path);
+						var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE + "," + FileAttribute.FILESYSTEM_FREE, null);
+						total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
+						free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+					}
+				} catch (Error e) {
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		private bool create_base_folder() {
 			var main_folder = File.new_for_path(this.drive_path);
 			if (false == main_folder.query_exists()) {
 				try {
 					main_folder.make_directory_with_parents();
 				} catch (Error e) {
-					this.send_error(_("Can't create the base folder in the backup disk"));
-					return null; // Error: can't create the base directory
+					this.send_error(_("Can't create the base folders to do backups. Aborting backup.\n"));
+					this.current_status = backup_current_status.IDLE;
+					return false; // Error: can't create the base directory
 				}
 			}
+			return true;
+		}
+
+		public override Gee.List<backup_element>? get_backup_list(out time_t oldest, out time_t newest) {
+
+			oldest = 0;
+			newest = 0;
+			if (this.drive_path == null) {
+				return null;
+			}
+			Gee.List<backup_element> folder_list = new Gee.ArrayList<backup_element>();
+			if (!this.create_base_folder()) {
+				return null;
+			}
+			var main_folder = File.new_for_path(this.drive_path);
 			try {
 				GLib.Regex regexBackups = new GLib.Regex(this.regex_backup);
 				var folder_content = main_folder.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
@@ -91,6 +141,13 @@ namespace cronopete {
 					time_t backup_time = (time_t) uint64.parse(dirname.substring(20));
 					// Also never append backups "from the future"
 					if ((backup_time <= now) && (backup_time != 0)) {
+						if ((oldest == 0) || (backup_time < oldest)) {
+							oldest = backup_time;
+							this.last_backup_time = oldest;
+						}
+						if ((newest == 0) || (backup_time > newest)) {
+							newest = backup_time;
+						}
 						folder_list.add(new rsync_element(backup_time, this.drive_path, file_info));
 					}
 				}
@@ -106,6 +163,14 @@ namespace cronopete {
 
 		public override bool do_backup() {
 
+			if (this.current_status != backup_current_status.IDLE) {
+				return false;
+			}
+
+			this.send_message(_("Starting backup\n"));
+			if (!this.create_base_folder()) {
+				return false;
+			}
 			this.folders = new Gee.ArrayList<folder_container?>();
 			string[] folder_list = this.cronopete_settings.get_strv("backup-folders");
 			string[] exclude_list = this.cronopete_settings.get_strv("exclude-folders");
@@ -115,7 +180,9 @@ namespace cronopete {
 					this.folders.add(container);
 				}
 			}
-			var backups = this.get_backup_list();
+			time_t oldest;
+			time_t newest;
+			var backups = this.get_backup_list(out oldest, out newest);
 			if (backups == null) {
 				return false;
 			}
@@ -135,9 +202,8 @@ namespace cronopete {
 			} else {
 				this.last_backup = last_backup_element.full_path;
 			}
-			var t = time_t();
-			
-			this.current_backup = this.date_to_folder_name(t);
+			this.current_backup_time = time_t();
+			this.current_backup = this.date_to_folder_name(this.current_backup_time);
 			this.current_status = backup_current_status.RUNNING;
 			this.deleting_mode = 0;
 			// delete aborted backups first
@@ -171,14 +237,6 @@ namespace cronopete {
 		private void delete_backup_folders(string prefix) {
 
 			var main_folder = File.new_for_path(this.drive_path);
-			if (false == main_folder.query_exists()) {
-				try {
-					main_folder.make_directory_with_parents();
-				} catch (Error e) {
-					this.send_error(_("Can't create the base folder in the backup disk"));
-					return; // Error: can't create the base directory
-				}
-			}
 			// find the next folder to delete
 			string? to_delete = null;
 			try {
@@ -237,7 +295,7 @@ namespace cronopete {
 				return;
 			}
 			var folder = this.folders.get(0);
-			this.send_message(_("Backing up %s").printf(folder.folder));
+			this.send_message(_("Backing up folder %s.\n").printf(folder.folder));
 			/* The backup is done to a temporary folder called like the final one, but preppended with a 'B' letter
 			 * This way, if there is an big error (like if the computer hangs, or the electric suply fails), it will
 			 * be easily identified as an incomplete backup and won't be used
@@ -257,6 +315,7 @@ namespace cronopete {
 			foreach(var exclude in folder.exclude) {
 				command += "--exclude";
 				command += exclude;
+				this.send_message(_("Excluding folder %s.\n").printf(Path.build_filename(folder.folder, exclude)));
 			}
 			command += folder.folder;
 			command += out_folder;
@@ -343,6 +402,13 @@ namespace cronopete {
 			}
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
+				if (status == 0) {
+					this.last_backup_time = this.current_backup_time;
+				} else {
+					this.send_error(_("Failed to rename backup folder. Aborting backup."));
+					this.current_status = backup_current_status.IDLE;
+					return;
+				}
 				this.do_second_sync();
 			});
 		}
@@ -350,6 +416,7 @@ namespace cronopete {
 		 * And when the directory has been renamed to its final name, sync again and finish the backup
 		 */
 		private void do_second_sync() {
+			this.send_message(_("Syncing disk\n"));
 			Pid child_pid;
 			string[] command = {"sync"};
 			string[] env = Environ.get();
@@ -428,23 +495,35 @@ namespace cronopete {
 
 			var volumes = this.monitor.get_volumes();
 			var drive_uuid = cronopete_settings.get_string("backup-uid");
-			this.drive_path = null;
 
 			foreach (Volume v in volumes) {
 				if ((drive_uuid != "") && (drive_uuid == v.get_identifier("uuid"))) {
 					var mnt = v.get_mount();
 					if (!(mnt is Mount)) {
+						this.last_backup_time = 0;
 						// the drive is not mounted!!!!!!
-						if (cronopete_settings.get_boolean("enabled")) {
+						if (this.drive_path != null) {
 							this.is_available_changed(false);
+							this.drive_path = null;
+						}
+						if (cronopete_settings.get_boolean("enabled")) {
 							v.mount.begin(GLib.MountMountFlags.NONE, null); // if backups are enabled, mount it
 						}
 					} else {
-						this.is_available_changed(true);
-						this.drive_path = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
+						if (this.drive_path == null) {
+							this.last_backup_time = 0;
+							this.is_available_changed(true);
+							this.drive_path = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
+						}
 					}
-					break;
+					return;
 				}
+			}
+			// the backup disk isn't connected
+			this.last_backup_time = 0;
+			if (this.drive_path != null) {
+				this.drive_path = null;
+				this.is_available_changed(false);
 			}
 		}
 	}

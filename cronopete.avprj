@@ -3,10 +3,8 @@ autovala_version: 27
 project_name: cronopete
 vala_version: 0.26
 
-*define: NO_APPINDICATOR
-
 vala_binary: src/cronopete2
-*version: 3.27.0
+*version: 4.0.0
 compile_options: --target-glib 2.32
 *vala_package: posix
 vala_check_package: gtk+-3.0
@@ -26,6 +24,9 @@ end
 *vala_source: backup_base.vala
 *vala_source: backup_rsync.vala
 *vala_source: cronopete.vala
+*vala_source: fixedlabel.vala
+*vala_source: menu.vala
+*vala_source: options.vala
 
 
 *po: po
@@ -47,6 +48,9 @@ end
 *translate: vala src/backup_base.vala
 *translate: vala src/backup_rsync.vala
 *translate: vala src/cronopete.vala
+*translate: vala src/fixedlabel.vala
+*translate: vala src/menu.vala
+*translate: vala src/options.vala
 
 *data: data/local
 
