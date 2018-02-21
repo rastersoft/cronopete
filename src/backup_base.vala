@@ -102,6 +102,12 @@ namespace cronopete {
 		public abstract bool do_backup();
 
 		/**
+		 * Aborts the current backup, and ensures that the half-made backup
+		 * is not a problem
+		 */
+		public abstract void abort_backup();
+
+		/**
 		 * Returns a list of all complete backups available in the storage
 		 * @param oldest A variable where to store the oldest backup available in the device
 		 * @param newest A variable where to store the newest backup available in the device
@@ -132,17 +138,17 @@ namespace cronopete {
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if
 		 * that backup must be kept, or will set it to FALSE if it must be deleted to reclaim its
 		 * disk space.
-		 * 
+		 *
 		 * It follows these rules:
 		 * - keep all the backups made in the last 24 hours
 		 * - keep a daily backup made in the last month
 		 * - keep a weekly backup for every other cases
-		 * 
+		 *
 		 * @param free_space If TRUE, if there are no old backups marked to be deleted after following
 		 * the previous rules, it will delete the oldest backup (this is used when there is no free
 		 * space when doing a backup); if FALSE, it will only delete the backups that don't follow the
 		 * rules.
-		 * 
+		 *
 		 * @return A list of backup_elements with the "keep" property specifying if each backup must
 		 * be kept or must be deleted.
 		 */

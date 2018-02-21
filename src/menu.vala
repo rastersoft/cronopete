@@ -19,7 +19,7 @@
 using GLib;
 using Gtk;
 
-namespace  cronopete { 
+namespace  cronopete {
 
     public class c_main_menu : GLib.Object {
 
@@ -54,7 +54,12 @@ namespace  cronopete {
             this.messages = new StringBuilder("");
 
             this.builder = new Builder();
-            this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"main.ui"));
+            try {
+                this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"main.ui"));
+            } catch(GLib.Error e) {
+                print("Can't create the configuration window. Aborting.\n");
+                Posix.exit(48);
+            }
 
             this.main_w = (Window) this.builder.get_object("window1");
 
@@ -73,7 +78,7 @@ namespace  cronopete {
             this.text_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
             var status_alignment = (Gtk.Alignment) this.builder.get_object("status_frame");
             status_alignment.add (this.text_status);
-            
+
             this.show_in_bar_ch.notify_property("active");
 
             (VBox) this.builder.get_object("vbox_switch");
@@ -107,7 +112,14 @@ namespace  cronopete {
             }
         }
 
-        public void insert_text_log(string msg) {
+        public void insert_text_log(string msg_original) {
+
+            string msg;
+            if ((msg_original != "") && (!msg_original.has_suffix("\n"))) {
+                msg = msg_original + "\n";
+            } else {
+                msg = msg_original;
+            }
 
             if (msg == "\n") {
                 this.messages = new StringBuilder("");
@@ -249,8 +261,12 @@ namespace  cronopete {
         public void about_clicked(Button source) {
 
             var w = new Builder();
-
-            w.add_from_file(GLib.Path.build_filename(Constants.PKGDATADIR,"about.ui"));
+            try {
+                w.add_from_file(GLib.Path.build_filename(Constants.PKGDATADIR,"about.ui"));
+            } catch(GLib.Error e) {
+                print("Can't create the about window.\n");
+                return;
+            }
 
             var about_w = (AboutDialog)w.get_object("aboutdialog1");
             about_w.set_transient_for(this.main_w);

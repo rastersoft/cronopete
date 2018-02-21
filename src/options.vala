@@ -40,7 +40,13 @@ public class c_options : GLib.Object {
         int retval;
 
         this.builder = new Builder();
-        this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"options.ui"));
+
+        try {
+            this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"options.ui"));
+        } catch(GLib.Error e) {
+            print("Can't create the options window. Aborting.\n");
+            Posix.exit(48);
+        }
 
         this.main_w = (Dialog) this.builder.get_object("options");
         this.main_w.set_transient_for(parent);
@@ -178,7 +184,12 @@ public class c_options : GLib.Object {
 
         int retval;
         var tmp_builder = new Builder();
-        tmp_builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"folder_selector.ui"));
+        try {
+            tmp_builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"folder_selector.ui"));
+        } catch(GLib.Error e) {
+            print("Can't create the folder selector window. Aborting.\n");
+            Posix.exit(48);
+        }
         var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
         selector.set_transient_for(this.main_w);
         selector.show_all();
@@ -208,7 +219,12 @@ public class c_options : GLib.Object {
         int retval;
 
         var tmp_builder = new Builder();
-        tmp_builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"folder_selector.ui"));
+        try {
+            tmp_builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"folder_selector.ui"));
+        } catch(GLib.Error e) {
+            print("Can't create the folder selector window. Aborting.\n");
+            Posix.exit(48);
+        }
         var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
         selector.set_transient_for(this.main_w);
         selector.show_all();

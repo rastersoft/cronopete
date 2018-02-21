@@ -272,6 +272,7 @@
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Next backup:</property>
                           </object>
                           <packing>
@@ -283,6 +284,7 @@
                           <object class="GtkLabel" id="label_next_backup">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

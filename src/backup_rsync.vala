@@ -41,8 +41,14 @@ namespace cronopete {
 		private time_t last_backup_time;
 		// contains the current backup time
 		private time_t current_backup_time;
+		// the PID for the currently running child, to abort a backup
+		private Pid current_child_pid;
+		// if an abort call has been issued
+		private bool aborting;
 
 		public backup_rsync() {
+			this.current_child_pid = -1;
+			this.aborting = false;
 			this.folders = null;
 			this.last_backup = null;
 			this.current_backup = null;
@@ -95,7 +101,7 @@ namespace cronopete {
 				try {
 					main_folder.make_directory_with_parents();
 				} catch (Error e) {
-					this.send_error(_("Can't create the base folders to do backups. Aborting backup.\n"));
+					this.send_error(_("Can't create the base folders to do backups. Aborting backup."));
 					this.current_status = backup_current_status.IDLE;
 					return false; // Error: can't create the base directory
 				}
@@ -143,10 +149,10 @@ namespace cronopete {
 					if ((backup_time <= now) && (backup_time != 0)) {
 						if ((oldest == 0) || (backup_time < oldest)) {
 							oldest = backup_time;
-							this.last_backup_time = oldest;
 						}
 						if ((newest == 0) || (backup_time > newest)) {
 							newest = backup_time;
+							this.last_backup_time = newest;
 						}
 						folder_list.add(new rsync_element(backup_time, this.drive_path, file_info));
 					}
@@ -161,13 +167,24 @@ namespace cronopete {
 			return (this.drive_path != null);
 		}
 
+		public override void abort_backup() {
+			if (this.aborting) {
+				return;
+			}
+			this.aborting = true;
+			if (this.current_child_pid != -1) {
+				Posix.kill(this.current_child_pid,Posix.SIGTERM);
+				this.current_child_pid = -1;
+			}
+		}
+
 		public override bool do_backup() {
 
 			if (this.current_status != backup_current_status.IDLE) {
 				return false;
 			}
 
-			this.send_message(_("Starting backup\n"));
+			this.send_message(_("Starting backup."));
 			if (!this.create_base_folder()) {
 				return false;
 			}
@@ -206,6 +223,7 @@ namespace cronopete {
 			this.current_backup = this.date_to_folder_name(this.current_backup_time);
 			this.current_status = backup_current_status.RUNNING;
 			this.deleting_mode = 0;
+			this.aborting = false;
 			// delete aborted backups first
 			this.delete_backup_folders("B");
 			return true;
@@ -216,7 +234,14 @@ namespace cronopete {
 			return "%04d_%02d_%02d_%02d:%02d:%02d_%ld".printf(1900 + ctime.year, ctime.month + 1, ctime.day, ctime.hour, ctime.minute, ctime.second, t);
 		}
 
+		/**
+		 * Manages the next command to run after deleting an old backup
+		 */
 		private void ended_deleting_old_backups() {
+			if (this.aborting) {
+				this.end_abort();
+				return;
+			}
 			switch(this.deleting_mode) {
 				case 0: // we are deleting aborted backups
 				case 1: // we are freeing disk space because we ran out of it
@@ -228,6 +253,17 @@ namespace cronopete {
 					this.current_status = backup_current_status.IDLE;
 					break;
 			}
+		}
+
+		/**
+		 * Sets everything as needed after an abort
+		 */
+		private void end_abort() {
+			this.current_child_pid = -1;
+			this.aborting = false;
+			this.deleting_mode = -1;
+			this.current_status = backup_current_status.IDLE;
+			this.send_message(_("Backup aborted."));
 		}
 
 		/**
@@ -276,8 +312,10 @@ namespace cronopete {
 				this.ended_deleting_old_backups();
 				return;
 			}
+			this.current_child_pid = child_pid;
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
+				this.current_child_pid = -1;
 				this.delete_backup_folders(prefix);
 			});
 		}
@@ -295,7 +333,7 @@ namespace cronopete {
 				return;
 			}
 			var folder = this.folders.get(0);
-			this.send_message(_("Backing up folder %s.\n").printf(folder.folder));
+			this.send_message(_("Backing up folder %s.").printf(folder.folder));
 			/* The backup is done to a temporary folder called like the final one, but preppended with a 'B' letter
 			 * This way, if there is an big error (like if the computer hangs, or the electric suply fails), it will
 			 * be easily identified as an incomplete backup and won't be used
@@ -315,7 +353,7 @@ namespace cronopete {
 			foreach(var exclude in folder.exclude) {
 				command += "--exclude";
 				command += exclude;
-				this.send_message(_("Excluding folder %s.\n").printf(Path.build_filename(folder.folder, exclude)));
+				this.send_message(_("Excluding folder %s.").printf(Path.build_filename(folder.folder, exclude)));
 			}
 			command += folder.folder;
 			command += out_folder;
@@ -328,8 +366,10 @@ namespace cronopete {
 				this.current_status = backup_current_status.IDLE;
 				return;
 			}
+			this.current_child_pid = child_pid;
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
+				this.current_child_pid = -1;
 				if (status != 0) {
 					if (status == 11) {
 						// if there is no free disk space, delete the oldest backup and try again
@@ -338,6 +378,10 @@ namespace cronopete {
 						return;
 					}
 					this.send_warning(_("There was a problem when backing up the folder '%s'").printf(folder.folder));
+				}
+				if (this.aborting) {
+					this.end_abort();
+					return;
 				}
 				this.folders.remove_at(0); // next folder
 				this.do_backup_folder();
@@ -372,51 +416,38 @@ namespace cronopete {
 			this.debug_command(command);
 			this.current_status = backup_current_status.SYNCING;
 			try {
-				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out 
-				child_pid);
-			} catch (GLib.SpawnError error) {
-				this.send_warning(_("Failed to launch sync command"));
-				this.do_rename_backup();
-				return;
-			}
-			ChildWatch.add (child_pid, (pid, status) => {
-				Process.close_pid (pid);
-				this.do_rename_backup();
-			});
-		}
-
-		/**
-		 * After the data has been physically stored, rename the directory
-		 */
-		private void do_rename_backup() {
-			Pid child_pid;
-			string[] command = {"mv", Path.build_filename(this.drive_path, "B" + this.current_backup), Path.build_filename(this.drive_path, this.current_backup)};
-			string[] env = Environ.get();
-			this.debug_command(command);
-			try {
 				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid);
 			} catch (GLib.SpawnError error) {
-				this.send_error(_("Failed to rename backup folder. Aborting backup."));
-				this.current_status = backup_current_status.IDLE;
+				this.send_warning(_("Failed to launch sync command"));
+				this.do_second_sync();
 				return;
 			}
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
-				if (status == 0) {
-					this.last_backup_time = this.current_backup_time;
-				} else {
-					this.send_error(_("Failed to rename backup folder. Aborting backup."));
-					this.current_status = backup_current_status.IDLE;
+				if (this.aborting) {
+					this.end_abort();
 					return;
 				}
 				this.do_second_sync();
 			});
 		}
+
 		/**
+		 * After the data has been physically stored, rename the directory
 		 * And when the directory has been renamed to its final name, sync again and finish the backup
 		 */
 		private void do_second_sync() {
-			this.send_message(_("Syncing disk\n"));
+			var current_folder = File.new_for_path(Path.build_filename(this.drive_path, "B" + this.current_backup));
+			try {
+				current_folder.set_display_name(this.current_backup);
+			} catch (GLib.Error e) {
+				this.send_warning(_("Failed to rename backup folder. Aborting backup."));
+				this.current_status = backup_current_status.CLEANING;
+				this.deleting_mode = 2;
+				this.delete_old_backups(false);
+				return;
+			}
+			this.send_message(_("Syncing disk."));
 			Pid child_pid;
 			string[] command = {"sync"};
 			string[] env = Environ.get();
@@ -430,6 +461,10 @@ namespace cronopete {
 			}
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
+				if (this.aborting) {
+					this.end_abort();
+					return;
+				}
 				this.current_status = backup_current_status.CLEANING;
 				this.deleting_mode = 2;
 				this.delete_old_backups(false);
@@ -440,7 +475,7 @@ namespace cronopete {
 		 * Deletes old backups, ensuring that all the backups in the last 24 hours are kept,
 		 * also one daily backup for the last mont, and one backup each week for the rest of
 		 * the time.
-		 * 
+		 *
 		 * @param free_space If true, if no backup is deleted, the last backup will be deleted
 		 * to make space for the current backup
 		 */
