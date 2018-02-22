@@ -44,7 +44,7 @@ public class c_options : GLib.Object {
         try {
             this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"options.ui"));
         } catch(GLib.Error e) {
-            print("Can't create the options window. Aborting.\n");
+            print("Can't create the options window. Aborting");
             Posix.exit(48);
         }
 
@@ -187,7 +187,7 @@ public class c_options : GLib.Object {
         try {
             tmp_builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"folder_selector.ui"));
         } catch(GLib.Error e) {
-            print("Can't create the folder selector window. Aborting.\n");
+            print("Can't create the folder selector window. Aborting");
             Posix.exit(48);
         }
         var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
@@ -222,7 +222,7 @@ public class c_options : GLib.Object {
         try {
             tmp_builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"folder_selector.ui"));
         } catch(GLib.Error e) {
-            print("Can't create the folder selector window. Aborting.\n");
+            print("Can't create the folder selector window. Aborting");
             Posix.exit(48);
         }
         var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");

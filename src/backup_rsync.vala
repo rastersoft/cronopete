@@ -101,7 +101,7 @@ namespace cronopete {
 				try {
 					main_folder.make_directory_with_parents();
 				} catch (Error e) {
-					this.send_error(_("Can't create the base folders to do backups. Aborting backup."));
+					this.send_error(_("Can't create the base folders to do backups. Aborting backup"));
 					this.current_status = backup_current_status.IDLE;
 					return false; // Error: can't create the base directory
 				}
@@ -184,7 +184,7 @@ namespace cronopete {
 				return false;
 			}
 
-			this.send_message(_("Starting backup."));
+			this.send_message(_("Starting backup"));
 			if (!this.create_base_folder()) {
 				return false;
 			}
@@ -249,6 +249,7 @@ namespace cronopete {
 					this.do_backup_folder();
 					break;
 				case 2: // we are deleting old backups
+					this.send_message(_("Backup done"));
 					this.deleting_mode = -1;
 					this.current_status = backup_current_status.IDLE;
 					break;
@@ -263,7 +264,7 @@ namespace cronopete {
 			this.aborting = false;
 			this.deleting_mode = -1;
 			this.current_status = backup_current_status.IDLE;
-			this.send_message(_("Backup aborted."));
+			this.send_message(_("Backup aborted"));
 		}
 
 		/**
@@ -333,7 +334,7 @@ namespace cronopete {
 				return;
 			}
 			var folder = this.folders.get(0);
-			this.send_message(_("Backing up folder %s.").printf(folder.folder));
+			this.send_message(_("Backing up folder %s").printf(folder.folder));
 			/* The backup is done to a temporary folder called like the final one, but preppended with a 'B' letter
 			 * This way, if there is an big error (like if the computer hangs, or the electric suply fails), it will
 			 * be easily identified as an incomplete backup and won't be used
@@ -353,7 +354,7 @@ namespace cronopete {
 			foreach(var exclude in folder.exclude) {
 				command += "--exclude";
 				command += exclude;
-				this.send_message(_("Excluding folder %s.").printf(Path.build_filename(folder.folder, exclude)));
+				this.send_message(_("Excluding folder %s").printf(Path.build_filename(folder.folder, exclude)));
 			}
 			command += folder.folder;
 			command += out_folder;
@@ -362,7 +363,7 @@ namespace cronopete {
 			try {
 				GLib.Process.spawn_async_with_pipes("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid, null, out standard_output, null);
 			} catch (GLib.SpawnError error) {
-				this.send_error(_("Failed to launch rsync for '%s'. Aborting backup.").printf(folder.folder));
+				this.send_error(_("Failed to launch rsync for '%s'. Aborting backup").printf(folder.folder));
 				this.current_status = backup_current_status.IDLE;
 				return;
 			}
@@ -370,6 +371,10 @@ namespace cronopete {
 			ChildWatch.add (child_pid, (pid, status) => {
 				Process.close_pid (pid);
 				this.current_child_pid = -1;
+				if (this.aborting) {
+					this.end_abort();
+					return;
+				}
 				if (status != 0) {
 					if (status == 11) {
 						// if there is no free disk space, delete the oldest backup and try again
@@ -378,10 +383,6 @@ namespace cronopete {
 						return;
 					}
 					this.send_warning(_("There was a problem when backing up the folder '%s'").printf(folder.folder));
-				}
-				if (this.aborting) {
-					this.end_abort();
-					return;
 				}
 				this.folders.remove_at(0); // next folder
 				this.do_backup_folder();
@@ -441,13 +442,12 @@ namespace cronopete {
 			try {
 				current_folder.set_display_name(this.current_backup);
 			} catch (GLib.Error e) {
-				this.send_warning(_("Failed to rename backup folder. Aborting backup."));
+				this.send_warning(_("Failed to rename backup folder. Aborting backup"));
 				this.current_status = backup_current_status.CLEANING;
 				this.deleting_mode = 2;
 				this.delete_old_backups(false);
 				return;
 			}
-			this.send_message(_("Syncing disk."));
 			Pid child_pid;
 			string[] command = {"sync"};
 			string[] env = Environ.get();
@@ -455,7 +455,7 @@ namespace cronopete {
 			try {
 				GLib.Process.spawn_async("/",command,env,SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,null,out child_pid);
 			} catch (GLib.SpawnError error) {
-				this.send_warning(_("Failed to launch final sync command."));
+				this.send_warning(_("Failed to launch final sync command"));
 				this.current_status = backup_current_status.IDLE;
 				return;
 			}
@@ -465,6 +465,7 @@ namespace cronopete {
 					this.end_abort();
 					return;
 				}
+				this.send_message(_("Disk synced, cleaning old backups"));
 				this.current_status = backup_current_status.CLEANING;
 				this.deleting_mode = 2;
 				this.delete_old_backups(false);

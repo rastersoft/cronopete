@@ -159,12 +159,10 @@ namespace  cronopete {
         public void show_main() {
 
             this.refresh_backup_data();
-
             this.log.set_text(this.messages.str);
             this.cronopete_settings.set_boolean("show-welcome",false);
             this.main_w.show_all();
             this.main_w.present();
-
             this.tabs.set_current_page(0);
 
             TextIter iter;
@@ -173,7 +171,6 @@ namespace  cronopete {
             this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
             this.text_status.set_label(this.last_status);
             this.is_visible = true;
-
         }
 
         public void refresh_backup_data() {
@@ -186,7 +183,6 @@ namespace  cronopete {
             string? icon;
 
             this.backend.get_backup_data(out volume_id, out oldest, out newest, out total_space, out free_space, out icon);
-
             if (volume_id == null) {
                 // This text means that the user still has not selected a hard disk where to do the backups
                 this.label_disk_id.set_text(_("Not defined"));
@@ -195,7 +191,7 @@ namespace  cronopete {
             }
             this.label_oldest.set_text(this.parse_date(oldest));
             this.label_newest.set_text(this.parse_date(newest));
-            time_t next = newest + this.cronopete_settings.get_int("backup-period");
+            time_t next = newest + this.cronopete_settings.get_uint("backup-period");
             time_t now = time_t();
             if (next < now) {
                 next = now + 600;

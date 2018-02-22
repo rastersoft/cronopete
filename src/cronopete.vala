@@ -49,10 +49,12 @@ namespace cronopete {
 		private Gtk.MenuItem menuEnter;
 
 		private int iconpos;
+		private uint animation_timer;
 
 		public cronopete_class() {
 
 			this.iconpos = 0;
+			this.animation_timer = 0;
 			this.current_status = BackupStatus.STOPPED;
 
 			// currently there is only the RSYNC backend
@@ -114,8 +116,11 @@ namespace cronopete {
 				icon_name += "4";
 			break;
 			}
-			this.iconpos++;
 			icon_name += "-";
+			backup_current_status backup_status = this.backend.current_status;
+			if (backup_status != backup_current_status.IDLE) {
+				this.iconpos++;
+			}
 			if (this.backend.storage_is_available() == false) {
 				icon_name += "red"; // There's no disk connected
 			} else {
@@ -123,12 +128,11 @@ namespace cronopete {
 					switch (this.current_status) {
 					case BackupStatus.STOPPED:
 						icon_name += "white"; // Idle
-						this.iconpos--;
 					break;
 					case BackupStatus.ALLFINE:
-						if (this.backend.current_status == backup_current_status.RUNNING) {
+						if ((backup_status == backup_current_status.RUNNING) && (backup_status == backup_current_status.SYNCING)) {
 							icon_name += "green"; // Doing backup; everything fine
-						} else if ((this.backend.current_status == backup_current_status.SYNCING) || (this.backend.current_status == backup_current_status.CLEANING)) {
+						} else if (backup_status == backup_current_status.CLEANING) {
 							icon_name += "white"; // Clening old backups; everything fine
 						}
 					break;
@@ -145,7 +149,12 @@ namespace cronopete {
 			}
 
 			this.appindicator.set_icon(icon_name);
-			return true;
+			if (backup_status == backup_current_status.IDLE) {
+				this.animation_timer = 0;
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 		private void backend_availability_changed(bool is_availabe) {
@@ -154,6 +163,16 @@ namespace cronopete {
 
 		public void backend_status_changed(backup_current_status status) {
 			this.menuSystem_popup(); // update the menu
+			if (status != backup_current_status.IDLE) {
+				if (this.animation_timer == 0) {
+					this.current_status = BackupStatus.ALLFINE;
+					this.animation_timer = GLib.Timeout.add(500, this.repaint_tray_icon);
+				}
+			} else {
+				if (this.current_status == BackupStatus.ALLFINE) {
+					this.current_status = BackupStatus.STOPPED;
+				}
+			}
 		}
 
 		private void received_warning(string msg) {
