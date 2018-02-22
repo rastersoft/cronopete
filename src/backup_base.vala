@@ -152,8 +152,9 @@ namespace cronopete {
 		 * @return A list of backup_elements with the "keep" property specifying if each backup must
 		 * be kept or must be deleted.
 		 */
-		protected Gee.List<backup_element>? eval_backups_to_delete(bool free_space) {
+		protected Gee.List<backup_element>? eval_backups_to_delete(bool free_space, out bool forcing_deletion) {
 
+			forcing_deletion = false;
 			time_t oldest;
 			time_t newest;
 			var backups = this.get_backup_list(out oldest, out newest);
@@ -230,6 +231,9 @@ namespace cronopete {
 					}
 				}
 			}
+			/* if there are no old backups to remove, and FREE_SPACE is TRUE,
+			 * we need to free space for the current backup
+			 */
 			if (free_space) {
 				bool there_are_to_remove = false;
 				backup_element? oldest_element = null;
@@ -245,8 +249,13 @@ namespace cronopete {
 						oldest_element = b;
 					}
 				}
+				/* If we need to free space, but no backups are being deleted when
+				 * using the backup keeping rules (all from last 24 hours, daily for
+				 * the last 15 days, weekely for the others), mark the oldest one for deletion
+				 */
 				if ((there_are_to_remove == false) && (oldest_element != null)) {
 					oldest_element.keep = false;
+					forcing_deletion = true; // specify that we are deleting the last one
 				}
 			}
 			return backups;

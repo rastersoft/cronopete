@@ -93,6 +93,11 @@ namespace cronopete {
 				} else {
 					this.appindicator.set_status(IndicatorStatus.PASSIVE);
 				}
+				return;
+			}
+			if (key == "enabled") {
+				this.repaint_tray_icon();
+				return;
 			}
 		}
 
@@ -130,7 +135,7 @@ namespace cronopete {
 						icon_name += "white"; // Idle
 					break;
 					case BackupStatus.ALLFINE:
-						if ((backup_status == backup_current_status.RUNNING) && (backup_status == backup_current_status.SYNCING)) {
+						if ((backup_status == backup_current_status.RUNNING) || (backup_status == backup_current_status.SYNCING)) {
 							icon_name += "green"; // Doing backup; everything fine
 						} else if (backup_status == backup_current_status.CLEANING) {
 							icon_name += "white"; // Clening old backups; everything fine
@@ -159,6 +164,7 @@ namespace cronopete {
 
 		private void backend_availability_changed(bool is_availabe) {
 			this.menuSystem_popup(); // update the menu
+			this.repaint_tray_icon(); // and the tray icon color
 		}
 
 		public void backend_status_changed(backup_current_status status) {

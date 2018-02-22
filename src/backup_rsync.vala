@@ -69,6 +69,20 @@ namespace cronopete {
 			return this.last_backup_time;
 		}
 
+		private void get_free_space(out uint64 total_space, out uint64 free_space) {
+			total_space = 0;
+			free_space = 0;
+			try {
+				if (this.drive_path != null) {
+					var file = File.new_for_path(this.drive_path);
+					var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE + "," + FileAttribute.FILESYSTEM_FREE, null);
+					total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
+					free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
+				}
+			} catch (Error e) {
+			}
+		}
+
 		public override bool get_backup_data(out string? id, out time_t oldest, out time_t newest, out uint64 total_space, out uint64 free_space, out string? icon) {
 
 			id = cronopete_settings.get_string("backup-uid");
@@ -80,15 +94,7 @@ namespace cronopete {
 			free_space = 0;
 			if (this.drive_path != null) {
 				this.get_backup_list(out oldest, out newest);
-				try {
-					if (this.drive_path != null) {
-						var file = File.new_for_path(this.drive_path);
-						var info = file.query_filesystem_info(FileAttribute.FILESYSTEM_SIZE + "," + FileAttribute.FILESYSTEM_FREE, null);
-						total_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_SIZE);
-						free_space = info.get_attribute_uint64(FileAttribute.FILESYSTEM_FREE);
-					}
-				} catch (Error e) {
-				}
+				this.get_free_space(out total_space, out free_space);
 				return true;
 			} else {
 				return false;
@@ -250,6 +256,11 @@ namespace cronopete {
 					break;
 				case 2: // we are deleting old backups
 					this.send_message(_("Backup done"));
+					this.deleting_mode = -1;
+					this.current_status = backup_current_status.IDLE;
+					break;
+				case 3: // there is a problem with the backup, stop deleting
+					this.send_error(_("Asked for freeing disk space when there is free space. Aborting backup"));
 					this.deleting_mode = -1;
 					this.current_status = backup_current_status.IDLE;
 					break;
@@ -482,11 +493,29 @@ namespace cronopete {
 		 */
 		public void delete_old_backups(bool free_space) {
 
-			var backups = this.eval_backups_to_delete(free_space);
+			bool forcing_deletion = false;
+			var backups = this.eval_backups_to_delete(free_space, out forcing_deletion);
 
 			if (backups == null) {
 				this.ended_deleting_old_backups();
 				return;
+			}
+
+			if (forcing_deletion) {
+				/* If we are deleting the last backup because we need free space,
+				 * ensure that there is no free space, just to avoid deleting everything
+				 * if there is a bug
+				 */
+				uint64 disk_total_space;
+				uint64 disk_free_space;
+				this.get_free_space(out disk_total_space, out disk_free_space);
+				// if the free space is more than the 10% of the total space, don't delete
+				// because
+				if (disk_free_space > (disk_total_space * 0.1)) {
+					this.deleting_mode = 3;
+					this.ended_deleting_old_backups();
+					return;
+				}
 			}
 
 			bool found_backup_to_delete = false;
