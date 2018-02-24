@@ -184,7 +184,7 @@ namespace cronopete {
 			}
 		}
 
-		public override bool do_backup() {
+		public override bool do_backup(string[] folder_list, string[] exclude_list, bool skip_hidden_at_home) {
 
 			if (this.current_status != backup_current_status.IDLE) {
 				return false;
@@ -195,10 +195,8 @@ namespace cronopete {
 				return false;
 			}
 			this.folders = new Gee.ArrayList<folder_container?>();
-			string[] folder_list = this.cronopete_settings.get_strv("backup-folders");
-			string[] exclude_list = this.cronopete_settings.get_strv("exclude-folders");
 			foreach(var folder in folder_list) {
-				var container = folder_container(folder, exclude_list, this.cronopete_settings.get_boolean("skip-hiden-at-home"));
+				var container = folder_container(folder, exclude_list, skip_hidden_at_home);
 				if (container.valid) {
 					this.folders.add(container);
 				}
@@ -568,7 +566,7 @@ namespace cronopete {
 							this.drive_path = null;
 						}
 						if (cronopete_settings.get_boolean("enabled")) {
-							v.mount.begin(GLib.MountMountFlags.NONE, null); // if backups are enabled, mount it
+							v.mount.begin(GLib.MountMountFlags.NONE, null); // if backups are enabled, remount it
 						}
 					} else {
 						if (this.drive_path == null) {

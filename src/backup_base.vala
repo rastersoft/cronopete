@@ -97,9 +97,13 @@ namespace cronopete {
 
 		/**
 		 * Creates a new backup.
+		 * @param folder_list A list with all the folders to backup
+		 * @param exclude_list A list with the folders to exclude from the backup
+		 * @param skip_hidden_at_home If TRUE, and the HOME directory is to be backed up, the hidden folders
+		 * in the HOME will be excluded. If FALSE, they will be backed up.
 		 * @return TRUE if the backup started fine; FALSE if there was an error
 		 */
-		public abstract bool do_backup();
+		public abstract bool do_backup(string[] folder_list, string[] exclude_list, bool skip_hidden_at_home);
 
 		/**
 		 * Aborts the current backup, and ensures that the half-made backup

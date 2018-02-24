@@ -94,7 +94,9 @@ namespace cronopete {
 				var now = time_t();
 				if ((last_backup + period) < now) {
 					// a backup is pending
-					this.backend.do_backup();
+					this.backend.do_backup(this.cronopete_settings.get_strv("backup-folders"),
+										   this.cronopete_settings.get_strv("exclude-folders"),
+										   this.cronopete_settings.get_boolean("skip-hiden-at-home"));
 				}
 			}
 			if (this.backup_timeout == period) {
@@ -324,13 +326,15 @@ namespace cronopete {
 			menuSBUnow.sensitive = this.backend.storage_is_available();
 		}
 
-		private void backup_now() {
+		public void backup_now() {
 			if (this.backend.current_status == backup_current_status.IDLE) {
-				this.backend.do_backup();
+				this.backend.do_backup(this.cronopete_settings.get_strv("backup-folders"),
+									   this.cronopete_settings.get_strv("exclude-folders"),
+									   this.cronopete_settings.get_boolean("skip-hiden-at-home"));
 			}
 		}
 
-		private void stop_backup() {
+		public void stop_backup() {
 			if (this.backend.current_status != backup_current_status.IDLE) {
 				this.backend.abort_backup();
 			}
@@ -388,11 +392,11 @@ namespace cronopete {
 		}
 
 		public void do_backup() {
-			//callback_object.backup_now();
+			callback_object.backup_now();
 		}
 
 		public void stop_backup() {
-			//callback_object.stop_backup();
+			callback_object.stop_backup();
 		}
 
 		public void show_preferences() {
