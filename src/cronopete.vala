@@ -50,6 +50,7 @@ namespace cronopete {
 
 		private int iconpos;
 		private uint animation_timer;
+		private uint32 backup_timeout;
 
 		public cronopete_class() {
 
@@ -81,6 +82,28 @@ namespace cronopete {
 			// set indicator visibility
 			this.changed_config("visible");
 			this.repaint_tray_icon();
+			// wait 10 minutes before checking if a backup is needed, to allow the desktop to be fully loaded
+			this.backup_timeout = 600;
+			GLib.Timeout.add(this.backup_timeout * 1000, this.check_backup);
+		}
+
+		private bool check_backup() {
+			var period = this.cronopete_settings.get_uint("backup-period");
+			if (this.backend.current_status == backup_current_status.IDLE) {
+				var last_backup = this.backend.get_last_backup();
+				var now = time_t();
+				if ((last_backup + period) < now) {
+					// a backup is pending
+					this.backend.do_backup();
+				}
+			}
+			if (this.backup_timeout == period) {
+				return true;
+			} else {
+				GLib.Timeout.add(period * 1000, this.check_backup);
+				this.backup_timeout = period;
+				return false;
+			}
 		}
 
 		/**

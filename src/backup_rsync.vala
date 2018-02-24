@@ -294,7 +294,7 @@ namespace cronopete {
 				FileInfo file_info;
 				while ((file_info = folder_content.next_file (null)) != null) {
 
-					// If the directory starts with 'B', it's a temporary directory from an
+					// If the directory starts with 'prefix', it's a temporary directory from an
 					// unfinished backup, or one being removed, so don't append it
 
 					var dirname = file_info.get_name();
@@ -305,6 +305,7 @@ namespace cronopete {
 					break;
 				}
 			} catch(Error e) {
+				this.send_error("Failed to delete folders: %s".printf(e.message));
 				to_delete = null;
 			}
 
@@ -497,6 +498,7 @@ namespace cronopete {
 			var backups = this.eval_backups_to_delete(free_space, out forcing_deletion);
 
 			if (backups == null) {
+				this.send_message(_("No old backups to delete"));
 				this.ended_deleting_old_backups();
 				return;
 			}
@@ -518,12 +520,10 @@ namespace cronopete {
 				}
 			}
 
-			bool found_backup_to_delete = false;
 			foreach(var backup_tmp in backups) {
 				if (backup_tmp.keep) {
 					continue;
 				}
-				found_backup_to_delete = true;
 				var backup = backup_tmp as rsync_element;
 				this.send_message(_("Deleting old backup %s").printf(backup.path));
 				File remove_folder = File.new_for_path(backup.full_path);
@@ -536,11 +536,7 @@ namespace cronopete {
 				}
 			}
 			// and now we delete those folders
-			if (found_backup_to_delete) {
-				this.delete_backup_folders("C");
-			} else {
-				this.ended_deleting_old_backups();
-			}
+			this.delete_backup_folders("C");
 		}
 
 

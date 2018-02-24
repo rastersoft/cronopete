@@ -137,7 +137,8 @@ namespace cronopete {
 		/**
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if
 		 * that backup must be kept, or will set it to FALSE if it must be deleted to reclaim its
-		 * disk space.
+		 * disk space. The list will contain objects created with the backend's method "get_backup_list",
+		 * so it can contain extra data if the objects are children of backup_element.
 		 *
 		 * It follows these rules:
 		 * - keep all the backups made in the last 24 hours
