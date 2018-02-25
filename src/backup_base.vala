@@ -144,8 +144,10 @@ namespace cronopete {
 
 		/**
 		 * Shows and runs a Dialog to configure the disk where to do the backups
+		 * @param main_window The main window, to make any new window its sibling
+		 * @return TRUE if the disk has been chosen; FALSE if the disk has not been changed
 		 */
-		public abstract bool configure_backup_device();
+		public abstract bool configure_backup_device(Gtk.Window main_window);
 
 		/**
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if

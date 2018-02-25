@@ -49,7 +49,6 @@ interface Filesystem_if : GLib.Object {
 
 public class c_format : GLib.Object {
 
-    private string uipath;
     private Gtk.Window parent_window;
 
     public signal void format_ended(int status);
@@ -64,7 +63,12 @@ public class c_format : GLib.Object {
         GLib.stdout.printf("Error: %s\n",msg);
 
         var builder=new Builder();
-        builder.add_from_file(Path.build_filename(this.uipath,"format_error.ui"));
+        try {
+            builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"format_error.ui"));
+        } catch (GLib.Error e) {
+            print("Can't show the ERROR window: %s\n".printf(e.message));
+            return;
+        }
         var label = (Label) builder.get_object("msg_error");
         label.set_label(msg);
         var w = (Dialog) builder.get_object("error_dialog");
@@ -79,26 +83,30 @@ public class c_format : GLib.Object {
     private async string? do_format(string disk_uuid) {
 
         string? final_uuid = null;
-
-        GLib.HashTable<ObjectPath,GLib.HashTable<string,GLib.HashTable<string,Variant>>> objects;
-        UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if> (BusType.SYSTEM, "org.freedesktop.UDisks2","/org/freedesktop/UDisks2");
-        udisk.GetManagedObjects(out objects);
-
         ObjectPath? disk = null;
         Block_if? block = null;
 
-        foreach(var o in objects.get_keys()) {
-            Introspectable_if intro = Bus.get_proxy_sync<Introspectable_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",o);
-            string data;
-            yield intro.Introspect(out data);
-            // check if it has the Block and Filesystem interfaces
-            if (data.contains("org.freedesktop.UDisks2.Block") && data.contains("org.freedesktop.UDisks2.Filesystem")) {
-                block = Bus.get_proxy_sync<Block_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",o);
-                if (block.IdUUID == disk_uuid) {
-                    disk = o;
-                    break;
+        try {
+            GLib.HashTable<ObjectPath,GLib.HashTable<string,GLib.HashTable<string,Variant>>> objects;
+            UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if> (BusType.SYSTEM, "org.freedesktop.UDisks2","/org/freedesktop/UDisks2");
+            udisk.GetManagedObjects(out objects);
+
+            foreach(var o in objects.get_keys()) {
+                Introspectable_if intro = Bus.get_proxy_sync<Introspectable_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",o);
+                string data;
+                yield intro.Introspect(out data);
+                // check if it has the Block and Filesystem interfaces
+                if (data.contains("org.freedesktop.UDisks2.Block") && data.contains("org.freedesktop.UDisks2.Filesystem")) {
+                    block = Bus.get_proxy_sync<Block_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",o);
+                    if (block.IdUUID == disk_uuid) {
+                        disk = o;
+                        break;
+                    }
                 }
             }
+        } catch (GLib.IOError e) {
+            print("DBus error: %s\n".printf(e.message));
+            final_uuid = null;
         }
 
         if (disk == null) { // Failed to find the disk!!!!!!
@@ -106,8 +114,14 @@ public class c_format : GLib.Object {
             return final_uuid;
         }
 
-        var filesystem = Bus.get_proxy_sync<Filesystem_if> (BusType.SYSTEM, "org.freedesktop.UDisks2",disk);
-        var hash = new GLib.HashTable<string,Variant>(str_hash,str_equal);
+        Filesystem_if filesystem;
+        try {
+            filesystem = Bus.get_proxy_sync<Filesystem_if> (BusType.SYSTEM, "org.freedesktop.UDisks2", disk);
+        } catch (GLib.IOError e) {
+            this.show_error(_("Failed to unmount the disk. Aborting format operation."));
+            return final_uuid;
+        }
+        var hash = new GLib.HashTable<string,Variant>(str_hash, str_equal);
         try {
             yield filesystem.Unmount(hash);
         } catch (GLib.Error e) {
@@ -116,7 +130,11 @@ public class c_format : GLib.Object {
         }
 
         var builder2 = new Builder();
-        builder2.add_from_file(Path.build_filename(this.uipath,"formatting.ui"));
+        try {
+            builder2.add_from_file(Path.build_filename(Constants.PKGDATADIR,"formatting.ui"));
+        } catch(GLib.Error e) {
+            print("Failed to create the FORMATTING window\n");
+        }
         var format_window = (Dialog) builder2.get_object("formatting");
         format_window.set_transient_for(this.parent_window);
         format_window.show_all();
@@ -130,7 +148,7 @@ public class c_format : GLib.Object {
         hash.insert("erase",boolvariant3);
 
         try {
-            yield block.Format("ext4",hash);
+            yield block.Format("ext4", hash);
         } catch (GLib.Error e) {
             this.show_error(_("Failed to format the disk (maybe it is needing too much time). Please, try again."));
             format_window.hide();
@@ -155,14 +173,17 @@ public class c_format : GLib.Object {
         return final_uuid;
     }
 
-    public string? run(string path,string disk_uuid) {
+    public string? run(string disk_uuid) {
 
-        this.uipath=path;
         string? new_uuid = null;
         string message;
         var builder = new Builder();
 
-        builder.add_from_file(Path.build_filename(path,"format_force.ui"));
+        try {
+            builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "format_force.ui"));
+        } catch (GLib.Error e) {
+            return null;
+        }
         message = _("The selected drive must be formated to be used for backups.\n\nTo do it, click the <i>Format disk</i> button.\n\n<b>All the data in the drive will be erased</b>");
         builder.connect_signals(this);
 
@@ -198,11 +219,10 @@ public class c_choose_disk : GLib.Object {
     private VolumeMonitor monitor;
     private TreeView disk_list;
     private Gtk.Window parent_window;
-    private string basepath;
     private Dialog choose_w;
     private GLib.Settings cronopete_settings;
 
-    private Gtk.CheckButton show_all;
+    private Gtk.CheckButton show_all_disks;
 
     private void show_all_toggled() {
         /**
@@ -219,7 +239,12 @@ public class c_choose_disk : GLib.Object {
 
         this.cronopete_settings = c_settings;
         this.builder = new Builder();
-        this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "chooser.ui"));
+        try {
+            this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "chooser.ui"));
+        } catch (GLib.Error e) {
+            print("Failed to create the window for choosing the disk\n");
+            return null;
+        }
         this.builder.connect_signals(this);
 
         this.choose_w = (Dialog) this.builder.get_object("disk_chooser");
@@ -228,9 +253,9 @@ public class c_choose_disk : GLib.Object {
         this.disk_list = (TreeView) this.builder.get_object("disk_list");
         this.ok_button = (Button) this.builder.get_object("ok_button");
 
-        this.show_all = (Gtk.CheckButton) this.builder.get_object("show_all_disks");
-        this.cronopete_settings.bind("all-drives", this.show_all, "active", GLib.SettingsBindFlags.DEFAULT);
-        this.show_all.toggled.connect(this.show_all_toggled);
+        this.show_all_disks = (Gtk.CheckButton) this.builder.get_object("show_all_disks");
+        this.cronopete_settings.bind("all-drives", this.show_all_disks, "active", GLib.SettingsBindFlags.DEFAULT);
+        this.show_all_disks.toggled.connect(this.show_all_toggled);
 
         this.disk_listmodel = new Gtk.ListStore (6, typeof(Icon), typeof (string), typeof (string), typeof (string), typeof (string), typeof (string));
         this.disk_list.set_model(this.disk_listmodel);
@@ -260,7 +285,6 @@ public class c_choose_disk : GLib.Object {
 
             var selected = this.disk_list.get_selection();
             if (selected.count_selected_rows()!=0) {
-
                 TreeModel model;
                 TreeIter iter;
                 GLib.Value spath;
@@ -274,22 +298,23 @@ public class c_choose_disk : GLib.Object {
                 var fstype = stype.get_string().dup();
                 var final_path = spath.get_string().dup();
                 var final_uid = suid.get_string().dup();
-
+                print(fstype + "\n");
                 // EXT4 is the recomended filesystem for cronopete
-                if ((fstype == "reiserfs") || (fstype.has_prefix("btrfs")) || (fstype.has_prefix("ext4"))) {
+                if ((fstype == "reiserfs") || (fstype == "btrfs") || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
                     var backup_path = Path.build_filename(final_path, "cronopete");
                     var directory2 = File.new_for_path(backup_path);
                     // if the media doesn't have the folder "cronopete", try to create it
-                    if (!directory2.query_exists()) {
+                    if (directory2.query_exists() == false) {
                         try {
                             // if it's possible to create it, go ahead
-                            directory2.make_directory_with_parents();
-                            final_disk_uuid = final_uid;
-                            retval = Posix.chmod(backup_path, 0x01FF); // everybody can read and write
-                            if (retval == 0) {
-                                break;
+                            if (directory2.make_directory_with_parents()) {
+                                final_disk_uuid = final_uid;
+                                var retval = Posix.chmod(backup_path, 0x01FF); // everybody can read and write
+                                if (retval == 0) {
+                                    break;
+                                }
                             }
-                        } catch (IOError e) {
+                        } catch (GLib.Error e) {
                             // if not, the media is not writable by this user, so propose to format it
                         }
                     } else {
@@ -298,13 +323,11 @@ public class c_choose_disk : GLib.Object {
                         if (retval == 0) {
                             break;
                         }
-                        break;
                     }
                 }
                 this.choose_w.hide();
-
                 var w = new c_format(this.parent_window);
-                final_disk_uuid = w.run(this.basepath,final_uid);
+                final_disk_uuid = w.run(final_uid);
                 if (final_disk_uuid != null) {
                     break;
                 }
@@ -329,8 +352,14 @@ public class c_choose_disk : GLib.Object {
 
     private bool check_is_external(string uid) {
 
-        if (this.refresh_list.get_active()) {
-            return (true);
+        /**
+         * Returns if an specific disk is external or internal, to decide if it
+         * is shown in the list of available disks or not
+         */
+        if (this.show_all_disks.get_active()) {
+            // If the "show all disks" togglebutton is marked, return always TRUE
+            // to ensure that all disks are shown
+            return true;
         }
 
         try {
@@ -346,7 +375,7 @@ public class c_choose_disk : GLib.Object {
                     }
                 }
             }
-        } catch (IOError e) {
+        } catch (GLib.Error e) {
             GLib.stdout.printf(e.message);
         }
         return (true);
@@ -386,7 +415,7 @@ public class c_choose_disk : GLib.Object {
                 size = info.get_attribute_uint64("filesystem::size");
             } catch (GLib.Error e) {
                 fsystem = null;
-                print ("Failed to get filesystem data");
+                print("Failed to get filesystem data");
             }
             uid = v.get_identifier("uuid");
 

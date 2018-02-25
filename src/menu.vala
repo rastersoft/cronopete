@@ -220,24 +220,7 @@ namespace  cronopete {
         public void change_disk_callback(Button source) {
 
             // CALL TO THE DISK SELECT CODE IN THE BACKEND
-
-            /*bool not_configured;
-
-            if (this.cronopete_settings.get_string("backup-uid") == "") {
-                not_configured=true;
-            } else {
-                not_configured=false;
-            }
-            var tmp = new c_choose_disk(this.main_w,Constants.PKGDATADIR);
-            var new_uuid = tmp.run(this.cronopete_settings);
-            if (new_uuid != null) {
-                this.parent.backup_uid = new_uuid;
-            }
-            if ((new_uuid != "") && (new_uuid != null) && (not_configured==true) && (this.parent.active==false)) {
-                this.parent.active=true;
-                this.enabled_ch.active=true;
-            }
-            this.refresh_backup_data();*/
+            this.backend.configure_backup_device(this.main_w);
         }
 
         [CCode (instance_pos = -1)]

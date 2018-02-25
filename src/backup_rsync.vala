@@ -605,8 +605,10 @@ namespace cronopete {
 			}
 		}
 
-		public override bool configure_backup_device() {
-			//var builder = Gtk.Builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"chooser.ui"));
+		public override bool configure_backup_device(Gtk.Window main_window) {
+			var choose_window = new c_choose_disk(main_window);
+			var disk_uuid = choose_window.run(this.cronopete_settings);
+			print(disk_uuid);
 			return false;
 		}
 	}

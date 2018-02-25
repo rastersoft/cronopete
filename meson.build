@@ -18,6 +18,7 @@ gobject_2_0_dep = dependency('gobject-2.0')
 gsl_dep = dependency('gsl')
 pango_dep = dependency('pango')
 pangocairo_dep = dependency('pangocairo')
+udisks2_dep = dependency('udisks2')
 
 subdir('po')
 cfg_dbus_data = configuration_data()
