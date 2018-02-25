@@ -29,6 +29,8 @@ namespace cronopete {
 		private VolumeMonitor monitor;
 		// the current disk path (or null if the drive is not available), which will be /path/to/disk/cronopete/username
 		private string? drive_path;
+		// the current disk path (or null if the drive is not available) without the user
+		private string? base_drive_path;
 		// the last backup path if there is one, or null if there are no previous backups
 		private string? last_backup;
 		// the current backup name
@@ -47,6 +49,8 @@ namespace cronopete {
 		private bool aborting;
 
 		public backup_rsync() {
+			this.drive_path = null;
+			this.base_drive_path = null;
 			this.current_child_pid = -1;
 			this.aborting = false;
 			this.folders = null;
@@ -192,6 +196,10 @@ namespace cronopete {
 
 			if (this.drive_path == null) {
 				return false;
+			}
+			Posix.chmod(this.drive_path, 0x01C0); // only each user can read and write in their backup folder
+			if (this.base_drive_path != null) {
+				Posix.chmod(this.base_drive_path, 0x01FF); // everybody can read and write in the CRONOPETE folder
 			}
 
 			this.send_message(_("Starting backup"));
@@ -562,7 +570,7 @@ namespace cronopete {
 
 			var volumes = this.monitor.get_volumes();
 			var drive_uuid = cronopete_settings.get_string("backup-uid");
-
+			this.base_drive_path = null;
 			foreach (Volume v in volumes) {
 				if ((drive_uuid != "") && (drive_uuid == v.get_identifier("uuid"))) {
 					var mnt = v.get_mount();
@@ -581,9 +589,9 @@ namespace cronopete {
 							this.last_backup_time = 0;
 							this.is_available_changed(true);
 							this.drive_path = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
+							this.base_drive_path = Path.build_filename(mnt.get_root().get_path(), "cronopete");
 							Posix.chmod(this.drive_path, 0x01C0); // only each user can read and write in their backup folder
-							var cronopete_path = Path.build_filename(mnt.get_root().get_path(), "cronopete");
-							Posix.chmod(cronopete_path, 0x01FF); // everybody can read and write in the CRONOPETE folder
+							Posix.chmod(this.base_drive_path, 0x01FF); // everybody can read and write in the CRONOPETE folder
 						}
 					}
 					return;
