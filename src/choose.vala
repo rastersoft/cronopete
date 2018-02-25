@@ -235,6 +235,20 @@ public class c_choose_disk : GLib.Object {
         this.parent_window = parent;
     }
 
+    private bool create_folders(string backup_path) {
+        var userpath = Path.build_filename(backup_path, Environment.get_user_name());
+        var userfolder = File.new_for_path(userpath);
+        try {
+            if (userfolder.query_exists() || userfolder.make_directory_with_parents()) {
+                // only the user can read and write
+                if (0 == Posix.chmod(userpath, 0x01C0)) {
+                    return true;
+                }
+            }
+        } catch (GLib.Error e) {}
+        return false;
+    }
+
     public string? run(GLib.Settings c_settings) {
 
         this.cronopete_settings = c_settings;
@@ -298,8 +312,7 @@ public class c_choose_disk : GLib.Object {
                 var fstype = stype.get_string().dup();
                 var final_path = spath.get_string().dup();
                 var final_uid = suid.get_string().dup();
-                print(fstype + "\n");
-                // EXT4 is the recomended filesystem for cronopete
+                // EXT4 is the recomended filesystem for cronopete, but supports reiser, ext3 and btrfs for preformated disks
                 if ((fstype == "reiserfs") || (fstype == "btrfs") || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
                     var backup_path = Path.build_filename(final_path, "cronopete");
                     var directory2 = File.new_for_path(backup_path);
@@ -308,19 +321,20 @@ public class c_choose_disk : GLib.Object {
                         try {
                             // if it's possible to create it, go ahead
                             if (directory2.make_directory_with_parents()) {
-                                final_disk_uuid = final_uid;
-                                var retval = Posix.chmod(backup_path, 0x01FF); // everybody can read and write
-                                if (retval == 0) {
-                                    break;
+                                // make that everybody can read and write
+                                if (0 == Posix.chmod(backup_path, 0x01FF)) {
+                                    if (this.create_folders(backup_path)) {
+                                        final_disk_uuid = final_uid;
+                                        break;
+                                    }
                                 }
                             }
                         } catch (GLib.Error e) {
                             // if not, the media is not writable by this user, so propose to format it
                         }
                     } else {
-                        final_disk_uuid = final_uid;
-                        var retval = Posix.chmod(backup_path, 0x01FF); // everybody can read and write
-                        if (retval == 0) {
+                        if (this.create_folders(backup_path)) {
+                            final_disk_uuid = final_uid;
                             break;
                         }
                     }
