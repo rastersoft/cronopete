@@ -1,5 +1,5 @@
 /*
- Copyright 2011 (C) Raster Software Vigo (Sergio Costas)
+ Copyright 2011-2018 (C) Raster Software Vigo (Sergio Costas)
 
  This file is part of Cronopete
 

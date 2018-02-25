@@ -141,6 +141,12 @@ namespace cronopete {
 		 */
 		public abstract bool get_backup_data(out string? id, out time_t oldest, out time_t newest, out uint64 total_space, out uint64 free_space, out string? icon);
 
+
+		/**
+		 * Shows and runs a Dialog to configure the disk where to do the backups
+		 */
+		public abstract bool configure_backup_device();
+
 		/**
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if
 		 * that backup must be kept, or will set it to FALSE if it must be deleted to reclaim its

@@ -27,7 +27,7 @@ namespace cronopete {
 		private Gee.List<folder_container?>? folders;
 		// the disk monitor object to manage the disks
 		private VolumeMonitor monitor;
-		// the current disk path (or null if the drive is not available)
+		// the current disk path (or null if the drive is not available), which will be /path/to/disk/cronopete/username
 		private string? drive_path;
 		// the last backup path if there is one, or null if there are no previous backups
 		private string? last_backup;
@@ -187,6 +187,10 @@ namespace cronopete {
 		public override bool do_backup(string[] folder_list, string[] exclude_list, bool skip_hidden_at_home) {
 
 			if (this.current_status != backup_current_status.IDLE) {
+				return false;
+			}
+
+			if (this.drive_path == null) {
 				return false;
 			}
 
@@ -577,6 +581,9 @@ namespace cronopete {
 							this.last_backup_time = 0;
 							this.is_available_changed(true);
 							this.drive_path = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
+							Posix.chmod(this.drive_path, 0x01C0); // only each user can read and write in their backup folder
+							var cronopete_path = Path.build_filename(mnt.get_root().get_path(), "cronopete");
+							Posix.chmod(cronopete_path, 0x01FF); // everybody can read and write in the CRONOPETE folder
 						}
 					}
 					return;
@@ -588,6 +595,11 @@ namespace cronopete {
 				this.drive_path = null;
 				this.is_available_changed(false);
 			}
+		}
+
+		public override bool configure_backup_device() {
+			//var builder = Gtk.Builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"chooser.ui"));
+			return false;
 		}
 	}
 
@@ -626,6 +638,10 @@ namespace cronopete {
 	}
 
 	public class rsync_element : backup_element {
+		/**
+		 * Extending the "backup_element" class, to simplify managing the backups
+		 * by keeping the folder where it is stored.
+		 */
 
 		private FileInfo file_info;
 		public string path;

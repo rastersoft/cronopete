@@ -1,5 +1,5 @@
 /*
- Copyright 2011 (C) Raster Software Vigo (Sergio Costas)
+ Copyright 2011-2018 (C) Raster Software Vigo (Sergio Costas)
 
  This file is part of Cronopete
 
@@ -55,29 +55,29 @@ namespace  cronopete {
 
             this.builder = new Builder();
             try {
-                this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR,"main.ui"));
+                this.builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "main.ui"));
             } catch(GLib.Error e) {
                 print("Can't create the configuration window. Aborting.\n");
                 Posix.exit(48);
             }
 
-            this.main_w = (Window) this.builder.get_object("window1");
+            this.main_w                = (Window) this.builder.get_object("window1");
 
-            this.log             = (TextBuffer) this.builder.get_object("textbuffer1");
-            this.log_view        = (TextView) this.builder.get_object("textview1");
-            this.tabs            = (Notebook) this.builder.get_object("notebook1");
-            this.label_disk_id   = (Label) this.builder.get_object("label_volume");
-            this.label_oldest    = (Label) this.builder.get_object("label_oldest_backup");
-            this.label_newest    = (Label) this.builder.get_object("label_newest_backup");
-            this.label_next      = (Label) this.builder.get_object("label_next_backup");
-            this.label_space     = (Label) this.builder.get_object("label_free_space");
-            this.disk_icon       = (Image) this.builder.get_object("image_disk");
-            this.img             = (Image) this.builder.get_object("image_disk");
-            this.show_in_bar_ch  = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
-            this.text_status     = new fixed_label("",300);
+            this.log                   = (TextBuffer) this.builder.get_object("textbuffer1");
+            this.log_view              = (TextView) this.builder.get_object("textview1");
+            this.tabs                  = (Notebook) this.builder.get_object("notebook1");
+            this.label_disk_id         = (Label) this.builder.get_object("label_volume");
+            this.label_oldest          = (Label) this.builder.get_object("label_oldest_backup");
+            this.label_newest          = (Label) this.builder.get_object("label_newest_backup");
+            this.label_next            = (Label) this.builder.get_object("label_next_backup");
+            this.label_space           = (Label) this.builder.get_object("label_free_space");
+            this.disk_icon             = (Image) this.builder.get_object("image_disk");
+            this.img                   = (Image) this.builder.get_object("image_disk");
+            this.show_in_bar_ch        = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
+            this.text_status           = new fixed_label("",300);
             this.text_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
-            this.text_status.lines = 3;
-            var status_alignment = (Gtk.Alignment) this.builder.get_object("status_frame");
+            this.text_status.lines     = 3;
+            var status_alignment       = (Gtk.Alignment) this.builder.get_object("status_frame");
             status_alignment.add (this.text_status);
 
             this.show_in_bar_ch.notify_property("active");

@@ -87,16 +87,28 @@ namespace cronopete {
 			GLib.Timeout.add(this.backup_timeout * 1000, this.check_backup);
 		}
 
+
+		private bool can_do_backup() {
+			if (this.backend.current_status != backup_current_status.IDLE) {
+				return false;
+			}
+			if (this.backend.storage_is_available() == false) {
+				return false;
+			}
+			if (this.cronopete_settings.get_boolean("enabled") == false) {
+				return false;
+			}
+			return true;
+		}
+
 		private bool check_backup() {
 			var period = this.cronopete_settings.get_uint("backup-period");
-			if (this.backend.current_status == backup_current_status.IDLE) {
+			if (this.can_do_backup()) {
 				var last_backup = this.backend.get_last_backup();
 				var now = time_t();
 				if ((last_backup + period) < now) {
 					// a backup is pending
-					this.backend.do_backup(this.cronopete_settings.get_strv("backup-folders"),
-										   this.cronopete_settings.get_strv("exclude-folders"),
-										   this.cronopete_settings.get_boolean("skip-hiden-at-home"));
+					this.backup_now();
 				}
 			}
 			if (this.backup_timeout == period) {
@@ -105,6 +117,14 @@ namespace cronopete {
 				GLib.Timeout.add(period * 1000, this.check_backup);
 				this.backup_timeout = period;
 				return false;
+			}
+		}
+
+		public void backup_now() {
+			if (this.can_do_backup()) {
+				this.backend.do_backup(this.cronopete_settings.get_strv("backup-folders"),
+									   this.cronopete_settings.get_strv("exclude-folders"),
+									   this.cronopete_settings.get_boolean("skip-hiden-at-home"));
 			}
 		}
 
@@ -122,6 +142,7 @@ namespace cronopete {
 			}
 			if (key == "enabled") {
 				this.repaint_tray_icon();
+				this.menuSystem_popup();
 				return;
 			}
 		}
@@ -286,6 +307,7 @@ namespace cronopete {
 			}
 
 			this.menuDate.set_label(_("Latest backup: %s").printf(cronopete.date_to_string(this.backend.get_last_backup())));
+
 			if (this.backend.storage_is_available()) {
 				int64 a, b;
 				var list = this.backend.get_backup_list(out a, out b);
@@ -304,15 +326,12 @@ namespace cronopete {
 				menuSBUnow.show();
 				menuBUnow.hide();
 			}
-			menuBUnow.sensitive = this.backend.storage_is_available();
-			menuSBUnow.sensitive = this.backend.storage_is_available();
-		}
-
-		public void backup_now() {
-			if (this.backend.current_status == backup_current_status.IDLE) {
-				this.backend.do_backup(this.cronopete_settings.get_strv("backup-folders"),
-									   this.cronopete_settings.get_strv("exclude-folders"),
-									   this.cronopete_settings.get_boolean("skip-hiden-at-home"));
+			if (this.backend.storage_is_available() && this.cronopete_settings.get_boolean("enabled")) {
+				menuBUnow.sensitive = true;
+				menuSBUnow.sensitive = true;
+			} else {
+				menuBUnow.sensitive = false;
+				menuSBUnow.sensitive = false;
 			}
 		}
 
