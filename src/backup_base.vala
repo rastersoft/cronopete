@@ -83,6 +83,9 @@ namespace cronopete {
 			set {
 				this._current_status = value;
 				this.current_status_changed(value);
+				if (current_status == backup_current_status.IDLE) {
+					this.send_current_action(_("Ready"));
+				}
 			}
 		}
 

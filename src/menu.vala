@@ -102,7 +102,10 @@ namespace  cronopete {
                 this.insert_text_log(msg);
             });
             this.backend.send_current_action.connect( (msg) => {
-                this.text_status.set_text(msg);
+                var msg2 = msg.strip();
+                if (msg2 != "") {
+                    this.text_status.set_text(msg2);
+                }
             });
         }
 
