@@ -76,6 +76,7 @@ namespace  cronopete {
             this.show_in_bar_ch  = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
             this.text_status     = new fixed_label("",300);
             this.text_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
+            this.text_status.lines = 3;
             var status_alignment = (Gtk.Alignment) this.builder.get_object("status_frame");
             status_alignment.add (this.text_status);
 
@@ -99,6 +100,9 @@ namespace  cronopete {
             });
             this.backend.send_message.connect( (msg) => {
                 this.insert_text_log(msg);
+            });
+            this.backend.send_current_action.connect( (msg) => {
+                this.text_status.set_text(msg);
             });
         }
 
@@ -136,26 +140,6 @@ namespace  cronopete {
             }
         }
 
-        private string parse_date(time_t val) {
-
-            string retval;
-
-            if (val==0) {
-                // This is returned as the date for the first, last... backup when it doesn't exists (eg: last backup: none)
-                retval=_("None");
-            } else {
-                var date = new DateTime.from_unix_local(val);
-                time_t current = time_t();
-                if ((current - val) < 86400) {
-                    retval = date.format("%X").dup();
-                } else {
-                    retval = date.format("%x").dup();
-                }
-            }
-
-            return retval;
-        }
-
         public void show_main() {
 
             this.refresh_backup_data();
@@ -189,14 +173,14 @@ namespace  cronopete {
             } else {
                 this.label_disk_id.set_text(volume_id);
             }
-            this.label_oldest.set_text(this.parse_date(oldest));
-            this.label_newest.set_text(this.parse_date(newest));
+            this.label_oldest.set_text(cronopete.date_to_string(oldest));
+            this.label_newest.set_text(cronopete.date_to_string(newest));
             time_t next = newest + this.cronopete_settings.get_uint("backup-period");
             time_t now = time_t();
             if (next < now) {
                 next = now + 600;
             }
-            this.label_next.set_text(this.parse_date(next));
+            this.label_next.set_text(cronopete.date_to_string(next));
             this.disk_icon.set_from_icon_name(icon, IconSize.DIALOG);
             /* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB */
             this.label_space.set_text(_("%lld GB of %lld GB").printf((uint64)(free_space + 900000000)/1073741824,(uint64)(total_space + 900000000)/1073741824));

@@ -228,6 +228,7 @@ namespace cronopete {
 			this.current_status = backup_current_status.RUNNING;
 			this.deleting_mode = 0;
 			this.aborting = false;
+			this.send_current_action(_("Cleaning incomplete backups"));
 			// delete aborted backups first
 			this.delete_backup_folders("B");
 			return true;
@@ -406,7 +407,7 @@ namespace cronopete {
 					string line;
 					channel.read_line (out line, null, null);
 					var line2 = line.strip();
-					this.send_file_backed_up(Path.build_filename(folder.folder, line2));
+					this.send_current_action(_("Backing up %s").printf(Path.build_filename(folder.folder, line2)));
 				} catch (IOChannelError e) {
 					return false;
 				} catch (ConvertError e) {
@@ -424,6 +425,7 @@ namespace cronopete {
 			string[] command = {"sync"};
 			string[] env = Environ.get();
 			this.send_message(_("Syncing disk"));
+			this.send_current_action(_("Syncing disk"));
 			this.debug_command(command);
 			this.current_status = backup_current_status.SYNCING;
 			try {
@@ -491,6 +493,8 @@ namespace cronopete {
 		 * to make space for the current backup
 		 */
 		public void delete_old_backups(bool free_space) {
+
+			this.send_current_action(_("Cleaning old backups"));
 
 			bool forcing_deletion = false;
 			var backups = this.eval_backups_to_delete(free_space, out forcing_deletion);

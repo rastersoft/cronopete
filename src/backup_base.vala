@@ -69,9 +69,9 @@ namespace cronopete {
 		public signal void send_debug(string debug_msg);
 
 		/**
-		 * This signal is emitted every time a new file is being backed up
+		 * This signal is emitted every time a new file is being backed up, or an action is being done
 		 */
-		public signal void send_file_backed_up(string full_path);
+		public signal void send_current_action(string full_path);
 
 		/**
 		 * Allows to get or set the current status

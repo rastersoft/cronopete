@@ -1,5 +1,5 @@
 /*
- Copyright 2011-2015 (C) Raster Software Vigo (Sergio Costas)
+ Copyright 2011-2018 (C) Raster Software Vigo (Sergio Costas)
 
  This file is part of Cronopete
 
@@ -129,54 +129,49 @@ namespace cronopete {
 		/* Paints the animated icon in the panel */
 		public bool repaint_tray_icon() {
 
-			string icon_name = "cronopete-arrow-";
-
-			switch(this.iconpos) {
-			default:
-				icon_name += "1";
-				this.iconpos = 0;
-			break;
-			case 1:
-				icon_name += "2";
-			break;
-			case 2:
-				icon_name += "3";
-			break;
-			case 3:
-				icon_name += "4";
-			break;
-			}
-			icon_name += "-";
 			backup_current_status backup_status = this.backend.current_status;
+
 			if (backup_status != backup_current_status.IDLE) {
 				this.iconpos++;
 			}
+			if (this.iconpos > 3) {
+				this.iconpos = 0;
+			}
+
+			string icon_color = "";
 			if (this.backend.storage_is_available() == false) {
-				icon_name += "red"; // There's no disk connected
+				icon_color = "red"; // There's no disk connected
 			} else {
 				if (this.cronopete_settings.get_boolean("enabled")) {
 					switch (this.current_status) {
 					case BackupStatus.STOPPED:
-						icon_name += "white"; // Idle
+						icon_color = "white"; // Idle
 					break;
 					case BackupStatus.ALLFINE:
-						if ((backup_status == backup_current_status.RUNNING) || (backup_status == backup_current_status.SYNCING)) {
-							icon_name += "green"; // Doing backup; everything fine
-						} else if (backup_status == backup_current_status.CLEANING) {
-							icon_name += "white"; // Clening old backups; everything fine
+					{
+						switch(backup_status) {
+						case backup_current_status.RUNNING:
+						case backup_current_status.SYNCING:
+							icon_color = "green"; // doing backup, everything is fine
+							break;
+						case backup_current_status.CLEANING:
+							icon_color = "cyan";
+							break;
 						}
+					}
 					break;
 					case BackupStatus.WARNING:
-						icon_name += "yellow";
+						icon_color = "yellow";
 					break;
 					case BackupStatus.ERROR:
-						icon_name += "red";
+						icon_color = "red";
 					break;
 					}
 				} else {
-					icon_name += "orange";
+					icon_color = "orange"; // the backup is disabled
 				}
 			}
+			string icon_name = "cronopete-arrow-%d-%s".printf(this.iconpos + 1, icon_color);
 
 			this.appindicator.set_icon(icon_name);
 			if (backup_status == backup_current_status.IDLE) {
@@ -290,20 +285,7 @@ namespace cronopete {
 				this.appindicator.set_menu(this.menuSystem);
 			}
 
-			string last_backup_str;
-			var last_backup_time = this.backend.get_last_backup();
-			if (last_backup_time == 0) {
-				last_backup_str = _("None");
-			} else {
-				var last_backup = GLib.Time.local(last_backup_time);
-				var now = GLib.Time.local(time_t());
-				if ((last_backup.day == now.day) && (last_backup.month == now.month) && (last_backup.year == now.year)) {
-					last_backup_str = last_backup.format("%X");
-				} else {
-					last_backup_str = last_backup.format("%x");
-				}
-			}
-			this.menuDate.set_label(_("Latest backup: %s").printf(last_backup_str));
+			this.menuDate.set_label(_("Latest backup: %s").printf(cronopete.date_to_string(this.backend.get_last_backup())));
 			if (this.backend.storage_is_available()) {
 				int64 a, b;
 				var list = this.backend.get_backup_list(out a, out b);

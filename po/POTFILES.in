@@ -1,6 +1,7 @@
 src/backup_base.vala
 src/backup_rsync.vala
 src/cronopete.vala
+src/dates.vala
 src/fixedlabel.vala
 src/menu.vala
 src/options.vala

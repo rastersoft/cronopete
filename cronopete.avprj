@@ -24,6 +24,7 @@ end
 *vala_source: backup_base.vala
 *vala_source: backup_rsync.vala
 *vala_source: cronopete.vala
+*vala_source: dates.vala
 *vala_source: fixedlabel.vala
 *vala_source: menu.vala
 *vala_source: options.vala
@@ -48,6 +49,7 @@ end
 *translate: vala src/backup_base.vala
 *translate: vala src/backup_rsync.vala
 *translate: vala src/cronopete.vala
+*translate: vala src/dates.vala
 *translate: vala src/fixedlabel.vala
 *translate: vala src/menu.vala
 *translate: vala src/options.vala
@@ -92,6 +94,7 @@ end
 *full_icon: Hicolor Applications data/icons/anacronopete_32x32.png
 *full_icon: Hicolor Applications data/icons/anacronopete_48x48.png
 *full_icon: Hicolor Applications data/icons/anacronopete_64x64.png
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-1-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-1-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-1-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-1-orange-symbolic.svg
@@ -102,6 +105,7 @@ end
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-1-white.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-1-yellow-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-1-yellow.svg
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-2-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-2-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-2-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-2-orange-symbolic.svg
@@ -112,6 +116,7 @@ end
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-2-white.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-2-yellow-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-2-yellow.svg
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-3-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-3-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-3-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-3-orange-symbolic.svg
@@ -122,6 +127,7 @@ end
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-3-white.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-3-yellow-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-3-yellow.svg
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-4-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-4-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-4-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-4-orange-symbolic.svg
