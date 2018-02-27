@@ -279,7 +279,7 @@ public abstract class backup_base : GLib.Object {
     }
 
     public backup_base() {
-        this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete2");
+        this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
     }
 }
 

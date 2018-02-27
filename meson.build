@@ -42,7 +42,7 @@ dbus_cfg_com_rastersoft_cronopete_service_base = configure_file(input: 'data/dbu
 install_data(dbus_cfg_com_rastersoft_cronopete_service_base,install_dir: join_paths(get_option('prefix'),get_option('datadir'),'dbus-1','services'))
 eos_plug_cfg_cronopete_plug = configure_file(input: 'data/cronopete.plug',output: 'cronopete.plug', configuration: cfg_dbus_data)
 install_data(eos_plug_cfg_cronopete_plug,install_dir: join_paths(get_option('prefix'),'lib','plugs','cronopete'))
-install_data('data/org.rastersoft.cronopete2.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
+install_data('data/org.rastersoft.cronopete.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
 meson.add_install_script('meson_scripts/install_schemas.py')
 	install_data('data/interface/about.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/chooser.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))

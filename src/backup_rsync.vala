@@ -569,8 +569,8 @@ public class backup_rsync : backup_base {
                     this.last_backup_time = 0;
                     // the drive is not mounted!!!!!!
                     if (this.drive_path != null) {
-                        this.is_available_changed(false);
                         this.drive_path = null;
+                        this.is_available_changed(false);
                     }
                     if (cronopete_settings.get_boolean("enabled")) {
                         v.mount.begin(GLib.MountMountFlags.NONE, null);                                 // if backups are enabled, remount it
@@ -578,11 +578,11 @@ public class backup_rsync : backup_base {
                 } else {
                     if (this.drive_path == null) {
                         this.last_backup_time = 0;
-                        this.is_available_changed(true);
-                        this.drive_path      = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
-                        this.base_drive_path = Path.build_filename(mnt.get_root().get_path(), "cronopete");
+                        this.drive_path       = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
+                        this.base_drive_path  = Path.build_filename(mnt.get_root().get_path(), "cronopete");
                         Posix.chmod(this.drive_path, 0x01C0);                                 // only each user can read and write in their backup folder
                         Posix.chmod(this.base_drive_path, 0x01FF);                            // everybody can read and write in the CRONOPETE folder
+                        this.is_available_changed(true);
                     }
                 }
                 return;

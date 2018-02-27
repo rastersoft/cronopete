@@ -50,6 +50,8 @@ class cronopete_class : GLib.Object {
     private uint animation_timer;
     private uint32 backup_timeout;
 
+    private restore_iface restore_window;
+
     public cronopete_class() {
         this.iconpos         = 0;
         this.animation_timer = 0;
@@ -342,6 +344,7 @@ class cronopete_class : GLib.Object {
     }
 
     private void restore_files() {
+        this.restore_window = new restore_iface(this.backend);
     }
 }
 

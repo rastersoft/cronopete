@@ -3,7 +3,7 @@ autovala_version: 27
 project_name: cronopete
 vala_version: 0.26
 
-vala_binary: src/cronopete2
+vala_binary: src/cronopete
 *version: 4.0.0
 compile_options: --target-glib 2.32
 *vala_package: posix
@@ -30,6 +30,7 @@ end
 *vala_source: fixedlabel.vala
 *vala_source: menu.vala
 *vala_source: options.vala
+*vala_source: restore.vala
 
 
 *po: po
@@ -56,6 +57,7 @@ end
 *translate: vala src/fixedlabel.vala
 *translate: vala src/menu.vala
 *translate: vala src/options.vala
+*translate: vala src/restore.vala
 
 *data: data/local
 
@@ -73,7 +75,7 @@ end
 
 *eos_plug: data/cronopete.plug
 
-*scheme: data/org.rastersoft.cronopete2.gschema.xml
+*scheme: data/org.rastersoft.cronopete.gschema.xml
 
 *glade: data/interface/about.ui
 *glade: data/interface/chooser.ui

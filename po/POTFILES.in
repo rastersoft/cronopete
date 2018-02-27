@@ -6,6 +6,7 @@ src/dates.vala
 src/fixedlabel.vala
 src/menu.vala
 src/options.vala
+src/restore.vala
 data/interface/about.ui
 data/interface/chooser.ui
 data/interface/config_exported.ui

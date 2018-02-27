@@ -101,7 +101,7 @@ public class c_main_menu : GLib.Object {
         this.backend.send_current_action.connect((msg) => {
                 var msg2 = msg.strip();
                 if (msg2 != "") {
-                    this.text_status.set_text(msg2);
+                    this.set_status(msg2);
                 }
             });
     }

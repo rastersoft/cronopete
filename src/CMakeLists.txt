@@ -48,6 +48,7 @@ set (APP_SOURCES ${APP_SOURCES} dates.vala)
 set (APP_SOURCES ${APP_SOURCES} fixedlabel.vala)
 set (APP_SOURCES ${APP_SOURCES} menu.vala)
 set (APP_SOURCES ${APP_SOURCES} options.vala)
+set (APP_SOURCES ${APP_SOURCES} restore.vala)
 
 if (NO_APPINDICATOR)
 	set (COMPILE_OPTIONS ${COMPILE_OPTIONS} -D NO_APPINDICATOR)
@@ -61,7 +62,7 @@ endif()
 
 set (COMPILE_OPTIONS ${COMPILE_OPTIONS} --target-glib 2.32 )
 
-vala_precompile(VALA_C cronopete2
+vala_precompile(VALA_C cronopete
 	${APP_SOURCES}
 PACKAGES
 	${VALA_PACKAGES}
@@ -69,17 +70,17 @@ OPTIONS
 	${COMPILE_OPTIONS}
 )
 
-add_executable(cronopete2 ${VALA_C})
+add_executable(cronopete ${VALA_C})
 
 
 install(TARGETS
-	cronopete2
+	cronopete
 RUNTIME DESTINATION
 	${CMAKE_INSTALL_BINDIR}
 )
 if(HAVE_VALADOC)
-	valadoc(cronopete2
-		${CMAKE_BINARY_DIR}/valadoc/cronopete2
+	valadoc(cronopete
+		${CMAKE_BINARY_DIR}/valadoc/cronopete
 		${APP_SOURCES}
 	PACKAGES
 		${VALA_PACKAGES}
