@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 3.21.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 00:11+0200\n"
+"POT-Creation-Date: 2018-02-28 00:25+0100\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -20,83 +20,126 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/backup.vala:287
-#, c-format
-msgid "Backing up folder %s.\n"
-msgstr "Папка резервирования %s.\n"
+#: src/backup_base.vala:85
+msgid "Ready"
+msgstr ""
 
-#: src/backup.vala:291
-#, c-format
-msgid "Excluding folder %s.\n"
-msgstr "Исключить папку %s.\n"
-
-#: src/backup.vala:297
-#, c-format
-msgid "Excluding hidden folders in %s.\n"
-msgstr "Исключить скрытые папки в %s.\n"
-
-#: src/backup.vala:299
-#, c-format
-msgid "Backing up hidden folders in %s.\n"
-msgstr "Резервировать скрытые папки в %s.\n"
-
-#: src/backup.vala:347
-msgid "Can't create the folder for this backup. Aborting backup.\n"
-msgstr "Невозможно создать папку для резервной копии. Операция прервана.\n"
-
-#: src/backup.vala:350
-msgid "Can't create the base folders to do backups. Aborting backup.\n"
+#: src/backup_rsync.vala:111
+#, fuzzy
+msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr ""
 "Невозможно создать базовые папки для резервной копии. Операция прервана.\n"
 
-#: src/backup.vala:353
-msgid "Backup device not available. Aborting backup.\n"
-msgstr "Устройство резервной копии недоступно. Операция прервана.\n"
+#: src/backup_rsync.vala:199
+#, fuzzy
+msgid "Starting backup"
+msgstr "Резервирование\n"
 
-#: src/backup.vala:356
-msgid "Already started a backup.\n"
-msgstr "Все готово к созданию резервной копии.\n"
+#: src/backup_rsync.vala:237
+#, fuzzy
+msgid "Cleaning incomplete backups"
+msgstr "Удаление старых резервных копий"
 
-#: src/backup.vala:360
-msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+#: src/backup_rsync.vala:264
+#, fuzzy
+msgid "Backup done"
+msgstr "Резервирование прекращено"
+
+#: src/backup_rsync.vala:270
+#, fuzzy
+msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Нет свободного места на диске для запуска резервирования. Операция "
 "прервана.\n"
 
-#: src/backup.vala:379
-msgid "Backup aborted\n"
-msgstr "Операция прервана\n"
+#: src/backup_rsync.vala:285
+msgid "Backup aborted"
+msgstr "Резервирование прекращено"
 
-#: src/backup.vala:393
-msgid ""
-"The disk is too small to hold a single backup.\n"
-"Adjust the list of backup and exclude folders.\n"
+#: src/backup_rsync.vala:329
+msgid "Failed to delete aborted backups: "
 msgstr ""
-"Емкость диска слишком мала для резервной копии.\n"
-"Измените настройки резервной копии и исключите папки.\n"
 
-#: src/backup.vala:407
-msgid "Syncing disk\n"
+#: src/backup_rsync.vala:353
+#, fuzzy, c-format
+msgid "Backing up folder %s"
+msgstr "Резервирование папки %s\n"
+
+#: src/backup_rsync.vala:374
+#, fuzzy, c-format
+msgid "Excluding folder %s"
+msgstr "Исключить папку %s.\n"
+
+#: src/backup_rsync.vala:383
+#, fuzzy, c-format
+msgid "Failed to launch rsync for '%s'. Aborting backup"
+msgstr ""
+"Нет свободного места на диске для запуска резервирования. Операция "
+"прервана.\n"
+
+#: src/backup_rsync.vala:402
+#, c-format
+msgid "There was a problem when backing up the folder '%s'"
+msgstr ""
+
+#: src/backup_rsync.vala:416
+#, fuzzy, c-format
+msgid "Backing up %s"
+msgstr "Резервирование папки %s\n"
+
+#: src/backup_rsync.vala:433 src/backup_rsync.vala:434
+#, fuzzy
+msgid "Syncing disk"
 msgstr "Синхронизация диска\n"
 
-#: src/backup.vala:409
-msgid "Can't close the backup. Aborting.\n"
-msgstr "Невозможно завершить резервирование. Операция отменена.\n"
+#: src/backup_rsync.vala:440
+msgid "Failed to launch sync command"
+msgstr ""
 
-#: src/backup.vala:415
+#: src/backup_rsync.vala:463
+#, fuzzy
+msgid "Failed to rename backup folder. Aborting backup"
+msgstr ""
+"Нет свободного места на диске для запуска резервирования. Операция "
+"прервана.\n"
+
+#: src/backup_rsync.vala:476
+msgid "Failed to launch final sync command"
+msgstr ""
+
+#: src/backup_rsync.vala:486
+#, fuzzy
+msgid "Disk synced, cleaning old backups"
+msgstr "Удаление старых резервных копий"
+
+#: src/backup_rsync.vala:502
+#, fuzzy
+msgid "Cleaning old backups"
+msgstr "Удаление старых резервных копий"
+
+#: src/backup_rsync.vala:508
+msgid "No old backups to delete"
+msgstr ""
+
+#: src/backup_rsync.vala:535
+#, fuzzy, c-format
+msgid "Deleting old backup %s"
+msgstr "Удаление старых резервных копий"
+
+#: src/backup_rsync.vala:542
 #, c-format
-msgid "Backup done. Needed %ld seconds.\n"
-msgstr "Резервирование завершено. Потребовалось %ld секунд.\n"
+msgid "Failed to delete old backup %s: %s"
+msgstr ""
 
-#: src/choose.vala:107
+#: src/choose.vala:108
 msgid "Failed to find the disk!!!!!"
 msgstr "Ошибка в чтении диска!!!!!"
 
-#: src/choose.vala:116
+#: src/choose.vala:116 src/choose.vala:123
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr "Ошибка при отключении диска. Отмена операции."
 
-#: src/choose.vala:137
+#: src/choose.vala:148
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
@@ -104,11 +147,11 @@ msgstr ""
 "Ошибка форматирования диска (возможно требуется больше времени). Попробуйте "
 "еще раз."
 
-#: src/choose.vala:152
+#: src/choose.vala:163
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr "Ошибка при подключении диска. Отмена операции."
 
-#: src/choose.vala:168
+#: src/choose.vala:181
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -122,150 +165,64 @@ msgstr ""
 "\n"
 "<b>Все данные на диске будут уничтожены</b>"
 
-#: src/choose.vala:390
+#: src/choose.vala:430
 msgid "Unknown FS"
 msgstr "Неизвестная ФС"
 
-#: src/choose.vala:408
+#: src/choose.vala:448
 msgid "Unknown size"
 msgstr "Неизвестный размер"
 
-#: src/cronopete.vala:221 src/cronopete.vala:328 src/cronopete.vala:358
-msgid "Idle"
-msgstr "Бездействие"
+#: src/cronopete.vala:288
+msgid "Back Up Now"
+msgstr "Начать резервировать"
 
-#: src/cronopete.vala:240 src/cronopete.vala:246 src/cronopete.vala:257
-#: src/cronopete.vala:261
+#: src/cronopete.vala:291
+msgid "Stop Backing Up"
+msgstr "Остановить резервирование"
+
+#: src/cronopete.vala:295 src/restore.vala:62
+msgid "Restore files"
+msgstr "Восстановить файлы"
+
+#: src/cronopete.vala:303
+msgid "Configure backup policies"
+msgstr "Настройте резервное копирование"
+
+#: src/cronopete.vala:311
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Последняя копия: %s"
 
-#: src/cronopete.vala:240 src/menu.vala:197
-msgid "Not defined"
-msgstr "Не выбран"
-
-#: src/cronopete.vala:246 src/cronopete.vala:257 src/menu.vala:146
-msgid "None"
-msgstr "Никогда"
-
-#: src/cronopete.vala:355
-msgid "Storage not available"
+#: src/dates.vala:25
+#, fuzzy
+msgid "Not available"
 msgstr "Хранилище недоступно"
 
-#: src/cronopete.vala:360
-msgid "Backup disabled"
-msgstr "Резервирование отключено"
+#: src/dates.vala:36
+#, fuzzy
+msgid "today at %R"
+msgstr "Сегодня, в %H:%M"
 
-#: src/cronopete.vala:432
-msgid "Back Up Now"
-msgstr "Начать резервировать"
+#: src/dates.vala:40
+#, fuzzy
+msgid "yesterday at %R"
+msgstr "Вчера, в %H:%M"
 
-#: src/cronopete.vala:435
-msgid "Stop Backing Up"
-msgstr "Остановить резервирование"
+#: src/dates.vala:44
+msgid "tomorrow at %R"
+msgstr ""
 
-#: src/cronopete.vala:439 src/restore.vala:186
-msgid "Restore files"
-msgstr "Восстановить файлы"
-
-#: src/cronopete.vala:447
-msgid "Configure backup policies"
-msgstr "Настройте резервное копирование"
-
-#: src/cronopete.vala:539
-#, c-format
-msgid "Backing up folder %s\n"
-msgstr "Резервирование папки %s\n"
-
-#: src/cronopete.vala:557
-#, c-format
-msgid "Can't copy file %s\n"
-msgstr "Невозможно скопировать файл %s\n"
-
-#: src/cronopete.vala:562
-#, c-format
-msgid "Can't access directory %s\n"
-msgstr "Нет доступа к дериктории %s\n"
-
-#: src/cronopete.vala:567
-#, c-format
-msgid "Can't create directory %s\n"
-msgstr "Невозможно создать дерикторию %s\n"
-
-#: src/cronopete.vala:585
-msgid "\n"
-msgstr "\n"
-
-#: src/cronopete.vala:586
-msgid "Starting backup\n"
-msgstr "Резервирование\n"
-
-#: src/cronopete.vala:600
-msgid "Erasing old backups"
-msgstr "Удаление старых резервных копий"
-
-#: src/cronopete.vala:612
-msgid "Backup aborted"
-msgstr "Резервирование прекращено"
-
-#: src/cronopete.vala:616
-msgid "Can't do backup; disk is too small"
-msgstr "Невозможно сделать резервирование; емкость диска слишком мала"
-
-#: src/cronopete.vala:620
-msgid "Can't do backup"
-msgstr "Невозможно создать резервную копию"
-
-#: src/icons_widget.vala:153
-msgid "Name"
-msgstr "Имя"
-
-#: src/icons_widget.vala:156
-msgid "Size"
-msgstr "Размер"
-
-#: src/icons_widget.vala:157
-msgid "Modification date"
-msgstr "Дата изменения"
-
-#: src/icons_widget.vala:392
-msgid "Show hidden files"
-msgstr "Показать скрытые файлы"
-
-#: src/icons_widget.vala:400
-msgid "Reverse order"
-msgstr "Обратный порядок"
-
-#: src/icons_widget.vala:408
-msgid "Sort by name"
-msgstr "Сортировать по имени"
-
-#: src/icons_widget.vala:412
-msgid "Sort by type"
-msgstr "Сортировать по типу"
-
-#: src/icons_widget.vala:416
-msgid "Sort by size"
-msgstr "Сортировать по размеру"
-
-#: src/icons_widget.vala:420
-msgid "Sort by date"
-msgstr "Сортировать по дате"
-
-#: src/icons_widget.vala:442
-msgid "View as icons"
-msgstr "Отобразить иконками"
-
-#: src/icons_widget.vala:446
-msgid "View as list"
-msgstr "Отобразить списком"
-
-#: src/menu.vala:111
+#: src/menu.vala:112
 #, c-format
 msgid "Status: %s"
 msgstr "Состояние: %s"
 
-#: src/menu.vala:205
+#: src/menu.vala:168
+msgid "Not defined"
+msgstr "Не выбран"
+
+#: src/menu.vala:182
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld Гб из %lld Гб"
@@ -275,74 +232,9 @@ msgstr "%lld Гб из %lld Гб"
 msgid "Backup hidden files and folders in %s"
 msgstr "Резервировать скрытые файлы и папки в %s"
 
-#: src/restore.vala:194
+#: src/restore.vala:74
 msgid "Exit"
 msgstr "Выход"
-
-#: src/restore.vala:697
-msgid "Today, at %H:%M"
-msgid_plural "Today, at %H:%M"
-msgstr[0] "Сегодня, в %H:%M"
-msgstr[1] "Сегодня, в %H:%M"
-
-#: src/restore.vala:702
-msgid "Yesterday, at %H:%M"
-msgid_plural "Yesterday, at %H:%M"
-msgstr[0] "Вчера, в %H:%M"
-msgstr[1] "Вчера, в %H:%M"
-
-#: src/restore.vala:710
-msgid "%A, %d %B %Y at %H:%M"
-msgid_plural "%A, %d %B %Y at %H:%M"
-msgstr[0] "%A, %d %B %Y в %H:%M"
-msgstr[1] "%A, %d %B %Y в %H:%M"
-
-#: src/restore.vala:717
-msgid "%A, %B %d %Y at %H:%M"
-msgid_plural "%A, %B %d %Y at %H:%M"
-msgstr[0] "%A, %B %d %Y в %H:%M"
-msgstr[1] "%A, %B %d %Y в %H:%M"
-
-#: src/restore.vala:966
-#, c-format
-msgid ""
-"Restoring file:\n"
-"\n"
-"%s"
-msgstr ""
-"Восстановление файла:\n"
-"\n"
-"%s"
-
-#: src/restore.vala:978
-#, c-format
-msgid ""
-"Failed to restore file\n"
-"\n"
-"%s\n"
-"\n"
-"There's not enought free space"
-msgstr ""
-"Ошибка восстановления файла\n"
-"\n"
-"%s\n"
-"\n"
-"Недостаточно свободного места"
-
-#: src/restore.vala:980
-#, c-format
-msgid ""
-"Failed to restore file\n"
-"\n"
-"%s"
-msgstr ""
-"Ошибка восстановления файла\n"
-"\n"
-"%s"
-
-#: src/restore.vala:1068
-msgid "Preparing folders to restore"
-msgstr "Подготовка папок для восстановления"
 
 #: data/interface/about.ui:15
 msgid "©2011-15 Raster Software Vigo"
@@ -449,42 +341,42 @@ msgid "anaCRONOPETE"
 msgstr "anaCRONOPETE"
 
 #. Don't translate this. Is part of the name in the main window
-#: data/interface/main.ui:50
+#: data/interface/main.ui:51
 msgid "ana"
 msgstr "ana"
 
 #. Don't translate this. Is part of the name in the main window.
-#: data/interface/main.ui:63
+#: data/interface/main.ui:64
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:233
-msgid "Next backup:"
-msgstr "Следующая копия:"
-
-#: data/interface/main.ui:246
+#: data/interface/main.ui:224
 msgid "Latest backup:"
 msgstr "Последняя копия:"
 
-#: data/interface/main.ui:259
+#: data/interface/main.ui:237
 msgid "Oldest backup:"
 msgstr "Первая копия:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:272
+#: data/interface/main.ui:250
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Свободно:"
 
-#: data/interface/main.ui:285
+#: data/interface/main.ui:263
 msgid "Device:"
 msgstr "Устройство:"
 
-#: data/interface/main.ui:340
+#: data/interface/main.ui:276
+msgid "Next backup:"
+msgstr "Следующая копия:"
+
+#: data/interface/main.ui:342
 msgid "Change disk..."
 msgstr "Сменить диск..."
 
-#: data/interface/main.ui:356 data/interface/options.ui:17
+#: data/interface/main.ui:357 data/interface/options.ui:17
 msgid "Options"
 msgstr "Настройки"
 
@@ -506,15 +398,15 @@ msgstr ""
 msgid "Show Cronopete in menu bar"
 msgstr "Отобразить Cronopete в строке состояния (трее)"
 
-#: data/interface/main.ui:420
+#: data/interface/main.ui:418
 msgid "About"
 msgstr "Об Cronopete"
 
-#: data/interface/main.ui:454
+#: data/interface/main.ui:451
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: data/interface/main.ui:483
+#: data/interface/main.ui:480
 msgid "Log"
 msgstr "Журнал"
 
@@ -591,3 +483,141 @@ msgstr ""
 "\n"
 "Сейчас вы можете настроить ваши внешние диски для резервного копирования "
 "данных, или можете сделать это позже."
+
+#~ msgid "Backing up folder %s.\n"
+#~ msgstr "Папка резервирования %s.\n"
+
+#~ msgid "Excluding hidden folders in %s.\n"
+#~ msgstr "Исключить скрытые папки в %s.\n"
+
+#~ msgid "Backing up hidden folders in %s.\n"
+#~ msgstr "Резервировать скрытые папки в %s.\n"
+
+#~ msgid "Can't create the folder for this backup. Aborting backup.\n"
+#~ msgstr "Невозможно создать папку для резервной копии. Операция прервана.\n"
+
+#~ msgid "Backup device not available. Aborting backup.\n"
+#~ msgstr "Устройство резервной копии недоступно. Операция прервана.\n"
+
+#~ msgid "Already started a backup.\n"
+#~ msgstr "Все готово к созданию резервной копии.\n"
+
+#~ msgid "Backup aborted\n"
+#~ msgstr "Операция прервана\n"
+
+#~ msgid ""
+#~ "The disk is too small to hold a single backup.\n"
+#~ "Adjust the list of backup and exclude folders.\n"
+#~ msgstr ""
+#~ "Емкость диска слишком мала для резервной копии.\n"
+#~ "Измените настройки резервной копии и исключите папки.\n"
+
+#~ msgid "Can't close the backup. Aborting.\n"
+#~ msgstr "Невозможно завершить резервирование. Операция отменена.\n"
+
+#~ msgid "Backup done. Needed %ld seconds.\n"
+#~ msgstr "Резервирование завершено. Потребовалось %ld секунд.\n"
+
+#~ msgid "Idle"
+#~ msgstr "Бездействие"
+
+#~ msgid "None"
+#~ msgstr "Никогда"
+
+#~ msgid "Backup disabled"
+#~ msgstr "Резервирование отключено"
+
+#~ msgid "Can't copy file %s\n"
+#~ msgstr "Невозможно скопировать файл %s\n"
+
+#~ msgid "Can't access directory %s\n"
+#~ msgstr "Нет доступа к дериктории %s\n"
+
+#~ msgid "Can't create directory %s\n"
+#~ msgstr "Невозможно создать дерикторию %s\n"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "Can't do backup; disk is too small"
+#~ msgstr "Невозможно сделать резервирование; емкость диска слишком мала"
+
+#~ msgid "Can't do backup"
+#~ msgstr "Невозможно создать резервную копию"
+
+#~ msgid "Name"
+#~ msgstr "Имя"
+
+#~ msgid "Size"
+#~ msgstr "Размер"
+
+#~ msgid "Modification date"
+#~ msgstr "Дата изменения"
+
+#~ msgid "Show hidden files"
+#~ msgstr "Показать скрытые файлы"
+
+#~ msgid "Reverse order"
+#~ msgstr "Обратный порядок"
+
+#~ msgid "Sort by name"
+#~ msgstr "Сортировать по имени"
+
+#~ msgid "Sort by type"
+#~ msgstr "Сортировать по типу"
+
+#~ msgid "Sort by size"
+#~ msgstr "Сортировать по размеру"
+
+#~ msgid "Sort by date"
+#~ msgstr "Сортировать по дате"
+
+#~ msgid "View as icons"
+#~ msgstr "Отобразить иконками"
+
+#~ msgid "View as list"
+#~ msgstr "Отобразить списком"
+
+#~ msgid "%A, %d %B %Y at %H:%M"
+#~ msgid_plural "%A, %d %B %Y at %H:%M"
+#~ msgstr[0] "%A, %d %B %Y в %H:%M"
+#~ msgstr[1] "%A, %d %B %Y в %H:%M"
+
+#~ msgid "%A, %B %d %Y at %H:%M"
+#~ msgid_plural "%A, %B %d %Y at %H:%M"
+#~ msgstr[0] "%A, %B %d %Y в %H:%M"
+#~ msgstr[1] "%A, %B %d %Y в %H:%M"
+
+#~ msgid ""
+#~ "Restoring file:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Восстановление файла:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Failed to restore file\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "There's not enought free space"
+#~ msgstr ""
+#~ "Ошибка восстановления файла\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Недостаточно свободного места"
+
+#~ msgid ""
+#~ "Failed to restore file\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка восстановления файла\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Preparing folders to restore"
+#~ msgstr "Подготовка папок для восстановления"

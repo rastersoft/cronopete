@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 00:11+0200\n"
+"POT-Creation-Date: 2018-02-28 00:25+0100\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -21,83 +21,126 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.7\n"
 "X-Poedit-Language: Galician\n"
 
-#: src/backup.vala:287
-#, c-format
-msgid "Backing up folder %s.\n"
-msgstr "Copiando o cartafol %s.\n"
+#: src/backup_base.vala:85
+msgid "Ready"
+msgstr ""
 
-#: src/backup.vala:291
-#, c-format
-msgid "Excluding folder %s.\n"
-msgstr "Excluindo o cartafol %s.\n"
-
-#: src/backup.vala:297
-#, c-format
-msgid "Excluding hidden folders in %s.\n"
-msgstr "Excluindo cartafoles agochados en %s.\n"
-
-#: src/backup.vala:299
-#, c-format
-msgid "Backing up hidden folders in %s.\n"
-msgstr "Copiando cartafoles agochados en %s.\n"
-
-#: src/backup.vala:347
-msgid "Can't create the folder for this backup. Aborting backup.\n"
-msgstr "Non foi posíbel crear o cartafol para esta copia. Interrompendo.\n"
-
-#: src/backup.vala:350
-msgid "Can't create the base folders to do backups. Aborting backup.\n"
+#: src/backup_rsync.vala:111
+#, fuzzy
+msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr ""
 "Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
 
-#: src/backup.vala:353
-msgid "Backup device not available. Aborting backup.\n"
-msgstr "Non está dispoñíbel o disco externo para as copias. Interrompendo.\n"
+#: src/backup_rsync.vala:199
+#, fuzzy
+msgid "Starting backup"
+msgstr "Comezando a copia\n"
 
-#: src/backup.vala:356
-msgid "Already started a backup.\n"
-msgstr "Xa está a facerse unha copia.\n"
+#: src/backup_rsync.vala:237
+#, fuzzy
+msgid "Cleaning incomplete backups"
+msgstr "Borrando copias antigas"
 
-#: src/backup.vala:360
-msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+#: src/backup_rsync.vala:264
+#, fuzzy
+msgid "Backup done"
+msgstr "Copia cancelada"
+
+#: src/backup_rsync.vala:270
+#, fuzzy
+msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: src/backup.vala:379
-msgid "Backup aborted\n"
-msgstr "Copia cancelada.\n"
+#: src/backup_rsync.vala:285
+msgid "Backup aborted"
+msgstr "Copia cancelada"
 
-#: src/backup.vala:393
-msgid ""
-"The disk is too small to hold a single backup.\n"
-"Adjust the list of backup and exclude folders.\n"
+#: src/backup_rsync.vala:329
+msgid "Failed to delete aborted backups: "
 msgstr ""
-"O disco é demasiado pequeno para poder copiar todo.\n"
-"Axuste a lista de cartafoles a copiar e a excluír.\n"
 
-#: src/backup.vala:407
-msgid "Syncing disk\n"
+#: src/backup_rsync.vala:353
+#, fuzzy, c-format
+msgid "Backing up folder %s"
+msgstr "Copiando o cartafol %s\n"
+
+#: src/backup_rsync.vala:374
+#, fuzzy, c-format
+msgid "Excluding folder %s"
+msgstr "Excluindo o cartafol %s.\n"
+
+#: src/backup_rsync.vala:383
+#, fuzzy, c-format
+msgid "Failed to launch rsync for '%s'. Aborting backup"
+msgstr ""
+"Non foi posíbel liberar espazo no disco para comezar unha copia. "
+"Interrompendo.\n"
+
+#: src/backup_rsync.vala:402
+#, c-format
+msgid "There was a problem when backing up the folder '%s'"
+msgstr ""
+
+#: src/backup_rsync.vala:416
+#, fuzzy, c-format
+msgid "Backing up %s"
+msgstr "Copiando o cartafol %s\n"
+
+#: src/backup_rsync.vala:433 src/backup_rsync.vala:434
+#, fuzzy
+msgid "Syncing disk"
 msgstr "Sincronizando o disco\n"
 
-#: src/backup.vala:409
-msgid "Can't close the backup. Aborting.\n"
-msgstr "Non foi posíbel pechar a copia. Interrompendo.\n"
+#: src/backup_rsync.vala:440
+msgid "Failed to launch sync command"
+msgstr ""
 
-#: src/backup.vala:415
+#: src/backup_rsync.vala:463
+#, fuzzy
+msgid "Failed to rename backup folder. Aborting backup"
+msgstr ""
+"Non foi posíbel liberar espazo no disco para comezar unha copia. "
+"Interrompendo.\n"
+
+#: src/backup_rsync.vala:476
+msgid "Failed to launch final sync command"
+msgstr ""
+
+#: src/backup_rsync.vala:486
+#, fuzzy
+msgid "Disk synced, cleaning old backups"
+msgstr "Borrando copias antigas"
+
+#: src/backup_rsync.vala:502
+#, fuzzy
+msgid "Cleaning old backups"
+msgstr "Borrando copias antigas"
+
+#: src/backup_rsync.vala:508
+msgid "No old backups to delete"
+msgstr ""
+
+#: src/backup_rsync.vala:535
+#, fuzzy, c-format
+msgid "Deleting old backup %s"
+msgstr "Borrando copias antigas"
+
+#: src/backup_rsync.vala:542
 #, c-format
-msgid "Backup done. Needed %ld seconds.\n"
-msgstr "Copia rematada. levou %ld segundos.\n"
+msgid "Failed to delete old backup %s: %s"
+msgstr ""
 
-#: src/choose.vala:107
+#: src/choose.vala:108
 msgid "Failed to find the disk!!!!!"
 msgstr "Non foi posíbel atopar o disco!"
 
-#: src/choose.vala:116
+#: src/choose.vala:116 src/choose.vala:123
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr "Non foi posíbel desmontar o disco. Cancelase a operación de formatado."
 
-#: src/choose.vala:137
+#: src/choose.vala:148
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
@@ -105,12 +148,12 @@ msgstr ""
 "Non foi posíbel formatar o disco (é probábel que precise moito tempo). "
 "Ténteo outra vez."
 
-#: src/choose.vala:152
+#: src/choose.vala:163
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
 "Non foi posíbel montar de novo o disco. Cancelase a operación de formatado."
 
-#: src/choose.vala:168
+#: src/choose.vala:181
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -125,150 +168,64 @@ msgstr ""
 "\n"
 "<b>Perderanse todos os datos contidos no disco</b>."
 
-#: src/choose.vala:390
+#: src/choose.vala:430
 msgid "Unknown FS"
 msgstr "Sistema de ficheiros descoñecido"
 
-#: src/choose.vala:408
+#: src/choose.vala:448
 msgid "Unknown size"
 msgstr "Tamaño descoñecido"
 
-#: src/cronopete.vala:221 src/cronopete.vala:328 src/cronopete.vala:358
-msgid "Idle"
-msgstr "En repouso"
+#: src/cronopete.vala:288
+msgid "Back Up Now"
+msgstr "Copiar agora"
 
-#: src/cronopete.vala:240 src/cronopete.vala:246 src/cronopete.vala:257
-#: src/cronopete.vala:261
+#: src/cronopete.vala:291
+msgid "Stop Backing Up"
+msgstr "Deter a copia"
+
+#: src/cronopete.vala:295 src/restore.vala:62
+msgid "Restore files"
+msgstr "Restaurar ficheiros"
+
+#: src/cronopete.vala:303
+msgid "Configure backup policies"
+msgstr "Configurar a copia de seguranza"
+
+#: src/cronopete.vala:311
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
 
-#: src/cronopete.vala:240 src/menu.vala:197
-msgid "Not defined"
-msgstr "Non definida"
-
-#: src/cronopete.vala:246 src/cronopete.vala:257 src/menu.vala:146
-msgid "None"
-msgstr "Ningunha"
-
-#: src/cronopete.vala:355
-msgid "Storage not available"
+#: src/dates.vala:25
+#, fuzzy
+msgid "Not available"
 msgstr "O almacenamento non está dispoñíbel "
 
-#: src/cronopete.vala:360
-msgid "Backup disabled"
-msgstr "Copias desactivadas"
+#: src/dates.vala:36
+#, fuzzy
+msgid "today at %R"
+msgstr "Hoxe, á %H:%M"
 
-#: src/cronopete.vala:432
-msgid "Back Up Now"
-msgstr "Copiar agora"
+#: src/dates.vala:40
+#, fuzzy
+msgid "yesterday at %R"
+msgstr "Onte, á %H:%M"
 
-#: src/cronopete.vala:435
-msgid "Stop Backing Up"
-msgstr "Deter a copia"
+#: src/dates.vala:44
+msgid "tomorrow at %R"
+msgstr ""
 
-#: src/cronopete.vala:439 src/restore.vala:186
-msgid "Restore files"
-msgstr "Restaurar ficheiros"
-
-#: src/cronopete.vala:447
-msgid "Configure backup policies"
-msgstr "Configurar a copia de seguranza"
-
-#: src/cronopete.vala:539
-#, c-format
-msgid "Backing up folder %s\n"
-msgstr "Copiando o cartafol %s\n"
-
-#: src/cronopete.vala:557
-#, c-format
-msgid "Can't copy file %s\n"
-msgstr "Non é posíbel copiar o ficheiro %s\n"
-
-#: src/cronopete.vala:562
-#, c-format
-msgid "Can't access directory %s\n"
-msgstr "Non é posíbel acceder ao cartafol %s\n"
-
-#: src/cronopete.vala:567
-#, c-format
-msgid "Can't create directory %s\n"
-msgstr "Non é posíbel crear o cartafol %s\n"
-
-#: src/cronopete.vala:585
-msgid "\n"
-msgstr "\n"
-
-#: src/cronopete.vala:586
-msgid "Starting backup\n"
-msgstr "Comezando a copia\n"
-
-#: src/cronopete.vala:600
-msgid "Erasing old backups"
-msgstr "Borrando copias antigas"
-
-#: src/cronopete.vala:612
-msgid "Backup aborted"
-msgstr "Copia cancelada"
-
-#: src/cronopete.vala:616
-msgid "Can't do backup; disk is too small"
-msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
-
-#: src/cronopete.vala:620
-msgid "Can't do backup"
-msgstr "Non é posíbel facer a copia"
-
-#: src/icons_widget.vala:153
-msgid "Name"
-msgstr "Nome"
-
-#: src/icons_widget.vala:156
-msgid "Size"
-msgstr "Tamaño"
-
-#: src/icons_widget.vala:157
-msgid "Modification date"
-msgstr "Data da modificación"
-
-#: src/icons_widget.vala:392
-msgid "Show hidden files"
-msgstr "Amosar os ficheiros agochados"
-
-#: src/icons_widget.vala:400
-msgid "Reverse order"
-msgstr "Inverter a orde"
-
-#: src/icons_widget.vala:408
-msgid "Sort by name"
-msgstr "Ordenar por nome"
-
-#: src/icons_widget.vala:412
-msgid "Sort by type"
-msgstr "Ordenar por tipo"
-
-#: src/icons_widget.vala:416
-msgid "Sort by size"
-msgstr "Ordenar por tamaño"
-
-#: src/icons_widget.vala:420
-msgid "Sort by date"
-msgstr "Ordenar por data"
-
-#: src/icons_widget.vala:442
-msgid "View as icons"
-msgstr "Ver como iconas"
-
-#: src/icons_widget.vala:446
-msgid "View as list"
-msgstr "Ver como lista"
-
-#: src/menu.vala:111
+#: src/menu.vala:112
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
-#: src/menu.vala:205
+#: src/menu.vala:168
+msgid "Not defined"
+msgstr "Non definida"
+
+#: src/menu.vala:182
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
@@ -278,74 +235,9 @@ msgstr "%lld GB de %lld GB"
 msgid "Backup hidden files and folders in %s"
 msgstr "Copiar ficheiros e cartafoles agochados en %s"
 
-#: src/restore.vala:194
+#: src/restore.vala:74
 msgid "Exit"
 msgstr "Saír"
-
-#: src/restore.vala:697
-msgid "Today, at %H:%M"
-msgid_plural "Today, at %H:%M"
-msgstr[0] "Hoxe, á %H:%M"
-msgstr[1] "Hoxe, ás %H:%M"
-
-#: src/restore.vala:702
-msgid "Yesterday, at %H:%M"
-msgid_plural "Yesterday, at %H:%M"
-msgstr[0] "Onte, á %H:%M"
-msgstr[1] "Onte, ás %H:%M"
-
-#: src/restore.vala:710
-msgid "%A, %d %B %Y at %H:%M"
-msgid_plural "%A, %d %B %Y at %H:%M"
-msgstr[0] "%A, %d %B %Y á %H:%M"
-msgstr[1] "%A, %d %B %Y ás %H:%M"
-
-#: src/restore.vala:717
-msgid "%A, %B %d %Y at %H:%M"
-msgid_plural "%A, %B %d %Y at %H:%M"
-msgstr[0] "%A, %B %d %Y á %H:%M"
-msgstr[1] "%A, %B %d %Y ás %H:%M"
-
-#: src/restore.vala:966
-#, c-format
-msgid ""
-"Restoring file:\n"
-"\n"
-"%s"
-msgstr ""
-"Restaurando o ficheiro:\n"
-"\n"
-"%s"
-
-#: src/restore.vala:978
-#, c-format
-msgid ""
-"Failed to restore file\n"
-"\n"
-"%s\n"
-"\n"
-"There's not enought free space"
-msgstr ""
-"Non foi posíbel restaurar o ficheiro\n"
-"\n"
-"%s\n"
-"\n"
-"Non hai espazo baleiro abondo"
-
-#: src/restore.vala:980
-#, c-format
-msgid ""
-"Failed to restore file\n"
-"\n"
-"%s"
-msgstr ""
-"Non foi posíbel restaurar o ficheiro\n"
-"\n"
-"%s"
-
-#: src/restore.vala:1068
-msgid "Preparing folders to restore"
-msgstr "Preparando os cartafoles para restaurar"
 
 #: data/interface/about.ui:15
 msgid "©2011-15 Raster Software Vigo"
@@ -452,42 +344,42 @@ msgid "anaCRONOPETE"
 msgstr "anaCRONOPETE"
 
 #. Don't translate this. Is part of the name in the main window
-#: data/interface/main.ui:50
+#: data/interface/main.ui:51
 msgid "ana"
 msgstr "ana"
 
 #. Don't translate this. Is part of the name in the main window.
-#: data/interface/main.ui:63
+#: data/interface/main.ui:64
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:233
-msgid "Next backup:"
-msgstr "Próxima copia:"
-
-#: data/interface/main.ui:246
+#: data/interface/main.ui:224
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: data/interface/main.ui:259
+#: data/interface/main.ui:237
 msgid "Oldest backup:"
 msgstr "Primeira copia:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:272
+#: data/interface/main.ui:250
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Dispoñíbel:"
 
-#: data/interface/main.ui:285
+#: data/interface/main.ui:263
 msgid "Device:"
 msgstr "Dispositivo:"
 
-#: data/interface/main.ui:340
+#: data/interface/main.ui:276
+msgid "Next backup:"
+msgstr "Próxima copia:"
+
+#: data/interface/main.ui:342
 msgid "Change disk..."
 msgstr "Cambiar o disco..."
 
-#: data/interface/main.ui:356 data/interface/options.ui:17
+#: data/interface/main.ui:357 data/interface/options.ui:17
 msgid "Options"
 msgstr "Opcións"
 
@@ -509,15 +401,15 @@ msgstr ""
 msgid "Show Cronopete in menu bar"
 msgstr "Amosar Cronopete na barra"
 
-#: data/interface/main.ui:420
+#: data/interface/main.ui:418
 msgid "About"
 msgstr "Sobre"
 
-#: data/interface/main.ui:454
+#: data/interface/main.ui:451
 msgid "Configuration"
 msgstr "Configuración"
 
-#: data/interface/main.ui:483
+#: data/interface/main.ui:480
 msgid "Log"
 msgstr "Rexistro"
 
@@ -596,6 +488,145 @@ msgstr ""
 "Agora, pode configurar que disco externo quere empregar para facer as copias "
 "de seguranza e de que cartafoles quere facelas, ou, se o prefire, pode "
 "deixar isto para máis adiante."
+
+#~ msgid "Backing up folder %s.\n"
+#~ msgstr "Copiando o cartafol %s.\n"
+
+#~ msgid "Excluding hidden folders in %s.\n"
+#~ msgstr "Excluindo cartafoles agochados en %s.\n"
+
+#~ msgid "Backing up hidden folders in %s.\n"
+#~ msgstr "Copiando cartafoles agochados en %s.\n"
+
+#~ msgid "Can't create the folder for this backup. Aborting backup.\n"
+#~ msgstr "Non foi posíbel crear o cartafol para esta copia. Interrompendo.\n"
+
+#~ msgid "Backup device not available. Aborting backup.\n"
+#~ msgstr ""
+#~ "Non está dispoñíbel o disco externo para as copias. Interrompendo.\n"
+
+#~ msgid "Already started a backup.\n"
+#~ msgstr "Xa está a facerse unha copia.\n"
+
+#~ msgid "Backup aborted\n"
+#~ msgstr "Copia cancelada.\n"
+
+#~ msgid ""
+#~ "The disk is too small to hold a single backup.\n"
+#~ "Adjust the list of backup and exclude folders.\n"
+#~ msgstr ""
+#~ "O disco é demasiado pequeno para poder copiar todo.\n"
+#~ "Axuste a lista de cartafoles a copiar e a excluír.\n"
+
+#~ msgid "Can't close the backup. Aborting.\n"
+#~ msgstr "Non foi posíbel pechar a copia. Interrompendo.\n"
+
+#~ msgid "Backup done. Needed %ld seconds.\n"
+#~ msgstr "Copia rematada. levou %ld segundos.\n"
+
+#~ msgid "Idle"
+#~ msgstr "En repouso"
+
+#~ msgid "None"
+#~ msgstr "Ningunha"
+
+#~ msgid "Backup disabled"
+#~ msgstr "Copias desactivadas"
+
+#~ msgid "Can't copy file %s\n"
+#~ msgstr "Non é posíbel copiar o ficheiro %s\n"
+
+#~ msgid "Can't access directory %s\n"
+#~ msgstr "Non é posíbel acceder ao cartafol %s\n"
+
+#~ msgid "Can't create directory %s\n"
+#~ msgstr "Non é posíbel crear o cartafol %s\n"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "Can't do backup; disk is too small"
+#~ msgstr "Non é posíbel facer a copia; o disco é demasiado pequeno"
+
+#~ msgid "Can't do backup"
+#~ msgstr "Non é posíbel facer a copia"
+
+#~ msgid "Name"
+#~ msgstr "Nome"
+
+#~ msgid "Size"
+#~ msgstr "Tamaño"
+
+#~ msgid "Modification date"
+#~ msgstr "Data da modificación"
+
+#~ msgid "Show hidden files"
+#~ msgstr "Amosar os ficheiros agochados"
+
+#~ msgid "Reverse order"
+#~ msgstr "Inverter a orde"
+
+#~ msgid "Sort by name"
+#~ msgstr "Ordenar por nome"
+
+#~ msgid "Sort by type"
+#~ msgstr "Ordenar por tipo"
+
+#~ msgid "Sort by size"
+#~ msgstr "Ordenar por tamaño"
+
+#~ msgid "Sort by date"
+#~ msgstr "Ordenar por data"
+
+#~ msgid "View as icons"
+#~ msgstr "Ver como iconas"
+
+#~ msgid "View as list"
+#~ msgstr "Ver como lista"
+
+#~ msgid "%A, %d %B %Y at %H:%M"
+#~ msgid_plural "%A, %d %B %Y at %H:%M"
+#~ msgstr[0] "%A, %d %B %Y á %H:%M"
+#~ msgstr[1] "%A, %d %B %Y ás %H:%M"
+
+#~ msgid "%A, %B %d %Y at %H:%M"
+#~ msgid_plural "%A, %B %d %Y at %H:%M"
+#~ msgstr[0] "%A, %B %d %Y á %H:%M"
+#~ msgstr[1] "%A, %B %d %Y ás %H:%M"
+
+#~ msgid ""
+#~ "Restoring file:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Restaurando o ficheiro:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Failed to restore file\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "There's not enought free space"
+#~ msgstr ""
+#~ "Non foi posíbel restaurar o ficheiro\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Non hai espazo baleiro abondo"
+
+#~ msgid ""
+#~ "Failed to restore file\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Non foi posíbel restaurar o ficheiro\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Preparing folders to restore"
+#~ msgstr "Preparando os cartafoles para restaurar"
 
 #~ msgid "Invalid parameter in config file %s (line %d)\n"
 #~ msgstr "Parámetro incorrecto no ficheiro de configuración %s (liña %d)\n"
