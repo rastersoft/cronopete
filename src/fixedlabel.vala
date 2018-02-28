@@ -20,15 +20,15 @@ using GLib;
 using Gtk;
 
 public class fixed_label : Gtk.Label {
-    private int _maxwidth;
+	private int _maxwidth;
 
-    public fixed_label(string text, int width) {
-        this.label     = text;
-        this._maxwidth = width;
-    }
+	public fixed_label(string text, int width) {
+		this.label     = text;
+		this._maxwidth = width;
+	}
 
-    public override void get_preferred_width(out int min_width, out int pref_width) {
-        min_width  = this._maxwidth;
-        pref_width = this._maxwidth;
-    }
+	public override void get_preferred_width(out int min_width, out int pref_width) {
+		min_width  = this._maxwidth;
+		pref_width = this._maxwidth;
+	}
 }

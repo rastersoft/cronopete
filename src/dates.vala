@@ -19,32 +19,32 @@
 using GLib;
 
 namespace cronopete {
-string date_to_string(time_t datetime) {
-    if (datetime == 0) {
-        /* "Not available" refers to a backup (e.g. when the disk is not connected) */
-        return _("Not available");
-    }
+	string date_to_string(time_t datetime) {
+		if (datetime == 0) {
+			/* "Not available" refers to a backup (e.g. when the disk is not connected) */
+			return _("Not available");
+		}
 
-    var last_backup = GLib.Time.local(datetime);
-    var now         = time_t();
-    var today       = GLib.Time.local(now);
-    var yesterday   = GLib.Time.local(now - 86400);                  // 60 * 60 * 24 = 86400 seconds / day
-    var tomorrow    = GLib.Time.local(now + 86400);                  // 60 * 60 * 24 = 86400 seconds / day
+		var last_backup = GLib.Time.local(datetime);
+		var now         = time_t();
+		var today       = GLib.Time.local(now);
+		var yesterday   = GLib.Time.local(now - 86400);              // 60 * 60 * 24 = 86400 seconds / day
+		var tomorrow    = GLib.Time.local(now + 86400);              // 60 * 60 * 24 = 86400 seconds / day
 
-    if ((last_backup.day == today.day) && (last_backup.month == today.month) && (last_backup.year == today.year)) {
-        // %R is a backup's time
-        return last_backup.format(_("today at %R"));
-    }
-    if ((last_backup.day == yesterday.day) && (last_backup.month == yesterday.month) && (last_backup.year == yesterday.year)) {
-        // %R is a backup's time
-        return last_backup.format(_("yesterday at %R"));
-    }
-    if ((last_backup.day == tomorrow.day) && (last_backup.month == tomorrow.month) && (last_backup.year == tomorrow.year)) {
-        // %R is a backup's time
-        return last_backup.format(_("tomorrow at %R"));
-    } else {
-        // %x is a backup's date, and %R a backup's time
-        return last_backup.format("%x at %R");
-    }
-}
+		if ((last_backup.day == today.day) && (last_backup.month == today.month) && (last_backup.year == today.year)) {
+			// %R is a backup's time
+			return last_backup.format(_("today at %R"));
+		}
+		if ((last_backup.day == yesterday.day) && (last_backup.month == yesterday.month) && (last_backup.year == yesterday.year)) {
+			// %R is a backup's time
+			return last_backup.format(_("yesterday at %R"));
+		}
+		if ((last_backup.day == tomorrow.day) && (last_backup.month == tomorrow.month) && (last_backup.year == tomorrow.year)) {
+			// %R is a backup's time
+			return last_backup.format(_("tomorrow at %R"));
+		} else {
+			// %x is a backup's date, and %R a backup's time
+			return last_backup.format("%x at %R");
+		}
+	}
 }

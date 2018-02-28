@@ -23,27 +23,25 @@ using Gdk;
 using Cairo;
 
 namespace cronopete {
-public class RestoreCanvas : Gtk.Container {
+	public class RestoreCanvas : Gtk.Container {
+		private Gtk.EventBox box;
+		private Gtk.Fixed base_layout
+		private Gtk.DrawingArea drawing;
 
-	private Gtk.EventBox box;
-	private Gtk.Fixed base_layout
-	private Gtk.DrawingArea drawing;
-
-	public RestoreCanvas() {
-		this.drawing     = new DrawingArea();
-		// base_layout will be the container of the drawing area where the graphics will be painted
-        this.base_layout = new Fixed();
-        this.base_layout.add(this.drawing);
-        // an event_box is needed to receive the mouse and key events
-        this.box = new EventBox();
-        this.box.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK | Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK);
-        this.box.add(this.base_layout);
-        this.box.scroll_event.connect(this.on_scroll);
-        this.box.button_release_event.connect(this.on_click);
-        this.box.key_press_event.connect(this.on_key_press);
-        this.box.key_release_event.connect(this.on_key_release);
-        this.box.sensitive = true;
+		public RestoreCanvas() {
+			this.drawing = new DrawingArea();
+			// base_layout will be the container of the drawing area where the graphics will be painted
+			this.base_layout = new Fixed();
+			this.base_layout.add(this.drawing);
+			// an event_box is needed to receive the mouse and key events
+			this.box = new EventBox();
+			this.box.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK | Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK);
+			this.box.add(this.base_layout);
+			this.box.scroll_event.connect(this.on_scroll);
+			this.box.button_release_event.connect(this.on_click);
+			this.box.key_press_event.connect(this.on_key_press);
+			this.box.key_release_event.connect(this.on_key_release);
+			this.box.sensitive = true;
+		}
 	}
-
-}
 }
