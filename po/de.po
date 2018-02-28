@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-28 00:25+0100\n"
+"POT-Creation-Date: 2018-02-28 12:51+0100\n"
 "PO-Revision-Date: 2018-11-01 22:00+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
@@ -223,7 +223,7 @@ msgstr "Status: %s"
 msgid "Not defined"
 msgstr "Nicht definiert"
 
-#: src/menu.vala:182
+#: src/menu.vala:183
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB von %lld GB"
@@ -382,10 +382,11 @@ msgid "Options"
 msgstr "Optionen"
 
 #: data/interface/main.ui:382
+#, fuzzy
 msgid ""
 "Cronopete keeps:\n"
 "\n"
-" * Hourly backups for the past 24 hours\n"
+" * All backups for the past 24 hours\n"
 " * Daily backups for the past month\n"
 " * Weekly backups until your hard disk is full"
 msgstr ""

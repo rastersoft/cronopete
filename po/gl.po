@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-28 00:25+0100\n"
+"POT-Creation-Date: 2018-02-28 12:51+0100\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -225,7 +225,7 @@ msgstr "Estado: %s"
 msgid "Not defined"
 msgstr "Non definida"
 
-#: src/menu.vala:182
+#: src/menu.vala:183
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
@@ -384,10 +384,11 @@ msgid "Options"
 msgstr "Opcións"
 
 #: data/interface/main.ui:382
+#, fuzzy
 msgid ""
 "Cronopete keeps:\n"
 "\n"
-" * Hourly backups for the past 24 hours\n"
+" * All backups for the past 24 hours\n"
 " * Daily backups for the past month\n"
 " * Weekly backups until your hard disk is full"
 msgstr ""

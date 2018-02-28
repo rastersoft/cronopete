@@ -31,6 +31,7 @@ end
 *vala_source: menu.vala
 *vala_source: options.vala
 *vala_source: restore.vala
+*vala_source: restore_canvas.vala
 
 
 *po: po
@@ -58,6 +59,7 @@ end
 *translate: vala src/menu.vala
 *translate: vala src/options.vala
 *translate: vala src/restore.vala
+*translate: vala src/restore_canvas.vala
 
 *data: data/local
 

@@ -381,7 +381,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Cronopete keeps:
 
- * Hourly backups for the past 24 hours
+ * All backups for the past 24 hours
  * Daily backups for the past month
  * Weekly backups until your hard disk is full</property>
                   </object>

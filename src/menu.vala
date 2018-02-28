@@ -178,8 +178,9 @@ public class c_main_menu : GLib.Object {
         }
         this.label_next.set_text(cronopete.date_to_string(next));
         this.disk_icon.set_from_icon_name(icon, IconSize.DIALOG);
-        /* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB */
-        this.label_space.set_text(_("%lld GB of %lld GB").printf((uint64) (free_space + 900000000) / 1073741824, (uint64) (total_space + 900000000) / 1073741824));
+        /* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
+           Adding 900000000 and dividing by 1000000000 allows to round up to the nearest size instead of the lowest one */
+        this.label_space.set_text(_("%lld GB of %lld GB").printf((uint64) (free_space + 900000000) / 1000000000, (uint64) (total_space + 900000000) / 1000000000));
     }
 
     [CCode(instance_pos = -1)]

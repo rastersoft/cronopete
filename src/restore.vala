@@ -27,9 +27,7 @@ public class restore_iface : Gtk.Window {
     private backup_base backend;
     Gee.List<backup_element> ? backup_list;
 
-    private Fixed base_layout;
-    private EventBox box;
-    private DrawingArea drawing;
+    private RestoreCanvas restore_canvas;
     private Gtk.Label current_date;
     private Gtk.SizeGroup sizegroup;
     private int screen_w;
@@ -97,24 +95,10 @@ public class restore_iface : Gtk.Window {
         button_box.pack_start(this.current_date, true, true, 0);
         button_box.pack_start(quit_button, false, false, 0);
 
-        // base_layout will be the container of the drawing area where the graphics will be painted
-        this.base_layout = new Fixed();
-        this.drawing     = new DrawingArea();
-        this.base_layout.add(this.drawing);
-        // an event_box is needed to receive the mouse and key events
-        this.box = new EventBox();
-        this.box.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK | Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK);
-        this.box.add(this.base_layout);
-        this.box.scroll_event.connect(this.on_scroll);
-        this.box.button_release_event.connect(this.on_click);
-        this.box.key_press_event.connect(this.on_key_press);
-        this.box.key_release_event.connect(this.on_key_release);
-        this.box.sensitive = true;
-
         // main_box will contain all the widgets
         var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         main_box.pack_start(button_box, false, true, 0);
-        main_box.pack_start(box, true, true, 0);
+        main_box.pack_start(restore_canvas, true, true, 0);
 
         this.add(main_box);
         this.size_allocate.connect(this.size_changed);
