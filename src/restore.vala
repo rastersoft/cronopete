@@ -30,8 +30,6 @@ namespace cronopete {
 		private RestoreCanvas restore_canvas;
 		private Gtk.Label current_date;
 		private Gtk.SizeGroup sizegroup;
-		private int screen_w;
-		private int screen_h;
 
 		private GLib.Settings cronopete_settings;
 
@@ -95,28 +93,16 @@ namespace cronopete {
 			button_box.pack_start(this.current_date, true, true, 0);
 			button_box.pack_start(quit_button, false, false, 0);
 
+			this.restore_canvas = new RestoreCanvas(this.backend, this.cronopete_settings);
+
 			// main_box will contain all the widgets
 			var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 			main_box.pack_start(button_box, false, true, 0);
 			main_box.pack_start(restore_canvas, true, true, 0);
 
 			this.add(main_box);
-			this.size_allocate.connect(this.size_changed);
-			this.draw.connect(this.do_draw);
 			this.fullscreen();
 			this.show_all();
-		}
-
-		private void size_changed(Allocation allocation) {
-			if ((this.screen_w != allocation.width) || (this.screen_h != allocation.height)) {
-				this.screen_w = allocation.width;
-				this.screen_h = allocation.height;
-			}
-		}
-
-		private bool do_draw(Context cr) {
-			print("Repinto\n");
-			return false;
 		}
 
 		private void do_restore() {
@@ -127,20 +113,5 @@ namespace cronopete {
 			this.destroy();
 		}
 
-		private bool on_scroll(Gtk.Widget widget, Gdk.EventScroll event) {
-			return false;
-		}
-
-		private bool on_click(Gtk.Widget widget, Gdk.EventButton event) {
-			return false;
-		}
-
-		private bool on_key_press(Gtk.Widget widget, Gdk.EventKey event) {
-			return false;
-		}
-
-		private bool on_key_release(Gtk.Widget widget, Gdk.EventKey event) {
-			return false;
-		}
 	}
 }
