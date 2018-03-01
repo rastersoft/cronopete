@@ -35,6 +35,9 @@ namespace cronopete {
 		private int screen_w;
 		private int screen_h;
 
+		private int current_backup;
+		private int desired_backup;
+
 		// file browser coordinates and size
 		private double browser_x;
 		private double browser_y;
@@ -68,6 +71,8 @@ namespace cronopete {
 		public RestoreCanvas(backup_base backend, GLib.Settings settings) {
 			this.backend            = backend;
 			this.cronopete_settings = settings;
+			this.current_backup = 0;
+			this.desired_backup = 0;
 
 			this.drawing = new DrawingArea();
 			// base_layout will be the container of the drawing area where the graphics will be painted
