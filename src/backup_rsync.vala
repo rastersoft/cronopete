@@ -45,6 +45,8 @@ namespace cronopete {
 		private Pid current_child_pid;
 		// if an abort call has been issued
 		private bool aborting;
+		// used to calculate how many time was needed to do the backup
+		private time_t start_time;
 
 		public backup_rsync() {
 			this.drive_path        = null;
@@ -193,6 +195,8 @@ namespace cronopete {
 			if (this.drive_path == null) {
 				return false;
 			}
+
+			this.start_time = time_t();
 			// only each user can read and write in their backup folder
 			Posix.chmod(this.drive_path, 0x01C0);
 			if (this.base_drive_path != null) {
@@ -268,7 +272,8 @@ namespace cronopete {
 
 			case 2:
 				// we are deleting old backups
-				this.send_message(_("Backup done"));
+				time_t elapsed = time_t() - this.start_time;
+				this.send_message(_("Backup done. Elapsed time: %d:%02d".printf((int) (elapsed / 60), (int) (elapsed % 60))));
 				this.deleting_mode  = -1;
 				this.current_status = backup_current_status.IDLE;
 				break;
