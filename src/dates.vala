@@ -29,8 +29,8 @@ namespace cronopete {
 		var now         = time_t();
 		var today       = GLib.Time.local(now);
 		// 60 * 60 * 24 = 86400 seconds / day
-		var yesterday   = GLib.Time.local(now - 86400);
-		var tomorrow    = GLib.Time.local(now + 86400);
+		var yesterday = GLib.Time.local(now - 86400);
+		var tomorrow  = GLib.Time.local(now + 86400);
 
 		if ((last_backup.day == today.day) && (last_backup.month == today.month) && (last_backup.year == today.year)) {
 			// %R is a backup's time

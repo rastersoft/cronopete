@@ -158,16 +158,19 @@ namespace cronopete {
 				this.iconpos = 0;
 			}
 
-			string icon_color = "";
+			string icon_color  = "";
+			string description = "";
 			if (this.backend.storage_is_available() == false) {
 				// There's no disk connected
-				icon_color = "red";
+				icon_color  = "red";
+				description = _("Disk not available");
 			} else {
 				if (this.cronopete_settings.get_boolean("enabled")) {
 					switch (this.current_status) {
 					case BackupStatus.STOPPED:
 						// Idle
-						icon_color = "white";
+						icon_color  = "white";
+						description = _("Idle");
 						break;
 
 					case BackupStatus.ALLFINE:
@@ -176,32 +179,37 @@ namespace cronopete {
 						case backup_current_status.RUNNING:
 						case backup_current_status.SYNCING:
 							// doing backup, everything is fine
-							icon_color = "green";
+							icon_color  = "green";
+							description = _("Doing backup");
 							break;
 
 						case backup_current_status.CLEANING:
-							icon_color = "cyan";
+							icon_color  = "cyan";
+							description = _("Cleaning old backups");
 							break;
 						}
 					}
 					break;
 
 					case BackupStatus.WARNING:
-						icon_color = "yellow";
+						icon_color  = "yellow";
+						description = _("Doing backup, have a warning");
 						break;
 
 					case BackupStatus.ERROR:
-						icon_color = "red";
+						icon_color  = "red";
+						description = _("Doing backup, have an error");
 						break;
 					}
 				} else {
 					// the backup is disabled
-					icon_color = "orange";
+					icon_color  = "orange";
+					description = _("Backup is disabled");
 				}
 			}
 			string icon_name = "cronopete-arrow-%d-%s".printf(this.iconpos + 1, icon_color);
 
-			this.appindicator.set_icon(icon_name);
+			this.appindicator.set_icon_full(icon_name, description);
 			if (backup_status == backup_current_status.IDLE) {
 				this.animation_timer = 0;
 				return false;
@@ -262,15 +270,18 @@ namespace cronopete {
 			welcome_w.hide();
 			welcome_w.destroy();
 			switch (retval) {
-			case 1:                                                                                     // ask me later
+			case 1:
+				// ask me later
 				break;
 
-			case 2:                                                                                     // configure now
+			case 2:
+				// configure now
 				this.cronopete_settings.set_boolean("show-welcome", false);
 				this.show_configuration();
 				break;
 
-			case 3:                                                                                     // don't ask again
+			case 3:
+				// don't ask again
 				this.cronopete_settings.set_boolean("show-welcome", false);
 				break;
 			}
@@ -400,23 +411,23 @@ namespace cronopete {
 
 	[DBus(name = "com.rastersoft.cronopete")]
 	public class DetectServer : GLib.Object {
-		public int do_ping(int v) {
+		public int do_ping(int v) throws GLib.DBusError, GLib.IOError {
 			return (v + 1);
 		}
 
-		public void do_backup() {
+		public void do_backup() throws GLib.DBusError, GLib.IOError {
 			callback_object.backup_now();
 		}
 
-		public void stop_backup() {
+		public void stop_backup() throws GLib.DBusError, GLib.IOError {
 			callback_object.stop_backup();
 		}
 
-		public void show_preferences() {
+		public void show_preferences() throws GLib.DBusError, GLib.IOError {
 			callback_object.show_configuration();
 		}
 
-		public void restore_files() {
+		public void restore_files() throws GLib.DBusError, GLib.IOError {
 			//callback_object.enter_clicked ();
 		}
 	}

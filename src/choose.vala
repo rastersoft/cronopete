@@ -24,12 +24,12 @@ using UDisks;
 
 [DBus(name = "org.freedesktop.DBus.ObjectManager")]
 interface UDisk2_if : GLib.Object {
-	public abstract void GetManagedObjects(out GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant> > > path) throws IOError;
+	public abstract void GetManagedObjects(out GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant> > > path) throws GLib.IOError, GLib.DBusError;
 }
 
 [DBus(timeout = 10000000, name = "org.freedesktop.DBus.Introspectable")]
 interface Introspectable_if : GLib.Object {
-	public abstract async void Introspect(out string xml_data) throws IOError;
+	public abstract async void Introspect(out string xml_data) throws GLib.IOError, GLib.DBusError;
 }
 
 [DBus(timeout = 1000000, name = "org.freedesktop.UDisks2.Block")]
@@ -37,13 +37,13 @@ interface Block_if : GLib.Object {
 	public abstract string IdLabel { owned get; }
 	public abstract string IdUUID { owned get; }
 
-	public abstract async void Format(string type, GLib.HashTable<string, Variant> options) throws IOError;
+	public abstract async void Format(string type, GLib.HashTable<string, Variant> options) throws GLib.IOError, GLib.DBusError;
 }
 
 [DBus(timeout = 10000000, name = "org.freedesktop.UDisks2.Filesystem")]
 interface Filesystem_if : GLib.Object {
-	public abstract async void Mount(GLib.HashTable<string, Variant> options, out string mount_path) throws IOError;
-	public abstract async void Unmount(GLib.HashTable<string, Variant> options) throws IOError;
+	public abstract async void Mount(GLib.HashTable<string, Variant> options, out string mount_path) throws GLib.IOError, GLib.DBusError;
+	public abstract async void Unmount(GLib.HashTable<string, Variant> options) throws GLib.IOError, GLib.DBusError;
 }
 
 public class c_format : GLib.Object {
@@ -100,11 +100,15 @@ public class c_format : GLib.Object {
 				}
 			}
 		} catch (GLib.IOError e) {
+			print("IO error: %s\n".printf(e.message));
+			final_uuid = null;
+		} catch (GLib.DBusError e) {
 			print("DBus error: %s\n".printf(e.message));
 			final_uuid = null;
 		}
 
-		if (disk == null) { // Failed to find the disk!!!!!!
+		// Failed to find the disk!!!!!!
+		if (disk == null) {
 			this.show_error(_("Failed to find the disk!!!!!"));
 			return final_uuid;
 		}
@@ -190,7 +194,8 @@ public class c_format : GLib.Object {
 		window.show_all();
 		var rv = window.run();
 		window.destroy();
-		if (rv == 1) { // format
+		// format
+		if (rv == 1) {
 			this.do_format.begin(disk_uuid, (obj, res) => {
 				new_uuid = this.do_format.end(res);
 				Gtk.main_quit();

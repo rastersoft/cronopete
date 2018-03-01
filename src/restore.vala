@@ -112,6 +112,5 @@ namespace cronopete {
 			this.hide();
 			this.destroy();
 		}
-
 	}
 }
