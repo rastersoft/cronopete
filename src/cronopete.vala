@@ -105,7 +105,7 @@ namespace cronopete {
 			if (this.can_do_backup()) {
 				var last_backup = this.backend.get_last_backup();
 				var now         = time_t();
-				if ((last_backup + period) < now) {
+				if ((last_backup + period) <= now) {
 					// a backup is pending
 					this.backup_now();
 				}

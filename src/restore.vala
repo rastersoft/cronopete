@@ -84,8 +84,7 @@ namespace cronopete {
 
 			// current_date is a label that will contain the current date and time
 			// of the backup being displayed
-			this.current_date            = new Label("<span size=\"xx-large\"> </span>");
-			this.current_date.use_markup = true;
+			this.current_date = new Label("");
 
 			// button_box will contain the buttons and the current date
 			var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -94,6 +93,7 @@ namespace cronopete {
 			button_box.pack_start(quit_button, false, false, 0);
 
 			this.restore_canvas = new RestoreCanvas(this.backend, this.cronopete_settings);
+			this.restore_canvas.changed_backup_time.connect(this.changed_backup_time);
 
 			// main_box will contain all the widgets
 			var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -102,6 +102,7 @@ namespace cronopete {
 
 			this.add(main_box);
 			this.fullscreen();
+			this.changed_backup_time(0);
 			this.show_all();
 		}
 
@@ -111,6 +112,11 @@ namespace cronopete {
 		private void exit_restore() {
 			this.hide();
 			this.destroy();
+		}
+
+		private void changed_backup_time(int new_index) {
+			var time_now = this.backup_list[new_index].utc_time;
+			this.current_date.set_markup("<span size=\"xx-large\">%s</span>".printf(date_to_string(time_now)));
 		}
 	}
 }

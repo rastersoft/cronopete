@@ -63,6 +63,8 @@ namespace cronopete {
 
 		private double incval;
 
+		public signal void changed_backup_time(int backup_index);
+
 		// backups and asociated data
 		Gee.List<backup_element> ? backup_list;
 		time_t oldest;
@@ -71,8 +73,8 @@ namespace cronopete {
 		public RestoreCanvas(backup_base backend, GLib.Settings settings) {
 			this.backend            = backend;
 			this.cronopete_settings = settings;
-			this.current_backup = 0;
-			this.desired_backup = 0;
+			this.current_backup     = 0;
+			this.desired_backup     = 0;
 
 			this.drawing = new DrawingArea();
 			// base_layout will be the container of the drawing area where the graphics will be painted
@@ -90,6 +92,7 @@ namespace cronopete {
 			this.box.draw.connect(this.do_draw);
 			this.box.size_allocate.connect(this.size_changed);
 			this.add(this.box);
+			this.changed_backup_time(this.current_backup);
 		}
 
 		private void size_changed(Allocation allocation) {
@@ -350,10 +353,23 @@ namespace cronopete {
 		private bool do_draw(Context cr) {
 			cr.set_source_surface(this.base_surface, 0, 0);
 			cr.paint();
+			// Paint the timeline index
+			double pos_y = this.scale_y + this.scale_h;
+			cr.set_source_rgb(1, 0, 0);
+			cr.set_line_width(3);
+			cr.move_to(this.scale_x, pos_y - this.timeline_scale_factor * (this.backup_list[this.current_backup].utc_time - this.oldest));
+			cr.rel_line_to(this.scale_w, 0);
+			cr.stroke();
 			return false;
 		}
 
 		private bool on_scroll(Gtk.Widget widget, Gdk.EventScroll event) {
+			if ((event.direction == ScrollDirection.UP) && (this.current_backup > 0)) {
+				this.go_prev_backup();
+			}
+			if ((event.direction == ScrollDirection.DOWN) && (this.current_backup < (this.backup_list.size - 1))) {
+				this.go_next_backup();
+			}
 			return false;
 		}
 
@@ -367,6 +383,24 @@ namespace cronopete {
 
 		private bool on_key_release(Gtk.Widget widget, Gdk.EventKey event) {
 			return false;
+		}
+
+		private void go_prev_backup() {
+			if (this.current_backup > 0) {
+				this.current_backup--;
+				this.changed_backup_time(this.current_backup);
+				this.queue_draw();
+				return;
+			}
+		}
+
+		private void go_next_backup() {
+			if (this.current_backup < (this.backup_list.size - 1)) {
+				this.current_backup++;
+				this.changed_backup_time(this.current_backup);
+				this.queue_draw();
+				return;
+			}
 		}
 	}
 }
