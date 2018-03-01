@@ -35,6 +35,36 @@ namespace cronopete {
 		private int screen_w;
 		private int screen_h;
 
+		// file browser coordinates and size
+		private double browser_x;
+		private double browser_y;
+		private double browser_margin;
+		private double browser_w;
+		private double browser_h;
+
+		// timeline arrows coordinates, to know how to respond to mouse clicks
+		private double arrows_x;
+		private double arrows_y;
+		private double arrows_w;
+		private double arrows_h;
+
+		// margin around the file browser
+		private int margin_around;
+
+		// scale values for the timeline, to allow to easily paint the current position
+		private double scale_x;
+		private double scale_y;
+		private double scale_w;
+		private double scale_h;
+		private double timeline_scale_factor;
+
+		private double incval;
+
+		// backups and asociated data
+		Gee.List<backup_element> ? backup_list;
+		time_t oldest;
+		time_t newest;
+
 		public RestoreCanvas(backup_base backend, GLib.Settings settings) {
 			this.backend            = backend;
 			this.cronopete_settings = settings;
@@ -173,7 +203,8 @@ namespace cronopete {
 			}
 
 			if (bgpic != null) {
-				if (bgformat == "wallpaper") {                                                                                                                                                                                                                                                 // repeat it several times
+				if (bgformat == "wallpaper") {
+					// repeat it several times
 					double l1;
 					double l2;
 					double s1 = 0.0;
@@ -238,6 +269,77 @@ namespace cronopete {
 					c_base.restore();
 				}
 			}
+
+			double scale = this.screen_w / 2800.0;
+
+			this.margin_around = this.screen_h / 20;
+			// Browser border
+			this.browser_x      = this.screen_w * 0.1;
+			this.browser_y      = this.margin_around;
+			this.browser_margin = this.screen_h / 8.0;
+			this.browser_w      = this.screen_w * 4.0 / 5.0;
+			this.browser_h      = this.screen_h - this.browser_y - this.browser_margin - this.margin_around;
+			double scale2 = (this.screen_w - 60.0 - 100.0 * scale) / 2175.0;
+			c_base.save();
+			c_base.scale(scale2, scale2);
+
+			// arrows
+			var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(Constants.PKGDATADIR, "arrows.png"));
+			this.arrows_x = (this.browser_x + this.browser_w) - 256.0 * scale2;
+			this.arrows_y = this.browser_y / 2.0;
+			this.arrows_w = 256.0 * scale2;
+			this.arrows_h = 150.0 * scale2;
+			c_base.set_source_surface(arrows_pic, this.arrows_x / scale2, this.arrows_y / scale2);
+			c_base.paint();
+			c_base.restore();
+
+			// timeline
+			this.scale_x = 0;
+			this.scale_y = this.browser_y;
+			this.scale_w = this.screen_w / 28.0;
+			this.scale_h = this.browser_h + this.browser_margin;
+
+			this.backup_list = this.backend.get_backup_list(out this.oldest, out this.newest);
+			this.backup_list.sort(sort_backup_elements_newer_to_older);
+			this.timeline_scale_factor = this.scale_h / (this.newest - this.oldest);
+
+			double last_pos_y = -1;
+			double pos_y      = this.scale_y + this.scale_h;
+			double new_y;
+
+			this.incval = this.scale_w / 5.0;
+			double nw = this.scale_w * 3.0 / 5.0;
+			this.scale_x += this.incval / 2.0;
+
+			c_base.set_source_rgba(0, 0, 0, 0.6);
+			this.rounded_rectangle(c_base, this.scale_x, this.scale_y - incval, this.scale_w, this.scale_h + 2.0 * incval, 2.0 * incval);
+			c_base.fill();
+
+			c_base.set_source_rgb(1, 1, 1);
+			c_base.set_line_width(1);
+
+			for (var i = 0; i < this.backup_list.size; i++) {
+				new_y = pos_y - this.timeline_scale_factor * (this.backup_list[i].utc_time - this.oldest);
+				if (new_y - last_pos_y < 2) {
+					continue;
+				}
+				last_pos_y = new_y;
+				c_base.move_to(this.scale_x + incval, new_y);
+				c_base.rel_line_to(nw, 0);
+				c_base.stroke();
+			}
+		}
+
+		public void rounded_rectangle(Cairo.Context context, double x, double y, double w, double h, double r) {
+			context.move_to(x + r, y);
+			context.line_to(x + w - r, y);
+			context.curve_to(x + w, y, x + w, y, x + w, y + r);
+			context.line_to(x + w, y + h - r);
+			context.curve_to(x + w, y + h, x + w, y + h, x + w - r, y + h);
+			context.line_to(x + r, y + h);
+			context.curve_to(x, y + h, x, y + h, x, y + h - r);
+			context.line_to(x, y + r);
+			context.curve_to(x, y, x, y, x + r, y);
 		}
 
 		private bool do_draw(Context cr) {

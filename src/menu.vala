@@ -115,6 +115,11 @@ namespace  cronopete {
 			}
 		}
 
+		public void erase_text_log() {
+			this.messages = new StringBuilder("");
+			this.log.set_text("");
+		}
+
 		public void insert_text_log(string msg_original) {
 			string msg;
 			if ((msg_original != "") && (!msg_original.has_suffix("\n"))) {
@@ -123,11 +128,7 @@ namespace  cronopete {
 				msg = msg_original;
 			}
 
-			if (msg == "\n") {
-				this.messages = new StringBuilder("");
-			} else {
-				this.messages.append(msg);
-			}
+			this.messages.append(msg);
 
 			if (this.is_visible) {
 				TextIter iter;

@@ -77,7 +77,8 @@ namespace cronopete {
 
 			// check if this is the first time we launch cronopete
 			this.check_welcome();
-			this.menuSystem_popup();             // update the menu
+			// update the menu
+			this.menuSystem_popup();
 			// set indicator visibility
 			this.changed_config("visible");
 			this.repaint_tray_icon();
@@ -120,6 +121,7 @@ namespace cronopete {
 
 		public void backup_now() {
 			if (this.can_do_backup()) {
+				this.main_menu.erase_text_log();
 				this.backend.do_backup(this.cronopete_settings.get_strv("backup-folders"),
 				                       this.cronopete_settings.get_strv("exclude-folders"),
 				                       this.cronopete_settings.get_boolean("skip-hiden-at-home"));
@@ -158,12 +160,14 @@ namespace cronopete {
 
 			string icon_color = "";
 			if (this.backend.storage_is_available() == false) {
-				icon_color = "red";                 // There's no disk connected
+				// There's no disk connected
+				icon_color = "red";
 			} else {
 				if (this.cronopete_settings.get_boolean("enabled")) {
 					switch (this.current_status) {
 					case BackupStatus.STOPPED:
-						icon_color = "white";                         // Idle
+						// Idle
+						icon_color = "white";
 						break;
 
 					case BackupStatus.ALLFINE:
@@ -171,7 +175,8 @@ namespace cronopete {
 						switch (backup_status) {
 						case backup_current_status.RUNNING:
 						case backup_current_status.SYNCING:
-							icon_color = "green";                             // doing backup, everything is fine
+							// doing backup, everything is fine
+							icon_color = "green";
 							break;
 
 						case backup_current_status.CLEANING:
@@ -190,7 +195,8 @@ namespace cronopete {
 						break;
 					}
 				} else {
-					icon_color = "orange";                     // the backup is disabled
+					// the backup is disabled
+					icon_color = "orange";
 				}
 			}
 			string icon_name = "cronopete-arrow-%d-%s".printf(this.iconpos + 1, icon_color);
@@ -205,12 +211,15 @@ namespace cronopete {
 		}
 
 		private void backend_availability_changed(bool is_availabe) {
-			this.menuSystem_popup();             // update the menu
-			this.repaint_tray_icon();            // and the tray icon color
+			// update the menu
+			this.menuSystem_popup();
+			// and the tray icon color
+			this.repaint_tray_icon();
 		}
 
 		public void backend_status_changed(backup_current_status status) {
-			this.menuSystem_popup();             // update the menu
+			// update the menu
+			this.menuSystem_popup();
 			if (status != backup_current_status.IDLE) {
 				if (this.animation_timer == 0) {
 					this.current_status  = BackupStatus.ALLFINE;
@@ -253,15 +262,15 @@ namespace cronopete {
 			welcome_w.hide();
 			welcome_w.destroy();
 			switch (retval) {
-			case 1:             // ask me later
+			case 1:                                                                                     // ask me later
 				break;
 
-			case 2:             // configure now
+			case 2:                                                                                     // configure now
 				this.cronopete_settings.set_boolean("show-welcome", false);
 				this.show_configuration();
 				break;
 
-			case 3:             // don't ask again
+			case 3:                                                                                     // don't ask again
 				this.cronopete_settings.set_boolean("show-welcome", false);
 				break;
 			}
@@ -365,7 +374,8 @@ namespace cronopete {
 			// If the child dies, launch cronopete again, to ensure that the backup always work
 			fork_pid = Posix.fork();
 			if (fork_pid == 0) {
-				nice(19);                 // Minimum priority
+				// Minimum priority
+				nice(19);
 				Intl.bindtextdomain(Constants.GETTEXT_PACKAGE, GLib.Path.build_filename(Constants.DATADIR, "locale"));
 				Intl.textdomain("cronopete");
 				Intl.bind_textdomain_codeset("cronopete", "UTF-8");

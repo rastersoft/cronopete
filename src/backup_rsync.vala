@@ -110,7 +110,8 @@ namespace cronopete {
 				} catch (Error e) {
 					this.send_error(_("Can't create the base folders to do backups. Aborting backup"));
 					this.current_status = backup_current_status.IDLE;
-					return false;                     // Error: can't create the base directory
+					// Error: can't create the base directory
+					return false;
 				}
 			}
 			return true;
@@ -163,7 +164,8 @@ namespace cronopete {
 					}
 				}
 			} catch (Error e) {
-				return null;                 // Error: can't read the backups list
+				// Error: can't read the backups list
+				return null;
 			}
 			return folder_list;
 		}
@@ -191,9 +193,11 @@ namespace cronopete {
 			if (this.drive_path == null) {
 				return false;
 			}
-			Posix.chmod(this.drive_path, 0x01C0);             // only each user can read and write in their backup folder
+			// only each user can read and write in their backup folder
+			Posix.chmod(this.drive_path, 0x01C0);
 			if (this.base_drive_path != null) {
-				Posix.chmod(this.base_drive_path, 0x01FF);    // everybody can read and write in the CRONOPETE folder
+				// everybody can read and write in the CRONOPETE folder
+				Posix.chmod(this.base_drive_path, 0x01FF);
 			}
 
 			this.send_message(_("Starting backup"));
@@ -254,19 +258,23 @@ namespace cronopete {
 				return;
 			}
 			switch (this.deleting_mode) {
-			case 0 :                    // we are deleting aborted backups
-			case 1:                     // we are freeing disk space because we ran out of it
+			case 0 :
+			// we are deleting aborted backups
+			case 1:
+				// we are freeing disk space because we ran out of it
 				this.deleting_mode = -1;
 				this.do_backup_folder();
 				break;
 
-			case 2:                     // we are deleting old backups
+			case 2:
+				// we are deleting old backups
 				this.send_message(_("Backup done"));
 				this.deleting_mode  = -1;
 				this.current_status = backup_current_status.IDLE;
 				break;
 
-			case 3:                     // there is a problem with the backup, stop deleting
+			case 3:
+				// there is a problem with the backup, stop deleting
 				this.send_error(_("Asked for freeing disk space when there is free space. Aborting backup"));
 				this.deleting_mode  = -1;
 				this.current_status = backup_current_status.IDLE;
@@ -301,7 +309,6 @@ namespace cronopete {
 				while ((file_info = folder_content.next_file(null)) != null) {
 					// If the directory starts with 'prefix', it's a temporary directory from an
 					// unfinished backup, or one being removed, so don't append it
-
 					var dirname = file_info.get_name();
 					if (!folder_regexp.match(dirname)) {
 						continue;
@@ -401,7 +408,8 @@ namespace cronopete {
 					}
 				    this.send_warning(_("There was a problem when backing up the folder '%s'").printf(folder.folder));
 				}
-				this.folders.remove_at(0);                 // next folder
+				// next folder
+				this.folders.remove_at(0);
 				this.do_backup_folder();
 			});
 			IOChannel output = new IOChannel.unix_new(standard_output);
@@ -573,15 +581,18 @@ namespace cronopete {
 							this.is_available_changed(false);
 						}
 						if (cronopete_settings.get_boolean("enabled")) {
-							v.mount.begin(GLib.MountMountFlags.NONE, null);                             // if backups are enabled, remount it
+							// if backups are enabled, remount it
+							v.mount.begin(GLib.MountMountFlags.NONE, null);
 						}
 					} else {
 						if (this.drive_path == null) {
 							this.last_backup_time = 0;
 							this.drive_path       = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
 							this.base_drive_path  = Path.build_filename(mnt.get_root().get_path(), "cronopete");
-							Posix.chmod(this.drive_path, 0x01C0);                             // only each user can read and write in their backup folder
-							Posix.chmod(this.base_drive_path, 0x01FF);                        // everybody can read and write in the CRONOPETE folder
+							// only each user can read and write in their backup folder
+							Posix.chmod(this.drive_path, 0x01C0);
+							// everybody can read and write in the CRONOPETE folder
+							Posix.chmod(this.base_drive_path, 0x01FF);
 							this.is_available_changed(true);
 						}
 					}

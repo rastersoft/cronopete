@@ -191,9 +191,10 @@ namespace cronopete {
 			 */
 
 			// Some constants
-			time_t day_duration   = 60 * 60 * 24;
-			time_t week_duration  = day_duration * 7;
-			time_t month_duration = day_duration * 30;             // use 30-day months
+			time_t day_duration  = 60 * 60 * 24;
+			time_t week_duration = day_duration * 7;
+			// use 30-day months
+			time_t month_duration = day_duration * 30;
 
 			// time interval to keep all backups
 			time_t day = now_t - day_duration;
@@ -272,7 +273,8 @@ namespace cronopete {
 				 */
 				if ((there_are_to_remove == false) && (oldest_element != null)) {
 					oldest_element.keep = false;
-					forcing_deletion    = true;                  // specify that we are deleting the last one
+					// specify that we are deleting the last one
+					forcing_deletion = true;
 				}
 			}
 			return backups;
