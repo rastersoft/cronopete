@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 01:10+0100\n"
+"POT-Creation-Date: 2018-03-01 17:25+0100\n"
 "PO-Revision-Date: 2017-09-14 00:14+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "Disk synced, cleaning old backups"
 msgstr "Mazání starých záloh"
 
-#: src/backup_rsync.vala:515
+#: src/backup_rsync.vala:515 src/cronopete.vala:188
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "Mazání starých záloh"
@@ -131,17 +131,17 @@ msgstr "Mazání starých záloh"
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
-#: src/choose.vala:108
+#: src/choose.vala:112
 msgid "Failed to find the disk!!!!!"
 msgstr "Nepodařilo se najít (flash)disk!!!"
 
-#: src/choose.vala:116 src/choose.vala:123
+#: src/choose.vala:120 src/choose.vala:127
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr ""
 "Nepodařilo se odpojit (umount) stávající souborový systém na flash(disku). "
 "Přerušení formátování."
 
-#: src/choose.vala:148
+#: src/choose.vala:152
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
@@ -149,11 +149,11 @@ msgstr ""
 "(Flash)disk se nepodařilo naformátovat (možná trvalo příliš dlouho). Zkuste "
 "to znovu."
 
-#: src/choose.vala:163
+#: src/choose.vala:167
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr "Nepodařilo se znovupřipojit (flash)disk. Formátování přerušeno."
 
-#: src/choose.vala:181
+#: src/choose.vala:185
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -167,31 +167,58 @@ msgstr ""
 "\n"
 "<b>Veškerá data na tomto (flash)disku budou smazána!</b>."
 
-#: src/choose.vala:430
+#: src/choose.vala:435
 msgid "Unknown FS"
 msgstr "Neznámý souborový systém"
 
-#: src/choose.vala:448
+#: src/choose.vala:453
 msgid "Unknown size"
 msgstr "Neznámá velikost"
 
-#: src/cronopete.vala:297
+#: src/cronopete.vala:166
+#, fuzzy
+msgid "Disk not available"
+msgstr "Úložiště není k dispozici"
+
+#: src/cronopete.vala:173
+msgid "Idle"
+msgstr "Nečinné"
+
+#: src/cronopete.vala:183
+#, fuzzy
+msgid "Doing backup"
+msgstr "Spouštění zálohování\n"
+
+#: src/cronopete.vala:196
+msgid "Doing backup, have a warning"
+msgstr ""
+
+#: src/cronopete.vala:201
+msgid "Doing backup, have an error"
+msgstr ""
+
+#: src/cronopete.vala:207
+#, fuzzy
+msgid "Backup is disabled"
+msgstr "Zálohování vypnuto"
+
+#: src/cronopete.vala:308
 msgid "Back Up Now"
 msgstr "Zazálohovat nyní"
 
-#: src/cronopete.vala:300
+#: src/cronopete.vala:311
 msgid "Stop Backing Up"
 msgstr "Zastavit zálohování"
 
-#: src/cronopete.vala:304 src/restore.vala:58
+#: src/cronopete.vala:315 src/restore.vala:58
 msgid "Restore files"
 msgstr "Obnovit soubory"
 
-#: src/cronopete.vala:312
+#: src/cronopete.vala:323
 msgid "Configure backup policies"
 msgstr "Nastavit pravidla zálohování"
 
-#: src/cronopete.vala:320
+#: src/cronopete.vala:331
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Nejnovější záloha: %s"
@@ -530,14 +557,8 @@ msgstr ""
 #~ msgid "Backup done. Needed %ld seconds.\n"
 #~ msgstr "Zálohování dokončeno. Trvalo %ld sekund.\n"
 
-#~ msgid "Idle"
-#~ msgstr "Nečinné"
-
 #~ msgid "None"
 #~ msgstr "Nic"
-
-#~ msgid "Backup disabled"
-#~ msgstr "Zálohování vypnuto"
 
 #~ msgid "Can't copy file %s\n"
 #~ msgstr "Nedaří se zkopírovat soubor %s\n"

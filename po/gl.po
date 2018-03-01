@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 01:10+0100\n"
+"POT-Creation-Date: 2018-03-01 17:25+0100\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Disk synced, cleaning old backups"
 msgstr "Borrando copias antigas"
 
-#: src/backup_rsync.vala:515
+#: src/backup_rsync.vala:515 src/cronopete.vala:188
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "Borrando copias antigas"
@@ -132,15 +132,15 @@ msgstr "Borrando copias antigas"
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
-#: src/choose.vala:108
+#: src/choose.vala:112
 msgid "Failed to find the disk!!!!!"
 msgstr "Non foi posíbel atopar o disco!"
 
-#: src/choose.vala:116 src/choose.vala:123
+#: src/choose.vala:120 src/choose.vala:127
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr "Non foi posíbel desmontar o disco. Cancelase a operación de formatado."
 
-#: src/choose.vala:148
+#: src/choose.vala:152
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
@@ -148,12 +148,12 @@ msgstr ""
 "Non foi posíbel formatar o disco (é probábel que precise moito tempo). "
 "Ténteo outra vez."
 
-#: src/choose.vala:163
+#: src/choose.vala:167
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
 "Non foi posíbel montar de novo o disco. Cancelase a operación de formatado."
 
-#: src/choose.vala:181
+#: src/choose.vala:185
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -168,31 +168,58 @@ msgstr ""
 "\n"
 "<b>Perderanse todos os datos contidos no disco</b>."
 
-#: src/choose.vala:430
+#: src/choose.vala:435
 msgid "Unknown FS"
 msgstr "Sistema de ficheiros descoñecido"
 
-#: src/choose.vala:448
+#: src/choose.vala:453
 msgid "Unknown size"
 msgstr "Tamaño descoñecido"
 
-#: src/cronopete.vala:297
+#: src/cronopete.vala:166
+#, fuzzy
+msgid "Disk not available"
+msgstr "O almacenamento non está dispoñíbel "
+
+#: src/cronopete.vala:173
+msgid "Idle"
+msgstr "En repouso"
+
+#: src/cronopete.vala:183
+#, fuzzy
+msgid "Doing backup"
+msgstr "Comezando a copia\n"
+
+#: src/cronopete.vala:196
+msgid "Doing backup, have a warning"
+msgstr ""
+
+#: src/cronopete.vala:201
+msgid "Doing backup, have an error"
+msgstr ""
+
+#: src/cronopete.vala:207
+#, fuzzy
+msgid "Backup is disabled"
+msgstr "Copias desactivadas"
+
+#: src/cronopete.vala:308
 msgid "Back Up Now"
 msgstr "Copiar agora"
 
-#: src/cronopete.vala:300
+#: src/cronopete.vala:311
 msgid "Stop Backing Up"
 msgstr "Deter a copia"
 
-#: src/cronopete.vala:304 src/restore.vala:58
+#: src/cronopete.vala:315 src/restore.vala:58
 msgid "Restore files"
 msgstr "Restaurar ficheiros"
 
-#: src/cronopete.vala:312
+#: src/cronopete.vala:323
 msgid "Configure backup policies"
 msgstr "Configurar a copia de seguranza"
 
-#: src/cronopete.vala:320
+#: src/cronopete.vala:331
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
@@ -529,14 +556,8 @@ msgstr ""
 #~ msgid "Backup done. Needed %ld seconds.\n"
 #~ msgstr "Copia rematada. levou %ld segundos.\n"
 
-#~ msgid "Idle"
-#~ msgstr "En repouso"
-
 #~ msgid "None"
 #~ msgstr "Ningunha"
-
-#~ msgid "Backup disabled"
-#~ msgstr "Copias desactivadas"
 
 #~ msgid "Can't copy file %s\n"
 #~ msgstr "Non é posíbel copiar o ficheiro %s\n"

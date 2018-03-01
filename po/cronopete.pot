@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 01:10+0100\n"
+"POT-Creation-Date: 2018-03-01 17:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr ""
 msgid "Disk synced, cleaning old backups"
 msgstr ""
 
-#: src/backup_rsync.vala:515
+#: src/backup_rsync.vala:515 src/cronopete.vala:188
 msgid "Cleaning old backups"
 msgstr ""
 
@@ -113,25 +113,25 @@ msgstr ""
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
-#: src/choose.vala:108
+#: src/choose.vala:112
 msgid "Failed to find the disk!!!!!"
 msgstr ""
 
-#: src/choose.vala:116 src/choose.vala:123
+#: src/choose.vala:120 src/choose.vala:127
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr ""
 
-#: src/choose.vala:148
+#: src/choose.vala:152
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
 
-#: src/choose.vala:163
+#: src/choose.vala:167
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
 
-#: src/choose.vala:181
+#: src/choose.vala:185
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -140,31 +140,55 @@ msgid ""
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
 
-#: src/choose.vala:430
+#: src/choose.vala:435
 msgid "Unknown FS"
 msgstr ""
 
-#: src/choose.vala:448
+#: src/choose.vala:453
 msgid "Unknown size"
 msgstr ""
 
-#: src/cronopete.vala:297
+#: src/cronopete.vala:166
+msgid "Disk not available"
+msgstr ""
+
+#: src/cronopete.vala:173
+msgid "Idle"
+msgstr ""
+
+#: src/cronopete.vala:183
+msgid "Doing backup"
+msgstr ""
+
+#: src/cronopete.vala:196
+msgid "Doing backup, have a warning"
+msgstr ""
+
+#: src/cronopete.vala:201
+msgid "Doing backup, have an error"
+msgstr ""
+
+#: src/cronopete.vala:207
+msgid "Backup is disabled"
+msgstr ""
+
+#: src/cronopete.vala:308
 msgid "Back Up Now"
 msgstr ""
 
-#: src/cronopete.vala:300
+#: src/cronopete.vala:311
 msgid "Stop Backing Up"
 msgstr ""
 
-#: src/cronopete.vala:304 src/restore.vala:58
+#: src/cronopete.vala:315 src/restore.vala:58
 msgid "Restore files"
 msgstr ""
 
-#: src/cronopete.vala:312
+#: src/cronopete.vala:323
 msgid "Configure backup policies"
 msgstr ""
 
-#: src/cronopete.vala:320
+#: src/cronopete.vala:331
 #, c-format
 msgid "Latest backup: %s"
 msgstr ""

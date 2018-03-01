@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 3.21.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 01:10+0100\n"
+"POT-Creation-Date: 2018-03-01 17:25+0100\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "Disk synced, cleaning old backups"
 msgstr "Удаление старых резервных копий"
 
-#: src/backup_rsync.vala:515
+#: src/backup_rsync.vala:515 src/cronopete.vala:188
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "Удаление старых резервных копий"
@@ -131,15 +131,15 @@ msgstr "Удаление старых резервных копий"
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
-#: src/choose.vala:108
+#: src/choose.vala:112
 msgid "Failed to find the disk!!!!!"
 msgstr "Ошибка в чтении диска!!!!!"
 
-#: src/choose.vala:116 src/choose.vala:123
+#: src/choose.vala:120 src/choose.vala:127
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr "Ошибка при отключении диска. Отмена операции."
 
-#: src/choose.vala:148
+#: src/choose.vala:152
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
@@ -147,11 +147,11 @@ msgstr ""
 "Ошибка форматирования диска (возможно требуется больше времени). Попробуйте "
 "еще раз."
 
-#: src/choose.vala:163
+#: src/choose.vala:167
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr "Ошибка при подключении диска. Отмена операции."
 
-#: src/choose.vala:181
+#: src/choose.vala:185
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -165,31 +165,58 @@ msgstr ""
 "\n"
 "<b>Все данные на диске будут уничтожены</b>"
 
-#: src/choose.vala:430
+#: src/choose.vala:435
 msgid "Unknown FS"
 msgstr "Неизвестная ФС"
 
-#: src/choose.vala:448
+#: src/choose.vala:453
 msgid "Unknown size"
 msgstr "Неизвестный размер"
 
-#: src/cronopete.vala:297
+#: src/cronopete.vala:166
+#, fuzzy
+msgid "Disk not available"
+msgstr "Хранилище недоступно"
+
+#: src/cronopete.vala:173
+msgid "Idle"
+msgstr "Бездействие"
+
+#: src/cronopete.vala:183
+#, fuzzy
+msgid "Doing backup"
+msgstr "Резервирование\n"
+
+#: src/cronopete.vala:196
+msgid "Doing backup, have a warning"
+msgstr ""
+
+#: src/cronopete.vala:201
+msgid "Doing backup, have an error"
+msgstr ""
+
+#: src/cronopete.vala:207
+#, fuzzy
+msgid "Backup is disabled"
+msgstr "Резервирование отключено"
+
+#: src/cronopete.vala:308
 msgid "Back Up Now"
 msgstr "Начать резервировать"
 
-#: src/cronopete.vala:300
+#: src/cronopete.vala:311
 msgid "Stop Backing Up"
 msgstr "Остановить резервирование"
 
-#: src/cronopete.vala:304 src/restore.vala:58
+#: src/cronopete.vala:315 src/restore.vala:58
 msgid "Restore files"
 msgstr "Восстановить файлы"
 
-#: src/cronopete.vala:312
+#: src/cronopete.vala:323
 msgid "Configure backup policies"
 msgstr "Настройте резервное копирование"
 
-#: src/cronopete.vala:320
+#: src/cronopete.vala:331
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Последняя копия: %s"
@@ -523,14 +550,8 @@ msgstr ""
 #~ msgid "Backup done. Needed %ld seconds.\n"
 #~ msgstr "Резервирование завершено. Потребовалось %ld секунд.\n"
 
-#~ msgid "Idle"
-#~ msgstr "Бездействие"
-
 #~ msgid "None"
 #~ msgstr "Никогда"
-
-#~ msgid "Backup disabled"
-#~ msgstr "Резервирование отключено"
 
 #~ msgid "Can't copy file %s\n"
 #~ msgstr "Невозможно скопировать файл %s\n"
