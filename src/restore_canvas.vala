@@ -400,8 +400,7 @@ namespace cronopete {
 
 				cr.select_font_face("Sans", FontSlant.NORMAL, FontWeight.BOLD);
 				cr.set_font_size(18.0 * s_factor);
-				var ctime = GLib.Time.local(this.backup_list[z_index + i].utc_time);
-				var date  = ctime.format("%x at %R");
+				var date  = cronopete.date_to_string(this.backup_list[z_index + i].utc_time);
 
 				Cairo.TextExtents extents;
 				cr.text_extents(date, out extents);
