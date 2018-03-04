@@ -23,6 +23,9 @@ using Gdk;
 using Cairo;
 
 namespace cronopete {
+	/**
+	 * Contains the inner canvas with the timeline
+	 */
 	public class RestoreCanvas : Gtk.Bin {
 		private backup_base backend;
 		private GLib.Settings cronopete_settings;
@@ -60,8 +63,6 @@ namespace cronopete {
 		private double scale_w;
 		private double scale_h;
 		private double timeline_scale_factor;
-
-		private double incval;
 
 		public signal void changed_backup_time(int backup_index);
 
@@ -315,9 +316,9 @@ namespace cronopete {
 			double pos_y      = this.scale_y + this.scale_h;
 			double new_y;
 
-			this.incval = this.scale_w / 5.0;
+			var incval = this.scale_w / 5.0;
 			double nw = this.scale_w * 3.0 / 5.0;
-			this.scale_x += this.incval / 2.0;
+			this.scale_x += incval / 2.0;
 
 			c_base.set_source_rgba(0, 0, 0, 0.6);
 			this.rounded_rectangle(c_base, this.scale_x, this.scale_y - incval, this.scale_w, this.scale_h + 2.0 * incval, 2.0 * incval);

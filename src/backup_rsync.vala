@@ -150,8 +150,8 @@ namespace cronopete {
 					}
 
 					time_t backup_time = 0;
-					bool found_error = false;
-					for(int i = 20; i < dirname.length; i++) {
+					bool   found_error = false;
+					for (int i = 20; i < dirname.length; i++) {
 						var c = dirname[i];
 						if ((c >= '0') && (c <= '9')) {
 							backup_time *= 10;
