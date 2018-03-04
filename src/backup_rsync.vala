@@ -148,13 +148,22 @@ namespace cronopete {
 					if (dirname.length < 21) {
 						continue;
 					}
-					var date_value = dirname.substring(20);
-					if (date_value == null) {
-						continue;
+
+					time_t backup_time = 0;
+					bool found_error = false;
+					for(int i = 20; i < dirname.length; i++) {
+						var c = dirname[i];
+						if ((c >= '0') && (c <= '9')) {
+							backup_time *= 10;
+							backup_time += (time_t) (c - '0');
+						} else {
+							found_error = true;
+							print("Error when converting %s to time_t\n".printf(dirname));
+							break;
+						}
 					}
-					time_t backup_time = (time_t) uint64.parse(dirname.substring(20));
 					// Also never append backups "from the future"
-					if ((backup_time <= now) && (backup_time != 0)) {
+					if ((found_error == false) && (backup_time <= now) && (backup_time != 0)) {
 						if ((oldest == 0) || (backup_time < oldest)) {
 							oldest = backup_time;
 						}
@@ -615,7 +624,7 @@ namespace cronopete {
 		public override bool configure_backup_device(Gtk.Window main_window) {
 			var choose_window = new c_choose_disk(main_window);
 			var disk_uuid     = choose_window.run(this.cronopete_settings);
-			print(disk_uuid);
+			print("Choosen disk: %s\n".printf(disk_uuid));
 			return false;
 		}
 	}

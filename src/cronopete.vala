@@ -100,23 +100,22 @@ namespace cronopete {
 			return true;
 		}
 
+		/**
+		 * Every 10 minutes will check if there is need to do a new backup
+		 * Since deleting old backups can take a lot of time, it can delay
+		 * the next backup
+		 */
 		private bool check_backup() {
-			var period = this.cronopete_settings.get_uint("backup-period");
 			if (this.can_do_backup()) {
 				var last_backup = this.backend.get_last_backup();
 				var now         = time_t();
+				var period      = this.cronopete_settings.get_uint("backup-period");
 				if ((last_backup + period) <= now) {
 					// a backup is pending
 					this.backup_now();
 				}
 			}
-			if (this.backup_timeout == period) {
-				return true;
-			} else {
-				GLib.Timeout.add(period * 1000, this.check_backup);
-				this.backup_timeout = period;
-				return false;
-			}
+			return true;
 		}
 
 		public void backup_now() {
