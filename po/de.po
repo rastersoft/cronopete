@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 17:25+0100\n"
+"POT-Creation-Date: 2018-03-05 00:59+0100\n"
 "PO-Revision-Date: 2018-11-01 22:00+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
@@ -29,103 +29,103 @@ msgstr ""
 "Es kann nicht der Basisordner für die Backups erstellt werden. Sicherung "
 "wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:207
+#: src/backup_rsync.vala:216
 #, fuzzy
 msgid "Starting backup"
 msgstr "Sicherung starten\n"
 
-#: src/backup_rsync.vala:245
+#: src/backup_rsync.vala:254
 #, fuzzy
 msgid "Cleaning incomplete backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:276
+#: src/backup_rsync.vala:285
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr ""
 
-#: src/backup_rsync.vala:283
+#: src/backup_rsync.vala:292
 #, fuzzy
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
 "Sicherung wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:298
+#: src/backup_rsync.vala:307
 msgid "Backup aborted"
 msgstr "Sicherung abbrechen"
 
-#: src/backup_rsync.vala:341
+#: src/backup_rsync.vala:350
 msgid "Failed to delete aborted backups: "
 msgstr ""
 
-#: src/backup_rsync.vala:365
+#: src/backup_rsync.vala:374
 #, fuzzy, c-format
 msgid "Backing up folder %s"
 msgstr "Ordner sichern %s\n"
 
-#: src/backup_rsync.vala:386
+#: src/backup_rsync.vala:395
 #, fuzzy, c-format
 msgid "Excluding folder %s"
 msgstr "Ordner die ausgeschlossen werden %s.\n"
 
-#: src/backup_rsync.vala:395
+#: src/backup_rsync.vala:404
 #, fuzzy, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr ""
 "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
 "Sicherung wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:414
+#: src/backup_rsync.vala:423
 #, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr ""
 
-#: src/backup_rsync.vala:429
+#: src/backup_rsync.vala:438
 #, fuzzy, c-format
 msgid "Backing up %s"
 msgstr "Ordner sichern %s\n"
 
-#: src/backup_rsync.vala:446 src/backup_rsync.vala:447
+#: src/backup_rsync.vala:455 src/backup_rsync.vala:456
 #, fuzzy
 msgid "Syncing disk"
 msgstr "Synchronisiere Festplatte\n"
 
-#: src/backup_rsync.vala:453
+#: src/backup_rsync.vala:462
 msgid "Failed to launch sync command"
 msgstr ""
 
-#: src/backup_rsync.vala:476
+#: src/backup_rsync.vala:485
 #, fuzzy
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr ""
 "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
 "Sicherung wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:489
+#: src/backup_rsync.vala:498
 msgid "Failed to launch final sync command"
 msgstr ""
 
-#: src/backup_rsync.vala:499
+#: src/backup_rsync.vala:508
 #, fuzzy
 msgid "Disk synced, cleaning old backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:515 src/cronopete.vala:188
+#: src/backup_rsync.vala:524 src/cronopete.vala:187
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:521
+#: src/backup_rsync.vala:530
 msgid "No old backups to delete"
 msgstr ""
 
-#: src/backup_rsync.vala:548
+#: src/backup_rsync.vala:557
 #, fuzzy, c-format
 msgid "Deleting old backup %s"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:555
+#: src/backup_rsync.vala:564
 #, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
@@ -174,50 +174,50 @@ msgstr "Unbekanntes Dateisystem"
 msgid "Unknown size"
 msgstr "Unbekannte Größe"
 
-#: src/cronopete.vala:166
+#: src/cronopete.vala:165
 #, fuzzy
 msgid "Disk not available"
 msgstr "Speicher nicht verfügbar"
 
-#: src/cronopete.vala:173
+#: src/cronopete.vala:172
 msgid "Idle"
 msgstr "Warten"
 
-#: src/cronopete.vala:183
+#: src/cronopete.vala:182
 #, fuzzy
 msgid "Doing backup"
 msgstr "Sicherung starten\n"
 
-#: src/cronopete.vala:196
+#: src/cronopete.vala:195
 msgid "Doing backup, have a warning"
 msgstr ""
 
-#: src/cronopete.vala:201
+#: src/cronopete.vala:200
 msgid "Doing backup, have an error"
 msgstr ""
 
-#: src/cronopete.vala:207
+#: src/cronopete.vala:206
 #, fuzzy
 msgid "Backup is disabled"
 msgstr "Backup ausgeschaltet"
 
-#: src/cronopete.vala:308
+#: src/cronopete.vala:307
 msgid "Back Up Now"
 msgstr "jetzt sichern"
 
-#: src/cronopete.vala:311
+#: src/cronopete.vala:310
 msgid "Stop Backing Up"
 msgstr "Sicherung anhalten"
 
-#: src/cronopete.vala:315 src/restore.vala:58
+#: src/cronopete.vala:314 src/restore.vala:58
 msgid "Restore files"
 msgstr "Dateien wieder herstellen"
 
-#: src/cronopete.vala:323
+#: src/cronopete.vala:322
 msgid "Configure backup policies"
 msgstr "Backupregeln einstellen"
 
-#: src/cronopete.vala:331
+#: src/cronopete.vala:330
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Letztes Backup: %s"
@@ -265,7 +265,8 @@ msgid "Exit"
 msgstr "Exit"
 
 #: data/interface/about.ui:15
-msgid "©2011-15 Raster Software Vigo"
+#, fuzzy
+msgid "©2011-2018 Raster Software Vigo"
 msgstr "©2011-15 Raster Software Vigo"
 
 #: data/interface/about.ui:16
@@ -512,6 +513,10 @@ msgstr ""
 "\n"
 "Du kannst jetzt eine externe Festplatte für die Sicherungen konfigurieren "
 "und angeben welche Ordner gesichert werden sollen, oder du tust es später."
+
+#, fuzzy
+#~ msgid "%x at %R"
+#~ msgstr "Heute, um %H:%M"
 
 #, fuzzy
 #~ msgid "Backup done"

@@ -34,7 +34,7 @@ namespace cronopete {
 		// the current backup name
 		private string ? current_backup;
 		// contains the base regexp to identify a backup folder
-		private string regex_backup = "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]:[0-9][0-9]:[0-9][0-9]_[0-9]+";
+		private string regex_backup = "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]:[0-9][0-9]:[0-9][0-9]_[0-9]+";
 		// contains the type of delete we are doing, to now what do call at the end
 		private int deleting_mode;
 		// contains the last backup time
@@ -131,7 +131,7 @@ namespace cronopete {
 			}
 			var main_folder = File.new_for_path(this.drive_path);
 			try {
-				GLib.Regex regexBackups   = new GLib.Regex(this.regex_backup);
+				GLib.Regex regexBackups   = new GLib.Regex("^" + this.regex_backup);
 				var        folder_content = main_folder.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
 
 				FileInfo file_info;
@@ -316,7 +316,7 @@ namespace cronopete {
 			// find the next folder to delete
 			string ? to_delete = null;
 			try {
-				var folder_regexp  = new GLib.Regex(prefix + this.regex_backup);
+				var folder_regexp  = new GLib.Regex("^" + prefix + this.regex_backup);
 				var folder_content = main_folder.enumerate_children(FileAttribute.STANDARD_NAME, 0, null);
 
 				FileInfo file_info;

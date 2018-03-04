@@ -45,7 +45,7 @@ namespace cronopete {
 			return last_backup.format(_("tomorrow at %R"));
 		} else {
 			// %x is a backup's date, and %R a backup's time
-			return last_backup.format("%x at %R");
+			return last_backup.format("%x, %R");
 		}
 	}
 }
