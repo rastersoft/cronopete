@@ -39,7 +39,9 @@ namespace cronopete {
 		private int screen_h;
 
 		private int current_backup;
-		private int desired_backup;
+		private int64 current_z_pos;
+		private time_t current_timeline;
+		private time_t desired_timeline;
 
 		// file browser coordinates and size
 		private double browser_x;
@@ -64,6 +66,12 @@ namespace cronopete {
 		private double scale_h;
 		private double timeline_scale_factor;
 
+		// stores the tick callback uid, to know if it is already set
+		private uint tick_cb;
+
+		// this stores the last frame time, to now if a new frame must be animated
+		private int64 last_time_frame;
+
 		public signal void changed_backup_time(int backup_index);
 
 		// backups and asociated data
@@ -74,8 +82,14 @@ namespace cronopete {
 		public RestoreCanvas(backup_base backend, GLib.Settings settings) {
 			this.backend            = backend;
 			this.cronopete_settings = settings;
-			this.current_backup     = 0;
-			this.desired_backup     = 0;
+			this.backup_list        = this.backend.get_backup_list(out this.oldest, out this.newest);
+			this.backup_list.sort(sort_backup_elements_newer_to_older);
+			this.current_backup   = 0;
+			this.current_z_pos    = 0;
+			this.current_timeline = this.backup_list[0].utc_time;
+			this.desired_timeline = this.current_timeline;
+			this.tick_cb          = 0;
+			this.last_time_frame  = 0;
 
 			this.drawing = new DrawingArea();
 			// base_layout will be the container of the drawing area where the graphics will be painted
@@ -308,16 +322,14 @@ namespace cronopete {
 			this.scale_w = this.screen_w / 28.0;
 			this.scale_h = this.browser_h + this.browser_margin;
 
-			this.backup_list = this.backend.get_backup_list(out this.oldest, out this.newest);
-			this.backup_list.sort(sort_backup_elements_newer_to_older);
 			this.timeline_scale_factor = this.scale_h / (this.newest - this.oldest);
 
 			double last_pos_y = -1;
 			double pos_y      = this.scale_y + this.scale_h;
 			double new_y;
 
-			var incval = this.scale_w / 5.0;
-			double nw = this.scale_w * 3.0 / 5.0;
+			var    incval = this.scale_w / 5.0;
+			double nw     = this.scale_w * 3.0 / 5.0;
 			this.scale_x += incval / 2.0;
 
 			c_base.set_source_rgba(0, 0, 0, 0.6);
@@ -358,10 +370,95 @@ namespace cronopete {
 			double pos_y = this.scale_y + this.scale_h;
 			cr.set_source_rgb(1, 0, 0);
 			cr.set_line_width(3);
-			cr.move_to(this.scale_x, pos_y - this.timeline_scale_factor * (this.backup_list[this.current_backup].utc_time - this.oldest));
+			cr.move_to(this.scale_x, pos_y - this.timeline_scale_factor * (this.current_timeline - this.oldest));
 			cr.rel_line_to(this.scale_w, 0);
 			cr.stroke();
+
+			// Paint the windows
+			double ox;
+			double oy;
+			double ow;
+			double oh;
+			double s_factor;
+			int64  z_offset = (1000 - (this.current_z_pos % 1000)) % 1000;
+			int    z_index  = (int) (this.current_z_pos / 1000);
+			int    last     = 0;
+			if (z_offset != 0) {
+				z_index++;
+			}
+			if (z_offset >= 200) {
+				last = -1;
+			}
+			cr.set_line_width(1.5);
+			cr.set_source_rgb(0.2, 0.2, 0.2);
+			for (int i = 9; i >= last; i--) {
+				if (((z_index + i) < 0) || ((z_index + i) >= this.backup_list.size)) {
+					continue;
+				}
+				var z2 = z_offset + i * 1000;
+				this.transform_coords(z2, out ox, out oy, out ow, out oh, out s_factor);
+
+				cr.select_font_face("Sans", FontSlant.NORMAL, FontWeight.BOLD);
+				cr.set_font_size(18.0 * s_factor);
+				var ctime = GLib.Time.local(this.backup_list[z_index + i].utc_time);
+				var date  = ctime.format("%x at %R");
+
+				Cairo.TextExtents extents;
+				cr.text_extents(date, out extents);
+				cr.set_source_rgb(1, 1, 1);
+				double final_add = 4.0 * s_factor;
+				cr.rectangle(ox, oy - 2 * final_add - extents.height, ow, oh + 2 * final_add + extents.height);
+				cr.fill();
+				cr.set_source_rgb(0.0, 0.0, 0.0);
+				cr.rectangle(ox, oy - 2 * final_add - extents.height, ow, oh + 2 * final_add + extents.height);
+				cr.stroke();
+				cr.move_to(ox + (ow - extents.width + extents.x_bearing) / 2, oy - extents.height - extents.y_bearing - final_add);
+
+				cr.show_text(date);
+			}
 			return false;
+		}
+
+		private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {
+			double eyedist = 2500.0;
+
+			ox       = (this.browser_x * eyedist + (z * ((double) this.screen_w) / 2)) / (z + eyedist);
+			oy       = ((this.browser_margin) * eyedist) / (z + eyedist);
+			ow       = (this.browser_w * eyedist) / (z + eyedist);
+			oh       = (this.browser_h * eyedist) / (z + eyedist);
+			oy      += this.browser_y;
+			s_factor = eyedist / (z + eyedist);
+		}
+
+		private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock clock) {
+			var lt = clock.get_frame_time();
+			if ((lt - this.last_time_frame) < 50000) {
+				// keep the framerate at 20 FPS
+				return true;
+			}
+			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
+			this.last_time_frame  = lt;
+			this.current_timeline = (2 * this.current_timeline + this.desired_timeline) / 3;
+			time_t dif_timeline;
+			if (this.current_timeline > this.desired_timeline) {
+				dif_timeline = this.current_timeline - this.desired_timeline;
+			} else {
+				dif_timeline = this.desired_timeline - this.current_timeline;
+			}
+			if (dif_timeline < 2) {
+				this.current_timeline = this.desired_timeline;
+			}
+			this.current_z_pos = (2 * this.current_z_pos + desired_z_pos) / 3;
+			if (((this.current_z_pos - desired_z_pos).abs()) < 20) {
+				this.current_z_pos = desired_z_pos;
+			}
+			this.queue_draw();
+			if ((this.desired_timeline == this.current_timeline) && (this.current_z_pos == desired_z_pos)) {
+				this.tick_cb = 0;
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 		private bool on_scroll(Gtk.Widget widget, Gdk.EventScroll event) {
@@ -389,8 +486,11 @@ namespace cronopete {
 		private void go_prev_backup() {
 			if (this.current_backup > 0) {
 				this.current_backup--;
+				this.desired_timeline = this.backup_list[this.current_backup].utc_time;
 				this.changed_backup_time(this.current_backup);
-				this.queue_draw();
+				if (this.tick_cb == 0) {
+					this.tick_cb = this.add_tick_callback(this.tick_callback);
+				}
 				return;
 			}
 		}
@@ -398,8 +498,11 @@ namespace cronopete {
 		private void go_next_backup() {
 			if (this.current_backup < (this.backup_list.size - 1)) {
 				this.current_backup++;
+				this.desired_timeline = this.backup_list[this.current_backup].utc_time;
 				this.changed_backup_time(this.current_backup);
-				this.queue_draw();
+				if (this.tick_cb == 0) {
+					this.tick_cb = this.add_tick_callback(this.tick_callback);
+				}
 				return;
 			}
 		}

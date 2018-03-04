@@ -34,7 +34,7 @@ namespace cronopete {
 		// the current backup name
 		private string ? current_backup;
 		// contains the base regexp to identify a backup folder
-		private string regex_backup = "[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]:[0-9][0-9]:[0-9][0-9]_[0-9]+";
+		private string regex_backup = "^[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]:[0-9][0-9]:[0-9][0-9]_[0-9]+";
 		// contains the type of delete we are doing, to now what do call at the end
 		private int deleting_mode;
 		// contains the last backup time
