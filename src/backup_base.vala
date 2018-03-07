@@ -149,6 +149,15 @@ namespace cronopete {
 		public abstract bool configure_backup_device(Gtk.Window main_window);
 
 		/**
+		 * Returns a list with the files in the specified folder and backup
+		 * @param current_path The path from where the list of files must be obtained
+		 * @param backup The specific backup from where the list of files must be obtained
+		 * @param files The returned list of files with all the data needed
+		 * @return TRUE if everything went fine; FALSE if there was an error
+		 */
+		public abstract bool get_filelist(string current_path, backup_element backup, out Gee.List<file_info ?> files);
+
+		/**
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if
 		 * that backup must be kept, or will set it to FALSE if it must be deleted to reclaim its
 		 * disk space. The list will contain objects created with the backend's method "get_backup_list",
@@ -299,21 +308,21 @@ namespace cronopete {
 		}
 	}
 
-	public abstract class file_info : GLib.Object {
-		// This object contains the information for one file
+	public struct file_info {
+		// This structure contains the information for one file
 		// when, at restoring, the backend is asked for the list
 		// of available files
 
 		// File name
-		public string name;
+		string          name;
 		// Icon for this file
-		public GLib.ThemedIcon icon;
+		GLib.ThemedIcon icon;
 		// Whether this is, or not, a folder
-		public bool isdir;
+		bool            isdir;
 		// The modification time
-		public TimeVal mod_time;
+		TimeVal         mod_time;
 		// The file size
-		public int64 size;
+		int64           size;
 	}
 
 	public int sort_backup_elements_older_to_newer(backup_element a, backup_element b) {

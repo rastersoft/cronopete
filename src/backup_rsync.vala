@@ -196,6 +196,43 @@ namespace cronopete {
 			}
 		}
 
+		public override bool get_filelist(string current_path, backup_element backup, out Gee.List<file_info ?> files) {
+			FileInfo      info_file;
+			FileType      typeinfo;
+			rsync_element rbackup = backup as rsync_element;
+
+			try {
+				files = new Gee.ArrayList<file_info ?>();
+
+				var finalpath = Path.build_filename(rbackup.full_path, current_path);
+
+				var directory = File.new_for_path(finalpath);
+				var listfile  = directory.enumerate_children(FileAttribute.TIME_MODIFIED + "," + FileAttribute.STANDARD_NAME + "," + FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_SIZE + "," + FileAttribute.STANDARD_ICON, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+
+				while ((info_file = listfile.next_file(null)) != null) {
+					var tmpinfo = file_info();
+
+					typeinfo     = info_file.get_file_type();
+					tmpinfo.name = info_file.get_name().dup();
+
+					if (typeinfo == FileType.DIRECTORY) {
+						tmpinfo.isdir = true;
+					} else {
+						tmpinfo.isdir = false;
+					}
+
+					tmpinfo.mod_time = info_file.get_modification_time();
+					tmpinfo.size     = info_file.get_size();
+					tmpinfo.icon     = (GLib.ThemedIcon)info_file.get_icon();
+
+					files.add(tmpinfo);
+				}
+				return true;
+			} catch {
+				return false;
+			}
+		}
+
 		public override bool do_backup(string[] folder_list, string[] exclude_list, bool skip_hidden_at_home) {
 			if (this.current_status != backup_current_status.IDLE) {
 				return false;

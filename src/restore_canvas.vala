@@ -34,6 +34,9 @@ namespace cronopete {
 		private Gtk.Fixed base_layout;
 		private Gtk.DrawingArea drawing;
 
+		private IconBrowser file_browser;
+		private bool file_browser_visible;
+
 		private Cairo.ImageSurface base_surface;
 		private int screen_w;
 		private int screen_h;
@@ -107,6 +110,10 @@ namespace cronopete {
 			this.box.draw.connect(this.do_draw);
 			this.box.size_allocate.connect(this.size_changed);
 			this.add(this.box);
+			this.file_browser = new IconBrowser(this.backend, Environment.get_home_dir(), this.backup_list.get(this.current_backup));
+			this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
+			this.base_layout.add(this.file_browser);
+			this.file_browser_visible = true;
 			this.changed_backup_time(this.current_backup);
 		}
 
@@ -305,6 +312,9 @@ namespace cronopete {
 			double scale2 = (this.screen_w - 60.0 - 100.0 * scale) / 2175.0;
 			c_base.save();
 			c_base.scale(scale2, scale2);
+			this.file_browser.width_request  = (int) (this.browser_w);
+			this.file_browser.height_request = (int) (this.browser_h);
+			this.base_layout.move(this.file_browser, (int) (this.browser_x), (int) (this.browser_y + this.browser_margin));
 
 			// arrows
 			var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(Constants.PKGDATADIR, "arrows.png"));
@@ -430,6 +440,10 @@ namespace cronopete {
 		}
 
 		private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock clock) {
+			if (this.file_browser_visible) {
+				this.file_browser_visible = false;
+				this.file_browser.hide();
+			}
 			var lt = clock.get_frame_time();
 			if ((lt - this.last_time_frame) < 50000) {
 				// keep the framerate at 20 FPS
@@ -444,7 +458,7 @@ namespace cronopete {
 			} else {
 				dif_timeline = this.desired_timeline - this.current_timeline;
 			}
-			if (dif_timeline < 2) {
+			if ((this.timeline_scale_factor * dif_timeline) < 2) {
 				this.current_timeline = this.desired_timeline;
 			}
 			this.current_z_pos = (2 * this.current_z_pos + desired_z_pos) / 3;
@@ -453,7 +467,11 @@ namespace cronopete {
 			}
 			this.queue_draw();
 			if ((this.desired_timeline == this.current_timeline) && (this.current_z_pos == desired_z_pos)) {
+				// ended animation
 				this.tick_cb = 0;
+				this.file_browser_visible = true;
+				this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
+				this.file_browser.show();
 				return false;
 			} else {
 				return true;

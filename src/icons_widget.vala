@@ -66,8 +66,6 @@ namespace cronopete {
 
 		private bool to_refresh;
 
-		public signal void changed_path_list();
-
 		private Gee.Map<uint, icon_cache_st ?> icon_cache;
 
 		public IconBrowser(backup_base p_backend, string p_current_path, backup_element current_backup) {
@@ -195,6 +193,9 @@ namespace cronopete {
 			this.selection_made2();
 		}
 
+		/**
+		 * Reads the GTK user-defined bookmarks, to put them in the left part
+		 */
 		private void read_bookmarks_from_file(string file) {
 			var          config_file = File.new_for_path(file);
 			bookmark_str val         = bookmark_str();
@@ -235,6 +236,9 @@ namespace cronopete {
 			}
 		}
 
+		/**
+		 * Generates the bookmarks, both the standard ones and the user-defined ones
+		 */
 		private bool read_bookmarks() {
 			TreeIter iter;
 
@@ -615,7 +619,7 @@ namespace cronopete {
 			if (send_signal) {
 				this.to_refresh = true;
 				this.path_model.clear();
-				this.changed_path_list();
+				this.refresh_icons();
 			}
 		}
 
@@ -646,7 +650,7 @@ namespace cronopete {
 			this.current_path = fpath;
 			this.to_refresh   = true;
 			this.path_model.clear();
-			this.changed_path_list();
+			this.refresh_icons();
 			this.set_scroll_top();
 		}
 
@@ -792,11 +796,10 @@ namespace cronopete {
 		private void refresh_icons() {
 			TreeIter iter;
 			Gee.List<file_info ?> files;
-			string title;
 
 			this.path_model.clear();
 
-			if (false == this.backend.get_filelist(this.current_path, this.current_backup, out files, out title)) {
+			if (false == this.backend.get_filelist(this.current_path, this.current_backup, out files)) {
 				return;
 			}
 
@@ -891,14 +894,14 @@ namespace cronopete {
 				this.path_model.set(iter, 3, pbuf2);
 				float  fsize = (float) f.size;
 				string fssize;
-				if (fsize < 1024.0) {
-					fssize = "%01.0f bytes".printf(fsize);
-				} else if (fsize < 1048576.0) {
-					fssize = "%01.1f KB".printf(fsize / 1024.0);
-				} else if (fsize < 1073741824.0) {
-					fssize = "%01.1f MB".printf(fsize / 1048576.0);
+				if (fsize < 1000.0) {
+					fssize = "%01.0f Bytes".printf(fsize);
+				} else if (fsize < 1000000.0) {
+					fssize = "%01.1f KB".printf(fsize / 1000.0);
+				} else if (fsize < 1000000000.0) {
+					fssize = "%01.1f MB".printf(fsize / 1000000.0);
 				} else {
-					fssize = "%01.1f GB".printf(fsize / 1073741824.0);
+					fssize = "%01.1f GB".printf(fsize / 1000000000.0);
 				}
 				this.path_model.set(iter, 4, fssize);
 				GLib.DateTime timeval = new GLib.DateTime.from_timeval_utc(f.mod_time);
