@@ -28,6 +28,7 @@ end
 *vala_source: cronopete.vala
 *vala_source: dates.vala
 *vala_source: fixedlabel.vala
+*vala_source: icons_widget.vala
 *vala_source: menu.vala
 *vala_source: options.vala
 *vala_source: restore.vala
@@ -56,6 +57,7 @@ end
 *translate: vala src/cronopete.vala
 *translate: vala src/dates.vala
 *translate: vala src/fixedlabel.vala
+*translate: vala src/icons_widget.vala
 *translate: vala src/menu.vala
 *translate: vala src/options.vala
 *translate: vala src/restore.vala

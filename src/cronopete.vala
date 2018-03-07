@@ -427,7 +427,7 @@ namespace cronopete {
 		}
 
 		public void restore_files() throws GLib.DBusError, GLib.IOError {
-			//callback_object.enter_clicked ();
+			// callback_object.enter_clicked ();
 		}
 	}
 }
