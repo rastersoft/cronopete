@@ -34,7 +34,7 @@ namespace cronopete {
 
 	enum e_sort_by { NAME, TYPE, DATE, SIZE }
 
-	class IconBrowser : Frame {
+	class IconBrowser : Gtk.Bin {
 		private Box main_container;
 		private Box buttons_path;
 		private Gtk.ListStore path_model;
@@ -42,24 +42,25 @@ namespace cronopete {
 		private ScrolledWindow scroll;
 		private Gtk.TreeView path_view2;
 		private ScrolledWindow scroll2;
-
-		private string current_path;
-		private Gee.List<Button> path_list;
+		private Gtk.Paned paned;
 		private EventBox background_eb;
-		private time_t current_backup;
-		private backends backend;
-		private uint timer_refresh;
-		private Gtk.Menu menu;
-		private Gee.List<bookmark_str ?> bookmarks;
 		private Gtk.TreeView bookmark_view;
 		private Gtk.ListStore bookmark_model;
+
+		private Gee.List<Button> path_list;
+		private Gee.List<bookmark_str ?> bookmarks;
+
+		private Gtk.Menu menu;
+
+		private backup_base backend;
+
+		private string current_path;
+		private backup_element ? current_backup;
 
 		private e_sort_by sort_by;
 		private bool reverse_sort;
 		private bool show_hiden;
 		private bool view_as_icons;
-
-		private Gtk.Paned paned;
 
 		private bool showing_menu;
 
@@ -69,35 +70,32 @@ namespace cronopete {
 
 		private Gee.Map<uint, icon_cache_st ?> icon_cache;
 
-		public IconBrowser(backends p_backend, string p_current_path) {
+		public IconBrowser(backup_base p_backend, string p_current_path, backup_element current_backup) {
 			this.icon_cache = new Gee.TreeMap<uint, icon_cache_st ?>();
 
-			this.backend      = p_backend;
-			this.current_path = p_current_path;
+			this.backend        = p_backend;
+			this.current_path   = p_current_path;
+			this.current_backup = current_backup;
 
-			this.to_refresh = false;
-
-			this.main_container = new Box(Gtk.Orientation.VERTICAL, 0);
-
-			this.timer_refresh = 0;
+			this.to_refresh    = false;
 			this.showing_menu  = false;
-
 			this.show_hiden    = false;
 			this.view_as_icons = true;
 			this.sort_by       = e_sort_by.NAME;
-			this.buttons_path  = new Box(Gtk.Orientation.HORIZONTAL, 0);
+
+			this.main_container = new Box(Gtk.Orientation.VERTICAL, 0);
+			this.buttons_path   = new Box(Gtk.Orientation.HORIZONTAL, 0);
 
 			this.main_container.pack_start(buttons_path, false, false, 0);
 
-			this.paned = new Paned(Gtk.Orientation.HORIZONTAL);
 			var container2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			var scroll3    = new ScrolledWindow(null, null);
+			var crpb       = new CellRendererPixbuf();
 
-			var scroll3 = new ScrolledWindow(null, null);
 			scroll3.hscrollbar_policy = PolicyType.NEVER;
+			crpb.stock_size           = IconSize.SMALL_TOOLBAR;
 			this.bookmark_model       = new Gtk.ListStore(3, typeof(GLib.Icon), typeof(string), typeof(string));
 			this.bookmark_view        = new Gtk.TreeView.with_model(this.bookmark_model);
-			var crpb = new CellRendererPixbuf();
-			crpb.stock_size = IconSize.SMALL_TOOLBAR;
 			this.bookmark_view.insert_column_with_attributes(-1, "", crpb, "gicon", 0);
 			this.bookmark_view.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 1);
 			this.bookmark_view.enable_grid_lines = TreeViewGridLines.NONE;
@@ -107,6 +105,8 @@ namespace cronopete {
 
 			scroll3.add(this.bookmark_view);
 			scroll3.vscrollbar_policy = PolicyType.AUTOMATIC;
+
+			this.paned = new Paned(Gtk.Orientation.HORIZONTAL);
 			this.paned.add1(scroll3);
 			this.paned.add2(container2);
 
@@ -174,7 +174,8 @@ namespace cronopete {
 		}
 
 		private bool on_key_press(Gdk.EventKey event) {
-			if (event.keyval == 0xFF67) { // MENU key
+			if (event.keyval == 0xFF67) {
+				// MENU key
 				this.show_menu();
 				return true;
 			}
@@ -491,10 +492,11 @@ namespace cronopete {
 			this.refresh_icons();
 		}
 
-		public void set_backup_time(time_t backup) {
+		public void set_backup_time(backup_element backup) {
 			this.current_backup = backup;
 			this.path_model.clear();
 			this.to_refresh = true;
+			this.do_refresh_icons();
 		}
 
 		public void do_refresh_icons() {
@@ -727,8 +729,10 @@ namespace cronopete {
 				var posa = a.name.last_index_of_char('.');
 				var posb = b.name.last_index_of_char('.');
 
-				if ((posa * posb) < 0) { // one has extension, the other not
-					if (posa < 0) {      // files without extension go first
+				if ((posa * posb) < 0) {
+					// one has extension, the other not
+					if (posa < 0) {
+						// files without extension go first
 						if (reverse) {
 							return 1;
 						} else {

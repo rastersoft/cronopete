@@ -299,6 +299,23 @@ namespace cronopete {
 		}
 	}
 
+	public abstract class file_info : GLib.Object {
+		// This object contains the information for one file
+		// when, at restoring, the backend is asked for the list
+		// of available files
+
+		// File name
+		public string name;
+		// Icon for this file
+		public GLib.ThemedIcon icon;
+		// Whether this is, or not, a folder
+		public bool isdir;
+		// The modification time
+		public TimeVal mod_time;
+		// The file size
+		public int64 size;
+	}
+
 	public int sort_backup_elements_older_to_newer(backup_element a, backup_element b) {
 		if (a.utc_time < b.utc_time) {
 			return -1;
