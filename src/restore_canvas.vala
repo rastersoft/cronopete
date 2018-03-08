@@ -76,6 +76,7 @@ namespace cronopete {
 		private int64 last_time_frame;
 
 		public signal void changed_backup_time(int backup_index);
+		public signal void exit_restore();
 
 		// backups and asociated data
 		Gee.List<backup_element> ? backup_list;
@@ -117,6 +118,9 @@ namespace cronopete {
 			this.changed_backup_time(this.current_backup);
 		}
 
+		/**
+		 * Updates the background and the size variables when the window is resized
+		 */
 		private void size_changed(Allocation allocation) {
 			if ((this.screen_w != allocation.width) || (this.screen_h != allocation.height)) {
 				this.screen_w = allocation.width;
@@ -361,6 +365,15 @@ namespace cronopete {
 			}
 		}
 
+		/**
+		 * Draws a rounded rectangle in the specified context
+		 * @param context The context where to draw the rectangle
+		 * @param x The rectangle's left coordinate
+		 * @param y The rectangle's top coordinate
+		 * @param w The rectangle's width
+		 * @param h The rectangle's height
+		 * @param r The corner's radius
+		 */
 		public void rounded_rectangle(Cairo.Context context, double x, double y, double w, double h, double r) {
 			context.move_to(x + r, y);
 			context.line_to(x + w - r, y);
@@ -373,9 +386,16 @@ namespace cronopete {
 			context.curve_to(x, y, x, y, x + r, y);
 		}
 
+		/**
+		 * Paints the background, timeline, and the pseudo-3D windows
+		 * @param cr The Cairo context where everything will be painted
+		 */
 		private bool do_draw(Context cr) {
+
+			// Paint the background
 			cr.set_source_surface(this.base_surface, 0, 0);
 			cr.paint();
+
 			// Paint the timeline index
 			double pos_y = this.scale_y + this.scale_h;
 			cr.set_source_rgb(1, 0, 0);
@@ -428,6 +448,10 @@ namespace cronopete {
 			return false;
 		}
 
+		/**
+		 * Given the Z coordinate for a pseudo-3D window, calculates and returns the X and Y coordinates,
+		 * the width, height and scale factor
+		 */
 		private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {
 			double eyedist = 2500.0;
 
@@ -439,6 +463,10 @@ namespace cronopete {
 			s_factor = eyedist / (z + eyedist);
 		}
 
+		/**
+		 * Callback for the TICK signal, emited by the window every time  a new frame starts.
+		 * It is used to repaint and animate the windows and timeline
+		 */
 		private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock clock) {
 			if (this.file_browser_visible) {
 				this.file_browser_visible = false;
@@ -478,6 +506,12 @@ namespace cronopete {
 			}
 		}
 
+		/**
+		 * Callback for the mouse scrool wheel. Allows to go backward and forward through the timeline
+		 * @param widget The widget that received the event (should be always this one)
+		 * @param event The scroll event to be processed
+		 * @return true to stop other handlers from being invoked for the event. false to propagate the event further
+		 */
 		private bool on_scroll(Gtk.Widget widget, Gdk.EventScroll event) {
 			if ((event.direction == ScrollDirection.UP) && (this.current_backup > 0)) {
 				this.go_prev_backup();
@@ -485,11 +519,19 @@ namespace cronopete {
 			if ((event.direction == ScrollDirection.DOWN) && (this.current_backup < (this.backup_list.size - 1))) {
 				this.go_next_backup();
 			}
-			return false;
+			return true;
 		}
 
 		private bool on_click(Gtk.Widget widget, Gdk.EventButton event) {
-			return false;
+			if ((event.x < this.arrows_x) || (event.x > (this.arrows_x + this.arrows_w)) || (event.y < this.arrows_y) || (event.y > (this.arrows_y + this.arrows_h))) {
+				return false;
+			}
+			if (event.x < ((this.arrows_w / 2) + this.arrows_x)) {
+				this.go_prev_backup();
+			} else {
+				this.go_next_backup();
+			}
+			return true;
 		}
 
 		private bool on_key_press(Gtk.Widget widget, Gdk.EventKey event) {
@@ -497,6 +539,11 @@ namespace cronopete {
 		}
 
 		private bool on_key_release(Gtk.Widget widget, Gdk.EventKey event) {
+			if (event.keyval == 0xFF1B) {
+				// ESC key
+				this.exit_restore();
+				return true;
+			}
 			return false;
 		}
 

@@ -94,6 +94,7 @@ namespace cronopete {
 
 			this.restore_canvas = new RestoreCanvas(this.backend, this.cronopete_settings);
 			this.restore_canvas.changed_backup_time.connect(this.changed_backup_time);
+			this.restore_canvas.exit_restore.connect(this.exit_restore);
 
 			// main_box will contain all the widgets
 			var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
