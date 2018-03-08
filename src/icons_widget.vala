@@ -35,14 +35,22 @@ namespace cronopete {
 	enum e_sort_by { NAME, TYPE, DATE, SIZE }
 
 	class IconBrowser : Gtk.Bin {
+		// VBox that contains the buttons_path and the paned with the bookmarks and the files
 		private Box main_container;
+		// HBox with the buttons path
 		private Box buttons_path;
+		// Contains the bookmarks and the icons
+		private Gtk.Paned paned;
+
+		// For the icon view
 		private Gtk.ListStore path_model;
 		private IconView path_view;
 		private ScrolledWindow scroll;
+
+		// for the path view
 		private Gtk.TreeView path_view2;
 		private ScrolledWindow scroll2;
-		private Gtk.Paned paned;
+
 		private EventBox background_eb;
 		private Gtk.TreeView bookmark_view;
 		private Gtk.ListStore bookmark_model;
@@ -64,8 +72,6 @@ namespace cronopete {
 
 		private bool showing_menu;
 
-		private bool to_refresh;
-
 		private Gee.Map<uint, icon_cache_st ?> icon_cache;
 
 		public IconBrowser(backup_base p_backend, string p_current_path, backup_element current_backup) {
@@ -75,7 +81,6 @@ namespace cronopete {
 			this.current_path   = p_current_path;
 			this.current_backup = current_backup;
 
-			this.to_refresh    = false;
 			this.showing_menu  = false;
 			this.show_hiden    = false;
 			this.view_as_icons = true;
@@ -107,6 +112,7 @@ namespace cronopete {
 			this.paned = new Paned(Gtk.Orientation.HORIZONTAL);
 			this.paned.add1(scroll3);
 			this.paned.add2(container2);
+			this.main_container.pack_start(this.paned, true, true, 0);
 
 			this.scroll = new ScrolledWindow(null, null);
 			this.scroll.hscrollbar_policy = PolicyType.AUTOMATIC;
@@ -117,8 +123,6 @@ namespace cronopete {
 			this.scroll2.hscrollbar_policy = PolicyType.NEVER;
 			this.scroll2.vscrollbar_policy = PolicyType.AUTOMATIC;
 			container2.pack_start(this.scroll2, true, true, 0);
-
-			this.main_container.pack_start(this.paned, true, true, 0);
 
 			/* path_model stores the data for each file/folder:
 			 *   - file name (string)
@@ -145,12 +149,19 @@ namespace cronopete {
 			var crpb2 = new CellRendererPixbuf();
 			crpb2.stock_size = IconSize.SMALL_TOOLBAR;
 			this.path_view2.insert_column_with_attributes(-1, "", crpb2, "gicon", 3);
-			this.path_view2.insert_column_with_attributes(-1, _("Name"), new CellRendererText(), "text", 0);
+			var namecolumn = new Gtk.TreeViewColumn.with_attributes(_("Name"), new CellRendererText(), "text", 0);
+			this.path_view2.insert_column(namecolumn, -1);
+			namecolumn.clicked.connect(this.sort_name_clicked);
 			var renderdate = new CellRendererText();
 			renderdate.xalign = 1;
-			this.path_view2.insert_column_with_attributes(-1, _("Size"), renderdate, "text", 4);
-			this.path_view2.insert_column_with_attributes(-1, _("Modification date"), new CellRendererText(), "text", 5);
+			var sizecolumn = new Gtk.TreeViewColumn.with_attributes(_("Size"), renderdate, "text", 4);
+			this.path_view2.insert_column(sizecolumn, -1);
+			sizecolumn.clicked.connect(this.sort_size_clicked);
+			var datecolumn = new Gtk.TreeViewColumn.with_attributes(_("Modification date"), new CellRendererText(), "text", 5);
+			this.path_view2.insert_column(datecolumn, -1);
+			datecolumn.clicked.connect(this.sort_date_clicked);
 			this.path_view2.get_selection().set_mode(SelectionMode.MULTIPLE);
+			this.path_view2.headers_clickable = true;
 			var column = this.path_view2.get_column(1);
 			column.resizable = true;
 
@@ -173,13 +184,12 @@ namespace cronopete {
 
 		private bool on_key_press(Gdk.EventKey event) {
 			if (event.keyval == Gdk.Key.Menu) {
-				// MENU key
 				this.show_menu();
 				return true;
 			}
 
 			if ((event.keyval == Gdk.Key.Escape) && (this.showing_menu)) {
-				// ESC key
+				// This is needed to avoid exiting when using ESC to hide the contextual menu
 				return true;
 			}
 
@@ -187,6 +197,7 @@ namespace cronopete {
 		}
 
 		public void activated_row(TreePath path, TreeViewColumn column) {
+			print("Fila activada\n");
 			this.selection_made2();
 		}
 
@@ -348,6 +359,9 @@ namespace cronopete {
 			return true;
 		}
 
+		/**
+		 * This is the callback called when a bookmark has been clicked
+		 */
 		private void bookmark_selected() {
 			if (!this.visible) {
 				return;
@@ -367,11 +381,13 @@ namespace cronopete {
 			}
 		}
 
+		/**
+		 * This allows to show the contextual menu when the user clicks with the right button
+		 */
 		private bool on_click(Gdk.EventButton event) {
 			if (event.button != 3) {
 				return false;
 			}
-
 			this.show_menu();
 
 			return true;
@@ -487,6 +503,36 @@ namespace cronopete {
 			this.refresh_icons();
 		}
 
+		private void sort_name_clicked() {
+			if (this.sort_by == e_sort_by.NAME) {
+				this.reverse_sort = this.reverse_sort ? false : true;
+			} else {
+				this.sort_by = e_sort_by.NAME;
+				this.reverse_sort = false;
+			}
+			this.refresh_icons();
+		}
+
+		private void sort_date_clicked() {
+			if (this.sort_by == e_sort_by.DATE) {
+				this.reverse_sort = this.reverse_sort ? false : true;
+			} else {
+				this.sort_by = e_sort_by.DATE;
+				this.reverse_sort = false;
+			}
+			this.refresh_icons();
+		}
+
+		private void sort_size_clicked() {
+			if (this.sort_by == e_sort_by.SIZE) {
+				this.reverse_sort = this.reverse_sort ? false : true;
+			} else {
+				this.sort_by = e_sort_by.SIZE;
+				this.reverse_sort = false;
+			}
+			this.refresh_icons();
+		}
+
 		private void toggle_show_hide() {
 			this.show_hiden = this.show_hiden ? false : true;
 			this.refresh_icons();
@@ -497,18 +543,13 @@ namespace cronopete {
 			this.refresh_icons();
 		}
 
+		/**
+		 * Changes the current backup date. Called every time the user changes the backup date to the previous or next one
+		 * @param backup The backup date
+		 */
 		public void set_backup_time(backup_element backup) {
 			this.current_backup = backup;
-			this.path_model.clear();
-			this.to_refresh = true;
-			this.do_refresh_icons();
-		}
-
-		public void do_refresh_icons() {
-			if (this.to_refresh) {
-				this.to_refresh = false;
-				this.refresh_icons();
-			}
+			this.refresh_icons();
 		}
 
 		public bool selection_made(EventButton event) {
@@ -542,6 +583,9 @@ namespace cronopete {
 			return true;
 		}
 
+		/**
+		 * Returns the currently selected items (this is, the list of files and folders to restore)
+		 */
 		public void get_selected_items(out Gee.ArrayList<string> files_selected, out Gee.ArrayList<string> folders_selected) {
 			GLib.List<TreePath> selection;
 			TreeModel           model;
@@ -580,7 +624,10 @@ namespace cronopete {
 			this.refresh_path_list(false);
 		}
 
-		private void refresh_path_list(bool send_signal = true) {
+		/**
+		 * Updates the path list, the button list with the current path
+		 */
+		private void refresh_path_list(bool do_refresh_icons = true) {
 			if (this.view_as_icons) {
 				this.scroll.show();
 				this.scroll2.hide();
@@ -616,14 +663,14 @@ namespace cronopete {
 			this.buttons_path.show_all();
 			btn.has_focus = true;
 
-
-			if (send_signal) {
-				this.to_refresh = true;
-				this.path_model.clear();
+			if (do_refresh_icons) {
 				this.refresh_icons();
 			}
 		}
 
+		/**
+		 * Moves the scroll widget to the top
+		 */
 		private void set_scroll_top() {
 			this.scroll.hadjustment.value  = this.scroll.hadjustment.lower;
 			this.scroll.vadjustment.value  = this.scroll.vadjustment.lower;
@@ -631,6 +678,10 @@ namespace cronopete {
 			this.scroll2.vadjustment.value = this.scroll.vadjustment.lower;
 		}
 
+		/**
+		 * Callback for all the path buttons that allows to go to any upper folder
+		 * @param btn The pressed button
+		 */
 		public void change_path(Widget btn) {
 			string fpath = "";
 			bool   found;
@@ -649,8 +700,6 @@ namespace cronopete {
 				}
 			}
 			this.current_path = fpath;
-			this.to_refresh   = true;
-			this.path_model.clear();
 			this.refresh_icons();
 			this.set_scroll_top();
 		}
@@ -687,6 +736,9 @@ namespace cronopete {
 			return mysort_files(a, b, true, e_sort_by.TYPE);
 		}
 
+		/**
+		 * Sorts the icons by type, size, date or name
+		 */
 		public static int mysort_files(file_info ? a, file_info ? b, bool reverse, e_sort_by mode) {
 			// Folders always first
 			if (a.isdir && (!b.isdir)) {
@@ -794,6 +846,9 @@ namespace cronopete {
 			}
 		}
 
+		/**
+		 * Repaints the icons in the iconview
+		 */
 		private void refresh_icons() {
 			TreeIter iter;
 			Gee.List<file_info ?> files;
