@@ -391,7 +391,6 @@ namespace cronopete {
 		 * @param cr The Cairo context where everything will be painted
 		 */
 		private bool do_draw(Context cr) {
-
 			// Paint the background
 			cr.set_source_surface(this.base_surface, 0, 0);
 			cr.paint();
@@ -539,17 +538,17 @@ namespace cronopete {
 		}
 
 		private bool on_key_release(Gtk.Widget widget, Gdk.EventKey event) {
-			if (event.keyval == 0xFF1B) {
+			if (event.keyval == Gdk.Key.Escape) {
 				// ESC key
 				this.exit_restore();
 				return true;
 			}
-			if (event.keyval == 0xff55) {
+			if (event.keyval == Gdk.Key.KP_Page_Up) {
 				// Page up
 				this.go_prev_backup();
 				return true;
 			}
-			if (event.keyval == 0xff56) {
+			if (event.keyval == Gdk.Key.KP_Page_Down) {
 				// Page down
 				this.go_next_backup();
 				return true;

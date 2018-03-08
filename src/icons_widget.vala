@@ -172,13 +172,13 @@ namespace cronopete {
 		}
 
 		private bool on_key_press(Gdk.EventKey event) {
-			if (event.keyval == 0xFF67) {
+			if (event.keyval == Gdk.Key.Menu) {
 				// MENU key
 				this.show_menu();
 				return true;
 			}
 
-			if ((event.keyval == 0xFF1B) && (this.showing_menu)) {
+			if ((event.keyval == Gdk.Key.Escape) && (this.showing_menu)) {
 				// ESC key
 				return true;
 			}
