@@ -134,7 +134,7 @@ namespace cronopete {
 			this.path_view.set_text_column(0);
 			this.path_view.selection_mode = SelectionMode.MULTIPLE;
 			this.path_view.button_press_event.connect(this.selection_made);
-			this.path_view.item_activated.connect(this.activated);
+			this.path_view.item_activated.connect(this.activated_item);
 			this.path_view.item_orientation = Orientation.VERTICAL;
 			this.scroll.add(this.path_view);
 
@@ -155,7 +155,7 @@ namespace cronopete {
 			column.resizable = true;
 
 			this.path_view2.button_press_event.connect(this.selection_made);
-			this.path_view2.row_activated.connect(this.activated2);
+			this.path_view2.row_activated.connect(this.activated_row);
 			this.scroll2.add(this.path_view2);
 
 			this.background_eb = new EventBox();
@@ -179,17 +179,18 @@ namespace cronopete {
 			}
 
 			if ((event.keyval == 0xFF1B) && (this.showing_menu)) {
+				// ESC key
 				return true;
 			}
 
 			return false;
 		}
 
-		public void activated2(TreePath path, TreeViewColumn column) {
+		public void activated_row(TreePath path, TreeViewColumn column) {
 			this.selection_made2();
 		}
 
-		public void activated(TreePath path) {
+		public void activated_item(TreePath path) {
 			this.selection_made2();
 		}
 

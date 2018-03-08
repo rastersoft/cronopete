@@ -312,9 +312,9 @@ namespace cronopete {
 			double scale2 = (this.screen_w - 60.0 - 100.0 * scale) / 2175.0;
 			c_base.save();
 			c_base.scale(scale2, scale2);
-			this.file_browser.width_request  = (int) (this.browser_w);
-			this.file_browser.height_request = (int) (this.browser_h);
-			this.base_layout.move(this.file_browser, (int) (this.browser_x), (int) (this.browser_y + this.browser_margin));
+			this.file_browser.width_request  = (int) (this.browser_w - 2);
+			this.file_browser.height_request = (int) (this.browser_h - 1);
+			this.base_layout.move(this.file_browser, (int) (this.browser_x + 1), (int) (this.browser_y + this.browser_margin));
 
 			// arrows
 			var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(Constants.PKGDATADIR, "arrows.png"));

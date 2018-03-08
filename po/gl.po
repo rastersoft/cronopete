@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-05 00:59+0100\n"
+"POT-Creation-Date: 2018-03-08 01:17+0100\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -31,103 +31,103 @@ msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr ""
 "Non foi posíbel crear os cartafoles base para as copias. Interrompendo.\n"
 
-#: src/backup_rsync.vala:216
+#: src/backup_rsync.vala:253
 #, fuzzy
 msgid "Starting backup"
 msgstr "Comezando a copia\n"
 
-#: src/backup_rsync.vala:254
+#: src/backup_rsync.vala:291
 #, fuzzy
 msgid "Cleaning incomplete backups"
 msgstr "Borrando copias antigas"
 
-#: src/backup_rsync.vala:285
+#: src/backup_rsync.vala:322
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr ""
 
-#: src/backup_rsync.vala:292
+#: src/backup_rsync.vala:329
 #, fuzzy
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: src/backup_rsync.vala:307
+#: src/backup_rsync.vala:344
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: src/backup_rsync.vala:350
+#: src/backup_rsync.vala:387
 msgid "Failed to delete aborted backups: "
 msgstr ""
 
-#: src/backup_rsync.vala:374
+#: src/backup_rsync.vala:411
 #, fuzzy, c-format
 msgid "Backing up folder %s"
 msgstr "Copiando o cartafol %s\n"
 
-#: src/backup_rsync.vala:395
+#: src/backup_rsync.vala:432
 #, fuzzy, c-format
 msgid "Excluding folder %s"
 msgstr "Excluindo o cartafol %s.\n"
 
-#: src/backup_rsync.vala:404
+#: src/backup_rsync.vala:441
 #, fuzzy, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: src/backup_rsync.vala:423
+#: src/backup_rsync.vala:460
 #, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr ""
 
-#: src/backup_rsync.vala:438
+#: src/backup_rsync.vala:475
 #, fuzzy, c-format
 msgid "Backing up %s"
 msgstr "Copiando o cartafol %s\n"
 
-#: src/backup_rsync.vala:455 src/backup_rsync.vala:456
+#: src/backup_rsync.vala:492 src/backup_rsync.vala:493
 #, fuzzy
 msgid "Syncing disk"
 msgstr "Sincronizando o disco\n"
 
-#: src/backup_rsync.vala:462
+#: src/backup_rsync.vala:499
 msgid "Failed to launch sync command"
 msgstr ""
 
-#: src/backup_rsync.vala:485
+#: src/backup_rsync.vala:522
 #, fuzzy
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr ""
 "Non foi posíbel liberar espazo no disco para comezar unha copia. "
 "Interrompendo.\n"
 
-#: src/backup_rsync.vala:498
+#: src/backup_rsync.vala:535
 msgid "Failed to launch final sync command"
 msgstr ""
 
-#: src/backup_rsync.vala:508
+#: src/backup_rsync.vala:545
 #, fuzzy
 msgid "Disk synced, cleaning old backups"
 msgstr "Borrando copias antigas"
 
-#: src/backup_rsync.vala:524 src/cronopete.vala:187
+#: src/backup_rsync.vala:561 src/cronopete.vala:187
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "Borrando copias antigas"
 
-#: src/backup_rsync.vala:530
+#: src/backup_rsync.vala:567
 msgid "No old backups to delete"
 msgstr ""
 
-#: src/backup_rsync.vala:557
+#: src/backup_rsync.vala:594
 #, fuzzy, c-format
 msgid "Deleting old backup %s"
 msgstr "Borrando copias antigas"
 
-#: src/backup_rsync.vala:564
+#: src/backup_rsync.vala:601
 #, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
@@ -242,6 +242,50 @@ msgstr "Onte, á %H:%M"
 #: src/dates.vala:45
 msgid "tomorrow at %R"
 msgstr ""
+
+#: src/icons_widget.vala:148
+msgid "Name"
+msgstr "Nome"
+
+#: src/icons_widget.vala:151
+msgid "Size"
+msgstr "Tamaño"
+
+#: src/icons_widget.vala:152
+msgid "Modification date"
+msgstr "Data da modificación"
+
+#: src/icons_widget.vala:388
+msgid "Show hidden files"
+msgstr "Amosar os ficheiros agochados"
+
+#: src/icons_widget.vala:396
+msgid "Reverse order"
+msgstr "Inverter a orde"
+
+#: src/icons_widget.vala:404
+msgid "Sort by name"
+msgstr "Ordenar por nome"
+
+#: src/icons_widget.vala:408
+msgid "Sort by type"
+msgstr "Ordenar por tipo"
+
+#: src/icons_widget.vala:412
+msgid "Sort by size"
+msgstr "Ordenar por tamaño"
+
+#: src/icons_widget.vala:416
+msgid "Sort by date"
+msgstr "Ordenar por data"
+
+#: src/icons_widget.vala:441
+msgid "View as icons"
+msgstr "Ver como iconas"
+
+#: src/icons_widget.vala:445
+msgid "View as list"
+msgstr "Ver como lista"
 
 #: src/menu.vala:112
 #, c-format
@@ -581,39 +625,6 @@ msgstr ""
 
 #~ msgid "Can't do backup"
 #~ msgstr "Non é posíbel facer a copia"
-
-#~ msgid "Name"
-#~ msgstr "Nome"
-
-#~ msgid "Size"
-#~ msgstr "Tamaño"
-
-#~ msgid "Modification date"
-#~ msgstr "Data da modificación"
-
-#~ msgid "Show hidden files"
-#~ msgstr "Amosar os ficheiros agochados"
-
-#~ msgid "Reverse order"
-#~ msgstr "Inverter a orde"
-
-#~ msgid "Sort by name"
-#~ msgstr "Ordenar por nome"
-
-#~ msgid "Sort by type"
-#~ msgstr "Ordenar por tipo"
-
-#~ msgid "Sort by size"
-#~ msgstr "Ordenar por tamaño"
-
-#~ msgid "Sort by date"
-#~ msgstr "Ordenar por data"
-
-#~ msgid "View as icons"
-#~ msgstr "Ver como iconas"
-
-#~ msgid "View as list"
-#~ msgstr "Ver como lista"
 
 #~ msgid "%A, %d %B %Y at %H:%M"
 #~ msgid_plural "%A, %d %B %Y at %H:%M"
