@@ -544,6 +544,16 @@ namespace cronopete {
 				this.exit_restore();
 				return true;
 			}
+			if (event.keyval == 0xff55) {
+				// Page up
+				this.go_prev_backup();
+				return true;
+			}
+			if (event.keyval == 0xff56) {
+				// Page down
+				this.go_next_backup();
+				return true;
+			}
 			return false;
 		}
 
