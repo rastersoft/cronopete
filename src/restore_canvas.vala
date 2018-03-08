@@ -533,22 +533,22 @@ namespace cronopete {
 			return true;
 		}
 
-		private bool on_key_press(Gtk.Widget widget, Gdk.EventKey event) {
+		private bool on_key_release(Gtk.Widget widget, Gdk.EventKey event) {
 			return false;
 		}
 
-		private bool on_key_release(Gtk.Widget widget, Gdk.EventKey event) {
+		private bool on_key_press(Gtk.Widget widget, Gdk.EventKey event) {
 			if (event.keyval == Gdk.Key.Escape) {
 				// ESC key
 				this.exit_restore();
 				return true;
 			}
-			if (event.keyval == Gdk.Key.KP_Page_Up) {
+			if (event.keyval == Gdk.Key.Page_Up) {
 				// Page up
 				this.go_prev_backup();
 				return true;
 			}
-			if (event.keyval == Gdk.Key.KP_Page_Down) {
+			if (event.keyval == Gdk.Key.Page_Down) {
 				// Page down
 				this.go_next_backup();
 				return true;
