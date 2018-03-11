@@ -193,7 +193,7 @@ namespace  cronopete {
 		}
 
 		[CCode(instance_pos = -1)]
-		public bool on_destroy_event(Gtk.Widget o) {
+		public bool on_destroy_event(Gtk.Widget o, Gdk.Event e) {
 			this.main_w.hide();
 			this.is_visible = false;
 			return true;
