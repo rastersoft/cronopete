@@ -579,5 +579,11 @@ namespace cronopete {
 				return;
 			}
 		}
+
+		public void get_restore_data(out backup_element backup, out string path, out Gee.ArrayList<string> files_selected, out Gee.ArrayList<string> folders_selected) {
+			backup = this.backup_list[this.current_backup];
+			path = this.file_browser.get_current_path();
+			this.file_browser.get_selected_items(out files_selected, out folders_selected);
+		}
 	}
 }

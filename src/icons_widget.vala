@@ -197,7 +197,6 @@ namespace cronopete {
 		}
 
 		public void activated_row(TreePath path, TreeViewColumn column) {
-			print("Fila activada\n");
 			this.selection_made2();
 		}
 
@@ -473,32 +472,32 @@ namespace cronopete {
 			this.menu.popup(null, null, null, 2, Gtk.get_current_event_time());
 		}
 
-		private void set_view_as_icons() {
+		private void set_view_as_icons(Gtk.Widget emitter) {
 			this.view_as_icons = true;
 			this.refresh_path_list(false);
 		}
 
-		private void set_view_as_list() {
+		private void set_view_as_list(Gtk.Widget emitter) {
 			this.view_as_icons = false;
 			this.refresh_path_list(false);
 		}
 
-		private void set_sort_by_name() {
+		private void set_sort_by_name(Gtk.Widget emitter) {
 			this.sort_by = e_sort_by.NAME;
 			this.refresh_icons();
 		}
 
-		private void set_sort_by_type() {
+		private void set_sort_by_type(Gtk.Widget emitter) {
 			this.sort_by = e_sort_by.TYPE;
 			this.refresh_icons();
 		}
 
-		private void set_sort_by_size() {
+		private void set_sort_by_size(Gtk.Widget emitter) {
 			this.sort_by = e_sort_by.SIZE;
 			this.refresh_icons();
 		}
 
-		private void set_sort_by_date() {
+		private void set_sort_by_date(Gtk.Widget emitter) {
 			this.sort_by = e_sort_by.DATE;
 			this.refresh_icons();
 		}
@@ -507,7 +506,7 @@ namespace cronopete {
 			if (this.sort_by == e_sort_by.NAME) {
 				this.reverse_sort = this.reverse_sort ? false : true;
 			} else {
-				this.sort_by = e_sort_by.NAME;
+				this.sort_by      = e_sort_by.NAME;
 				this.reverse_sort = false;
 			}
 			this.refresh_icons();
@@ -517,7 +516,7 @@ namespace cronopete {
 			if (this.sort_by == e_sort_by.DATE) {
 				this.reverse_sort = this.reverse_sort ? false : true;
 			} else {
-				this.sort_by = e_sort_by.DATE;
+				this.sort_by      = e_sort_by.DATE;
 				this.reverse_sort = false;
 			}
 			this.refresh_icons();
@@ -527,7 +526,7 @@ namespace cronopete {
 			if (this.sort_by == e_sort_by.SIZE) {
 				this.reverse_sort = this.reverse_sort ? false : true;
 			} else {
-				this.sort_by = e_sort_by.SIZE;
+				this.sort_by      = e_sort_by.SIZE;
 				this.reverse_sort = false;
 			}
 			this.refresh_icons();
@@ -682,7 +681,7 @@ namespace cronopete {
 		 * Callback for all the path buttons that allows to go to any upper folder
 		 * @param btn The pressed button
 		 */
-		public void change_path(Widget btn) {
+		public void change_path(Gtk.Widget btn) {
 			string fpath = "";
 			bool   found;
 
@@ -855,7 +854,7 @@ namespace cronopete {
 
 			this.path_model.clear();
 
-			if (false == this.backend.get_filelist(this.current_path, this.current_backup, out files)) {
+			if (false == this.backend.get_filelist(this.current_backup, this.current_path, out files)) {
 				return;
 			}
 

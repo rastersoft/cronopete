@@ -31,7 +31,27 @@ namespace cronopete {
 		private Gtk.Label current_date;
 		private Gtk.SizeGroup sizegroup;
 
+		private Gtk.Button restore_button;
+		private Gtk.Button quit_button;
+
 		private GLib.Settings cronopete_settings;
+
+		private backup_element ? to_restore_backup;
+		private string ? to_restore_path;
+		private Gee.ArrayList<string> ? to_restore_files;
+		private Gee.ArrayList<string> ? to_restore_folders;
+		private Gtk.Button to_restore_cancel_button;
+		private bool to_restore_cancel;
+		private int to_restore_total;
+		private int to_restore_restored;
+
+		private Gtk.Window ? to_restore_window;
+		private Gtk.ProgressBar ? to_restore_bar_total;
+		private Gtk.ProgressBar ? to_restore_bar_working;
+		private Gtk.Label ? to_restore_label;
+		private string ? to_restore_filename;
+
+		private bool cancel_to_ok;
 
 		public static int mysort_64(backup_element ? a, backup_element ? b) {
 			if (a.utc_time < b.utc_time) {
@@ -48,7 +68,18 @@ namespace cronopete {
 
 			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 
+			this.to_restore_backup      = null;
+			this.to_restore_files       = null;
+			this.to_restore_folders     = null;
+			this.to_restore_path        = null;
+			this.to_restore_window      = null;
+			this.to_restore_bar_total   = null;
+			this.to_restore_bar_working = null;
+			this.to_restore_label       = null;
+			this.to_restore_cancel      = false;
+
 			this.backend = current_backend;
+			this.backend.ended_restore.connect(this.restore_callback);
 			time_t oldest, newest;
 			this.backup_list = this.backend.get_backup_list(out oldest, out newest);
 			this.backup_list.sort(mysort_64);
@@ -61,9 +92,9 @@ namespace cronopete {
 			container1.halign = Gtk.Align.CENTER;
 			container1.pack_start(pic1, false, false, 0);
 			container1.pack_start(label1, false, false, 0);
-			var restore_button = new Gtk.Button();
-			restore_button.add(container1);
-			restore_button.clicked.connect(this.do_restore);
+			this.restore_button = new Gtk.Button();
+			this.restore_button.add(container1);
+			this.restore_button.clicked.connect(this.do_restore);
 
 			// Create the EXIT button
 			var pic2   = new Gtk.Image.from_icon_name("application-exit", Gtk.IconSize.DND);
@@ -73,9 +104,9 @@ namespace cronopete {
 			container2.halign = Gtk.Align.CENTER;
 			container2.pack_start(pic2, false, false, 0);
 			container2.pack_start(label2, false, false, 0);
-			var quit_button = new Gtk.Button();
-			quit_button.add(container2);
-			quit_button.clicked.connect(this.exit_restore);
+			this.quit_button = new Gtk.Button();
+			this.quit_button.add(container2);
+			this.quit_button.clicked.connect(this.exit_restore);
 
 			// Make a sizegroup to make both buttons have the same width
 			this.sizegroup = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
@@ -94,7 +125,7 @@ namespace cronopete {
 
 			this.restore_canvas = new RestoreCanvas(this.backend, this.cronopete_settings);
 			this.restore_canvas.changed_backup_time.connect(this.changed_backup_time);
-			this.restore_canvas.exit_restore.connect(this.exit_restore);
+			this.restore_canvas.exit_restore.connect(this.exit_restore2);
 
 			// main_box will contain all the widgets
 			var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -108,9 +139,126 @@ namespace cronopete {
 		}
 
 		private void do_restore() {
+			this.cancel_to_ok      = false;
+			this.to_restore_cancel = false;
+			this.restore_canvas.get_restore_data(out this.to_restore_backup, out this.to_restore_path, out this.to_restore_files, out this.to_restore_folders);
+			if ((this.to_restore_files.size == 0) && (this.to_restore_folders.size == 0)) {
+				return;
+			}
+			var builder = new Gtk.Builder();
+			try {
+				builder.add_from_file(GLib.Path.build_filename(Constants.PKGDATADIR, "restoring.ui"));
+			} catch (GLib.Error e) {
+				print("Can't create the restore window.\n");
+				return;
+			}
+			this.hide();
+			this.to_restore_bar_total           = (Gtk.ProgressBar)builder.get_object("restore_file_progressbar");
+			this.to_restore_bar_total.show_text = true;
+			this.to_restore_bar_working         = (Gtk.ProgressBar)builder.get_object("restore_progressbar");
+			this.to_restore_label         = (Gtk.Label)builder.get_object("restoring_file");
+			this.to_restore_window        = (Gtk.Window)builder.get_object("restoring_window");
+			this.to_restore_cancel_button = (Gtk.Button)builder.get_object("cancel");
+			builder.connect_signals(this);
+
+			this.to_restore_window.show_all();
+			this.to_restore_total = 0;
+			if (this.to_restore_files != null) {
+				this.to_restore_total += this.to_restore_files.size;
+			}
+			if (this.to_restore_folders != null) {
+				this.to_restore_total += this.to_restore_folders.size;
+			}
+			this.to_restore_restored = -1;
+			this.restore_callback(true);
+			GLib.Timeout.add(250, this.restore_in_progress);
 		}
 
-		private void exit_restore() {
+		public bool restore_in_progress() {
+			if (this.to_restore_bar_working != null) {
+				this.to_restore_bar_working.pulse();
+				return true;
+			}
+			return false;
+		}
+
+		private void restore_callback(bool done_fine) {
+			if (this.to_restore_cancel) {
+				this.show_end_message(_("Aborted"));
+				return;
+			}
+			if (done_fine == false) {
+				this.show_end_message(_("Error while restoring %s").printf(this.to_restore_filename));
+				return;
+			}
+			this.to_restore_restored++;
+			this.to_restore_bar_total.fraction = ((double) this.to_restore_restored) / ((double) this.to_restore_total);
+			this.to_restore_bar_total.text     = "%d/%d".printf(this.to_restore_restored, this.to_restore_total);
+			bool is_file = false;
+			this.to_restore_filename = null;
+			if ((this.to_restore_files != null) && (this.to_restore_files.size > 0)) {
+				this.to_restore_filename = this.to_restore_files.remove_at(0);
+				this.to_restore_label.set_label(_("Restoring file %s").printf(this.to_restore_filename));
+				is_file = true;
+			}
+			if (this.to_restore_filename == null) {
+				if ((this.to_restore_folders != null) && (this.to_restore_folders.size > 0)) {
+					this.to_restore_filename = this.to_restore_folders.remove_at(0);
+					this.to_restore_label.set_label(_("Restoring folder %s").printf(this.to_restore_filename));
+					is_file = false;
+				}
+			}
+			if (this.to_restore_filename == null) {
+				// ended restore
+				this.show_end_message(_("Done"));
+				return;
+			}
+
+			var final_name = this.to_restore_filename;
+			var full_path  = File.new_for_path(GLib.Path.build_filename(this.to_restore_path, final_name));
+			if (full_path.query_exists()) {
+				int    counter = 0;
+				int    pos     = this.to_restore_filename.last_index_of_char('.');
+				string fname;
+				string extension;
+				if (pos == -1) {
+					// no extension
+					fname     = this.to_restore_filename;
+					extension = "";
+				} else {
+					fname     = this.to_restore_filename.substring(0, pos);
+					extension = this.to_restore_filename.substring(pos);
+				}
+				while (true) {
+					if (counter == 0) {
+						final_name = "%s.restored%s".printf(fname, extension);
+					} else {
+						final_name = "%s.restored.%d%s".printf(fname, counter, extension);
+					}
+					counter++;
+					full_path = File.new_for_path(GLib.Path.build_filename(this.to_restore_path, final_name));
+					if (full_path.query_exists() == false) {
+						break;
+					}
+				}
+			}
+			this.backend.restore_file_folder(this.to_restore_backup, this.to_restore_path, this.to_restore_filename, final_name, is_file);
+		}
+
+		private void show_end_message(string message) {
+			this.to_restore_label.set_label(message);
+			this.to_restore_bar_total.hide();
+			this.to_restore_bar_working.hide();
+			this.to_restore_cancel_button.set_label(_("OK"));
+			this.cancel_to_ok           = true;
+			this.to_restore_bar_working = null;
+		}
+
+		private void exit_restore(Gtk.Widget emiter) {
+			this.exit_restore2();
+		}
+
+		private void exit_restore2() {
 			this.hide();
 			this.destroy();
 		}
@@ -118,6 +266,19 @@ namespace cronopete {
 		private void changed_backup_time(int new_index) {
 			var time_now = this.backup_list[new_index].utc_time;
 			this.current_date.set_markup("<span size=\"xx-large\">%s</span>".printf(date_to_string(time_now)));
+		}
+
+		[CCode(instance_pos = -1)]
+		public void on_cancel_restore_clicked(Gtk.Button emitter) {
+			if (this.cancel_to_ok) {
+				this.to_restore_window.hide();
+				this.to_restore_window.close();
+				this.to_restore_window = null;
+				this.show();
+			} else {
+				this.to_restore_label.set_label(_("Aborting restore"));
+				this.to_restore_cancel = true;
+			}
 		}
 	}
 }

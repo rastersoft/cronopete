@@ -382,7 +382,7 @@ namespace cronopete {
 		while (true) {
 			// Create a child and run cronopete there
 			// If the child dies, launch cronopete again, to ensure that the backup always work
-			fork_pid = Posix.fork();
+			fork_pid = 0;//Posix.fork();
 			if (fork_pid == 0) {
 				// Minimum priority
 				nice(19);

@@ -186,7 +186,7 @@ namespace  cronopete {
 		}
 
 		[CCode(instance_pos = -1)]
-		public void options_callback(Button source) {
+		public void options_callback(Gtk.Button source) {
 			var tmp = new c_options(this.main_w);
 			this.refresh_backup_data();
 			tmp = null;
@@ -207,13 +207,13 @@ namespace  cronopete {
 		}
 
 		[CCode(instance_pos = -1)]
-		public void change_disk_callback(Button source) {
+		public void change_disk_callback(Gtk.Button source) {
 			// CALL TO THE DISK SELECT CODE IN THE BACKEND
 			this.backend.configure_backup_device(this.main_w);
 		}
 
 		[CCode(instance_pos = -1)]
-		public void about_clicked(Button source) {
+		public void about_clicked(Gtk.Button source) {
 			var w = new Builder();
 			try {
 				w.add_from_file(GLib.Path.build_filename(Constants.PKGDATADIR, "about.ui"));

@@ -196,7 +196,7 @@ namespace cronopete {
 			}
 		}
 
-		public override bool get_filelist(string current_path, backup_element backup, out Gee.List<file_info ?> files) {
+		public override bool get_filelist(backup_element backup, string current_path, out Gee.List<file_info ?> files) {
 			FileInfo      info_file;
 			FileType      typeinfo;
 			rsync_element rbackup = backup as rsync_element;
@@ -231,6 +231,35 @@ namespace cronopete {
 			} catch {
 				return false;
 			}
+		}
+
+		public override bool restore_file_folder(backup_element backup, string path, string origin_filename, string destination_filename, bool is_folder) {
+			var backup2 = backup as rsync_element;
+
+			var origin_fullpath      = Path.build_filename(backup2.full_path, path, origin_filename);
+			var destination_fullpath = Path.build_filename(path, destination_filename);
+			print("Restoring %s to %s\n".printf(origin_fullpath, destination_fullpath));
+
+			Pid      child_pid;
+			string[] command = { "cp", "-a", origin_fullpath, destination_fullpath };
+			string[] env     = Environ.get();
+			this.debug_command(command);
+			try {
+				GLib.Process.spawn_async("/", command, env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
+			} catch (GLib.SpawnError error) {
+				this.send_error(_("Failed to launch cp to restore: %s").printf(error.message));
+				return true;
+			}
+			this.current_child_pid = child_pid;
+			ChildWatch.add(child_pid, (pid, status) => {
+				Process.close_pid(pid);
+				if (status == 0) {
+				    this.ended_restore(true);
+				} else {
+				    this.ended_restore(false);
+				}
+			});
+			return false;
 		}
 
 		public override bool do_backup(string[] folder_list, string[] exclude_list, bool skip_hidden_at_home) {

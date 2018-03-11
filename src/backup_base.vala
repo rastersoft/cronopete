@@ -33,43 +33,56 @@ namespace cronopete {
 		/**
 		 * This signal is emitted every time the availability of the
 		 * storage changes
+		 * @param available TRUE if the storage is available; FALSE if not
 		 */
 		public signal void is_available_changed(bool available);
 
 		/**
 		 * This signal is emitted every time the status of the backup
 		 * changes.
+		 * @param status The new status
 		 */
 		public signal void current_status_changed(backup_current_status status);
 
 		/**
 		 * This signal is emitted every time a message must be sent to
 		 * the parent.
+		 * @param message The message to show
 		 */
 		public signal void send_message(string message);
 
 		/**
 		 * This signal is emitted every time a warning message must be sent to
 		 * the parent.
+		 * @param warning_msg The warning message to show
 		 */
 		public signal void send_warning(string warning_msg);
 
 		/**
 		 * This signal is emitted every time an error message must be sent to
 		 * the parent.
+		 * @param error_msg The error message to show
 		 */
 		public signal void send_error(string error_msg);
 
 		/**
 		 * This signal is emitted every time a debug message must be sent to
 		 * the parent.
+		 * @param debug_msg The debug message to show
 		 */
 		public signal void send_debug(string debug_msg);
 
 		/**
 		 * This signal is emitted every time a new file is being backed up, or an action is being done
+		 * @param full_path The full path of the file being backed up
 		 */
 		public signal void send_current_action(string full_path);
+
+		/**
+		 * This signal is emitted when a restore operation ended
+		 * @param success If TRUE, the restoring process worked fine; if FALSE, it failed
+		 */
+		public signal void ended_restore(bool success);
 
 		/**
 		 * Allows to get or set the current status
@@ -150,12 +163,24 @@ namespace cronopete {
 
 		/**
 		 * Returns a list with the files in the specified folder and backup
-		 * @param current_path The path from where the list of files must be obtained
 		 * @param backup The specific backup from where the list of files must be obtained
+		 * @param current_path The path from where the list of files must be obtained
 		 * @param files The returned list of files with all the data needed
 		 * @return TRUE if everything went fine; FALSE if there was an error
 		 */
-		public abstract bool get_filelist(string current_path, backup_element backup, out Gee.List<file_info ?> files);
+		public abstract bool get_filelist(backup_element backup, string current_path, out Gee.List<file_info ?> files);
+
+
+		/**
+		 * Restores a file or folder to the hard disk
+		 * @param backup The specific backup from where the file/folder will be restored
+		 * @param path The file/folder path
+		 * @param origin_filename the file/folder filename
+		 * @param destination_filename the file name for the restored file/folder. It usually will be in the form origin_filename.restored.extension
+		 * @param is_folder TRUE if it is a folder to restore; FALSE if it is a regular file
+		 * @return TRUE if there was an error; FALSE if everything went fine
+		 */
+		public abstract bool restore_file_folder(backup_element backup, string path, string origin_filename, string destination_filename, bool is_folder);
 
 		/**
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if
