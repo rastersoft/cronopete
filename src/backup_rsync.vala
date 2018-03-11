@@ -196,29 +196,31 @@ namespace cronopete {
 			}
 		}
 
-		public override bool get_filelist(backup_element backup, string current_path, out Gee.List<file_info ?> files) {
+		public override bool get_filelist(backup_element backup, string current_path, out Gee.List<file_information ?> files) {
 			FileInfo      info_file;
 			FileType      typeinfo;
 			rsync_element rbackup = backup as rsync_element;
 
 			try {
-				files = new Gee.ArrayList<file_info ?>();
+				files = new Gee.ArrayList<file_information ?>();
 
 				var finalpath = Path.build_filename(rbackup.full_path, current_path);
 
 				var directory = File.new_for_path(finalpath);
-				var listfile  = directory.enumerate_children(FileAttribute.TIME_MODIFIED + "," + FileAttribute.STANDARD_NAME + "," + FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_SIZE + "," + FileAttribute.STANDARD_ICON, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+				var listfile  = directory.enumerate_children(FileAttribute.TIME_MODIFIED + "," + FileAttribute.STANDARD_NAME + "," + FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_SIZE + "," + FileAttribute.STANDARD_ICON + "," + FileAttribute.STANDARD_FAST_CONTENT_TYPE, FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
 
 				while ((info_file = listfile.next_file(null)) != null) {
-					var tmpinfo = file_info();
+					var tmpinfo = file_information();
 
 					typeinfo     = info_file.get_file_type();
 					tmpinfo.name = info_file.get_name().dup();
 
 					if (typeinfo == FileType.DIRECTORY) {
 						tmpinfo.isdir = true;
+						tmpinfo.type  = null;
 					} else {
 						tmpinfo.isdir = false;
+						tmpinfo.type  = info_file.get_attribute_string(FileAttribute.STANDARD_FAST_CONTENT_TYPE);
 					}
 
 					tmpinfo.mod_time = info_file.get_modification_time();

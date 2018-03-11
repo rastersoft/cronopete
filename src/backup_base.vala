@@ -168,7 +168,7 @@ namespace cronopete {
 		 * @param files The returned list of files with all the data needed
 		 * @return TRUE if everything went fine; FALSE if there was an error
 		 */
-		public abstract bool get_filelist(backup_element backup, string current_path, out Gee.List<file_info ?> files);
+		public abstract bool get_filelist(backup_element backup, string current_path, out Gee.List<file_information ?> files);
 
 
 		/**
@@ -333,13 +333,15 @@ namespace cronopete {
 		}
 	}
 
-	public struct file_info {
+	public struct file_information {
 		// This structure contains the information for one file
 		// when, at restoring, the backend is asked for the list
 		// of available files
 
 		// File name
 		string          name;
+		// Content type (if available)
+		string ?        type;
 		// Icon for this file
 		GLib.ThemedIcon icon;
 		// Whether this is, or not, a folder

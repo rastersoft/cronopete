@@ -50,6 +50,10 @@ namespace cronopete {
 		// for the path view
 		private Gtk.TreeView path_view2;
 		private ScrolledWindow scroll2;
+		private Gtk.TreeViewColumn namecolumn;
+		private Gtk.TreeViewColumn typecolumn;
+		private Gtk.TreeViewColumn sizecolumn;
+		private Gtk.TreeViewColumn datecolumn;
 
 		private EventBox background_eb;
 		private Gtk.TreeView bookmark_view;
@@ -80,9 +84,9 @@ namespace cronopete {
 			this.icon_cache = new Gee.TreeMap<uint, icon_cache_st ?>();
 
 			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
-			this.backend        = p_backend;
-			this.current_path   = p_current_path;
-			this.current_backup = current_backup;
+			this.backend            = p_backend;
+			this.current_path       = p_current_path;
+			this.current_backup     = current_backup;
 
 			this.showing_menu  = false;
 			this.show_hiden    = false;
@@ -132,7 +136,7 @@ namespace cronopete {
 			 *   - icon (string)
 			 *   - is_folder (boolean)
 			 */
-			this.path_model = new Gtk.ListStore(6, typeof(string), typeof(Gdk.Pixbuf), typeof(bool), typeof(Gdk.Pixbuf), typeof(string), typeof(string));
+			this.path_model = new Gtk.ListStore(7, typeof(string), typeof(Gdk.Pixbuf), typeof(bool), typeof(Gdk.Pixbuf), typeof(string), typeof(string), typeof(string));
 			this.path_view  = new IconView.with_model(this.path_model);
 			this.path_view.add_events(Gdk.EventMask.BUTTON_PRESS_MASK);
 			this.path_view.button_press_event.connect(this.on_click);
@@ -152,21 +156,34 @@ namespace cronopete {
 			var crpb2 = new CellRendererPixbuf();
 			crpb2.stock_size = IconSize.SMALL_TOOLBAR;
 			this.path_view2.insert_column_with_attributes(-1, "", crpb2, "gicon", 3);
-			var namecolumn = new Gtk.TreeViewColumn.with_attributes(_("Name"), new CellRendererText(), "text", 0);
+			namecolumn = new Gtk.TreeViewColumn.with_attributes(_("Name"), new CellRendererText(), "text", 0);
 			this.path_view2.insert_column(namecolumn, -1);
 			namecolumn.clicked.connect(this.sort_name_clicked);
-			var renderdate = new CellRendererText();
-			renderdate.xalign = 1;
-			var sizecolumn = new Gtk.TreeViewColumn.with_attributes(_("Size"), renderdate, "text", 4);
+			namecolumn.sort_indicator = true;
+			namecolumn.sort_order     = SortType.ASCENDING;
+			namecolumn.resizable      = true;
+
+			typecolumn = new Gtk.TreeViewColumn.with_attributes(_("Type"), new CellRendererText(), "text", 6);
+			this.path_view2.insert_column(typecolumn, -1);
+			typecolumn.clicked.connect(this.sort_type_clicked);
+			typecolumn.resizable = true;
+
+			var rendersize = new CellRendererText();
+			rendersize.xalign = 1;
+			sizecolumn        = new Gtk.TreeViewColumn.with_attributes(_("Size"), rendersize, "text", 4);
 			this.path_view2.insert_column(sizecolumn, -1);
 			sizecolumn.clicked.connect(this.sort_size_clicked);
-			var datecolumn = new Gtk.TreeViewColumn.with_attributes(_("Modification date"), new CellRendererText(), "text", 5);
+			sizecolumn.resizable = true;
+
+			datecolumn = new Gtk.TreeViewColumn.with_attributes(_("Modification date"), new CellRendererText(), "text", 5);
 			this.path_view2.insert_column(datecolumn, -1);
 			datecolumn.clicked.connect(this.sort_date_clicked);
+			datecolumn.resizable = true;
+
 			this.path_view2.get_selection().set_mode(SelectionMode.MULTIPLE);
 			this.path_view2.headers_clickable = true;
-			var column = this.path_view2.get_column(1);
-			column.resizable = true;
+			// var column = this.path_view2.get_column(1);
+			// column.resizable = true;
 
 			this.path_view2.button_press_event.connect(this.selection_made);
 			this.path_view2.row_activated.connect(this.activated_row);
@@ -541,6 +558,16 @@ namespace cronopete {
 			this.refresh_icons();
 		}
 
+		private void sort_type_clicked() {
+			if (this.sort_by == e_sort_by.TYPE) {
+				this.reverse_sort = this.reverse_sort ? false : true;
+			} else {
+				this.sort_by      = e_sort_by.TYPE;
+				this.reverse_sort = false;
+			}
+			this.refresh_icons();
+		}
+
 		private void toggle_show_hide() {
 			this.show_hiden = this.show_hiden ? false : true;
 			this.refresh_icons();
@@ -712,42 +739,42 @@ namespace cronopete {
 			this.set_scroll_top();
 		}
 
-		public static int mysort_files_byname(file_info ? a, file_info ? b) {
+		public static int mysort_files_byname(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, false, e_sort_by.NAME);
 		}
 
-		public static int mysort_files_byname_r(file_info ? a, file_info ? b) {
+		public static int mysort_files_byname_r(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, true, e_sort_by.NAME);
 		}
 
-		public static int mysort_files_bydate(file_info ? a, file_info ? b) {
+		public static int mysort_files_bydate(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, false, e_sort_by.DATE);
 		}
 
-		public static int mysort_files_bydate_r(file_info ? a, file_info ? b) {
+		public static int mysort_files_bydate_r(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, true, e_sort_by.DATE);
 		}
 
-		public static int mysort_files_bysize(file_info ? a, file_info ? b) {
+		public static int mysort_files_bysize(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, false, e_sort_by.SIZE);
 		}
 
-		public static int mysort_files_bysize_r(file_info ? a, file_info ? b) {
+		public static int mysort_files_bysize_r(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, true, e_sort_by.SIZE);
 		}
 
-		public static int mysort_files_bytype(file_info ? a, file_info ? b) {
+		public static int mysort_files_bytype(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, false, e_sort_by.TYPE);
 		}
 
-		public static int mysort_files_bytype_r(file_info ? a, file_info ? b) {
+		public static int mysort_files_bytype_r(file_information ? a, file_information ? b) {
 			return mysort_files(a, b, true, e_sort_by.TYPE);
 		}
 
 		/**
 		 * Sorts the icons by type, size, date or name
 		 */
-		public static int mysort_files(file_info ? a, file_info ? b, bool reverse, e_sort_by mode) {
+		public static int mysort_files(file_information ? a, file_information ? b, bool reverse, e_sort_by mode) {
 			// Folders always first
 			if (a.isdir && (!b.isdir)) {
 				return -1;
@@ -791,40 +818,27 @@ namespace cronopete {
 			}
 
 			if ((mode == e_sort_by.TYPE) && (!a.isdir)) {
-				var posa = a.name.last_index_of_char('.');
-				var posb = b.name.last_index_of_char('.');
-
-				if ((posa * posb) < 0) {
-					// one has extension, the other not
-					if (posa < 0) {
-						// files without extension go first
-						if (reverse) {
-							return 1;
-						} else {
-							return -1;
-						}
+				if ((a.type == null) && (b.type == null)) {
+					return 0;
+				}
+				if (a.type == null) {
+					return -1;
+				}
+				if (b.type == null) {
+					return 1;
+				}
+				if (a.type < b.type) {
+					if (reverse) {
+						return -1;
 					} else {
-						if (reverse) {
-							return -1;
-						} else {
-							return 1;
-						}
+						return 1;
 					}
 				}
-
-				int r1;
-				if (posa >= 0) {
-					var exta = a.name.substring(posa);
-					var extb = b.name.substring(posb);
-					exta = exta.casefold();
-					extb = extb.casefold();
+				if (a.type > b.type) {
 					if (reverse) {
-						r1 = extb.collate(exta);
+						return 1;
 					} else {
-						r1 = exta.collate(extb);
-					}
-					if (r1 != 0) {
-						return (r1);
+						return -1;
 					}
 				}
 			}
@@ -859,7 +873,7 @@ namespace cronopete {
 		 */
 		private void refresh_icons() {
 			TreeIter iter;
-			Gee.List<file_info ?> files;
+			Gee.List<file_information ?> files;
 
 			this.path_model.clear();
 
@@ -869,33 +883,57 @@ namespace cronopete {
 
 			switch (this.sort_by) {
 			case e_sort_by.NAME :
+				namecolumn.sort_indicator = true;
+				typecolumn.sort_indicator = false;
+				datecolumn.sort_indicator = false;
+				sizecolumn.sort_indicator = false;
 				if (this.reverse_sort) {
+					namecolumn.sort_order = SortType.DESCENDING;
 					files.sort(mysort_files_byname_r);
 				} else {
+					namecolumn.sort_order = SortType.ASCENDING;
 					files.sort(mysort_files_byname);
 				}
 				break;
 
 			case e_sort_by.TYPE:
+				namecolumn.sort_indicator = false;
+				typecolumn.sort_indicator = true;
+				datecolumn.sort_indicator = false;
+				sizecolumn.sort_indicator = false;
 				if (this.reverse_sort) {
+					typecolumn.sort_order = SortType.DESCENDING;
 					files.sort(mysort_files_bytype_r);
 				} else {
+					typecolumn.sort_order = SortType.ASCENDING;
 					files.sort(mysort_files_bytype);
 				}
 				break;
 
 			case e_sort_by.SIZE:
+				namecolumn.sort_indicator = false;
+				typecolumn.sort_indicator = false;
+				datecolumn.sort_indicator = false;
+				sizecolumn.sort_indicator = true;
 				if (this.reverse_sort) {
+					sizecolumn.sort_order = SortType.DESCENDING;
 					files.sort(mysort_files_bysize_r);
 				} else {
+					sizecolumn.sort_order = SortType.ASCENDING;
 					files.sort(mysort_files_bysize);
 				}
 				break;
 
 			case e_sort_by.DATE:
+				namecolumn.sort_indicator = false;
+				typecolumn.sort_indicator = false;
+				datecolumn.sort_indicator = true;
+				sizecolumn.sort_indicator = false;
 				if (this.reverse_sort) {
+					datecolumn.sort_order = SortType.DESCENDING;
 					files.sort(mysort_files_bydate_r);
 				} else {
+					datecolumn.sort_order = SortType.ASCENDING;
 					files.sort(mysort_files_bydate);
 				}
 				break;
@@ -908,7 +946,7 @@ namespace cronopete {
 			Gdk.Pixbuf ? pbuf2 = null;
 
 			uint icon_hash;
-			foreach (file_info f in files) {
+			foreach (file_information f in files) {
 				if ((this.show_hiden == false) && (f.name[0] == '.')) {
 					continue;
 				}
@@ -970,6 +1008,13 @@ namespace cronopete {
 				this.path_model.set(iter, 4, fssize);
 				GLib.DateTime timeval = new GLib.DateTime.from_timeval_utc(f.mod_time);
 				this.path_model.set(iter, 5, timeval.format("%c"));
+				string file_type = "";
+				if (f.type != null) {
+					file_type = f.type;
+				} else if (f.isdir) {
+					file_type = _("Folder");
+				}
+				this.path_model.set(iter, 6, file_type);
 			}
 		}
 	}
