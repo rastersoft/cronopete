@@ -472,32 +472,32 @@ namespace cronopete {
 			this.menu.popup(null, null, null, 2, Gtk.get_current_event_time());
 		}
 
-		private void set_view_as_icons(Gtk.Widget emitter) {
+		private void set_view_as_icons() {
 			this.view_as_icons = true;
 			this.refresh_path_list(false);
 		}
 
-		private void set_view_as_list(Gtk.Widget emitter) {
+		private void set_view_as_list() {
 			this.view_as_icons = false;
 			this.refresh_path_list(false);
 		}
 
-		private void set_sort_by_name(Gtk.Widget emitter) {
+		private void set_sort_by_name() {
 			this.sort_by = e_sort_by.NAME;
 			this.refresh_icons();
 		}
 
-		private void set_sort_by_type(Gtk.Widget emitter) {
+		private void set_sort_by_type() {
 			this.sort_by = e_sort_by.TYPE;
 			this.refresh_icons();
 		}
 
-		private void set_sort_by_size(Gtk.Widget emitter) {
+		private void set_sort_by_size() {
 			this.sort_by = e_sort_by.SIZE;
 			this.refresh_icons();
 		}
 
-		private void set_sort_by_date(Gtk.Widget emitter) {
+		private void set_sort_by_date() {
 			this.sort_by = e_sort_by.DATE;
 			this.refresh_icons();
 		}
