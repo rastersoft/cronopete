@@ -353,14 +353,26 @@ namespace cronopete {
 			c_base.set_source_rgb(1, 1, 1);
 			c_base.set_line_width(1);
 
+			int last_month = -1;
+			int last_year  = -1;
 			for (var i = 0; i < this.backup_list.size; i++) {
-				new_y = pos_y - this.timeline_scale_factor * (this.backup_list[i].utc_time - this.oldest);
+				var time_now    = this.backup_list[i].utc_time;
+				var time_now_dt = new GLib.DateTime.from_unix_utc(time_now);
+				new_y = pos_y - this.timeline_scale_factor * (time_now - this.oldest);
 				if (new_y - last_pos_y < 2) {
 					continue;
 				}
 				last_pos_y = new_y;
 				c_base.move_to(this.scale_x + incval, new_y);
-				c_base.rel_line_to(nw, 0);
+				if ((last_year != -1) && (last_year != time_now_dt.get_year())) {
+					c_base.rel_line_to(nw, 0);
+				} else if ((last_month != -1) && (last_month != time_now_dt.get_month())) {
+					c_base.rel_line_to(nw * 2 / 3, 0);
+				} else {
+					c_base.rel_line_to(nw / 3, 0);
+				}
+				last_year  = time_now_dt.get_year();
+				last_month = time_now_dt.get_month();
 				c_base.stroke();
 			}
 		}
