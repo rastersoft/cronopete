@@ -3,15 +3,16 @@
 * Version 4.0.0 (2018/03/11)
   * Code refactorization
   * Now utilizes RSYNC instead of own code
-  * Architecture designed to allow the use of new backends
   * Now remembers whether the user preffers an icon view or an icon list in the restore window
   * Allows to sort the files and folders in the restore window by clicking on the column name
   * Added extra security checks when deleting old backups
   * Now ensures that half-deleted old backups won't interfere with the restoring window, and won't be used as base for a backup
   * Ensures that the main "cronopete" folder is writable by anyone, to allow to use the same disk by several users in the same computer
   * Ensures that the backup folder for each user is readable and writable ONLY by the owner, to ensure security and privacy
-  * Now shows the capacity in GB instead of Gib
   * Now deletes the old backups after doing the backup, to ensure to make the first backup as soon as possible
+  * Architecture designed to allow the use of new backends
+  * Shows in the timeline the months and the years
+  * Now shows the capacity in GB instead of Gib
 * Version 3.27.0 (2018/02/04)
   * Now ignores backups "from the future" to avoid troubles when creating new backups or listing them
 * Version 3.26.2 (2018/01/21)
