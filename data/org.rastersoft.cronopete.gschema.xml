@@ -56,6 +56,11 @@
       <summary>Shows the welcome message</summary>
       <description>When enabled, Cronopete will show the welcome message asking the user to configure the backups.</description>
     </key>
+    <key type="b" name="show-restore-as-icon-view">
+      <default>true</default>
+      <summary>Show the files in the restore window as an icon view</summary>
+      <description>When enabled, the restore window will show the files as an icon view; when disabled, they will be shown as an icon list.</description>
+    </key>
 
 	<!--<key type="" name="">
       <default></default>

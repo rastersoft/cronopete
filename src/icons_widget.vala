@@ -60,6 +60,8 @@ namespace cronopete {
 
 		private Gtk.Menu menu;
 
+		private GLib.Settings cronopete_settings;
+
 		private backup_base backend;
 
 		private string current_path;
@@ -77,13 +79,14 @@ namespace cronopete {
 		public IconBrowser(backup_base p_backend, string p_current_path, backup_element current_backup) {
 			this.icon_cache = new Gee.TreeMap<uint, icon_cache_st ?>();
 
+			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 			this.backend        = p_backend;
 			this.current_path   = p_current_path;
 			this.current_backup = current_backup;
 
 			this.showing_menu  = false;
 			this.show_hiden    = false;
-			this.view_as_icons = true;
+			this.view_as_icons = this.cronopete_settings.get_boolean("show-restore-as-icon-view");
 			this.sort_by       = e_sort_by.NAME;
 
 			this.main_container = new Box(Gtk.Orientation.VERTICAL, 0);
@@ -180,6 +183,14 @@ namespace cronopete {
 			this.refresh_path_list();
 			this.key_press_event.connect(this.on_key_press);
 			this.show.connect_after(this.refresh_path_list_show);
+			this.cronopete_settings.changed.connect(this.settings_changed);
+		}
+
+		public void settings_changed(string key) {
+			if (key == "show-restore-as-icon-view") {
+				this.view_as_icons = this.cronopete_settings.get_boolean(key);
+				this.refresh_path_list(false);
+			}
 		}
 
 		private bool on_key_press(Gdk.EventKey event) {
@@ -473,13 +484,11 @@ namespace cronopete {
 		}
 
 		private void set_view_as_icons() {
-			this.view_as_icons = true;
-			this.refresh_path_list(false);
+			this.cronopete_settings.set_boolean("show-restore-as-icon-view", true);
 		}
 
 		private void set_view_as_list() {
-			this.view_as_icons = false;
-			this.refresh_path_list(false);
+			this.cronopete_settings.set_boolean("show-restore-as-icon-view", false);
 		}
 
 		private void set_sort_by_name() {

@@ -362,7 +362,7 @@ namespace cronopete {
 			}
 		}
 
-		private void restore_files() {
+		public void restore_files() {
 			this.restore_window = new restore_iface(this.backend);
 		}
 	}
@@ -427,7 +427,7 @@ namespace cronopete {
 		}
 
 		public void restore_files() throws GLib.DBusError, GLib.IOError {
-			// callback_object.enter_clicked ();
+			callback_object.restore_files();
 		}
 	}
 }
