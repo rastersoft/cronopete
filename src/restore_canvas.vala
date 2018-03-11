@@ -367,7 +367,7 @@ namespace cronopete {
 				if ((last_year != -1) && (last_year != time_now_dt.get_year())) {
 					c_base.rel_line_to(nw, 0);
 				} else if ((last_month != -1) && (last_month != time_now_dt.get_month())) {
-					c_base.rel_line_to(nw * 2 / 3, 0);
+					c_base.rel_line_to(nw * 3 / 5, 0);
 				} else {
 					c_base.rel_line_to(nw / 3, 0);
 				}
