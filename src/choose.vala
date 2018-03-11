@@ -82,17 +82,17 @@ public class c_format : GLib.Object {
 
 		try {
 			GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant> > > objects;
-			UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if> (BusType.SYSTEM, "org.freedesktop.UDisks2", "/org/freedesktop/UDisks2");
+			UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", "/org/freedesktop/UDisks2");
 			udisk.GetManagedObjects(out objects);
 
 			foreach (var o in objects.get_keys()) {
-				Introspectable_if intro = Bus.get_proxy_sync<Introspectable_if> (BusType.SYSTEM, "org.freedesktop.UDisks2", o);
+				Introspectable_if intro = Bus.get_proxy_sync<Introspectable_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", o);
 				string            data;
 				yield intro.Introspect(out data);
 
 				// check if it has the Block and Filesystem interfaces
 				if (data.contains("org.freedesktop.UDisks2.Block") && data.contains("org.freedesktop.UDisks2.Filesystem")) {
-					block = Bus.get_proxy_sync<Block_if> (BusType.SYSTEM, "org.freedesktop.UDisks2", o);
+					block = Bus.get_proxy_sync<Block_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", o);
 					if (block.IdUUID == disk_uuid) {
 						disk = o;
 						break;
@@ -115,7 +115,7 @@ public class c_format : GLib.Object {
 
 		Filesystem_if filesystem;
 		try {
-			filesystem = Bus.get_proxy_sync<Filesystem_if> (BusType.SYSTEM, "org.freedesktop.UDisks2", disk);
+			filesystem = Bus.get_proxy_sync<Filesystem_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", disk);
 		} catch (GLib.IOError e) {
 			this.show_error(_("Failed to unmount the disk. Aborting format operation."));
 			return final_uuid;
