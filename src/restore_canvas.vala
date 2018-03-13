@@ -43,8 +43,8 @@ namespace cronopete {
 
 		private int current_backup;
 		private int64 current_z_pos;
-		private time_t current_timeline;
-		private time_t desired_timeline;
+		private double current_timeline;
+		private double desired_timeline;
 
 		// file browser coordinates and size
 		private double browser_x;
@@ -90,7 +90,7 @@ namespace cronopete {
 			this.backup_list.sort(sort_backup_elements_newer_to_older);
 			this.current_backup   = 0;
 			this.current_z_pos    = 0;
-			this.current_timeline = this.backup_list[0].utc_time;
+			this.current_timeline = 0;
 			this.desired_timeline = this.current_timeline;
 			this.tick_cb          = 0;
 			this.last_time_frame  = 0;
@@ -359,6 +359,7 @@ namespace cronopete {
 				var time_now    = this.backup_list[i].utc_time;
 				var time_now_dt = new GLib.DateTime.from_unix_utc(time_now);
 				new_y = pos_y - this.timeline_scale_factor * (time_now - this.oldest);
+				this.backup_list[i].ypos = new_y;
 				if (new_y - last_pos_y < 2) {
 					continue;
 				}
@@ -375,6 +376,8 @@ namespace cronopete {
 				last_month = time_now_dt.get_month();
 				c_base.stroke();
 			}
+			this.current_timeline = this.backup_list[this.current_backup].ypos;
+			this.desired_timeline = this.current_timeline;
 		}
 
 		/**
@@ -408,10 +411,9 @@ namespace cronopete {
 			cr.paint();
 
 			// Paint the timeline index
-			double pos_y = this.scale_y + this.scale_h;
 			cr.set_source_rgb(1, 0, 0);
 			cr.set_line_width(3);
-			cr.move_to(this.scale_x, pos_y - this.timeline_scale_factor * (this.current_timeline - this.oldest));
+			cr.move_to(this.scale_x, this.current_timeline);
 			cr.rel_line_to(this.scale_w, 0);
 			cr.stroke();
 
@@ -491,13 +493,13 @@ namespace cronopete {
 			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
 			this.last_time_frame  = lt;
 			this.current_timeline = (2 * this.current_timeline + this.desired_timeline) / 3;
-			time_t dif_timeline;
+			double dif_timeline;
 			if (this.current_timeline > this.desired_timeline) {
 				dif_timeline = this.current_timeline - this.desired_timeline;
 			} else {
 				dif_timeline = this.desired_timeline - this.current_timeline;
 			}
-			if ((this.timeline_scale_factor * dif_timeline) < 2) {
+			if (dif_timeline < 2) {
 				this.current_timeline = this.desired_timeline;
 			}
 			this.current_z_pos = (2 * this.current_z_pos + desired_z_pos) / 3;
@@ -571,7 +573,7 @@ namespace cronopete {
 		private void go_prev_backup() {
 			if (this.current_backup > 0) {
 				this.current_backup--;
-				this.desired_timeline = this.backup_list[this.current_backup].utc_time;
+				this.desired_timeline = this.backup_list[this.current_backup].ypos;
 				this.changed_backup_time(this.current_backup);
 				if (this.tick_cb == 0) {
 					this.tick_cb = this.add_tick_callback(this.tick_callback);
@@ -583,7 +585,7 @@ namespace cronopete {
 		private void go_next_backup() {
 			if (this.current_backup < (this.backup_list.size - 1)) {
 				this.current_backup++;
-				this.desired_timeline = this.backup_list[this.current_backup].utc_time;
+				this.desired_timeline = this.backup_list[this.current_backup].ypos;
 				this.changed_backup_time(this.current_backup);
 				if (this.tick_cb == 0) {
 					this.tick_cb = this.add_tick_callback(this.tick_callback);

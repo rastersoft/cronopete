@@ -325,6 +325,8 @@ namespace cronopete {
 		// used in eval_backups_to_delete to specify if this backup must be kept or
 		// should be deleted to free space
 		public bool keep;
+		// used in the timeline to determine where this backup is located in the screen
+		public double ypos;
 
 		protected void set_common_data(time_t t) {
 			this.utc_time   = t;
