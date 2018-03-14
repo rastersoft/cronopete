@@ -1,7 +1,7 @@
 ### AutoVala Project ###
 autovala_version: 27
 project_name: cronopete
-vala_version: 0.26
+vala_version: 0.36
 
 vala_binary: src/cronopete
 *version: 3.99.0
