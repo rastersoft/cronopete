@@ -433,6 +433,7 @@ namespace cronopete {
 		private void do_backup_folder() {
 			Pid child_pid;
 			int standard_output;
+			int standard_error;
 
 			if (this.folders.size == 0) {
 				this.do_first_sync();
@@ -467,7 +468,7 @@ namespace cronopete {
 			string[] env = Environ.get();
 			this.debug_command(command);
 			try {
-				GLib.Process.spawn_async_with_pipes("/", command, env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, null, out standard_output, null);
+				GLib.Process.spawn_async_with_pipes("/", command, env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid, null, out standard_output, out standard_error);
 			} catch (GLib.SpawnError error) {
 				this.send_error(_("Failed to launch rsync for '%s'. Aborting backup").printf(folder.folder));
 				this.current_status = backup_current_status.IDLE;
@@ -504,6 +505,22 @@ namespace cronopete {
 				    channel.read_line(out line, null, null);
 				    var line2 = line.strip();
 				    this.send_current_action(_("Backing up %s").printf(Path.build_filename(folder.folder, line2)));
+				} catch (IOChannelError e) {
+				    return false;
+				} catch (ConvertError e) {
+				    return false;
+				}
+				return true;
+			});
+			IOChannel output_error = new IOChannel.unix_new(standard_error);
+			output_error.add_watch(IOCondition.IN | IOCondition.HUP, (channel, condition) => {
+				if (condition == IOCondition.HUP) {
+				    return false;
+				}
+				try {
+				    string line;
+				    channel.read_line(out line, null, null);
+				    this.send_warning(line.strip());
 				} catch (IOChannelError e) {
 				    return false;
 				} catch (ConvertError e) {

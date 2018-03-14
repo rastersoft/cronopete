@@ -212,7 +212,7 @@ namespace cronopete {
 
 		private bool on_key_press(Gdk.EventKey event) {
 			if (event.keyval == Gdk.Key.Menu) {
-				this.show_menu();
+				this.show_menu(event);
 				return true;
 			}
 
@@ -415,7 +415,7 @@ namespace cronopete {
 			if (event.button != 3) {
 				return false;
 			}
-			this.show_menu();
+			this.show_menu(event);
 
 			return true;
 		}
@@ -424,7 +424,7 @@ namespace cronopete {
 			this.showing_menu = false;
 		}
 
-		private void show_menu() {
+		private void show_menu(Gdk.Event event) {
 			this.showing_menu = true;
 			this.menu         = new Gtk.Menu();
 			this.menu.hide.connect(this.hide_menu);
@@ -497,7 +497,7 @@ namespace cronopete {
 			}
 
 			this.menu.show_all();
-			this.menu.popup(null, null, null, 2, Gtk.get_current_event_time());
+			this.menu.popup_at_pointer(event);
 		}
 
 		private void set_view_as_icons() {
