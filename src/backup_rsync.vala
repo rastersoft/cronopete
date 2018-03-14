@@ -61,7 +61,7 @@ namespace cronopete {
 			this.last_backup_time  = 0;
 			this.monitor.mount_added.connect_after(this.refresh_connect);
 			this.monitor.mount_removed.connect_after(this.refresh_connect);
-			this.refresh_connect_in();
+			this.refresh_connect();
 		}
 
 		public override time_t get_last_backup() {
@@ -661,11 +661,7 @@ namespace cronopete {
 			this.send_debug(debug_msg);
 		}
 
-		private void refresh_connect(Mount mount) {
-			this.refresh_connect_in();
-		}
-
-		private void refresh_connect_in() {
+		private void refresh_connect() {
 			var volumes    = this.monitor.get_volumes();
 			var drive_uuid = cronopete_settings.get_string("backup-uid");
 			this.base_drive_path = null;
