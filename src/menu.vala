@@ -90,10 +90,10 @@ namespace  cronopete {
 			this.cronopete_settings.bind("visible", this.show_in_bar_ch, "active", GLib.SettingsBindFlags.DEFAULT);
 
 			this.backend.send_warning.connect((msg) => {
-				this.insert_text_log("WARNING: " + msg);
+				this.insert_text_log(_("<span foreground=\"#FF7F00\">WARNING:</span> %s").printf(msg));
 			});
 			this.backend.send_error.connect((msg) => {
-				this.insert_text_log("ERROR: " + msg);
+				this.insert_text_log(_("<span foreground=\"#FF3F3F\">ERROR:</span> %s").printf(msg));
 			});
 			this.backend.send_message.connect((msg) => {
 				this.insert_text_log(msg);
@@ -132,8 +132,8 @@ namespace  cronopete {
 
 			if (this.is_visible) {
 				TextIter iter;
-				this.log.insert_at_cursor(msg, msg.length);
 				this.log.get_end_iter(out iter);
+				this.log.insert_markup(ref iter, msg, msg.length);
 				this.mark = this.log.create_mark("end", iter, false);
 				this.log_view.scroll_to_mark(this.mark, 0.05, true, 0.0, 1.0);
 			}

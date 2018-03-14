@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-08 01:17+0100\n"
+"POT-Creation-Date: 2018-03-14 23:56+0100\n"
 "PO-Revision-Date: 2018-11-01 22:00+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/backup_base.vala:85
+#: src/backup_base.vala:98
 msgid "Ready"
 msgstr ""
 
@@ -29,103 +29,111 @@ msgstr ""
 "Es kann nicht der Basisordner für die Backups erstellt werden. Sicherung "
 "wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:253
+#: src/backup_rsync.vala:252
+#, fuzzy, c-format
+msgid "Failed to launch cp to restore: %s"
+msgstr ""
+"Datei konnte nicht wieder hergestellt werden\n"
+"\n"
+"%s"
+
+#: src/backup_rsync.vala:284
 #, fuzzy
 msgid "Starting backup"
 msgstr "Sicherung starten\n"
 
-#: src/backup_rsync.vala:291
+#: src/backup_rsync.vala:322
 #, fuzzy
 msgid "Cleaning incomplete backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:322
+#: src/backup_rsync.vala:353
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr ""
 
-#: src/backup_rsync.vala:329
+#: src/backup_rsync.vala:360
 #, fuzzy
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
 "Sicherung wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:344
+#: src/backup_rsync.vala:375
 msgid "Backup aborted"
 msgstr "Sicherung abbrechen"
 
-#: src/backup_rsync.vala:387
+#: src/backup_rsync.vala:418
 msgid "Failed to delete aborted backups: "
 msgstr ""
 
-#: src/backup_rsync.vala:411
+#: src/backup_rsync.vala:443
 #, fuzzy, c-format
 msgid "Backing up folder %s"
 msgstr "Ordner sichern %s\n"
 
-#: src/backup_rsync.vala:432
+#: src/backup_rsync.vala:464
 #, fuzzy, c-format
 msgid "Excluding folder %s"
 msgstr "Ordner die ausgeschlossen werden %s.\n"
 
-#: src/backup_rsync.vala:441
+#: src/backup_rsync.vala:473
 #, fuzzy, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr ""
 "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
 "Sicherung wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:460
+#: src/backup_rsync.vala:492
 #, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr ""
 
-#: src/backup_rsync.vala:475
+#: src/backup_rsync.vala:507
 #, fuzzy, c-format
 msgid "Backing up %s"
 msgstr "Ordner sichern %s\n"
 
-#: src/backup_rsync.vala:492 src/backup_rsync.vala:493
+#: src/backup_rsync.vala:540 src/backup_rsync.vala:541
 #, fuzzy
 msgid "Syncing disk"
 msgstr "Synchronisiere Festplatte\n"
 
-#: src/backup_rsync.vala:499
+#: src/backup_rsync.vala:547
 msgid "Failed to launch sync command"
 msgstr ""
 
-#: src/backup_rsync.vala:522
+#: src/backup_rsync.vala:570
 #, fuzzy
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr ""
 "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten. "
 "Sicherung wird abgebrochen.\n"
 
-#: src/backup_rsync.vala:535
+#: src/backup_rsync.vala:583
 msgid "Failed to launch final sync command"
 msgstr ""
 
-#: src/backup_rsync.vala:545
+#: src/backup_rsync.vala:593
 #, fuzzy
 msgid "Disk synced, cleaning old backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:561 src/cronopete.vala:187
+#: src/backup_rsync.vala:609 src/cronopete.vala:187
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:567
+#: src/backup_rsync.vala:615
 msgid "No old backups to delete"
 msgstr ""
 
-#: src/backup_rsync.vala:594
+#: src/backup_rsync.vala:642
 #, fuzzy, c-format
 msgid "Deleting old backup %s"
 msgstr "alte Sicherung werden gelöscht"
 
-#: src/backup_rsync.vala:601
+#: src/backup_rsync.vala:649
 #, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
@@ -209,7 +217,7 @@ msgstr "jetzt sichern"
 msgid "Stop Backing Up"
 msgstr "Sicherung anhalten"
 
-#: src/cronopete.vala:314 src/restore.vala:58
+#: src/cronopete.vala:314 src/restore.vala:89
 msgid "Restore files"
 msgstr "Dateien wieder herstellen"
 
@@ -241,49 +249,67 @@ msgstr "Gestern, um %H:%M"
 msgid "tomorrow at %R"
 msgstr ""
 
-#: src/icons_widget.vala:148
+#: src/icons_widget.vala:159
 msgid "Name"
 msgstr "Name"
 
-#: src/icons_widget.vala:151
+#: src/icons_widget.vala:166
+msgid "Type"
+msgstr ""
+
+#: src/icons_widget.vala:173
 msgid "Size"
 msgstr "Größe"
 
-#: src/icons_widget.vala:152
+#: src/icons_widget.vala:178
 msgid "Modification date"
 msgstr "Änderungsdatum"
 
-#: src/icons_widget.vala:388
+#: src/icons_widget.vala:432
 msgid "Show hidden files"
 msgstr "zeige versteckte Dateien"
 
-#: src/icons_widget.vala:396
+#: src/icons_widget.vala:440
 msgid "Reverse order"
 msgstr "umkehrte Reihenfolge"
 
-#: src/icons_widget.vala:404
+#: src/icons_widget.vala:448
 msgid "Sort by name"
 msgstr "sortiert nach Namen"
 
-#: src/icons_widget.vala:408
+#: src/icons_widget.vala:452
 msgid "Sort by type"
 msgstr "sortiert nach Typ"
 
-#: src/icons_widget.vala:412
+#: src/icons_widget.vala:456
 msgid "Sort by size"
 msgstr "sortiert nach Größe"
 
-#: src/icons_widget.vala:416
+#: src/icons_widget.vala:460
 msgid "Sort by date"
 msgstr "sortiert nach Datum"
 
-#: src/icons_widget.vala:441
+#: src/icons_widget.vala:485
 msgid "View as icons"
 msgstr "Ansicht als Symbol"
 
-#: src/icons_widget.vala:445
+#: src/icons_widget.vala:489
 msgid "View as list"
 msgstr "Ansicht als Liste"
+
+#: src/icons_widget.vala:1015
+msgid "Folder"
+msgstr ""
+
+#: src/menu.vala:93
+#, c-format
+msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
+msgstr ""
+
+#: src/menu.vala:96
+#, c-format
+msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
+msgstr ""
 
 #: src/menu.vala:112
 #, c-format
@@ -304,9 +330,40 @@ msgstr "%lld GB von %lld GB"
 msgid "Backup hidden files and folders in %s"
 msgstr "sichere versteckte Dateien und Ordner in %s"
 
-#: src/restore.vala:70
+#: src/restore.vala:101
 msgid "Exit"
 msgstr "Exit"
+
+#: src/restore.vala:187
+msgid "Aborted"
+msgstr ""
+
+#: src/restore.vala:191
+#, c-format
+msgid "Error while restoring %s"
+msgstr ""
+
+#: src/restore.vala:201
+#, fuzzy, c-format
+msgid "Restoring file %s"
+msgstr "Dateien wiederherstellen"
+
+#: src/restore.vala:207
+#, fuzzy, c-format
+msgid "Restoring folder %s"
+msgstr "Dateien wiederherstellen"
+
+#: src/restore.vala:213
+msgid "Done"
+msgstr ""
+
+#: src/restore.vala:252
+msgid "OK"
+msgstr ""
+
+#: src/restore.vala:279
+msgid "Aborting restore"
+msgstr ""
 
 #: data/interface/about.ui:15
 #, fuzzy
@@ -351,7 +408,7 @@ msgstr "Warum <i>ana<b>CRONOPETE</b></i>?"
 
 #: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
 #: data/interface/format_force.ui:26 data/interface/options.ui:35
-#: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
+#: data/interface/restore_error.ui:40 data/interface/restoring.ui:56
 msgid "Cancel"
 msgstr "Abbruch"
 
@@ -524,10 +581,6 @@ msgstr "Ingoriere alle"
 msgid "Restore ended succesfully"
 msgstr "Wiederherstellen wurde abgeschlossen"
 
-#: data/interface/restoring.ui:9
-msgid "Restoring files"
-msgstr "Dateien wiederherstellen"
-
 #: data/interface/welcome.ui:23
 msgid "Don't ask me again"
 msgstr "Frage mich nie wieder"
@@ -654,15 +707,6 @@ msgstr ""
 #~ "%s\n"
 #~ "\n"
 #~ "Es ist nicht genug freier Speicher vorhanden"
-
-#~ msgid ""
-#~ "Failed to restore file\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Datei konnte nicht wieder hergestellt werden\n"
-#~ "\n"
-#~ "%s"
 
 #~ msgid "Preparing folders to restore"
 #~ msgstr "Ordner werden vorbereitet für die Wiederherstellung"
