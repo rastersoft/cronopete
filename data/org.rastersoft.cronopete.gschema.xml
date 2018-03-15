@@ -21,11 +21,6 @@
       <summary>UID of the external disk</summary>
       <description>UID of the partition where to do the backups.</description>
     </key>
-    <key type="s" name="backup-path">
-      <default>""</default>
-      <summary>Path to the external disk</summary>
-      <description>Path to the location where the external disk is mounted.</description>
-    </key>
     <key type="as" name="backup-folders">
       <default>[]</default>
       <summary>Folders to back up</summary>
