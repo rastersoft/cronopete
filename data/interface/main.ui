@@ -417,10 +417,11 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="button1">
-                        <property name="label" translatable="yes">About</property>
+                        <property name="label">gtk-about</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="cronopete_c_main_menu_about_clicked" swapped="no"/>
                       </object>
                       <packing>

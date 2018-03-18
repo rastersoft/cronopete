@@ -63,10 +63,10 @@
       <description>The ID number for the current backend</description>
     </key>
 
-    <key type="s" name="backup-uid2">
+    <key type="s" name="folder-backend">
       <default>""</default>
-      <summary>UID of the external disk</summary>
-      <description>UID of the partition where to do the backups.</description>
+      <summary>Destination folder for the "folder backend"</summary>
+      <description>This is the folder where the "Folder backend" will store the backups.</description>
     </key>
 
 	<!--<key type="" name="">
