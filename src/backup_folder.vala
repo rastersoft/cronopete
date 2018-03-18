@@ -72,7 +72,7 @@ namespace cronopete {
 		}
 
 		public override string get_descriptor() {
-			return (_("any folder"));
+			return (_("Store backups in a folder"));
 		}
 
 		public override time_t get_last_backup() {

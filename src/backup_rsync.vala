@@ -73,7 +73,7 @@ namespace cronopete {
 		}
 
 		public override string get_descriptor() {
-			return (_("external hard disk"));
+			return (_("Store backups in an external hard disk"));
 		}
 
 		public override time_t get_last_backup() {

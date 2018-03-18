@@ -159,12 +159,7 @@ namespace  cronopete {
 
 		public void backend_status_changed(backup_current_status status) {
 			if (this.main_w.visible) {
-				if (status == backup_current_status.IDLE) {
-					this.backend_list.sensitive = true;
-					this.refresh_backup_data();
-				} else {
-					this.backend_list.sensitive = false;
-				}
+				this.refresh_backup_data();
 			}
 		}
 
@@ -202,12 +197,12 @@ namespace  cronopete {
 		}
 
 		public void show_main() {
-			this.refresh_backup_data();
-			this.log.set_text(this.messages.str);
-			this.cronopete_settings.set_boolean("show-welcome", false);
 			this.main_w.show_all();
 			this.main_w.present();
 			this.tabs.set_current_page(0);
+			this.refresh_backup_data();
+			this.log.set_text(this.messages.str);
+			this.cronopete_settings.set_boolean("show-welcome", false);
 
 			TextIter iter;
 			this.log.get_end_iter(out iter);
@@ -243,6 +238,11 @@ namespace  cronopete {
 				this.label_next.set_text(cronopete.date_to_string(next));
 			} else {
 				this.label_next.set_text("---");
+			}
+			if (this.backend.current_status == backup_current_status.IDLE) {
+				this.backend_list.sensitive = true;
+			} else {
+				this.backend_list.sensitive = false;
 			}
 			this.disk_icon.set_from_icon_name(icon, IconSize.DIALOG);
 
