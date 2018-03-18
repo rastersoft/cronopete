@@ -63,7 +63,7 @@
       <description>The ID number for the current backend</description>
     </key>
 
-    <key type="s" name="folder-backend">
+    <key type="s" name="folder-backup">
       <default>""</default>
       <summary>Destination folder for the "folder backend"</summary>
       <description>This is the folder where the "Folder backend" will store the backups.</description>

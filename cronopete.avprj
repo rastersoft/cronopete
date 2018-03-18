@@ -25,7 +25,7 @@ end
 *vala_source: backup_base.vala
 *vala_source: backup_folder.vala
 *vala_source: backup_rsync.vala
-*vala_source: choose.vala
+*vala_source: choose_disk.vala
 *vala_source: cronopete.vala
 *vala_source: fixedlabel.vala
 *vala_source: helpers.vala
@@ -39,7 +39,6 @@ end
 *po: po
 
 *translate: glade data/interface/about.ui
-*translate: glade data/interface/backend_chooser.ui
 *translate: glade data/interface/chooser.ui
 *translate: glade data/interface/config_exported.ui
 *translate: glade data/interface/folder_selector.ui
@@ -56,7 +55,7 @@ end
 *translate: vala src/backup_base.vala
 *translate: vala src/backup_folder.vala
 *translate: vala src/backup_rsync.vala
-*translate: vala src/choose.vala
+*translate: vala src/choose_disk.vala
 *translate: vala src/cronopete.vala
 *translate: vala src/fixedlabel.vala
 *translate: vala src/helpers.vala
@@ -85,7 +84,6 @@ end
 *scheme: data/org.rastersoft.cronopete.gschema.xml
 
 *glade: data/interface/about.ui
-*glade: data/interface/backend_chooser.ui
 *glade: data/interface/chooser.ui
 *glade: data/interface/config_exported.ui
 *glade: data/interface/folder_selector.ui

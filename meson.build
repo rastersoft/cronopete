@@ -45,7 +45,6 @@ install_data(eos_plug_cfg_cronopete_plug,install_dir: join_paths(get_option('pre
 install_data('data/org.rastersoft.cronopete.gschema.xml', install_dir: join_paths(get_option('prefix'),get_option('datadir'), 'glib-2.0', 'schemas'))
 meson.add_install_script('meson_scripts/install_schemas.py')
 	install_data('data/interface/about.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
-	install_data('data/interface/backend_chooser.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/chooser.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/config_exported.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))
 	install_data('data/interface/folder_selector.ui', install_dir: join_paths(get_option('prefix'),get_option('datadir'),'cronopete'))

@@ -47,7 +47,7 @@ namespace cronopete {
 		private bool backend_enabled;
 
 		public backup_folder() {
-			this.folder_path        = null;
+			this.folder_path       = null;
 			this.current_child_pid = -1;
 			this.aborting          = false;
 			this.folders           = null;
@@ -55,6 +55,8 @@ namespace cronopete {
 			this.current_backup    = null;
 			this.deleting_mode     = -1;
 			this.last_backup_time  = 0;
+			GLib.Timeout.add(3000, this.check_folder_exists);
+			this.check_folder_exists();
 		}
 
 		public override void in_use(bool backend_enabled) {
@@ -89,7 +91,7 @@ namespace cronopete {
 		}
 
 		public override bool get_backup_data(out string ? id, out time_t oldest, out time_t newest, out uint64 total_space, out uint64 free_space, out string ? icon) {
-			id     = cronopete_settings.get_string("backup-folder");
+			id     = cronopete_settings.get_string("folder-backup");
 			icon   = "folder";
 			oldest = 0;
 			this.last_backup_time = 0;
@@ -659,22 +661,51 @@ namespace cronopete {
 		}
 
 		public override bool configure_backup_device(Gtk.Window main_window) {
-			var choose_window = new c_choose_disk(main_window);
-			var disk_uuid     = choose_window.run(this.cronopete_settings);
-			if (disk_uuid != null) {
-				this.cronopete_settings.set_string("backup-folder", disk_uuid);
+			var builder = new Gtk.Builder();
+			try {
+				builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "folder_selector.ui"));
+			} catch (GLib.Error e) {
+				print("Failed to create the window for choosing the folder\n");
+				return false;
 			}
+
+			var w  = (Gtk.FileChooserDialog)builder.get_object("folder_selector");
+			var b1 = new Gtk.Button.with_label(_("Cancel"));
+			var b2 = new Gtk.Button.with_label(_("Add"));
+			w.add_action_widget(b1, Gtk.ResponseType.CANCEL);
+			w.add_action_widget(b2, Gtk.ResponseType.OK);
+			w.transient_for   = main_window;
+			w.create_folders  = true;
+			w.select_multiple = false;
+			w.local_only      = false;
+			w.action          = Gtk.FileChooserAction.SELECT_FOLDER;
+			var current = this.cronopete_settings.get_string("folder-backup");
+			if ((current != null) && (current != "")) {
+				w.set_current_folder(current);
+			}
+			w.show_all();
+			var r = w.run();
+
+			if (r == Gtk.ResponseType.OK) {
+				current = w.get_current_folder();
+				if ((current != null) && (current != "")) {
+					this.cronopete_settings.set_string("folder-backup", current);
+					this.check_folder_exists();
+				}
+			}
+			w.hide();
+			w.destroy();
 			return false;
 		}
 
-		private void check_folder_exists() {
+		private bool check_folder_exists() {
 			var folder = this.cronopete_settings.get_string("folder-backup");
 			if ((folder == null) || (folder == "")) {
 				if (this.folder_path != null) {
 					this.folder_path = null;
 					this.is_available_changed(false);
 				}
-				return;
+				return true;
 			}
 			var ffile = File.new_for_path(folder);
 			if (ffile.query_exists() == false) {
@@ -682,16 +713,15 @@ namespace cronopete {
 					this.folder_path = null;
 					this.is_available_changed(false);
 				}
-				return;
+				return true;
 			}
 			if (this.folder_path == null) {
 				this.folder_path = Path.build_filename(folder, "cronopete");
 				this.is_available_changed(true);
-				return;
 			}
 			this.folder_path = Path.build_filename(folder, "cronopete");
+			return true;
 		}
-
 	}
 
 	public class folder_element : backup_element {

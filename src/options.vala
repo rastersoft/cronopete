@@ -95,7 +95,7 @@ public class c_options : GLib.Object {
 		retval = this.main_w.run();
 		this.main_w.hide();
 		this.main_w.destroy();
-		if (retval == -6) {
+		if (retval == Gtk.ResponseType.OK) {
 			if (this.b_hiden.active) {
 				this.cronopete_settings.set_boolean("skip-hiden-at-home", false);
 			} else {
@@ -182,10 +182,14 @@ public class c_options : GLib.Object {
 			Posix.exit(48);
 		}
 		var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
+		var b1 = new Gtk.Button.with_label(_("Cancel"));
+		var b2 = new Gtk.Button.with_label(_("Add"));
+		selector.add_action_widget(b1, Gtk.ResponseType.CANCEL);
+		selector.add_action_widget(b2, Gtk.ResponseType.OK);
 		selector.set_transient_for(this.main_w);
 		selector.show_all();
 		retval = selector.run();
-		if (retval == -6) {
+		if (retval == Gtk.ResponseType.OK) {
 			var files = selector.get_filenames();
 			foreach (var file_uri in files) {
 				if (file_uri != null) {
@@ -216,9 +220,13 @@ public class c_options : GLib.Object {
 		}
 		var selector = (FileChooserDialog) tmp_builder.get_object("folder_selector");
 		selector.set_transient_for(this.main_w);
+		var b1 = new Gtk.Button.with_label(_("Cancel"));
+		var b2 = new Gtk.Button.with_label(_("Add"));
+		selector.add_action_widget(b1, Gtk.ResponseType.CANCEL);
+		selector.add_action_widget(b2, Gtk.ResponseType.OK);
 		selector.show_all();
 		retval = selector.run();
-		if (retval == -6) {
+		if (retval == Gtk.ResponseType.OK) {
 			var files = selector.get_filenames();
 			foreach (var file_uri in files) {
 				if (file_uri != null) {

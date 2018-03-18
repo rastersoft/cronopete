@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-14 23:56+0100\n"
-"PO-Revision-Date: 2018-03-14 23:57+0100\n"
+"POT-Creation-Date: 2018-03-18 19:08+0100\n"
+"PO-Revision-Date: 2018-03-18 19:08+0100\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: \n"
@@ -25,115 +25,133 @@ msgstr ""
 msgid "Ready"
 msgstr "Preparado"
 
-#: src/backup_rsync.vala:113
+#: src/backup_folder.vala:67
+msgid "Store backups in a folder"
+msgstr "Almacenar las copias en una carpeta"
+
+#: src/backup_folder.vala:116 src/backup_rsync.vala:125
 msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr "No se han podido crear las carpetas base para las copias. Cancelando."
 
-#: src/backup_rsync.vala:252
+#: src/backup_folder.vala:255 src/backup_rsync.vala:264
 #, c-format
 msgid "Failed to launch cp to restore: %s"
 msgstr "No se ha podido restaurar el archivo %s"
 
-#: src/backup_rsync.vala:284
+#: src/backup_folder.vala:283 src/backup_rsync.vala:296
 msgid "Starting backup"
 msgstr "Comenzando la copia"
 
-#: src/backup_rsync.vala:322
+#: src/backup_folder.vala:321 src/backup_rsync.vala:334
 msgid "Cleaning incomplete backups"
 msgstr "Borrando copias incompletas"
 
-#: src/backup_rsync.vala:353
+#: src/backup_folder.vala:352 src/backup_rsync.vala:365
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr "Copia terminada. Tiempo transcurrido: %d:%02d"
 
-#: src/backup_rsync.vala:360
+#: src/backup_folder.vala:359 src/backup_rsync.vala:372
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Se ha pedido liberar espacio del disco cuando aún queda espacio libre. "
 "Cancelando"
 
-#: src/backup_rsync.vala:375
+#: src/backup_folder.vala:374 src/backup_rsync.vala:387
 msgid "Backup aborted"
 msgstr "Copia cancelada"
 
-#: src/backup_rsync.vala:418
+#: src/backup_folder.vala:417 src/backup_rsync.vala:430
 msgid "Failed to delete aborted backups: "
 msgstr "No se han podido borrar las copias abortadas: "
 
-#: src/backup_rsync.vala:443
+#: src/backup_folder.vala:442 src/backup_rsync.vala:455
 #, c-format
 msgid "Backing up folder %s"
 msgstr "Copiando la carpeta %s"
 
-#: src/backup_rsync.vala:464
+#: src/backup_folder.vala:463 src/backup_rsync.vala:476
 #, c-format
 msgid "Excluding folder %s"
 msgstr "Excluyendo la carpeta %s"
 
-#: src/backup_rsync.vala:473
+#: src/backup_folder.vala:472 src/backup_rsync.vala:485
 #, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr "No se ha podido lanzar rsync para '%s'. Cancelando"
 
-#: src/backup_rsync.vala:492
+#: src/backup_folder.vala:491 src/backup_rsync.vala:504
 #, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr "Hubo un problema al copiar la carpeta '%s'"
 
-#: src/backup_rsync.vala:507
+#: src/backup_folder.vala:506 src/backup_rsync.vala:519
 #, c-format
 msgid "Backing up %s"
 msgstr "Copiando la carpeta %s"
 
-#: src/backup_rsync.vala:540 src/backup_rsync.vala:541
+#: src/backup_folder.vala:539 src/backup_folder.vala:540
+#: src/backup_rsync.vala:552 src/backup_rsync.vala:553
 msgid "Syncing disk"
 msgstr "Sincronizando el disco"
 
-#: src/backup_rsync.vala:547
+#: src/backup_folder.vala:546 src/backup_rsync.vala:559
 msgid "Failed to launch sync command"
 msgstr "No se ha podido lanzar el comando sync"
 
-#: src/backup_rsync.vala:570
+#: src/backup_folder.vala:569 src/backup_rsync.vala:582
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr "No se ha podido renombrar la carpeta de una copia. Cancelando"
 
-#: src/backup_rsync.vala:583
+#: src/backup_folder.vala:582 src/backup_rsync.vala:595
 msgid "Failed to launch final sync command"
 msgstr "No se ha podido lanzar el comando sync final"
 
-#: src/backup_rsync.vala:593
+#: src/backup_folder.vala:592 src/backup_rsync.vala:605
 msgid "Disk synced, cleaning old backups"
 msgstr "Disco sincronizado, borrando copias antiguas"
 
-#: src/backup_rsync.vala:609 src/cronopete.vala:187
+#: src/backup_folder.vala:608 src/backup_rsync.vala:621 src/cronopete.vala:222
 msgid "Cleaning old backups"
 msgstr "Borrando copias antiguas"
 
-#: src/backup_rsync.vala:615
+#: src/backup_folder.vala:614 src/backup_rsync.vala:627
 msgid "No old backups to delete"
 msgstr "No hay copias antiguas que borrar"
 
-#: src/backup_rsync.vala:642
+#: src/backup_folder.vala:641 src/backup_rsync.vala:654
 #, c-format
 msgid "Deleting old backup %s"
 msgstr "Borrando copia antigua %s"
 
-#: src/backup_rsync.vala:649
+#: src/backup_folder.vala:648 src/backup_rsync.vala:661
 #, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr "No se ha podido borrar la copia antigua %s: %s"
 
-#: src/choose.vala:112
+#: src/backup_folder.vala:673 src/options.vala:185 src/options.vala:223
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/backup_folder.vala:674 src/options.vala:186 src/options.vala:224
+#: data/interface/options.ui:115 data/interface/options.ui:205
+msgid "Add"
+msgstr "Añadir"
+
+#: src/backup_rsync.vala:76
+msgid "Store backups in an external hard disk"
+msgstr "Almacenar las copias en un disco duro externo"
+
+#: src/choose_disk.vala:112
 msgid "Failed to find the disk!!!!!"
 msgstr "¡¡¡¡¡No se ha encontrado el disco!!!!!"
 
-#: src/choose.vala:120 src/choose.vala:127
+#: src/choose_disk.vala:120 src/choose_disk.vala:127
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr ""
 "No se ha podido desmontar el disco. Cancelando la operación de formateo."
 
-#: src/choose.vala:152
+#: src/choose_disk.vala:152
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
@@ -141,13 +159,13 @@ msgstr ""
 "Ha fallado el formateo del disco (probablemente esté necesitando demasiado "
 "tiempo). Por favor, inténtelo de nuevo."
 
-#: src/choose.vala:167
+#: src/choose_disk.vala:167
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr ""
 "No se ha podido montar de nuevo el disco. Cancelando la operación de "
 "formateo."
 
-#: src/choose.vala:185
+#: src/choose_disk.vala:185
 msgid ""
 "The selected drive must be formated to be used for backups.\n"
 "\n"
@@ -162,72 +180,72 @@ msgstr ""
 "\n"
 "<b>Todos los datos contenidos en el disco se perderán</b>."
 
-#: src/choose.vala:435
+#: src/choose_disk.vala:435
 msgid "Unknown FS"
 msgstr "FS desconocido"
 
-#: src/choose.vala:453
+#: src/choose_disk.vala:453
 msgid "Unknown size"
 msgstr "Tamaño desconocido"
 
-#: src/cronopete.vala:165
+#: src/cronopete.vala:200
 msgid "Disk not available"
 msgstr "Disco no disponible"
 
-#: src/cronopete.vala:172
+#: src/cronopete.vala:207
 msgid "Idle"
 msgstr "En reposo"
 
-#: src/cronopete.vala:182
+#: src/cronopete.vala:217
 msgid "Doing backup"
 msgstr "Copiando"
 
-#: src/cronopete.vala:195
+#: src/cronopete.vala:230
 msgid "Doing backup, have a warning"
 msgstr "Copiando, hay un aviso"
 
-#: src/cronopete.vala:200
+#: src/cronopete.vala:235
 msgid "Doing backup, have an error"
 msgstr "Copiando, hay un error"
 
-#: src/cronopete.vala:206
+#: src/cronopete.vala:241
 msgid "Backup is disabled"
 msgstr "Copias desactivadas"
 
-#: src/cronopete.vala:307
+#: src/cronopete.vala:342
 msgid "Back Up Now"
 msgstr "Copiar ahora"
 
-#: src/cronopete.vala:310
+#: src/cronopete.vala:345
 msgid "Stop Backing Up"
 msgstr "Detener la copia"
 
-#: src/cronopete.vala:314 src/restore.vala:89
+#: src/cronopete.vala:349 src/restore.vala:89
 msgid "Restore files"
 msgstr "Restaurar archivos"
 
-#: src/cronopete.vala:322
+#: src/cronopete.vala:357
 msgid "Configure backup policies"
 msgstr "Configurar la copia de seguridad"
 
-#: src/cronopete.vala:330
+#: src/cronopete.vala:365
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Última copia: %s"
 
-#: src/dates.vala:25
+#: src/helpers.vala:25
 msgid "Not available"
 msgstr "No disponible"
 
-#: src/dates.vala:37
+#: src/helpers.vala:37
 msgid "today at %R"
 msgstr "Hoy a las %R"
 
-#: src/dates.vala:41
+#: src/helpers.vala:41
 msgid "yesterday at %R"
 msgstr "ayer a las %R"
 
-#: src/dates.vala:45
+#: src/helpers.vala:45
 msgid "tomorrow at %R"
 msgstr "mañana a las %R"
 
@@ -283,26 +301,26 @@ msgstr "Mostrar como lista"
 msgid "Folder"
 msgstr "Carpeta"
 
-#: src/menu.vala:93
+#: src/menu.vala:134
 #, c-format
 msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
 msgstr "<span foreground=\"#FF7F00\">AVISO:</span> %s"
 
-#: src/menu.vala:96
+#: src/menu.vala:137
 #, c-format
 msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 msgstr "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 
-#: src/menu.vala:112
+#: src/menu.vala:169
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
-#: src/menu.vala:169
+#: src/menu.vala:226
 msgid "Not defined"
 msgstr "No definido"
 
-#: src/menu.vala:185
+#: src/menu.vala:251
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
@@ -389,21 +407,11 @@ msgstr ""
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr "¿Por qué <i>ana<b>CRONOPETE</b></i>?"
 
-#: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
-#: data/interface/format_force.ui:26 data/interface/options.ui:35
-#: data/interface/restore_error.ui:40 data/interface/restoring.ui:56
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: data/interface/chooser.ui:40
-msgid "Select"
-msgstr "Seleccionar"
-
-#: data/interface/chooser.ui:68
+#: data/interface/chooser.ui:70
 msgid "Available USB disks:"
 msgstr "Discos USB disponibles:"
 
-#: data/interface/chooser.ui:103
+#: data/interface/chooser.ui:105
 msgid "Show all disks (except /home)"
 msgstr "Mostrar todos los discos (excepto /home)"
 
@@ -420,16 +428,7 @@ msgstr ""
 "Por favor, compruebe la lista de carpetas para asegurarse de que todo está "
 "correcto."
 
-#: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
-#: data/interface/options.ui:49 data/interface/restore_ok.ui:33
-msgid "Ok"
-msgstr "Aceptar"
-
-#: data/interface/folder_selector.ui:41
-msgid "Add folder(s)"
-msgstr "Añadir carpeta(s)"
-
-#: data/interface/format_error.ui:50
+#: data/interface/format_error.ui:51
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
@@ -437,7 +436,7 @@ msgstr ""
 "Se ha producido un error durante\n"
 "la operación de formateado. Cancelado."
 
-#: data/interface/format_error.ui:88
+#: data/interface/format_error.ui:89
 msgid "<b>Error info</b>"
 msgstr "<b>Información del error</b>"
 
@@ -463,37 +462,37 @@ msgstr "ana"
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:224
+#: data/interface/main.ui:239
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: data/interface/main.ui:237
+#: data/interface/main.ui:252
 msgid "Oldest backup:"
 msgstr "Primera copia:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:250
+#: data/interface/main.ui:265
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Disponible:"
 
-#: data/interface/main.ui:263
-msgid "Device:"
-msgstr "Dispositivo:"
+#: data/interface/main.ui:278
+msgid "Destination:"
+msgstr "Destino:"
 
-#: data/interface/main.ui:276
+#: data/interface/main.ui:291
 msgid "Next backup:"
 msgstr "Próxima copia:"
 
-#: data/interface/main.ui:342
-msgid "Change disk..."
-msgstr "Cambiar el disco..."
+#: data/interface/main.ui:346
+msgid "Change destination..."
+msgstr "Cambiar el destino..."
 
-#: data/interface/main.ui:357 data/interface/options.ui:17
+#: data/interface/main.ui:361 data/interface/options.ui:17
 msgid "Options"
 msgstr "Opciones"
 
-#: data/interface/main.ui:382
+#: data/interface/main.ui:386
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -507,19 +506,19 @@ msgstr ""
 " * Una copia diaria para el último mes\n"
 " * Copias semanales hasta que se llene el disco"
 
-#: data/interface/main.ui:401
+#: data/interface/main.ui:405
 msgid "Show Cronopete in menu bar"
 msgstr "Mostrar Cronopete en la barra"
 
-#: data/interface/main.ui:418
+#: data/interface/main.ui:422
 msgid "About"
 msgstr "Acerca de"
 
-#: data/interface/main.ui:451
+#: data/interface/main.ui:455
 msgid "Configuration"
 msgstr "Configuración"
 
-#: data/interface/main.ui:480
+#: data/interface/main.ui:484
 msgid "Log"
 msgstr "Registro"
 
@@ -527,35 +526,31 @@ msgstr "Registro"
 msgid "Folders to backup"
 msgstr "Carpetas a copiar"
 
-#: data/interface/options.ui:115 data/interface/options.ui:207
-msgid "Add"
-msgstr "Añadir"
-
-#: data/interface/options.ui:130 data/interface/options.ui:222
+#: data/interface/options.ui:129 data/interface/options.ui:219
 msgid "Remove"
 msgstr "Eliminar"
 
-#: data/interface/options.ui:156
+#: data/interface/options.ui:154
 msgid "<b>Backup these folders</b>"
 msgstr "<b>Copiar estas carpetas</b>"
 
-#: data/interface/options.ui:248
+#: data/interface/options.ui:244
 msgid "<b>Exclude these folders</b>"
 msgstr "<b>Excluir estas carpetas</b>"
 
-#: data/interface/options.ui:283
+#: data/interface/options.ui:277
 msgid "Time interval between backups (in hours):"
 msgstr "Tiempo entre copias (en horas):"
 
-#: data/interface/options.ui:296
+#: data/interface/options.ui:290
 msgid "1"
 msgstr "1"
 
-#: data/interface/restore_error.ui:53
+#: data/interface/restore_error.ui:54
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: data/interface/restore_error.ui:66
+#: data/interface/restore_error.ui:67
 msgid "Ignore all"
 msgstr "Ignorar todos"
 
@@ -592,6 +587,18 @@ msgstr ""
 "\n"
 "Ahora puede configurar el disco externo a usar para las copias y qué "
 "carpetas copiar, o dejarlo para más tarde."
+
+#~ msgid "Select"
+#~ msgstr "Seleccionar"
+
+#~ msgid "Ok"
+#~ msgstr "Aceptar"
+
+#~ msgid "Add folder(s)"
+#~ msgstr "Añadir carpeta(s)"
+
+#~ msgid "Device:"
+#~ msgstr "Dispositivo:"
 
 #~ msgid "%x at %R"
 #~ msgstr "%x a las %R"

@@ -309,8 +309,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">button1</action-widget>
-      <action-widget response="-6">button2</action-widget>
+      <action-widget response="-6">button1</action-widget>
+      <action-widget response="-5">button2</action-widget>
     </action-widgets>
     <child>
       <placeholder/>

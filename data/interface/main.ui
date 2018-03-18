@@ -165,6 +165,8 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
                     <child>
                       <object class="GtkImage" id="image_disk">
                         <property name="visible">True</property>
@@ -341,7 +343,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="change_destination">
-                        <property name="label" translatable="yes">Change disk...</property>
+                        <property name="label" translatable="yes">Change destination...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -417,11 +419,10 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="button1">
-                        <property name="label">gtk-about</property>
+                        <property name="label" translatable="yes">About</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
                         <signal name="clicked" handler="cronopete_c_main_menu_about_clicked" swapped="no"/>
                       </object>
                       <packing>
