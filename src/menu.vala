@@ -32,23 +32,28 @@ namespace  cronopete {
 		private Label label_space;
 		private Label text_status;
 		private Image disk_icon;
-		private Image img;
 		private Gtk.ToggleButton show_in_bar_ch;
 		private TextMark mark;
 		private TextView log_view;
 		private string last_status;
 		private Switch enabled_ch;
 		private StringBuilder messages;
+		private Gtk.ComboBox backend_list;
+		private Gtk.ListStore backend_list_store;
 
 		private backup_base backend;
 
 		public bool is_visible;
 		private GLib.Settings cronopete_settings;
 
-		public c_main_menu(backup_base backend) {
-			this.backend            = backend;
+		ulong[] handlers;
+
+		public c_main_menu(cronopete_class cronopete, backup_base[] backends) {
+			this.handlers           = {};
+			this.backend            = null;
 			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 			this.messages           = new StringBuilder("");
+			cronopete.changed_backend.connect(this.backend_changed);
 
 			this.builder = new Builder();
 			try {
@@ -69,13 +74,18 @@ namespace  cronopete {
 			this.label_next            = (Label) this.builder.get_object("label_next_backup");
 			this.label_space           = (Label) this.builder.get_object("label_free_space");
 			this.disk_icon             = (Image) this.builder.get_object("image_disk");
-			this.img                   = (Image) this.builder.get_object("image_disk");
+			this.backend_list          = (Gtk.ComboBox) this.builder.get_object("backend_list");
+			this.backend_list_store    = new Gtk.ListStore(2, typeof(string), typeof(int));
 			this.show_in_bar_ch        = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
 			this.text_status           = new fixed_label("", 300);
 			this.text_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
 			this.text_status.lines     = 3;
-			var status_alignment = (Gtk.Alignment) this.builder.get_object("status_frame");
-			status_alignment.add(this.text_status);
+			this.backend_list.set_model(this.backend_list_store);
+			Gtk.CellRendererText cell = new Gtk.CellRendererText();
+			this.backend_list.pack_start(cell, false);
+			this.backend_list.set_attributes(cell, "text", 0);
+			var status_alignment = (Gtk.Box) this.builder.get_object("status_frame");
+			status_alignment.pack_start(this.text_status, true, true, 2);
 
 			this.show_in_bar_ch.notify_property("active");
 
@@ -88,22 +98,74 @@ namespace  cronopete {
 			this.builder.connect_signals(this);
 			this.cronopete_settings.bind("enabled", this.enabled_ch, "active", GLib.SettingsBindFlags.DEFAULT);
 			this.cronopete_settings.bind("visible", this.show_in_bar_ch, "active", GLib.SettingsBindFlags.DEFAULT);
+			TreeIter iter;
+			uint     counter = 0;
+			foreach (var backend in backends) {
+				this.backend_list_store.append(out iter);
+				this.backend_list_store.set(iter, 0, backend.get_descriptor());
+				this.backend_list_store.set(iter, 1, counter);
+				counter++;
+			}
+			this.backend_list.set_active(this.cronopete_settings.get_int("current-backend"));
+			this.backend_list.changed.connect(this.changed_selected_backend);
+		}
 
-			this.backend.send_warning.connect((msg) => {
+		public void changed_selected_backend() {
+			var      old = this.cronopete_settings.get_int("current-backend");
+			TreeIter iter;
+			this.backend_list.get_active_iter(out iter);
+			Value v;
+			this.backend_list_store.get_value(iter, 1, out v);
+			var val = v.get_int();
+			if (val != old) {
+				this.cronopete_settings.set_int("current-backend", val);
+			}
+		}
+
+		public void backend_changed(backup_base new_backend) {
+			if (this.backend != null) {
+				foreach (var i in this.handlers) {
+					this.backend.disconnect(i);
+				}
+			}
+			this.backend     = new_backend;
+			this.handlers = {};
+			this.handlers += this.backend.send_warning.connect((msg) => {
 				this.insert_text_log(_("<span foreground=\"#FF7F00\">WARNING:</span> %s").printf(msg));
 			});
-			this.backend.send_error.connect((msg) => {
+			this.handlers += this.backend.send_error.connect((msg) => {
 				this.insert_text_log(_("<span foreground=\"#FF3F3F\">ERROR:</span> %s").printf(msg));
 			});
-			this.backend.send_message.connect((msg) => {
+			this.handlers += this.backend.send_message.connect((msg) => {
 				this.insert_text_log(msg);
 			});
-			this.backend.send_current_action.connect((msg) => {
+			this.handlers += this.backend.send_current_action.connect((msg) => {
 				var msg2 = msg.strip();
 				if (msg2 != "") {
 				    this.set_status(msg2);
 				}
 			});
+			this.handlers += this.backend.current_status_changed.connect(this.backend_status_changed);
+			this.handlers += this.backend.is_available_changed.connect(this.backend_available_changed);
+			this.refresh_backup_data();
+			this.backend_list.set_active(this.cronopete_settings.get_int("current-backend"));
+		}
+
+		public void backend_available_changed(bool is_available) {
+			if (this.main_w.visible) {
+				this.refresh_backup_data();
+			}
+		}
+
+		public void backend_status_changed(backup_current_status status) {
+			if (this.main_w.visible) {
+				if (status == backup_current_status.IDLE) {
+					this.backend_list.sensitive = true;
+					this.refresh_backup_data();
+				} else {
+					this.backend_list.sensitive = false;
+				}
+			}
 		}
 
 		public void set_status(string msg) {
@@ -177,7 +239,11 @@ namespace  cronopete {
 			if (next < now) {
 				next = now + 600;
 			}
-			this.label_next.set_text(cronopete.date_to_string(next));
+			if (this.backend.storage_is_available()) {
+				this.label_next.set_text(cronopete.date_to_string(next));
+			} else {
+				this.label_next.set_text("---");
+			}
 			this.disk_icon.set_from_icon_name(icon, IconSize.DIALOG);
 
 			/* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB

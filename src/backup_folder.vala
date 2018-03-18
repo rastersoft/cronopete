@@ -20,7 +20,7 @@ using GLib;
 using Posix;
 
 namespace cronopete {
-	public class backup_rsync : backup_base {
+	public class backup_folder : backup_base {
 		// contains all the folders that must be backed up, and the exclusions for each one
 		private Gee.List<folder_container ?> ? folders;
 		// the disk monitor object to manage the disks
@@ -50,8 +50,7 @@ namespace cronopete {
 
 		private bool backend_enabled;
 
-		public backup_rsync() {
-			this.backend_enabled   = false;
+		public backup_folder() {
 			this.drive_path        = null;
 			this.base_drive_path   = null;
 			this.current_child_pid = -1;
@@ -73,7 +72,7 @@ namespace cronopete {
 		}
 
 		public override string get_descriptor() {
-			return (_("external hard disk"));
+			return (_("any folder"));
 		}
 
 		public override time_t get_last_backup() {
@@ -100,8 +99,8 @@ namespace cronopete {
 		}
 
 		public override bool get_backup_data(out string ? id, out time_t oldest, out time_t newest, out uint64 total_space, out uint64 free_space, out string ? icon) {
-			id     = cronopete_settings.get_string("backup-uid");
-			icon   = "drive-harddisk";
+			id     = cronopete_settings.get_string("backup-uid2");
+			icon   = "folder";
 			oldest = 0;
 			this.last_backup_time = 0;
 			newest      = 0;
@@ -183,7 +182,7 @@ namespace cronopete {
 							newest = backup_time;
 							this.last_backup_time = newest;
 						}
-						folder_list.add(new rsync_element(backup_time, this.drive_path, file_info));
+						folder_list.add(new folder_element(backup_time, this.drive_path, file_info));
 					}
 				}
 			} catch (Error e) {
@@ -209,9 +208,9 @@ namespace cronopete {
 		}
 
 		public override bool get_filelist(backup_element backup, string current_path, out Gee.List<file_information ?> files) {
-			FileInfo      info_file;
-			FileType      typeinfo;
-			rsync_element rbackup = backup as rsync_element;
+			FileInfo       info_file;
+			FileType       typeinfo;
+			folder_element rbackup = backup as folder_element;
 
 			try {
 				files = new Gee.ArrayList<file_information ?>();
@@ -248,7 +247,7 @@ namespace cronopete {
 		}
 
 		public override bool restore_file_folder(backup_element backup, string path, string origin_filename, string destination_filename, bool is_folder) {
-			var backup2 = backup as rsync_element;
+			var backup2 = backup as folder_element;
 
 			var origin_fullpath      = Path.build_filename(backup2.full_path, path, origin_filename);
 			var destination_fullpath = Path.build_filename(path, destination_filename);
@@ -310,9 +309,9 @@ namespace cronopete {
 			if (backups == null) {
 				return false;
 			}
-			rsync_element last_backup_element = null;
+			folder_element last_backup_element = null;
 			foreach (var backup in backups) {
-				var backup2 = backup as rsync_element;
+				var backup2 = backup as folder_element;
 				if (last_backup_element == null) {
 					last_backup_element = backup2;
 				} else {
@@ -650,7 +649,7 @@ namespace cronopete {
 				if (backup_tmp.keep) {
 					continue;
 				}
-				var backup = backup_tmp as rsync_element;
+				var backup = backup_tmp as folder_element;
 				this.send_message(_("Deleting old backup %s").printf(backup.path));
 				File remove_folder = File.new_for_path(backup.full_path);
 				// First rename every backup that must be deleted, by preppending a 'C' letter
@@ -675,7 +674,7 @@ namespace cronopete {
 
 		private void refresh_connect() {
 			var volumes    = this.monitor.get_volumes();
-			var drive_uuid = cronopete_settings.get_string("backup-uid");
+			var drive_uuid = cronopete_settings.get_string("backup-uid2");
 			this.base_drive_path = null;
 			foreach (Volume v in volumes) {
 				if ((drive_uuid != "") && (drive_uuid == v.get_identifier("uuid"))) {
@@ -717,14 +716,16 @@ namespace cronopete {
 		public override bool configure_backup_device(Gtk.Window main_window) {
 			var choose_window = new c_choose_disk(main_window);
 			var disk_uuid     = choose_window.run(this.cronopete_settings);
+			print("Choosen disk: %s\n".printf(disk_uuid));
 			if (disk_uuid != null) {
-				this.cronopete_settings.set_string("backup-uid", disk_uuid);
+				this.cronopete_settings.set_string("backup-uid2", disk_uuid);
+				this.refresh_connect();
 			}
 			return false;
 		}
 	}
 
-	public class rsync_element : backup_element {
+	public class folder_element : backup_element {
 		/**
 		 * Extending the "backup_element" class, to simplify managing the backups
 		 * by keeping the folder where it is stored.
@@ -734,7 +735,7 @@ namespace cronopete {
 		public string path;
 		public string full_path;
 
-		public rsync_element(time_t t, string path, FileInfo f) {
+		public folder_element(time_t t, string path, FileInfo f) {
 			this.set_common_data(t);
 			this.file_info = f;
 			this.path      = f.get_name();

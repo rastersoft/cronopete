@@ -100,8 +100,21 @@ namespace cronopete {
 			}
 		}
 
+		/**
+		 * Allows the main program to specify to the backend whether it is being used or not
+		 * @param backend_enabled If TRUE, this backend is currently active; if FALSE, it is not being used
+		 */
+		public abstract void in_use(bool backend_enabled);
+
 		protected GLib.Settings cronopete_settings;
 		protected backup_current_status _current_status;
+
+		/**
+		 * Returns the text description for this backend
+		 * @return A textual description explaining where this backend will store the backups
+		 */
+
+		public abstract string get_descriptor();
 
 		/**
 		 * Returns the time of the last backup

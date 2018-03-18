@@ -48,4 +48,39 @@ namespace cronopete {
 			return last_backup.format("%x, %R");
 		}
 	}
+
+	private struct folder_container {
+		public string   folder;
+		public string[] exclude;
+		public bool     valid;
+
+		public folder_container(string folder, string[] exclude_list, bool skip_hidden_at_home) {
+			this.valid = true;
+			if (!folder.has_suffix("/")) {
+				this.folder = folder + "/";
+			} else {
+				this.folder = folder;
+			}
+			this.exclude = {};
+			foreach (var x in exclude_list) {
+				if (!x.has_suffix("/")) {
+					x = x + "/";
+				}
+				if (x == this.folder) {
+					valid = false;
+					break;
+				}
+				if (x.has_prefix(this.folder)) {
+					// "-1" to include the path separator before
+					this.exclude += x.substring(this.folder.length - 1);
+				}
+			}
+			// If this folder is the home folder, check if the hidden files/folders must be copied or not
+			var home_folder = Path.build_filename("/home", Environment.get_user_name()) + "/";
+			if ((this.folder == home_folder) && (skip_hidden_at_home)) {
+				this.exclude += "/.*";
+			}
+		}
+	}
+
 }

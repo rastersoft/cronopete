@@ -33,8 +33,10 @@ namespace cronopete {
 
 	enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
-	class cronopete_class : GLib.Object {
+	public class cronopete_class : GLib.Object {
 		private backup_base backend;
+		private backup_base[] backend_list;
+		private int current_backend;
 		private GLib.Settings cronopete_settings;
 		private c_main_menu main_menu;
 		private BackupStatus current_status;
@@ -52,27 +54,31 @@ namespace cronopete {
 
 		private restore_iface restore_window;
 
+		public signal void changed_backend(backup_base backend);
+
 		public cronopete_class() {
 			this.iconpos         = 0;
 			this.animation_timer = 0;
 			this.current_status  = BackupStatus.STOPPED;
 
-			// currently there is only the RSYNC backend
-			this.backend = new backup_rsync();
-
 			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
-
+			this.backend_list       = {};
+			// currently there is only the RSYNC backend
+			this.backend_list   += new backup_rsync();
+			this.backend_list   += new backup_folder();
+			this.current_backend = this.cronopete_settings.get_int("current-backend");
+			if (this.current_backend >= this.backend_list.length) {
+				this.current_backend = 0;
+			}
 			// Window that manages the configuration and the log
-			this.main_menu = new c_main_menu(this.backend);
+			this.main_menu = new c_main_menu(this, this.backend_list);
+
+			this.backend = null;
+			this.updated_backend();
 
 			// Create the app indicator
 			this.appindicator = new Indicator("Cronopete", "cronopete_arrow_1_green", IndicatorCategory.APPLICATION_STATUS);
 
-			// Connect all the signals
-			this.backend.send_warning.connect(this.received_warning);
-			this.backend.send_error.connect(this.received_error);
-			this.backend.is_available_changed.connect(this.backend_availability_changed);
-			this.backend.current_status_changed.connect(this.backend_status_changed);
 			this.cronopete_settings.changed.connect(this.changed_config);
 
 			// check if this is the first time we launch cronopete
@@ -85,6 +91,25 @@ namespace cronopete {
 			// wait 10 minutes before checking if a backup is needed, to allow the desktop to be fully loaded
 			this.backup_timeout = 600;
 			GLib.Timeout.add(this.backup_timeout * 1000, this.check_backup);
+		}
+
+		public void updated_backend() {
+			if (this.backend != null) {
+				// Unconnect all the signals from the old backend
+				this.backend.send_warning.disconnect(this.received_warning);
+				this.backend.send_error.disconnect(this.received_error);
+				this.backend.is_available_changed.disconnect(this.backend_availability_changed);
+				this.backend.current_status_changed.disconnect(this.backend_status_changed);
+				this.backend.in_use(false);
+			}
+			this.backend = this.backend_list[this.current_backend];
+			// Connect all the signals
+			this.backend.send_warning.connect(this.received_warning);
+			this.backend.send_error.connect(this.received_error);
+			this.backend.is_available_changed.connect(this.backend_availability_changed);
+			this.backend.current_status_changed.connect(this.backend_status_changed);
+			this.backend.in_use(true);
+			this.changed_backend(this.backend);
 		}
 
 		private bool can_do_backup() {
@@ -140,6 +165,16 @@ namespace cronopete {
 				return;
 			}
 			if (key == "enabled") {
+				this.repaint_tray_icon();
+				this.menuSystem_popup();
+				return;
+			}
+			if (key == "current-backend") {
+				this.current_backend = this.cronopete_settings.get_int("current-backend");
+				if (this.current_backend >= this.backend_list.length) {
+					this.current_backend = 0;
+				}
+				this.updated_backend();
 				this.repaint_tray_icon();
 				this.menuSystem_popup();
 				return;
