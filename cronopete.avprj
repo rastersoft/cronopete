@@ -51,6 +51,7 @@ end
 *translate: glade data/interface/restore_error.ui
 *translate: glade data/interface/restore_ok.ui
 *translate: glade data/interface/restoring.ui
+*translate: glade data/interface/warning_folder_backend.ui
 *translate: glade data/interface/welcome.ui
 *translate: vala src/backup_base.vala
 *translate: vala src/backup_folder.vala
@@ -96,6 +97,7 @@ end
 *glade: data/interface/restore_error.ui
 *glade: data/interface/restore_ok.ui
 *glade: data/interface/restoring.ui
+*glade: data/interface/warning_folder_backend.ui
 *glade: data/interface/welcome.ui
 
 *full_icon: Hicolor Applications data/icons/anacronopete_128x128.png

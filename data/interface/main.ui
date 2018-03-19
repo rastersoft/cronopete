@@ -7,7 +7,7 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">anaCRONOPETE</property>
     <property name="resizable">False</property>
-    <property name="window_position">center</property>
+    <property name="window_position">center-always</property>
     <property name="icon">anacronopete.svg</property>
     <property name="gravity">center</property>
     <signal name="delete-event" handler="cronopete_c_main_menu_on_delete_event" swapped="no"/>
@@ -152,6 +152,8 @@
                   <object class="GtkComboBox" id="backend_list">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">32</property>
+                    <property name="margin_right">32</property>
                     <property name="active">0</property>
                     <property name="id_column">0</property>
                   </object>

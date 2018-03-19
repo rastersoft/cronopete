@@ -23,4 +23,5 @@ data/interface/options.ui
 data/interface/restore_error.ui
 data/interface/restore_ok.ui
 data/interface/restoring.ui
+data/interface/warning_folder_backend.ui
 data/interface/welcome.ui

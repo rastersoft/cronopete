@@ -69,6 +69,16 @@
       <description>This is the folder where the "Folder backend" will store the backups.</description>
     </key>
 
+    <key type="b" name="enable-folder-backend">
+      <default>false</default>
+      <summary>Whether the 'store backups in a folder' backend should be enabled</summary>
+      <description>The 'store backups in a folder' backend can be considered quite dangerous because it allows to do what are considered 'bad practices' for a secure backup. Specifically, it allows to store the backups in the same physical disk (and even in the same partition) than the data to be backed up. This means that a disk failure will result in the loss of both the data and the backup.
+
+This means that the user must put a lot of care when using this backend to ensure that the folder where (s)he stores the backups belongs to a different disk. Or when using the same physical disk, that (s)he understands that there is no true backup of the data.
+
+To enable this backend, change this setting to 'true'.</description>
+    </key>
+
 	<!--<key type="" name="">
       <default></default>
       <summary></summary>

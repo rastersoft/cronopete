@@ -661,20 +661,31 @@ namespace cronopete {
 		}
 
 		public override bool configure_backup_device(Gtk.Window main_window) {
-			var builder = new Gtk.Builder();
+			var is_enabled = this.cronopete_settings.get_boolean("enable-folder-backend");
+			var builder    = new Gtk.Builder();
 			try {
-				builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "folder_selector.ui"));
+				if (is_enabled) {
+					builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "folder_selector.ui"));
+				} else {
+					builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "warning_folder_backend.ui"));
+					var w = (Gtk.Dialog)builder.get_object("warning_dialog");
+					w.transient_for = main_window;
+					w.show_all();
+					w.run();
+					w.hide();
+					w.destroy();
+					return false;
+				}
 			} catch (GLib.Error e) {
 				print("Failed to create the window for choosing the folder\n");
 				return false;
 			}
 
-			var w  = (Gtk.FileChooserDialog)builder.get_object("folder_selector");
+			var w = (Gtk.FileChooserDialog)builder.get_object("folder_selector");
 			var b1 = new Gtk.Button.with_label(_("Cancel"));
 			var b2 = new Gtk.Button.with_label(_("Add"));
 			w.add_action_widget(b1, Gtk.ResponseType.CANCEL);
 			w.add_action_widget(b2, Gtk.ResponseType.OK);
-			w.transient_for   = main_window;
 			w.create_folders  = true;
 			w.select_multiple = false;
 			w.local_only      = false;
@@ -683,9 +694,10 @@ namespace cronopete {
 			if ((current != null) && (current != "")) {
 				w.set_current_folder(current);
 			}
+
+			w.transient_for = main_window;
 			w.show_all();
 			var r = w.run();
-
 			if (r == Gtk.ResponseType.OK) {
 				current = w.get_current_folder();
 				if ((current != null) && (current != "")) {
@@ -699,8 +711,10 @@ namespace cronopete {
 		}
 
 		private bool check_folder_exists() {
+			var is_enabled = this.cronopete_settings.get_boolean("enable-folder-backend");
 			var folder = this.cronopete_settings.get_string("folder-backup");
-			if ((folder == null) || (folder == "")) {
+
+			if ((folder == null) || (folder == "") || (is_enabled == false)) {
 				if (this.folder_path != null) {
 					this.folder_path = null;
 					this.is_available_changed(false);
