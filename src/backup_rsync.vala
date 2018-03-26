@@ -718,7 +718,9 @@ namespace cronopete {
 			var choose_window = new c_choose_disk(main_window);
 			var disk_uuid     = choose_window.run(this.cronopete_settings);
 			if (disk_uuid != null) {
+				this.drive_path = null;
 				this.cronopete_settings.set_string("backup-uid", disk_uuid);
+				this.refresh_connect();
 			}
 			return false;
 		}
