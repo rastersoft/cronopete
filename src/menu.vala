@@ -22,21 +22,23 @@ using Gtk;
 namespace  cronopete {
 	public class c_main_menu : GLib.Object {
 		private weak TextBuffer log;
-		private Window main_w;
-		private Builder builder;
-		private Notebook tabs;
-		private Label label_disk_id;
-		private Label label_oldest;
-		private Label label_newest;
-		private Label label_next;
-		private Label label_space;
-		private Label text_status;
-		private Image disk_icon;
+		private Gtk.Window main_w;
+		private Gtk.Builder builder;
+		private Gtk.Notebook tabs;
+		private Gtk.Label label_disk_id;
+		private Gtk.Label label_oldest;
+		private Gtk.Label label_newest;
+		private Gtk.Label label_next;
+		private Gtk.Label label_space;
+		private Gtk.Label text_status;
+		private Gtk.Button change_destination;
+		private Gtk.Button set_options;
+		private Gtk.Image disk_icon;
 		private Gtk.ToggleButton show_in_bar_ch;
-		private TextMark mark;
-		private TextView log_view;
+		private Gtk.TextMark mark;
+		private Gtk.TextView log_view;
 		private string last_status;
-		private Switch enabled_ch;
+		private Gtk.Switch enabled_ch;
 		private StringBuilder messages;
 		private Gtk.ComboBox backend_list;
 		private Gtk.ListStore backend_list_store;
@@ -65,15 +67,17 @@ namespace  cronopete {
 
 			this.main_w = (Window) this.builder.get_object("window1");
 
-			this.log                   = (TextBuffer) this.builder.get_object("textbuffer1");
-			this.log_view              = (TextView) this.builder.get_object("textview1");
-			this.tabs                  = (Notebook) this.builder.get_object("notebook1");
-			this.label_disk_id         = (Label) this.builder.get_object("label_volume");
-			this.label_oldest          = (Label) this.builder.get_object("label_oldest_backup");
-			this.label_newest          = (Label) this.builder.get_object("label_newest_backup");
-			this.label_next            = (Label) this.builder.get_object("label_next_backup");
-			this.label_space           = (Label) this.builder.get_object("label_free_space");
-			this.disk_icon             = (Image) this.builder.get_object("image_disk");
+			this.log                   = (Gtk.TextBuffer) this.builder.get_object("textbuffer1");
+			this.log_view              = (Gtk.TextView) this.builder.get_object("textview1");
+			this.tabs                  = (Gtk.Notebook) this.builder.get_object("notebook1");
+			this.label_disk_id         = (Gtk.Label) this.builder.get_object("label_volume");
+			this.label_oldest          = (Gtk.Label) this.builder.get_object("label_oldest_backup");
+			this.label_newest          = (Gtk.Label) this.builder.get_object("label_newest_backup");
+			this.label_next            = (Gtk.Label) this.builder.get_object("label_next_backup");
+			this.label_space           = (Gtk.Label) this.builder.get_object("label_free_space");
+			this.disk_icon             = (Gtk.Image) this.builder.get_object("image_disk");
+			this.change_destination    = (Gtk.Button) this.builder.get_object("change_destination");
+			this.set_options           = (Gtk.Button) this.builder.get_object("set_options");
 			this.backend_list          = (Gtk.ComboBox) this.builder.get_object("backend_list");
 			this.backend_list_store    = new Gtk.ListStore(2, typeof(string), typeof(int));
 			this.show_in_bar_ch        = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
@@ -128,8 +132,8 @@ namespace  cronopete {
 					this.backend.disconnect(i);
 				}
 			}
-			this.backend     = new_backend;
-			this.handlers = {};
+			this.backend   = new_backend;
+			this.handlers  = {};
 			this.handlers += this.backend.send_warning.connect((msg) => {
 				this.insert_text_log(_("<span foreground=\"#FF7F00\">WARNING:</span> %s").printf(msg));
 			});
@@ -183,6 +187,22 @@ namespace  cronopete {
 				msg = msg_original + "\n";
 			} else {
 				msg = msg_original;
+			}
+
+			if (false) {
+				// a simple log for debugging purposes
+				var file = File.new_for_path(Path.build_filename("/home", Environment.get_user_name(), ".cronopete_log"));
+				DataOutputStream dos;
+				FileIOStream     os;
+				if (file.query_exists()) {
+					os = file.open_readwrite();
+					os.seek(0, SeekType.END);
+					dos = new DataOutputStream(os.output_stream);
+				} else {
+					dos = new DataOutputStream(file.create(FileCreateFlags.REPLACE_DESTINATION));
+				}
+				var now = Time.local(time_t());
+				dos.put_string("%s: %s".printf(now.to_string(), msg));
 			}
 
 			this.messages.append(msg);
@@ -240,9 +260,13 @@ namespace  cronopete {
 				this.label_next.set_text("---");
 			}
 			if (this.backend.current_status == backup_current_status.IDLE) {
-				this.backend_list.sensitive = true;
+				this.backend_list.sensitive       = true;
+				this.change_destination.sensitive = true;
+				this.set_options.sensitive        = true;
 			} else {
-				this.backend_list.sensitive = false;
+				this.backend_list.sensitive       = false;
+				this.change_destination.sensitive = false;
+				this.set_options.sensitive        = false;
 			}
 			this.disk_icon.set_from_icon_name(icon, IconSize.DIALOG);
 
