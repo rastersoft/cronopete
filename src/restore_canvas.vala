@@ -331,6 +331,12 @@ namespace cronopete {
 			c_base.restore();
 
 			// timeline
+			// c_base.select_font_face("Sans", FontSlant.NORMAL, FontWeight.BOLD);
+			// c_base.set_font_size(18.0);
+			Cairo.FontExtents extents;
+			c_base.font_extents(out extents);
+			Cairo.TextExtents textents;
+			c_base.text_extents("0000", out textents);
 			this.scale_x = 0;
 			this.scale_y = this.browser_y;
 			this.scale_w = this.screen_w / 28.0;
@@ -342,12 +348,12 @@ namespace cronopete {
 			double pos_y      = this.scale_y + this.scale_h;
 			double new_y;
 
-			var    incval = this.scale_w / 5.0;
+			double incval = this.scale_w / 5.0;
 			double nw     = this.scale_w * 3.0 / 5.0;
 			this.scale_x += incval / 2.0;
 
 			c_base.set_source_rgba(0, 0, 0, 0.6);
-			this.rounded_rectangle(c_base, this.scale_x, this.scale_y - incval, this.scale_w, this.scale_h + 2.0 * incval, 2.0 * incval);
+			this.rounded_rectangle(c_base, this.scale_x, this.scale_y - incval, this.scale_w + textents.width, this.scale_h + 2.0 * incval, 2.0 * incval);
 			c_base.fill();
 
 			c_base.set_source_rgb(1, 1, 1);
@@ -376,8 +382,75 @@ namespace cronopete {
 				last_month = time_now_dt.get_month();
 				c_base.stroke();
 			}
+			c_base.set_source_rgb(1, 1, 1);
+			var locked_pos = new Gee.ArrayList<double ?>();
+			for (int i = 0; i < 4; i++) {
+				this.set_topaint(i, extents, locked_pos, c_base, incval, nw);
+			}
 			this.current_timeline = this.backup_list[this.current_backup].ypos;
 			this.desired_timeline = this.current_timeline;
+		}
+
+		private bool set_topaint(int what_to_use, Cairo.FontExtents extents, Gee.ArrayList<double ?> locked_pos, Cairo.Context c_base, double incval, double nw) {
+			bool painted = false;
+			var last_v  = -1;
+			var paint_y = 0;
+			foreach (var i in this.backup_list) {
+				int    now_v    = -1;
+				string now_text = "";
+				double scale    = 1.0 / 3.0;
+				switch (what_to_use) {
+				case 0:
+					now_v    = i.local_time.year;
+					now_text = "%d".printf(1900 + now_v);
+					scale    = 1.0;
+					break;
+
+				case 1:
+					now_v    = i.local_time.month;
+					now_text = i.local_time.format("%b");
+					scale    = 3.0 / 5.0;
+					break;
+
+				case 2:
+					now_v    = i.local_time.day;
+					now_text = i.local_time.format("%e");
+					break;
+
+				case 3:
+					now_v    = i.local_time.hour;
+					now_text = i.local_time.format("%k:%M");
+					break;
+				}
+				if (((last_v != -1) || (what_to_use == 3)) && (last_v != now_v)) {
+					bool found = false;
+					var  min_y = i.ypos - extents.height;
+					var  max_y = i.ypos + extents.height;
+					if (what_to_use == 2) {
+						// with this, it ensures that the first text will be in hour:minute format before day format
+						var j = this.scale_y;
+						if ((j >= min_y) && (j <= max_y)) {
+							found = true;
+						}
+					}
+					if (!found) {
+						foreach (var j in locked_pos) {
+							if ((j >= min_y) && (j <= max_y)) {
+								found = true;
+								break;
+							}
+						}
+					}
+					if (!found) {
+						c_base.move_to(this.scale_x + incval + nw * scale + 2, i.ypos - extents.height * 0.5 + extents.ascent);
+						c_base.show_text(now_text);
+						locked_pos.add(i.ypos);
+						painted = true;
+					}
+				}
+				last_v = now_v;
+			}
+			return painted;
 		}
 
 		/**

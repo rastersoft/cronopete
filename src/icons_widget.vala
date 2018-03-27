@@ -497,7 +497,8 @@ namespace cronopete {
 			}
 
 			this.menu.show_all();
-			this.menu.popup_at_pointer(event);
+			this.menu.popup(null, null, null, 2, Gtk.get_current_event_time());
+			//this.menu.popup_at_pointer(event);
 		}
 
 		private void set_view_as_icons() {

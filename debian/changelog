@@ -1,3 +1,9 @@
+cronopete (3.99.0-Debian1) sid; urgency=low
+
+  * Changes made
+
+ -- Sergio Costas <rastersoft@gmail.com>  Wed, 21 Mar 2018 00:32:54 +0100
+
 cronopete (3.27.0-Debian1) sid; urgency=low
 
   * Now ignores backups "from the future" to avoid troubles when creating new backups or listing them

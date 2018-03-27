@@ -158,3 +158,4 @@ end
 *pixmap: data/pixmaps/anacronopete_tiny.svg
 *pixmap: data/pixmaps/arrows.png
 
+binary_dependency: /usr/bin/rsync

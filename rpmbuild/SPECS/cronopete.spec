@@ -1,5 +1,5 @@
 Name: cronopete
-Version: 3.27.0
+Version: 3.99.0
 Release: 1
 License: Unknown/not set
 Summary: A backup utility for Linux.
@@ -8,25 +8,21 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: vala
 BuildRequires: glibc-headers
-BuildRequires: libappindicator-gtk3-devel
-BuildRequires: atk-devel
-BuildRequires: cairo-devel
 BuildRequires: gtk3-devel
+BuildRequires: libappindicator-gtk3-devel
+BuildRequires: cairo-devel
 BuildRequires: gdk-pixbuf2-devel
 BuildRequires: libgee-devel
 BuildRequires: glib2-devel
 BuildRequires: gsl-devel
 BuildRequires: pango-devel
 BuildRequires: libudisks2-devel
-BuildRequires: libX11-devel
 BuildRequires: cmake
 BuildRequires: gettext
-BuildRequires: pkgconfig
+BuildRequires: pkgconf-pkg-config
 BuildRequires: make
 BuildRequires: intltool
 
-Requires: libappindicator-gtk3
-Requires: libdbusmenu
 Requires: gtk3
 Requires: pango
 Requires: atk
@@ -34,11 +30,13 @@ Requires: cairo-gobject
 Requires: cairo
 Requires: gdk-pixbuf2
 Requires: glib2
+Requires: libappindicator-gtk3
+Requires: libdbusmenu
 Requires: libgee
 Requires: gsl
 Requires: glibc-devel
 Requires: libudisks2
-Requires: libX11
+Requires: rsync
 
 %description
 A backup utility for Linux.

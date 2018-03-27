@@ -1,5 +1,5 @@
 pkgname=cronopete
-pkgver=3.27.0
+pkgver=3.99.0
 pkgrel=1
 pkgdesc="A backup utility for Linux.
 
@@ -7,8 +7,8 @@ Cronopete is a backup utility for Linux, modeled after Apple's Time
 Machine. It aims to simplify the creation of periodic backups.
 "
 arch=('i686' 'x86_64')
-depends=( 'atk' 'glib2' 'cairo' 'gtk3' 'pango' 'gdk-pixbuf2' 'libgee' 'libx11' )
-makedepends=( 'vala' 'glibc' 'atk' 'cairo' 'gtk3' 'gdk-pixbuf2' 'libgee' 'glib2' 'pango' 'libx11' 'cmake' 'gettext' 'pkg-config' 'gcc' 'make' 'intltool' )
+depends=( 'gtk3' 'pango' 'atk' 'cairo' 'gdk-pixbuf2' 'glib2' 'libgee' 'rsync' )
+makedepends=( 'vala' 'glibc' 'gtk3' 'cairo' 'gdk-pixbuf2' 'libgee' 'glib2' 'pango' 'cmake' 'gettext' 'pkg-config' 'gcc' 'make' 'intltool' )
 build() {
 	rm -rf ${startdir}/install
 	mkdir ${startdir}/install
