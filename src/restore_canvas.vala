@@ -84,7 +84,7 @@ namespace cronopete {
 		time_t oldest;
 		time_t newest;
 
-		public RestoreCanvas(backup_base backend, GLib.Settings settings) {
+		public RestoreCanvas(Gtk.Window base_window, backup_base backend, GLib.Settings settings) {
 			this.backend            = backend;
 			this.cronopete_settings = settings;
 			this.backup_list        = this.backend.get_backup_list(out this.oldest, out this.newest);
@@ -106,8 +106,8 @@ namespace cronopete {
 			this.box.add(this.base_layout);
 			this.box.scroll_event.connect(this.on_scroll);
 			this.box.button_release_event.connect(this.on_click);
-			this.box.key_press_event.connect(this.on_key_press);
-			this.box.key_release_event.connect(this.on_key_release);
+			base_window.key_press_event.connect(this.on_key_press);
+			base_window.key_release_event.connect(this.on_key_release);
 			this.box.sensitive = true;
 			this.box.draw.connect(this.do_draw);
 			this.box.size_allocate.connect(this.size_changed);

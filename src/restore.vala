@@ -125,7 +125,7 @@ namespace cronopete {
 			button_box.pack_start(this.current_date, true, true, 0);
 			button_box.pack_start(quit_button, false, false, 0);
 
-			this.restore_canvas = new RestoreCanvas(this.backend, this.cronopete_settings);
+			this.restore_canvas = new RestoreCanvas(this, this.backend, this.cronopete_settings);
 			this.restore_canvas.changed_backup_time.connect(this.changed_backup_time);
 			this.restore_canvas.exit_restore.connect(this.exit_restore2);
 
