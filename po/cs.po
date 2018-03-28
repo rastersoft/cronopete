@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 16:23+0200\n"
+"POT-Creation-Date: 2018-03-28 17:42+0200\n"
 "PO-Revision-Date: 2017-09-14 00:14+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -21,20 +21,22 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/backup_base.vala:98
+#. TRANSLATOR this message is shown in the configuration window to specify that cronopete is in idle state, not doing a backup
+#: src/backup_base.vala:99
 msgid "Ready"
 msgstr ""
 
-#: src/backup_folder.vala:67
+#. TRANSLATORS This is the name for the backend that allows to store the backups in a folder, instead of choosing a disk.
+#: src/backup_folder.vala:68
 msgid "Store backups in a folder"
 msgstr ""
 
-#: src/backup_folder.vala:116 src/backup_rsync.vala:125
+#: src/backup_folder.vala:117 src/backup_rsync.vala:126
 #, fuzzy
 msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr "Nedaří se vytvořit základní složky pro zálohy. Přerušení zálohování.\n"
 
-#: src/backup_folder.vala:255 src/backup_rsync.vala:264
+#: src/backup_folder.vala:256 src/backup_rsync.vala:265
 #, fuzzy, c-format
 msgid "Failed to launch cp to restore: %s"
 msgstr ""
@@ -42,118 +44,132 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/backup_folder.vala:283 src/backup_rsync.vala:296
+#: src/backup_folder.vala:284 src/backup_rsync.vala:297
 #, fuzzy
 msgid "Starting backup"
 msgstr "Spouštění zálohování\n"
 
-#: src/backup_folder.vala:321 src/backup_rsync.vala:334
+#: src/backup_folder.vala:322 src/backup_rsync.vala:335
 #, fuzzy
 msgid "Cleaning incomplete backups"
 msgstr "Mazání starých záloh"
 
-#: src/backup_folder.vala:352 src/backup_rsync.vala:365
+#: src/backup_folder.vala:353 src/backup_rsync.vala:366
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr ""
 
-#: src/backup_folder.vala:359 src/backup_rsync.vala:372
+#: src/backup_folder.vala:360 src/backup_rsync.vala:373
 #, fuzzy
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Nepodařilo se uvolnit dostatečný prostor pro zahájení zálohování. Přerušení "
 "zálohování.\n"
 
-#: src/backup_folder.vala:374 src/backup_rsync.vala:387
+#: src/backup_folder.vala:375 src/backup_rsync.vala:388
 msgid "Backup aborted"
 msgstr "Zálohování přerušeno"
 
-#: src/backup_folder.vala:417 src/backup_rsync.vala:430
-msgid "Failed to delete aborted backups: "
+#: src/backup_folder.vala:402 src/backup_rsync.vala:415
+#, fuzzy, c-format
+msgid "Failed to delete folders: %s"
 msgstr ""
+"Nezdařilo se obnovit soubor\n"
+"\n"
+"%s"
 
-#: src/backup_folder.vala:442 src/backup_rsync.vala:455
+#: src/backup_folder.vala:418 src/backup_rsync.vala:431
+#, fuzzy, c-format
+msgid "Failed to delete aborted backups: %s"
+msgstr ""
+"Nepodařilo se uvolnit dostatečný prostor pro zahájení zálohování. Přerušení "
+"zálohování.\n"
+
+#: src/backup_folder.vala:443 src/backup_rsync.vala:456
 #, fuzzy, c-format
 msgid "Backing up folder %s"
 msgstr "Zálohování složky %s\n"
 
-#: src/backup_folder.vala:463 src/backup_rsync.vala:476
+#: src/backup_folder.vala:464 src/backup_rsync.vala:477
 #, fuzzy, c-format
 msgid "Excluding folder %s"
 msgstr "Vynechání složky %s.\n"
 
-#: src/backup_folder.vala:472 src/backup_rsync.vala:485
+#: src/backup_folder.vala:473 src/backup_rsync.vala:486
 #, fuzzy, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr ""
 "Nepodařilo se uvolnit dostatečný prostor pro zahájení zálohování. Přerušení "
 "zálohování.\n"
 
-#: src/backup_folder.vala:491 src/backup_rsync.vala:504
+#: src/backup_folder.vala:492 src/backup_rsync.vala:505
 #, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr ""
 
-#: src/backup_folder.vala:506 src/backup_rsync.vala:519
+#: src/backup_folder.vala:507 src/backup_rsync.vala:520
 #, fuzzy, c-format
 msgid "Backing up %s"
 msgstr "Zálohování složky %s\n"
 
-#: src/backup_folder.vala:539 src/backup_folder.vala:540
-#: src/backup_rsync.vala:552 src/backup_rsync.vala:553
+#: src/backup_folder.vala:540 src/backup_folder.vala:541
+#: src/backup_rsync.vala:553 src/backup_rsync.vala:554
 #, fuzzy
 msgid "Syncing disk"
 msgstr "Synchronizace (flash)disku\n"
 
-#: src/backup_folder.vala:546 src/backup_rsync.vala:559
+#: src/backup_folder.vala:547 src/backup_rsync.vala:560
 msgid "Failed to launch sync command"
 msgstr ""
 
-#: src/backup_folder.vala:569 src/backup_rsync.vala:582
+#: src/backup_folder.vala:570 src/backup_rsync.vala:583
 #, fuzzy
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr ""
 "Nepodařilo se uvolnit dostatečný prostor pro zahájení zálohování. Přerušení "
 "zálohování.\n"
 
-#: src/backup_folder.vala:582 src/backup_rsync.vala:595
+#: src/backup_folder.vala:583 src/backup_rsync.vala:596
 msgid "Failed to launch final sync command"
 msgstr ""
 
-#: src/backup_folder.vala:592 src/backup_rsync.vala:605
+#: src/backup_folder.vala:593 src/backup_rsync.vala:606
 #, fuzzy
 msgid "Disk synced, cleaning old backups"
 msgstr "Mazání starých záloh"
 
-#: src/backup_folder.vala:608 src/backup_rsync.vala:621 src/cronopete.vala:222
+#: src/backup_folder.vala:609 src/backup_rsync.vala:622 src/cronopete.vala:224
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "Mazání starých záloh"
 
-#: src/backup_folder.vala:614 src/backup_rsync.vala:627
+#: src/backup_folder.vala:615 src/backup_rsync.vala:628
 msgid "No old backups to delete"
 msgstr ""
 
-#: src/backup_folder.vala:641 src/backup_rsync.vala:654
+#: src/backup_folder.vala:642 src/backup_rsync.vala:655
 #, fuzzy, c-format
 msgid "Deleting old backup %s"
 msgstr "Mazání starých záloh"
 
-#: src/backup_folder.vala:648 src/backup_rsync.vala:661
+#: src/backup_folder.vala:649 src/backup_rsync.vala:662
 #, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
-#: src/backup_folder.vala:685 src/options.vala:185 src/options.vala:223
+#. TRANSLATORS This is the text for a Cancel button, that cancels the current action of choosing a folder where to do the backups
+#: src/backup_folder.vala:687 src/options.vala:185 src/options.vala:223
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/backup_folder.vala:686 src/options.vala:186 src/options.vala:224
+#. TRANSLATORS This is the text for an Add button, that adds a selected folder as the destination where to do the backups when using the "backup to folder" backend
+#: src/backup_folder.vala:689 src/options.vala:186 src/options.vala:224
 #: data/interface/options.ui:115 data/interface/options.ui:205
 msgid "Add"
 msgstr "Přidat"
 
-#: src/backup_rsync.vala:76
+#. TRANSLATORS This is the name for the backend that allows to store the backups in an external disk
+#: src/backup_rsync.vala:77
 msgid "Store backups in an external hard disk"
 msgstr ""
 
@@ -193,62 +209,77 @@ msgstr ""
 "\n"
 "<b>Veškerá data na tomto (flash)disku budou smazána!</b>."
 
-#: src/choose_disk.vala:435
+#. TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
+#: src/choose_disk.vala:436
 msgid "Unknown FS"
 msgstr "Neznámý souborový systém"
 
-#: src/choose_disk.vala:453
+#. TRANSLATORS Specifies that the size of an external disk is unknown
+#: src/choose_disk.vala:455
 msgid "Unknown size"
 msgstr "Neznámá velikost"
 
-#: src/cronopete.vala:200
+#. TRANSLATORS Specify that the disk configured for backups is not available
+#: src/cronopete.vala:201
 #, fuzzy
 msgid "Disk not available"
 msgstr "Úložiště není k dispozici"
 
-#: src/cronopete.vala:207
+#. TRANSLATORS The program state, used in a tooltip, when it is waiting to do the next backup
+#: src/cronopete.vala:209
 msgid "Idle"
 msgstr "Nečinné"
 
-#: src/cronopete.vala:217
+#: src/cronopete.vala:219
 #, fuzzy
 msgid "Doing backup"
 msgstr "Spouštění zálohování\n"
 
-#: src/cronopete.vala:230
+#. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, a warning message
+#: src/cronopete.vala:233
 msgid "Doing backup, have a warning"
 msgstr ""
 
-#: src/cronopete.vala:235
+#. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, an error message
+#: src/cronopete.vala:239
 msgid "Doing backup, have an error"
 msgstr ""
 
-#: src/cronopete.vala:241
+#. TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
+#: src/cronopete.vala:246
 #, fuzzy
 msgid "Backup is disabled"
 msgstr "Zálohování vypnuto"
 
-#: src/cronopete.vala:342
+#. TRANSLATORS Menu entry to start a new backup manually
+#: src/cronopete.vala:348
 msgid "Back Up Now"
 msgstr "Zazálohovat nyní"
 
-#: src/cronopete.vala:345
+#. TRANSLATORS Menu entry to abort the current backup manually
+#: src/cronopete.vala:352
 msgid "Stop Backing Up"
 msgstr "Zastavit zálohování"
 
-#: src/cronopete.vala:349 src/restore.vala:89
+#. TRANSLATORS Menu entry to open the interface for restoring files from a backup
+#. TRANSLATORS Text for the button that restores the selected files
+#: src/cronopete.vala:357 src/restore.vala:90
 msgid "Restore files"
 msgstr "Obnovit soubory"
 
-#: src/cronopete.vala:357
-msgid "Configure backup policies"
+#. TRANSLATORS Menu entry to open the configuration window
+#: src/cronopete.vala:366
+#, fuzzy
+msgid "Configure the backups"
 msgstr "Nastavit pravidla zálohování"
 
-#: src/cronopete.vala:365
+#. TRANSLATORS Show the date of the last backup
+#: src/cronopete.vala:375
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Nejnovější záloha: %s"
 
+#. TRANSLATORS "Not available" refers to a backup (e.g. when the disk is not connected, the backups are not available)
 #: src/helpers.vala:25
 #, fuzzy
 msgid "Not available"
@@ -271,82 +302,100 @@ msgstr "Včera, v %H:%M"
 msgid "tomorrow at %R"
 msgstr ""
 
-#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime
+#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour/minute
 #: src/helpers.vala:48
-msgid "%B %e, %Y %R"
+msgid "%B %e, %Y  %R"
 msgstr ""
 
-#: src/icons_widget.vala:159
+#. TRANSLATOR this is the column in a file manager where file names are displayed
+#: src/icons_widget.vala:160
 msgid "Name"
 msgstr "Název"
 
-#: src/icons_widget.vala:166
+#. TRANSLATOR this is the column in a file manager where file types are displayed
+#: src/icons_widget.vala:168
 msgid "Type"
 msgstr ""
 
-#: src/icons_widget.vala:173
+#. TRANSLATOR this is the column in a file manager where file sizes are displayed
+#: src/icons_widget.vala:176
 msgid "Size"
 msgstr "Velikost"
 
-#: src/icons_widget.vala:178
+#. TRANSLATOR this is the column in a file manager where file modification dates are displayed
+#: src/icons_widget.vala:182
 msgid "Modification date"
 msgstr "Datum úpravy"
 
-#: src/icons_widget.vala:432
+#. TRANSLATOR this is for a popup in a file manager, to choose whether the hidden files in a folder should be shown or not
+#: src/icons_widget.vala:437
 msgid "Show hidden files"
 msgstr "Zobrazit skryté soubory"
 
-#: src/icons_widget.vala:440
+#. TRANSLATOR this is for a popup in a file manager, to choose to reverse the sorting order
+#: src/icons_widget.vala:446
 msgid "Reverse order"
 msgstr "Obrácené pořadí"
 
-#: src/icons_widget.vala:448
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by name
+#: src/icons_widget.vala:455
 msgid "Sort by name"
 msgstr "Seřadit dle názvu"
 
-#: src/icons_widget.vala:452
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by type
+#: src/icons_widget.vala:460
 msgid "Sort by type"
 msgstr "Seřadit dle typu"
 
-#: src/icons_widget.vala:456
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by size
+#: src/icons_widget.vala:465
 msgid "Sort by size"
 msgstr "Seřadit dle velikosti"
 
-#: src/icons_widget.vala:460
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by date
+#: src/icons_widget.vala:470
 msgid "Sort by date"
 msgstr "Seřadit dle data"
 
-#: src/icons_widget.vala:485
+#. TRANSLATOR this is for a popup in a file manager, to choose to show the files as a bunch of icons
+#: src/icons_widget.vala:496
 msgid "View as icons"
 msgstr "Zobrazit jako ikony"
 
-#: src/icons_widget.vala:489
+#. TRANSLATOR this is for a popup in a file manager, to choose to show the files as a list with name, size, type and modification date
+#: src/icons_widget.vala:501
 msgid "View as list"
 msgstr "Zobrazit jako seznam"
 
-#: src/icons_widget.vala:1016
+#. TRANSLATOR this is the string to put in the list of files, as the type for the folders inside the current folder. It is a file type like "video", "text document", "mp3 audio"...
+#: src/icons_widget.vala:1029
 msgid "Folder"
 msgstr ""
 
-#: src/menu.vala:138
+#. TRANSLATORS Shows a warning message with "warning" in Orange color
+#: src/menu.vala:139
 #, c-format
 msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
 msgstr ""
 
-#: src/menu.vala:141
+#. TRANSLATORS Shows an error message with "error" in Orange color
+#: src/menu.vala:143
 #, c-format
 msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 msgstr ""
 
-#: src/menu.vala:173
+#. TRANSLATORS This string shows the current status of Cronopete. It can be "Status: idle", or "Status: copying file"...
+#: src/menu.vala:174
 #, c-format
 msgid "Status: %s"
 msgstr "Stav: %s"
 
-#: src/menu.vala:246
+#. TRANSLATORS This text means that the user still has not selected a hard disk where to do the backups
+#: src/menu.vala:247
 msgid "Not defined"
 msgstr "Není určeno"
 
+#. TRANSLATORS This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
 #: src/menu.vala:275
 #, c-format
 msgid "%lld GB of %lld GB"
@@ -357,39 +406,43 @@ msgstr "%lld GiB z %lld GiB"
 msgid "Backup hidden files and folders in %s"
 msgstr "Zálohovat skryté soubory a složky v %s"
 
-#: src/restore.vala:101
+#. TRANSLATORS Text for the button that allows to exit the restore window
+#: src/restore.vala:103
 msgid "Exit"
 msgstr "Ukončit"
 
-#: src/restore.vala:187
+#: src/restore.vala:189
 msgid "Aborted"
 msgstr ""
 
-#: src/restore.vala:191
+#: src/restore.vala:193
 #, c-format
 msgid "Error while restoring %s"
 msgstr ""
 
-#: src/restore.vala:201
+#: src/restore.vala:203
 #, fuzzy, c-format
 msgid "Restoring file %s"
 msgstr "Obnovování souborů"
 
-#: src/restore.vala:207
+#: src/restore.vala:209
 #, fuzzy, c-format
 msgid "Restoring folder %s"
 msgstr "Obnovování souborů"
 
-#: src/restore.vala:213
+#. TRANSLATORS Specifies that a rstoring operation has ended
+#: src/restore.vala:215
 msgid "Done"
 msgstr ""
 
-#: src/restore.vala:252 data/interface/warning_folder_backend.ui:22
+#. TRANSLATORS Text for the button in the window that shows a message with the result of a restoring operation, for closing the window
+#: src/restore.vala:255 data/interface/warning_folder_backend.ui:22
 msgid "OK"
 msgstr ""
 
-#: src/restore.vala:279
-msgid "Aborting restore"
+#. TRANSLATORS Message shown when the user aborts a restoring operation (when restoring files from a backup to the hard disk)
+#: src/restore.vala:283
+msgid "Aborting restore operation"
 msgstr ""
 
 #: data/interface/about.ui:15
