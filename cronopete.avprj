@@ -1,6 +1,7 @@
 ### AutoVala Project ###
-autovala_version: 27
+autovala_version: 28
 project_name: cronopete
+po_comment_tag: TRANSLATOR
 vala_version: 0.30
 
 vala_binary: src/cronopete
@@ -159,3 +160,4 @@ end
 *pixmap: data/pixmaps/arrows.png
 
 binary_dependency: /usr/bin/rsync
+
