@@ -38,7 +38,7 @@ namespace cronopete {
 		// VBox that contains the buttons_path and the paned with the bookmarks and the files
 		private Box main_container;
 		// HBox with the buttons path
-		private Box buttons_path;
+		private Toolbar buttons_path;
 		// Contains the bookmarks and the icons
 		private Gtk.Paned paned;
 
@@ -59,7 +59,7 @@ namespace cronopete {
 		private Gtk.TreeView bookmark_view;
 		private Gtk.ListStore bookmark_model;
 
-		private Gee.List<Button> path_list;
+		private Gee.List<Gtk.ToolItem> path_list;
 		private Gee.List<bookmark_str ?> bookmarks;
 
 		private Gtk.Menu menu;
@@ -94,7 +94,7 @@ namespace cronopete {
 			this.sort_by       = e_sort_by.NAME;
 
 			this.main_container = new Box(Gtk.Orientation.VERTICAL, 0);
-			this.buttons_path   = new Box(Gtk.Orientation.HORIZONTAL, 0);
+			this.buttons_path   = new Gtk.Toolbar();
 
 			this.main_container.pack_start(buttons_path, false, false, 0);
 
@@ -199,7 +199,7 @@ namespace cronopete {
 
 			this.path_view.item_width = 175;
 
-			this.path_list = new Gee.ArrayList<ToggleButton>();
+			this.path_list = new Gee.ArrayList<Gtk.ToolItem>();
 
 			this.refresh_path_list();
 			this.key_press_event.connect(this.on_key_press);
@@ -684,28 +684,38 @@ namespace cronopete {
 				this.scroll.hide();
 			}
 
-			foreach (Button b in this.path_list) {
+			foreach (var b in this.path_list) {
 				b.destroy();
 			}
 
-			this.path_list = new Gee.ArrayList<Gtk.ToggleButton>();
+			this.path_list = new Gee.ArrayList<Gtk.ToolItem>();
 
-			var btn = new Button.with_label("/");
-			btn.show();
-			btn.clicked.connect(this.change_path);
-			this.buttons_path.pack_start(btn, false, false, 0);
+			var ibtn = new TopButton();
+			ibtn.set_label("/");
+			ibtn.full_path = "/";
+			var btn = new Gtk.ToolItem();
+			btn.add(ibtn);
+			btn.show_all();
+			ibtn.clicked.connect(this.change_path);
+			this.buttons_path.insert(btn, -1);
 			this.path_list.add(btn);
 
 			var elements = this.current_path.split("/");
+			var full_path = "/";
 			foreach (string s in elements) {
 				if (s == "") {
 					continue;
 				}
-				btn = new Button.with_label(s);
-				btn.show();
-				btn.clicked.connect(this.change_path);
+				full_path = Path.build_filename(full_path, s);
+				ibtn = new TopButton();
+				ibtn.set_label(s);
+				ibtn.full_path = full_path;
+				btn = new Gtk.ToolItem();
+				btn.add(ibtn);
+				btn.show_all();
+				ibtn.clicked.connect(this.change_path);
 				btn.focus_on_click = true;
-				this.buttons_path.pack_start(btn, false, false, 0);
+				this.buttons_path.insert(btn, -1);
 				this.path_list.add(btn);
 			}
 			this.buttons_path.show_all();
@@ -734,20 +744,9 @@ namespace cronopete {
 			string fpath = "";
 			bool   found;
 
-			found = false;
-			Button btn2 = (Button) btn;
+			var btn2 = (TopButton) btn;
 
-			foreach (Button b in this.path_list) {
-				if (!found) {
-					fpath = Path.build_filename(fpath, b.label);
-				} else {
-					b.destroy();
-				}
-				if (b == btn2) {
-					found = true;
-				}
-			}
-			this.current_path = fpath;
+			this.current_path = btn2.full_path;
 			this.refresh_icons();
 			this.set_scroll_top();
 		}
@@ -1031,5 +1030,9 @@ namespace cronopete {
 				this.path_model.set(iter, 6, file_type);
 			}
 		}
+	}
+
+	private class TopButton : Gtk.Button {
+		public string full_path;
 	}
 }
