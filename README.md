@@ -6,7 +6,7 @@ Cronopete is a backup utility for Linux, modeled after Apple's Time Machine. It 
 
 ## BUILDING CRONOPETE
 
-To build Cronopete, you need to install CMAKE or Ninja, Vala-0.30 and Gtk 3.10
+To build Cronopete, you need to install CMAKE or Ninja, Vala-0.30 or later, and Gtk 3.10 or later.
 
 Now, type
 
@@ -16,7 +16,7 @@ Now, type
     make
     sudo make install
 
-This will compile Cronopete with AppIndicator support.
+This will compile Cronopete.
 
 
 ## CONTACTING THE AUTHOR
