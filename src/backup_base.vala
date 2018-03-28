@@ -95,6 +95,7 @@ namespace cronopete {
 				this._current_status = value;
 				this.current_status_changed(value);
 				if (current_status == backup_current_status.IDLE) {
+					// TRANSLATOR this message is shown in the configuration window to specify that cronopete is in idle state, not doing a backup
 					this.send_current_action(_("Ready"));
 				}
 			}

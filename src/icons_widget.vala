@@ -156,6 +156,7 @@ namespace cronopete {
 			var crpb2 = new CellRendererPixbuf();
 			crpb2.stock_size = IconSize.SMALL_TOOLBAR;
 			this.path_view2.insert_column_with_attributes(-1, "", crpb2, "gicon", 3);
+			// TRANSLATOR this is the column in a file manager where file names are displayed
 			namecolumn = new Gtk.TreeViewColumn.with_attributes(_("Name"), new CellRendererText(), "text", 0);
 			this.path_view2.insert_column(namecolumn, -1);
 			namecolumn.clicked.connect(this.sort_name_clicked);
@@ -163,6 +164,7 @@ namespace cronopete {
 			namecolumn.sort_order     = SortType.ASCENDING;
 			namecolumn.resizable      = true;
 
+			// TRANSLATOR this is the column in a file manager where file types are displayed
 			typecolumn = new Gtk.TreeViewColumn.with_attributes(_("Type"), new CellRendererText(), "text", 6);
 			this.path_view2.insert_column(typecolumn, -1);
 			typecolumn.clicked.connect(this.sort_type_clicked);
@@ -170,11 +172,13 @@ namespace cronopete {
 
 			var rendersize = new CellRendererText();
 			rendersize.xalign = 1;
+			// TRANSLATOR this is the column in a file manager where file sizes are displayed
 			sizecolumn        = new Gtk.TreeViewColumn.with_attributes(_("Size"), rendersize, "text", 4);
 			this.path_view2.insert_column(sizecolumn, -1);
 			sizecolumn.clicked.connect(this.sort_size_clicked);
 			sizecolumn.resizable = true;
 
+			// TRANSLATOR this is the column in a file manager where file modification dates are displayed
 			datecolumn = new Gtk.TreeViewColumn.with_attributes(_("Modification date"), new CellRendererText(), "text", 5);
 			this.path_view2.insert_column(datecolumn, -1);
 			datecolumn.clicked.connect(this.sort_date_clicked);
@@ -429,6 +433,7 @@ namespace cronopete {
 			this.menu         = new Gtk.Menu();
 			this.menu.hide.connect(this.hide_menu);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose whether the hidden files in a folder should be shown or not
 			var item1 = new CheckMenuItem.with_label(_("Show hidden files"));
 			item1.active = this.show_hiden;
 			item1.activate.connect(this.toggle_show_hide);
@@ -437,6 +442,7 @@ namespace cronopete {
 			var item2 = new SeparatorMenuItem();
 			this.menu.append(item2);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to reverse the sorting order
 			var item3 = new CheckMenuItem.with_label(_("Reverse order"));
 			item3.active = this.reverse_sort;
 			item3.activate.connect(this.toggle_reverse_sort);
@@ -445,18 +451,22 @@ namespace cronopete {
 			var item4 = new SeparatorMenuItem();
 			this.menu.append(item4);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to sort the files by name
 			var item5 = new CheckMenuItem.with_label(_("Sort by name"));
 			item5.activate.connect(this.set_sort_by_name);
 			this.menu.append(item5);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to sort the files by type
 			var item6 = new CheckMenuItem.with_label(_("Sort by type"));
 			item6.activate.connect(this.set_sort_by_type);
 			this.menu.append(item6);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to sort the files by size
 			var item7 = new CheckMenuItem.with_label(_("Sort by size"));
 			item7.activate.connect(this.set_sort_by_size);
 			this.menu.append(item7);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to sort the files by date
 			var item8 = new CheckMenuItem.with_label(_("Sort by date"));
 			item8.activate.connect(this.set_sort_by_date);
 			this.menu.append(item8);
@@ -482,10 +492,12 @@ namespace cronopete {
 			var item9 = new SeparatorMenuItem();
 			this.menu.append(item9);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to show the files as a bunch of icons
 			var item10 = new CheckMenuItem.with_label(_("View as icons"));
 			item10.activate.connect(this.set_view_as_icons);
 			this.menu.append(item10);
 
+			// TRANSLATOR this is for a popup in a file manager, to choose to show the files as a list with name, size, type and modification date
 			var item11 = new CheckMenuItem.with_label(_("View as list"));
 			item11.activate.connect(this.set_view_as_list);
 			this.menu.append(item11);
@@ -1013,6 +1025,7 @@ namespace cronopete {
 				if (f.type != null) {
 					file_type = f.type;
 				} else if (f.isdir) {
+					// TRANSLATOR this is the string to put in the list of files, as the type for the folders inside the current folder. It is a file type like "video", "text document", "mp3 audio"...
 					file_type = _("Folder");
 				}
 				this.path_model.set(iter, 6, file_type);

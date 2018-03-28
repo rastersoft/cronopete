@@ -432,6 +432,7 @@ public class c_choose_disk : GLib.Object {
 			}
 
 			if (fsystem == null) {
+				// TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
 				fsystem = _("Unknown FS");
 			}
 
@@ -450,6 +451,7 @@ public class c_choose_disk : GLib.Object {
 			this.disk_listmodel.set(iter, 1, bpath);
 			this.disk_listmodel.set(iter, 2, fsystem);
 			if (size == 0) {
+				// TRANSLATORS Specifies that the size of an external disk is unknown
 				ssize = _("Unknown size");
 			} else if (size >= 1000000000) {
 				ssize = "%lld GB".printf((size + 500000000) / 1000000000);

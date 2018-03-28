@@ -86,6 +86,7 @@ namespace cronopete {
 
 			// Create the RESTORE button
 			var pic1   = new Gtk.Image.from_icon_name("document-revert", Gtk.IconSize.DND);
+			// TRANSLATORS Text for the button that restores the selected files
 			var label1 = new Label("<span size=\"xx-large\">" + _("Restore files") + "</span>");
 			label1.use_markup = true;
 			var container1 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -98,6 +99,7 @@ namespace cronopete {
 
 			// Create the EXIT button
 			var pic2   = new Gtk.Image.from_icon_name("application-exit", Gtk.IconSize.DND);
+			// TRANSLATORS Text for the button that allows to exit the restore window
 			var label2 = new Label("<span size=\"xx-large\">" + _("Exit") + "</span>");
 			label2.use_markup = true;
 			var container2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -209,7 +211,7 @@ namespace cronopete {
 				}
 			}
 			if (this.to_restore_filename == null) {
-				// ended restore
+				// TRANSLATORS Specifies that a rstoring operation has ended
 				this.show_end_message(_("Done"));
 				return;
 			}
@@ -249,6 +251,7 @@ namespace cronopete {
 			this.to_restore_label.set_label(message);
 			this.to_restore_bar_total.hide();
 			this.to_restore_bar_working.hide();
+			// TRANSLATORS Text for the button in the window that shows a message with the result of a restoring operation, for closing the window
 			this.to_restore_cancel_button.set_label(_("OK"));
 			this.cancel_to_ok           = true;
 			this.to_restore_bar_working = null;
@@ -276,7 +279,8 @@ namespace cronopete {
 				this.to_restore_window = null;
 				this.show();
 			} else {
-				this.to_restore_label.set_label(_("Aborting restore"));
+				// TRANSLATORS Message shown when the user aborts a restoring operation (when restoring files from a backup to the hard disk)
+				this.to_restore_label.set_label(_("Aborting restore operation"));
 				this.to_restore_cancel = true;
 			}
 		}

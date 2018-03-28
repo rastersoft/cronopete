@@ -73,6 +73,7 @@ namespace cronopete {
 		}
 
 		public override string get_descriptor() {
+			// TRANSLATORS This is the name for the backend that allows to store the backups in an external disk
 			return (_("Store backups in an external hard disk"));
 		}
 
@@ -411,7 +412,7 @@ namespace cronopete {
 					break;
 				}
 			} catch (Error e) {
-				this.send_error("Failed to delete folders: %s".printf(e.message));
+				this.send_error(_("Failed to delete folders: %s").printf(e.message));
 				to_delete = null;
 			}
 
@@ -427,7 +428,7 @@ namespace cronopete {
 			try {
 				GLib.Process.spawn_async("/", command, env, SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out child_pid);
 			} catch (GLib.SpawnError error) {
-				this.send_error(_("Failed to delete aborted backups: " + error.message));
+				this.send_error(_("Failed to delete aborted backups: %s").printf(error.message));
 				this.ended_deleting_old_backups();
 				return;
 			}

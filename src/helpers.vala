@@ -21,7 +21,7 @@ using GLib;
 namespace cronopete {
 	string date_to_string(time_t datetime) {
 		if (datetime == 0) {
-			/* "Not available" refers to a backup (e.g. when the disk is not connected) */
+			// TRANSLATORS "Not available" refers to a backup (e.g. when the disk is not connected, the backups are not available)
 			return _("Not available");
 		}
 
@@ -44,8 +44,8 @@ namespace cronopete {
 			/// TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 			return last_backup.format(_("tomorrow at %R"));
 		} else {
-			/// TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime
-			return last_backup.format(_("%B %e, %Y %R"));
+			/// TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour/minute
+			return last_backup.format(_("%B %e, %Y  %R"));
 		}
 	}
 

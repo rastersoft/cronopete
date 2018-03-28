@@ -135,9 +135,11 @@ namespace  cronopete {
 			this.backend   = new_backend;
 			this.handlers  = {};
 			this.handlers += this.backend.send_warning.connect((msg) => {
+				// TRANSLATORS Shows a warning message with "warning" in Orange color
 				this.insert_text_log(_("<span foreground=\"#FF7F00\">WARNING:</span> %s").printf(msg));
 			});
 			this.handlers += this.backend.send_error.connect((msg) => {
+				// TRANSLATORS Shows an error message with "error" in Orange color
 				this.insert_text_log(_("<span foreground=\"#FF3F3F\">ERROR:</span> %s").printf(msg));
 			});
 			this.handlers += this.backend.send_message.connect((msg) => {
@@ -168,8 +170,7 @@ namespace  cronopete {
 		}
 
 		public void set_status(string msg) {
-			/* This string shows the current status of Cronopete. It could be
-			 *  Status: idle, or Status: copying file... */
+			// TRANSLATORS This string shows the current status of Cronopete. It can be "Status: idle", or "Status: copying file"...
 			this.last_status = _("Status: %s").printf(msg);
 			if (this.is_visible) {
 				this.text_status.set_label(this.last_status);
@@ -242,7 +243,7 @@ namespace  cronopete {
 
 			this.backend.get_backup_data(out volume_id, out oldest, out newest, out total_space, out free_space, out icon);
 			if (volume_id == null) {
-				// This text means that the user still has not selected a hard disk where to do the backups
+				// TRANSLATORS This text means that the user still has not selected a hard disk where to do the backups
 				this.label_disk_id.set_text(_("Not defined"));
 			} else {
 				this.label_disk_id.set_text(volume_id);
@@ -270,9 +271,9 @@ namespace  cronopete {
 			}
 			this.disk_icon.set_from_icon_name(icon, IconSize.DIALOG);
 
-			/* This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
-			 * Adding 900000000 and dividing by 1000000000 allows to round up to the nearest size instead of the lowest one */
+			// TRANSLATORS This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
 			this.label_space.set_text(_("%lld GB of %lld GB").printf((uint64) (free_space + 900000000) / 1000000000, (uint64) (total_space + 900000000) / 1000000000));
+			// Adding 900000000 and dividing by 1000000000 allows to round up to the nearest size instead of the lowest one
 		}
 
 		[CCode(instance_pos = -1)]

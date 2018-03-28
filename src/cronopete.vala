@@ -197,6 +197,7 @@ namespace cronopete {
 			if (this.backend.storage_is_available() == false) {
 				// There's no disk connected
 				icon_color  = "red";
+				// TRANSLATORS Specify that the disk configured for backups is not available
 				description = _("Disk not available");
 			} else {
 				if (this.cronopete_settings.get_boolean("enabled")) {
@@ -204,6 +205,7 @@ namespace cronopete {
 					case BackupStatus.STOPPED:
 						// Idle
 						icon_color  = "white";
+						// TRANSLATORS The program state, used in a tooltip, when it is waiting to do the next backup
 						description = _("Idle");
 						break;
 
@@ -227,17 +229,20 @@ namespace cronopete {
 
 					case BackupStatus.WARNING:
 						icon_color  = "yellow";
+						// TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, a warning message
 						description = _("Doing backup, have a warning");
 						break;
 
 					case BackupStatus.ERROR:
 						icon_color  = "red";
+						// TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, an error message
 						description = _("Doing backup, have an error");
 						break;
 					}
 				} else {
 					// the backup is disabled
 					icon_color  = "orange";
+					// TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
 					description = _("Backup is disabled");
 				}
 			}
@@ -339,13 +344,16 @@ namespace cronopete {
 				menuDate.sensitive = false;
 				menuSystem.append(menuDate);
 
+				// TRANSLATORS Menu entry to start a new backup manually
 				this.menuBUnow = new Gtk.MenuItem.with_label(_("Back Up Now"));
 				menuBUnow.activate.connect(this.backup_now);
 				this.menuSystem.append(menuBUnow);
+				// TRANSLATORS Menu entry to abort the current backup manually
 				this.menuSBUnow = new Gtk.MenuItem.with_label(_("Stop Backing Up"));
 				menuSBUnow.activate.connect(this.stop_backup);
 				this.menuSystem.append(menuSBUnow);
 
+				// TRANSLATORS Menu entry to open the interface for restoring files from a backup
 				this.menuEnter = new Gtk.MenuItem.with_label(_("Restore files"));
 				menuEnter.activate.connect(this.restore_files);
 				menuSystem.append(menuEnter);
@@ -354,7 +362,8 @@ namespace cronopete {
 				var menuBar = new Gtk.SeparatorMenuItem();
 				menuSystem.append(menuBar);
 
-				menuMain = new Gtk.MenuItem.with_label(_("Configure backup policies"));
+				// TRANSLATORS Menu entry to open the configuration window
+				menuMain = new Gtk.MenuItem.with_label(_("Configure the backups"));
 				menuMain.activate.connect(this.show_configuration);
 				menuSystem.append(menuMain);
 
@@ -362,6 +371,7 @@ namespace cronopete {
 				this.appindicator.set_menu(this.menuSystem);
 			}
 
+			// TRANSLATORS Show the date of the last backup
 			this.menuDate.set_label(_("Latest backup: %s").printf(cronopete.date_to_string(this.backend.get_last_backup())));
 
 			if (this.backend.storage_is_available()) {
