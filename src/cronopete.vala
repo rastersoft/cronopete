@@ -53,10 +53,12 @@ namespace cronopete {
 		private uint32 backup_timeout;
 
 		private restore_iface restore_window;
+		private bool restore_window_visible;
 
 		public signal void changed_backend(backup_base backend);
 
 		public cronopete_class() {
+			this.restore_window_visible = false;
 			this.iconpos         = 0;
 			this.animation_timer = 0;
 			this.current_status  = BackupStatus.STOPPED;
@@ -408,7 +410,15 @@ namespace cronopete {
 		}
 
 		public void restore_files() {
-			this.restore_window = new restore_iface(this.backend);
+			if (this.restore_window_visible) {
+				this.restore_window.present();
+			} else {
+				this.restore_window_visible = true;
+				this.restore_window = new restore_iface(this.backend);
+				this.restore_window.destroy.connect( ()=> {
+					this.restore_window_visible = false;
+				});
+			}
 		}
 	}
 
