@@ -714,7 +714,6 @@ namespace cronopete {
 				btn.add(ibtn);
 				btn.show_all();
 				ibtn.clicked.connect(this.change_path);
-				btn.focus_on_click = true;
 				this.buttons_path.insert(btn, -1);
 				this.path_list.add(btn);
 			}
