@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 17:42+0200\n"
-"PO-Revision-Date: 2018-03-28 17:43+0200\n"
+"POT-Creation-Date: 2018-03-28 17:52+0200\n"
+"PO-Revision-Date: 2018-03-28 17:49+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: \n"
@@ -277,9 +277,9 @@ msgstr "ayer a las %R"
 msgid "tomorrow at %R"
 msgstr "mañana a las %R"
 
-#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour/minute
+#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour and minute. Results in a text which is like "March 23, 2018 at 18:43". Example of translation for spanish: "%e de %B de %Y a las %R", which gives "23 de marzo de 2018 a las 18:43"
 #: src/helpers.vala:48
-msgid "%B %e, %Y  %R"
+msgid "%B %e, %Y at %R"
 msgstr "%e de %B de %Y a las %R"
 
 #. TRANSLATOR this is the column in a file manager where file names are displayed

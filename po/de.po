@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 17:42+0200\n"
+"POT-Creation-Date: 2018-03-28 17:52+0200\n"
 "PO-Revision-Date: 2018-11-01 22:00+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
@@ -286,24 +286,22 @@ msgstr "Speicher nicht verfügbar"
 
 #. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
 #: src/helpers.vala:37
-#, fuzzy
 msgid "today at %R"
-msgstr "Heute, um %H:%M"
+msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
 #: src/helpers.vala:41
-#, fuzzy
 msgid "yesterday at %R"
-msgstr "Gestern, um %H:%M"
+msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 #: src/helpers.vala:45
 msgid "tomorrow at %R"
 msgstr ""
 
-#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour/minute
+#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour and minute. Results in a text which is like "March 23, 2018 at 18:43". Example of translation for spanish: "%e de %B de %Y a las %R", which gives "23 de marzo de 2018 a las 18:43"
 #: src/helpers.vala:48
-msgid "%B %e, %Y  %R"
+msgid "%B %e, %Y at %R"
 msgstr ""
 
 #. TRANSLATOR this is the column in a file manager where file names are displayed
@@ -775,11 +773,6 @@ msgstr ""
 #~ msgid_plural "%A, %d %B %Y at %H:%M"
 #~ msgstr[0] "%A, %d %B %Y um %H:%M"
 #~ msgstr[1] "%A, %d %B %Y um %H:%M"
-
-#~ msgid "%A, %B %d %Y at %H:%M"
-#~ msgid_plural "%A, %B %d %Y at %H:%M"
-#~ msgstr[0] "%A, %B %d %Y um %H:%M"
-#~ msgstr[1] "%A, %B %d %Y um %H:%M"
 
 #~ msgid ""
 #~ "Restoring file:\n"

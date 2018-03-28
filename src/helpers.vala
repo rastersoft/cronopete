@@ -44,8 +44,8 @@ namespace cronopete {
 			/// TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 			return last_backup.format(_("tomorrow at %R"));
 		} else {
-			/// TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour/minute
-			return last_backup.format(_("%B %e, %Y  %R"));
+			/// TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour and minute. Results in a text which is like "March 23, 2018 at 18:43". Example of translation for spanish: "%e de %B de %Y a las %R", which gives "23 de marzo de 2018 a las 18:43"
+			return last_backup.format(_("%B %e, %Y at %R"));
 		}
 	}
 
