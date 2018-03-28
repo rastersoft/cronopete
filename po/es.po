@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-18 19:08+0100\n"
-"PO-Revision-Date: 2018-03-18 19:08+0100\n"
+"POT-Creation-Date: 2018-03-28 13:11+0200\n"
+"PO-Revision-Date: 2018-03-28 13:01+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: \n"
@@ -129,11 +129,11 @@ msgstr "Borrando copia antigua %s"
 msgid "Failed to delete old backup %s: %s"
 msgstr "No se ha podido borrar la copia antigua %s: %s"
 
-#: src/backup_folder.vala:673 src/options.vala:185 src/options.vala:223
+#: src/backup_folder.vala:685 src/options.vala:185 src/options.vala:223
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/backup_folder.vala:674 src/options.vala:186 src/options.vala:224
+#: src/backup_folder.vala:686 src/options.vala:186 src/options.vala:224
 #: data/interface/options.ui:115 data/interface/options.ui:205
 msgid "Add"
 msgstr "Añadir"
@@ -237,17 +237,25 @@ msgstr "Última copia: %s"
 msgid "Not available"
 msgstr "No disponible"
 
+#. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
 #: src/helpers.vala:37
 msgid "today at %R"
 msgstr "Hoy a las %R"
 
+#. TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
 #: src/helpers.vala:41
 msgid "yesterday at %R"
 msgstr "ayer a las %R"
 
+#. TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 #: src/helpers.vala:45
 msgid "tomorrow at %R"
 msgstr "mañana a las %R"
+
+#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime
+#: src/helpers.vala:48
+msgid "%B %e, %Y %R"
+msgstr "%e de %B de %Y a las %R"
 
 #: src/icons_widget.vala:159
 msgid "Name"
@@ -297,30 +305,30 @@ msgstr "Mostrar como iconos"
 msgid "View as list"
 msgstr "Mostrar como lista"
 
-#: src/icons_widget.vala:1015
+#: src/icons_widget.vala:1016
 msgid "Folder"
 msgstr "Carpeta"
 
-#: src/menu.vala:134
+#: src/menu.vala:138
 #, c-format
 msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
 msgstr "<span foreground=\"#FF7F00\">AVISO:</span> %s"
 
-#: src/menu.vala:137
+#: src/menu.vala:141
 #, c-format
 msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 msgstr "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 
-#: src/menu.vala:169
+#: src/menu.vala:173
 #, c-format
 msgid "Status: %s"
 msgstr "Estado: %s"
 
-#: src/menu.vala:226
+#: src/menu.vala:246
 msgid "Not defined"
 msgstr "No definido"
 
-#: src/menu.vala:251
+#: src/menu.vala:275
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB de %lld GB"
@@ -357,7 +365,7 @@ msgstr "Restaurando carpeta %s"
 msgid "Done"
 msgstr "Hecho"
 
-#: src/restore.vala:252
+#: src/restore.vala:252 data/interface/warning_folder_backend.ui:22
 msgid "OK"
 msgstr "OK"
 
@@ -462,37 +470,37 @@ msgstr "ana"
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:239
+#: data/interface/main.ui:241
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: data/interface/main.ui:252
+#: data/interface/main.ui:254
 msgid "Oldest backup:"
 msgstr "Primera copia:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:265
+#: data/interface/main.ui:267
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Disponible:"
 
-#: data/interface/main.ui:278
+#: data/interface/main.ui:280
 msgid "Destination:"
 msgstr "Destino:"
 
-#: data/interface/main.ui:291
+#: data/interface/main.ui:293
 msgid "Next backup:"
 msgstr "Próxima copia:"
 
-#: data/interface/main.ui:346
+#: data/interface/main.ui:348
 msgid "Change destination..."
 msgstr "Cambiar el destino..."
 
-#: data/interface/main.ui:361 data/interface/options.ui:17
+#: data/interface/main.ui:363 data/interface/options.ui:17
 msgid "Options"
 msgstr "Opciones"
 
-#: data/interface/main.ui:386
+#: data/interface/main.ui:388
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -506,19 +514,19 @@ msgstr ""
 " * Una copia diaria para el último mes\n"
 " * Copias semanales hasta que se llene el disco"
 
-#: data/interface/main.ui:405
+#: data/interface/main.ui:407
 msgid "Show Cronopete in menu bar"
 msgstr "Mostrar Cronopete en la barra"
 
-#: data/interface/main.ui:422
+#: data/interface/main.ui:424
 msgid "About"
 msgstr "Acerca de"
 
-#: data/interface/main.ui:455
+#: data/interface/main.ui:457
 msgid "Configuration"
 msgstr "Configuración"
 
-#: data/interface/main.ui:484
+#: data/interface/main.ui:486
 msgid "Log"
 msgstr "Registro"
 
@@ -557,6 +565,32 @@ msgstr "Ignorar todos"
 #: data/interface/restore_ok.ui:9 data/interface/restore_ok.ui:23
 msgid "Restore ended succesfully"
 msgstr "Restauración finalizada correctamente"
+
+#: data/interface/warning_folder_backend.ui:53
+msgid ""
+"The <i>folder backend</i> is considered valid only for advanced users. To "
+"enable it, set the <i>gconf</i> key 'enable-folder-backend' to <i>true</i>. "
+"If you don't know how to do this, probably you should not use this backend."
+msgstr ""
+
+#: data/interface/warning_folder_backend.ui:76
+msgid ""
+"The <i>store backups in a folder</i> backend can be considered quite "
+"dangerous because it allows to do what are considered 'bad practices' for a "
+"secure backup. Specifically, it allows to store the backups in the same "
+"physical disk (and even in the same partition) than the data to be backed "
+"up. This means that a disk failure will result in the loss of both the data "
+"and the backup.\n"
+"\n"
+"This means that the user must put a lot of care when using this backend to "
+"ensure that the folder where (s)he stores the backups belongs to a different "
+"disk. Or when using the same physical disk, that (s)he understands that "
+"there is no true backup of the data."
+msgstr ""
+
+#: data/interface/warning_folder_backend.ui:87
+msgid "Read more..."
+msgstr ""
 
 #: data/interface/welcome.ui:23
 msgid "Don't ask me again"

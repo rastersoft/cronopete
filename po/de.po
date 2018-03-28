@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-18 19:08+0100\n"
+"POT-Creation-Date: 2018-03-28 13:11+0200\n"
 "PO-Revision-Date: 2018-11-01 22:00+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
@@ -143,11 +143,11 @@ msgstr "alte Sicherung werden gelöscht"
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
-#: src/backup_folder.vala:673 src/options.vala:185 src/options.vala:223
+#: src/backup_folder.vala:685 src/options.vala:185 src/options.vala:223
 msgid "Cancel"
 msgstr "Abbruch"
 
-#: src/backup_folder.vala:674 src/options.vala:186 src/options.vala:224
+#: src/backup_folder.vala:686 src/options.vala:186 src/options.vala:224
 #: data/interface/options.ui:115 data/interface/options.ui:205
 msgid "Add"
 msgstr "Hinzufügen"
@@ -253,18 +253,26 @@ msgstr "Letztes Backup: %s"
 msgid "Not available"
 msgstr "Speicher nicht verfügbar"
 
+#. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
 #: src/helpers.vala:37
 #, fuzzy
 msgid "today at %R"
 msgstr "Heute, um %H:%M"
 
+#. TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
 #: src/helpers.vala:41
 #, fuzzy
 msgid "yesterday at %R"
 msgstr "Gestern, um %H:%M"
 
+#. TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 #: src/helpers.vala:45
 msgid "tomorrow at %R"
+msgstr ""
+
+#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime
+#: src/helpers.vala:48
+msgid "%B %e, %Y %R"
 msgstr ""
 
 #: src/icons_widget.vala:159
@@ -315,30 +323,30 @@ msgstr "Ansicht als Symbol"
 msgid "View as list"
 msgstr "Ansicht als Liste"
 
-#: src/icons_widget.vala:1015
+#: src/icons_widget.vala:1016
 msgid "Folder"
 msgstr ""
 
-#: src/menu.vala:134
+#: src/menu.vala:138
 #, c-format
 msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
 msgstr ""
 
-#: src/menu.vala:137
+#: src/menu.vala:141
 #, c-format
 msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 msgstr ""
 
-#: src/menu.vala:169
+#: src/menu.vala:173
 #, c-format
 msgid "Status: %s"
 msgstr "Status: %s"
 
-#: src/menu.vala:226
+#: src/menu.vala:246
 msgid "Not defined"
 msgstr "Nicht definiert"
 
-#: src/menu.vala:251
+#: src/menu.vala:275
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB von %lld GB"
@@ -375,7 +383,7 @@ msgstr "Dateien wiederherstellen"
 msgid "Done"
 msgstr ""
 
-#: src/restore.vala:252
+#: src/restore.vala:252 data/interface/warning_folder_backend.ui:22
 msgid "OK"
 msgstr ""
 
@@ -479,38 +487,38 @@ msgstr "ana"
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:239
+#: data/interface/main.ui:241
 msgid "Latest backup:"
 msgstr "Letzte Sicherung:"
 
-#: data/interface/main.ui:252
+#: data/interface/main.ui:254
 msgid "Oldest backup:"
 msgstr "Älteste Sicherung:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:265
+#: data/interface/main.ui:267
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Vorhanden:"
 
-#: data/interface/main.ui:278
+#: data/interface/main.ui:280
 msgid "Destination:"
 msgstr ""
 
-#: data/interface/main.ui:291
+#: data/interface/main.ui:293
 msgid "Next backup:"
 msgstr "Nächste Sicherung:"
 
-#: data/interface/main.ui:346
+#: data/interface/main.ui:348
 #, fuzzy
 msgid "Change destination..."
 msgstr "Wechsel die Festplatte..."
 
-#: data/interface/main.ui:361 data/interface/options.ui:17
+#: data/interface/main.ui:363 data/interface/options.ui:17
 msgid "Options"
 msgstr "Optionen"
 
-#: data/interface/main.ui:386
+#: data/interface/main.ui:388
 #, fuzzy
 msgid ""
 "Cronopete keeps:\n"
@@ -525,19 +533,19 @@ msgstr ""
 " * tägliche Sicherungen für den letzten Monat\n"
 " * wöchtenliche Sicherungen bis deine Festplatte voll ist"
 
-#: data/interface/main.ui:405
+#: data/interface/main.ui:407
 msgid "Show Cronopete in menu bar"
 msgstr "Zeige Cronopete in der Menu-Bar"
 
-#: data/interface/main.ui:422
+#: data/interface/main.ui:424
 msgid "About"
 msgstr "Über"
 
-#: data/interface/main.ui:455
+#: data/interface/main.ui:457
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: data/interface/main.ui:484
+#: data/interface/main.ui:486
 msgid "Log"
 msgstr "Log"
 
@@ -576,6 +584,32 @@ msgstr "Ingoriere alle"
 #: data/interface/restore_ok.ui:9 data/interface/restore_ok.ui:23
 msgid "Restore ended succesfully"
 msgstr "Wiederherstellen wurde abgeschlossen"
+
+#: data/interface/warning_folder_backend.ui:53
+msgid ""
+"The <i>folder backend</i> is considered valid only for advanced users. To "
+"enable it, set the <i>gconf</i> key 'enable-folder-backend' to <i>true</i>. "
+"If you don't know how to do this, probably you should not use this backend."
+msgstr ""
+
+#: data/interface/warning_folder_backend.ui:76
+msgid ""
+"The <i>store backups in a folder</i> backend can be considered quite "
+"dangerous because it allows to do what are considered 'bad practices' for a "
+"secure backup. Specifically, it allows to store the backups in the same "
+"physical disk (and even in the same partition) than the data to be backed "
+"up. This means that a disk failure will result in the loss of both the data "
+"and the backup.\n"
+"\n"
+"This means that the user must put a lot of care when using this backend to "
+"ensure that the folder where (s)he stores the backups belongs to a different "
+"disk. Or when using the same physical disk, that (s)he understands that "
+"there is no true backup of the data."
+msgstr ""
+
+#: data/interface/warning_folder_backend.ui:87
+msgid "Read more..."
+msgstr ""
 
 #: data/interface/welcome.ui:23
 msgid "Don't ask me again"
