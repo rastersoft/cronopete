@@ -33,19 +33,19 @@ namespace cronopete {
 		var tomorrow  = GLib.Time.local(now + 86400);
 
 		if ((last_backup.day == today.day) && (last_backup.month == today.month) && (last_backup.year == today.year)) {
-			// %R is a backup's time
+			/// TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
 			return last_backup.format(_("today at %R"));
 		}
 		if ((last_backup.day == yesterday.day) && (last_backup.month == yesterday.month) && (last_backup.year == yesterday.year)) {
-			// %R is a backup's time
+			/// TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
 			return last_backup.format(_("yesterday at %R"));
 		}
 		if ((last_backup.day == tomorrow.day) && (last_backup.month == tomorrow.month) && (last_backup.year == tomorrow.year)) {
-			// %R is a backup's time
+			/// TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 			return last_backup.format(_("tomorrow at %R"));
 		} else {
-			// %x is a backup's date, and %R a backup's time
-			return last_backup.format("%x, %R");
+			/// TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime
+			return last_backup.format(_("%B %e, %Y %R"));
 		}
 	}
 

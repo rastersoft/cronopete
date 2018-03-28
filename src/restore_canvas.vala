@@ -68,6 +68,7 @@ namespace cronopete {
 		private double scale_w;
 		private double scale_h;
 		private double timeline_scale_factor;
+		private double timeline_indicator_width;
 
 		// stores the tick callback uid, to know if it is already set
 		private uint tick_cb;
@@ -342,7 +343,11 @@ namespace cronopete {
 			this.scale_w = this.screen_w / 28.0;
 			this.scale_h = this.browser_h + this.browser_margin;
 
-			this.timeline_scale_factor = this.scale_h / (this.newest - this.oldest);
+			if (this.backup_list.size > 1) {
+				this.timeline_scale_factor = this.scale_h / (this.backup_list.size - 1);
+			} else {
+				this.timeline_scale_factor = this.scale_h;
+			}
 
 			double last_pos_y = -1;
 			double pos_y      = this.scale_y + this.scale_h;
@@ -364,7 +369,7 @@ namespace cronopete {
 			for (var i = 0; i < this.backup_list.size; i++) {
 				var time_now    = this.backup_list[i].utc_time;
 				var time_now_dt = new GLib.DateTime.from_unix_utc(time_now);
-				new_y = pos_y - this.timeline_scale_factor * (time_now - this.oldest);
+				new_y = scale_y + this.timeline_scale_factor * i;
 				this.backup_list[i].ypos = new_y;
 				if (new_y - last_pos_y < 2) {
 					continue;
@@ -382,19 +387,24 @@ namespace cronopete {
 				last_month = time_now_dt.get_month();
 				c_base.stroke();
 			}
+			this.timeline_indicator_width = this.scale_x + incval + nw / 3;
 			c_base.set_source_rgb(1, 1, 1);
 			var locked_pos = new Gee.ArrayList<double ?>();
+			bool painted = false;
 			for (int i = 0; i < 4; i++) {
-				this.set_topaint(i, extents, locked_pos, c_base, incval, nw);
+				painted |= this.set_topaint(i, extents, locked_pos, c_base, incval, nw, painted);
 			}
 			this.current_timeline = this.backup_list[this.current_backup].ypos;
 			this.desired_timeline = this.current_timeline;
 		}
 
-		private bool set_topaint(int what_to_use, Cairo.FontExtents extents, Gee.ArrayList<double ?> locked_pos, Cairo.Context c_base, double incval, double nw) {
+		private bool set_topaint(int what_to_use, Cairo.FontExtents extents, Gee.ArrayList<double ?> locked_pos, Cairo.Context c_base, double incval, double nw, bool prev_painted) {
+			if ((what_to_use == 3) && prev_painted) {
+				return false;
+			}
 			bool painted = false;
-			var last_v  = -1;
-			var paint_y = 0;
+			var  last_v  = -1;
+			var  paint_y = 0;
 			foreach (var i in this.backup_list) {
 				int    now_v    = -1;
 				string now_text = "";
@@ -414,31 +424,25 @@ namespace cronopete {
 
 				case 2:
 					now_v    = i.local_time.day;
-					now_text = i.local_time.format("%e");
+					now_text = i.local_time.format("%a %e");
 					break;
 
 				case 3:
-					now_v    = i.local_time.hour;
+					now_v    = i.local_time.hour * 60 + i.local_time.minute;
 					now_text = i.local_time.format("%k:%M");
 					break;
 				}
-				if (((last_v != -1) || (what_to_use == 3)) && (last_v != now_v)) {
+				if ((last_v == -1) && (what_to_use < 2)) {
+					last_v = now_v;
+				}
+				if ((last_v != now_v)) {
 					bool found = false;
-					var  min_y = i.ypos - extents.height;
-					var  max_y = i.ypos + extents.height;
-					if (what_to_use == 2) {
-						// with this, it ensures that the first text will be in hour:minute format before day format
-						var j = this.scale_y;
+					var  min_y = i.ypos - (extents.height * 1.2);
+					var  max_y = i.ypos + (extents.height * 1.2);
+					foreach (var j in locked_pos) {
 						if ((j >= min_y) && (j <= max_y)) {
 							found = true;
-						}
-					}
-					if (!found) {
-						foreach (var j in locked_pos) {
-							if ((j >= min_y) && (j <= max_y)) {
-								found = true;
-								break;
-							}
+							break;
 						}
 					}
 					if (!found) {
@@ -447,8 +451,11 @@ namespace cronopete {
 						locked_pos.add(i.ypos);
 						painted = true;
 					}
+					last_v = now_v;
 				}
-				last_v = now_v;
+			}
+			if (what_to_use == 2) {
+				painted = false;
 			}
 			return painted;
 		}
@@ -487,7 +494,7 @@ namespace cronopete {
 			cr.set_source_rgb(1, 0, 0);
 			cr.set_line_width(3);
 			cr.move_to(this.scale_x, this.current_timeline);
-			cr.rel_line_to(this.scale_w, 0);
+			cr.rel_line_to(this.timeline_indicator_width, 0);
 			cr.stroke();
 
 			// Paint the windows
