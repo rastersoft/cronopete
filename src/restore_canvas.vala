@@ -437,14 +437,13 @@ namespace cronopete {
 
 			// arrows
 			c_base.save();
-			var scale3 = ((double) this.screen_h) / (1080 * 1.2);
-			c_base.scale(scale3, scale3);
+			c_base.scale(scale_w, scale_h);
 			var arrows_pic = new Cairo.ImageSurface.from_png(GLib.Path.build_filename(Constants.PKGDATADIR, "arrows.png"));
-			this.arrows_x = (this.browser_x + this.browser_w) - 256.0 * scale3;
-			this.arrows_y = this.browser_y / 2.0;
-			this.arrows_w = arrows_pic.get_width() * scale3;
-			this.arrows_h = arrows_pic.get_height() * scale3;
-			c_base.set_source_surface(arrows_pic, this.arrows_x / scale3, this.arrows_y / scale3);
+			this.arrows_w = arrows_pic.get_width() * scale_w;
+			this.arrows_h = arrows_pic.get_height() * scale_h;
+			this.arrows_x = (this.browser_x + this.browser_w) - this.arrows_w;
+			this.arrows_y = (this.browser_y + this.browser_margin) - this.arrows_h - 30;
+			c_base.set_source_surface(arrows_pic, this.arrows_x / scale_w, this.arrows_y / scale_h);
 			c_base.paint();
 			c_base.restore();
 		}
@@ -574,7 +573,7 @@ namespace cronopete {
 				var z2 = z_offset + i * 1000;
 				this.transform_coords(z2, out ox, out oy, out ow, out oh, out s_factor);
 
-				cr.select_font_face("Sans", FontSlant.NORMAL, FontWeight.BOLD);
+				cr.select_font_face("Sans", FontSlant.NORMAL, FontWeight.NORMAL);
 				cr.set_font_size(18.0 * s_factor);
 				var date = cronopete.date_to_string(this.backup_list[z_index + i].utc_time);
 
@@ -598,14 +597,14 @@ namespace cronopete {
 		 * Given the Z coordinate for a pseudo-3D window, calculates and returns the X and Y coordinates,
 		 * the width, height and scale factor
 		 */
-		private void transform_coords(double z, out double ox, out double oy, out double ow, out double oh, out double s_factor) {
+		private void transform_coords(double z, out int ox, out int oy, out int ow, out int oh, out double s_factor) {
 			double eyedist = 2500.0;
 
-			ox       = (this.browser_x * eyedist + (z * ((double) this.screen_w) / 2)) / (z + eyedist);
-			oy       = ((this.browser_margin) * eyedist) / (z + eyedist);
-			ow       = (this.browser_w * eyedist) / (z + eyedist);
-			oh       = (this.browser_h * eyedist) / (z + eyedist);
-			oy      += this.browser_y;
+			ox       = (int)((this.browser_x * eyedist + (z * ((double) this.screen_w) / 2)) / (z + eyedist));
+			oy       = (int)(((this.browser_margin) * eyedist) / (z + eyedist));
+			ow       = (int)((this.browser_w * eyedist) / (z + eyedist));
+			oh       = (int)((this.browser_h * eyedist) / (z + eyedist));
+			oy      += (int)(this.browser_y);
 			s_factor = eyedist / (z + eyedist);
 		}
 
