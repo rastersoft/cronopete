@@ -85,7 +85,7 @@ namespace cronopete {
 			this.backup_list.sort(mysort_64);
 
 			// Create the RESTORE button
-			var pic1   = new Gtk.Image.from_icon_name("document-revert", Gtk.IconSize.DND);
+			var pic1 = new Gtk.Image.from_icon_name("document-revert", Gtk.IconSize.DND);
 			// TRANSLATORS Text for the button that restores the selected files
 			var label1 = new Label("<span size=\"xx-large\">" + _("Restore files") + "</span>");
 			label1.use_markup = true;
@@ -98,7 +98,7 @@ namespace cronopete {
 			this.restore_button.clicked.connect(this.do_restore);
 
 			// Create the EXIT button
-			var pic2   = new Gtk.Image.from_icon_name("application-exit", Gtk.IconSize.DND);
+			var pic2 = new Gtk.Image.from_icon_name("application-exit", Gtk.IconSize.DND);
 			// TRANSLATORS Text for the button that allows to exit the restore window
 			var label2 = new Label("<span size=\"xx-large\">" + _("Exit") + "</span>");
 			label2.use_markup = true;

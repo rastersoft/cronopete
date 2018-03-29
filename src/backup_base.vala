@@ -335,7 +335,7 @@ namespace cronopete {
 
 	public abstract class backup_element : GLib.Object {
 		public time_t utc_time;
-		public GLib.Time local_time;
+		public GLib.DateTime local_time;
 		// used in eval_backups_to_delete to specify if this backup must be kept or
 		// should be deleted to free space
 		public bool keep;
@@ -344,7 +344,7 @@ namespace cronopete {
 
 		protected void set_common_data(time_t t) {
 			this.utc_time   = t;
-			this.local_time = GLib.Time.local(t);
+			this.local_time = new GLib.DateTime.from_unix_utc(t);
 			this.keep       = true;
 		}
 	}
