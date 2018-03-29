@@ -65,10 +65,10 @@ namespace cronopete {
 		private string title_font_size;
 
 		// scale values for the timeline, to allow to easily paint the current position
-		private double scale_x;
-		private double scale_y;
-		private double scale_w;
-		private double scale_h;
+		private double timeline_x;
+		private double timeline_y;
+		private double timeline_w;
+		private double timeline_h;
 		private double timeline_scale_factor;
 		private double timeline_indicator_width;
 
@@ -321,16 +321,6 @@ namespace cronopete {
 				scale = scale_w;
 			}
 
-			// minimum margin around the file browser
-			this.margin_around = (50 * scale_h);
-			// Browser border
-			this.browser_x      = this.screen_w * 0.1;
-			this.browser_y      = this.margin_around;
-			this.browser_margin = this.screen_h / 8.0;
-			this.browser_w      = this.screen_w * 4.0 / 5.0;
-			this.browser_h      = this.screen_h - this.browser_y - this.browser_margin - this.margin_around;
-			double scale2 = (this.screen_w - 60.0 - 100.0 * scale) / 2175.0;
-
 			// Get font sizes
 			// year width
 			layout.set_markup(this.timeline_font_size + "0000</span>", -1);
@@ -360,41 +350,38 @@ namespace cronopete {
 				}
 			}
 
-			this.timeline_indicator_width = 20 * scale_w;
-			this.scale_x = 10 * scale_w;
-			this.scale_y = text_height + 10 * scale_h;
-			// a margin of 5 pixels in each side
+			this.timeline_indicator_width = 25 * scale_w;
+			this.timeline_x = 10 * scale_w;
+			this.timeline_y = (text_height / 2) + (10 * scale_h);
 			double radius = text_height / 2;
 
 			var scale_w_year  = 2 + (2 * radius) + year_width + this.timeline_indicator_width;
 			var scale_w_month = 2 + (2 * radius) + month_width + (this.timeline_indicator_width * 3 / 5);
 			var scale_w_day   = 2 + (2 * radius) + day_width + (this.timeline_indicator_width / 3);
 
-			this.scale_w = scale_w_year;
-			if (this.scale_w < scale_w_month) {
-				this.scale_w = scale_w_month;
+			this.timeline_w = scale_w_year;
+			if (this.timeline_w < scale_w_month) {
+				this.timeline_w = scale_w_month;
 			}
-			if (this.scale_w < scale_w_day) {
-				this.scale_w = scale_w_day;
+			if (this.timeline_w < scale_w_day) {
+				this.timeline_w = scale_w_day;
 			}
 
-			this.scale_h = (1080 * scale_h) - (2 * this.scale_y);
+			this.timeline_h = (1080 * scale_h) - (2 * this.timeline_y);
 
 			c_base.set_source_rgba(0, 0, 0, 0.6);
-			this.rounded_rectangle(c_base, this.scale_x, this.scale_y - text_height, this.scale_w, this.scale_h + 2 * text_height, radius * 2);
+			this.rounded_rectangle(c_base, this.timeline_x, this.timeline_y - (text_height / 2) - 2, this.timeline_w, this.timeline_h + text_height + 4, radius * 2);
 			c_base.fill();
 
-			this.scale_x += radius;
-
 			if (this.backup_list.size > 1) {
-				this.timeline_scale_factor = this.scale_h / (this.backup_list.size - 1);
+				this.timeline_scale_factor = this.timeline_h / (this.backup_list.size - 1);
 			} else {
-				this.timeline_scale_factor = this.scale_h;
+				this.timeline_scale_factor = this.timeline_h;
 			}
 
-			double pos_y = this.scale_y + this.scale_h;
+			double pos_y = this.timeline_y + this.timeline_h;
 			double new_y;
-			this.scale_x += radius / 2.0;
+			this.timeline_x += radius;
 
 			c_base.set_source_rgb(1, 1, 1);
 			c_base.set_line_width(1);
@@ -407,13 +394,13 @@ namespace cronopete {
 				var i           = i2 - 1;
 				var time_now    = this.backup_list[i].utc_time;
 				var time_now_dt = new GLib.DateTime.from_unix_utc(time_now);
-				new_y = scale_y + this.timeline_scale_factor * i;
+				new_y = this.timeline_y + this.timeline_scale_factor * i;
 				this.backup_list[i].ypos = new_y;
 				if ((last_pos_y - new_y) < 2) {
 					continue;
 				}
 				last_pos_y = new_y;
-				c_base.move_to(this.scale_x, new_y);
+				c_base.move_to(this.timeline_x, new_y);
 				if ((last_year != -1) && (last_year != time_now_dt.get_year())) {
 					c_base.rel_line_to(this.timeline_indicator_width, 0);
 				} else if ((last_month != -1) && (last_month != time_now_dt.get_month())) {
@@ -435,12 +422,18 @@ namespace cronopete {
 			this.desired_timeline = this.current_timeline;
 
 
-			c_base.save();
-			c_base.scale(scale2, scale2);
+			// put the file browser
+			// minimum margin around the file browser
+			this.margin_around = 50;
+			// Browser border
+			this.browser_x                   = (int) ((this.timeline_x + this.timeline_w) * 1.5);
+			this.browser_y                   = this.margin_around * scale_h;
+			this.browser_margin              = 135 * scale_h;
+			this.browser_w                   = this.screen_w - 2 * this.browser_x;
+			this.browser_h                   = this.screen_h - this.browser_y - this.browser_margin - this.margin_around;
 			this.file_browser.width_request  = (int) (this.browser_w - 2);
 			this.file_browser.height_request = (int) (this.browser_h - 1);
 			this.base_layout.move(this.file_browser, (int) (this.browser_x + 1), (int) (this.browser_y + this.browser_margin));
-			c_base.restore();
 
 			// arrows
 			c_base.save();
@@ -505,7 +498,7 @@ namespace cronopete {
 						}
 					}
 					if (!found) {
-						c_base.move_to(this.scale_x + this.timeline_indicator_width * scale + 2, i.ypos - text_height * 0.5);
+						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2, i.ypos - text_height * 0.5);
 						layout.set_markup("<span size=\"small\">" + now_text + "</span>", -1);
 						Pango.cairo_show_layout(c_base, layout);
 						locked_pos.add(i.ypos);
@@ -553,7 +546,7 @@ namespace cronopete {
 			// Paint the timeline index
 			cr.set_source_rgb(1, 0, 0);
 			cr.set_line_width(3);
-			cr.move_to(this.scale_x, this.current_timeline);
+			cr.move_to(this.timeline_x, this.current_timeline);
 			cr.rel_line_to(this.timeline_indicator_width, 0);
 			cr.stroke();
 
