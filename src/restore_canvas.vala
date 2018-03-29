@@ -88,7 +88,7 @@ namespace cronopete {
 
 		public RestoreCanvas(Gtk.Window base_window, backup_base backend, GLib.Settings settings) {
 			this.timeline_font_size = "<span size=\"small\">";
-			this.title_font_size    = "<span size=\"medium\">";
+			this.title_font_size    = "<span size=\"large\">";
 			this.backend            = backend;
 			this.cronopete_settings = settings;
 			this.backup_list        = this.backend.get_backup_list(out this.oldest, out this.newest);
@@ -538,6 +538,7 @@ namespace cronopete {
 		 * @param cr The Cairo context where everything will be painted
 		 */
 		private bool do_draw(Context cr) {
+			var layout = this.create_pango_layout("");
 			// Paint the background
 			cr.set_source_surface(this.base_surface, 0, 0);
 			cr.paint();
@@ -572,24 +573,29 @@ namespace cronopete {
 				}
 				var z2 = z_offset + i * 1000;
 				this.transform_coords(z2, out ox, out oy, out ow, out oh, out s_factor);
-
-				cr.select_font_face("Sans", FontSlant.NORMAL, FontWeight.NORMAL);
-				cr.set_font_size(18.0 * s_factor);
 				var date = cronopete.date_to_string(this.backup_list[z_index + i].utc_time);
+				layout.set_markup(this.title_font_size + date + "</span>", -1);
+				int w, h;
+				layout.get_pixel_size(out w, out h);
+				w = (int) (w * s_factor);
+				h = (int) (h * s_factor);
 
-				Cairo.TextExtents extents;
-				cr.text_extents(date, out extents);
 				cr.set_source_rgb(1, 1, 1);
 				double final_add = 4.0 * s_factor;
-				cr.rectangle(ox, oy - 2 * final_add - extents.height, ow, oh + 2 * final_add + extents.height);
+				cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
 				cr.fill();
 				cr.set_source_rgb(0.0, 0.0, 0.0);
-				cr.rectangle(ox, oy - 2 * final_add - extents.height, ow, oh + 2 * final_add + extents.height);
+				cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
 				cr.stroke();
-				cr.move_to(ox + (ow - extents.width + extents.x_bearing) / 2, oy - extents.height - extents.y_bearing - final_add);
-
-				cr.show_text(date);
+				cr.move_to(ox + (ow - w) / 2, oy - h - final_add);
+				cr.save();
+				if (s_factor != 1.0) {
+					cr.scale(s_factor, s_factor);
+				}
+				Pango.cairo_show_layout(cr, layout);
+				cr.restore();
 			}
+			layout.set_font_description(null);
 			return false;
 		}
 
@@ -600,11 +606,11 @@ namespace cronopete {
 		private void transform_coords(double z, out int ox, out int oy, out int ow, out int oh, out double s_factor) {
 			double eyedist = 2500.0;
 
-			ox       = (int)((this.browser_x * eyedist + (z * ((double) this.screen_w) / 2)) / (z + eyedist));
-			oy       = (int)(((this.browser_margin) * eyedist) / (z + eyedist));
-			ow       = (int)((this.browser_w * eyedist) / (z + eyedist));
-			oh       = (int)((this.browser_h * eyedist) / (z + eyedist));
-			oy      += (int)(this.browser_y);
+			ox       = (int) ((this.browser_x * eyedist + (z * ((double) this.screen_w) / 2)) / (z + eyedist));
+			oy       = (int) (((this.browser_margin) * eyedist) / (z + eyedist));
+			ow       = (int) ((this.browser_w * eyedist) / (z + eyedist));
+			oh       = (int) ((this.browser_h * eyedist) / (z + eyedist));
+			oy      += (int) (this.browser_y);
 			s_factor = eyedist / (z + eyedist);
 		}
 
