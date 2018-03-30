@@ -389,38 +389,50 @@ namespace cronopete {
 			double new_y;
 			this.timeline_x += radius;
 
-			c_base.set_source_rgb(1, 1, 1);
 			c_base.set_line_width(1);
 
 			// Paints the timeline
+			var    locked_pos = new Gee.ArrayList<Cairo.Rectangle ?>();
 			double last_pos_y = this.screen_h;
 			int    last_month = -1;
 			int    last_year  = -1;
 			for (var i2 = this.backup_list.size; i2 > 0; i2--) {
 				var i           = i2 - 1;
 				var time_now    = this.backup_list[i].utc_time;
-				var time_now_dt = new GLib.DateTime.from_unix_utc(time_now);
+				var time_now_dt = this.backup_list[i].local_time;
 				new_y = this.timeline_y + this.timeline_scale_factor * i;
 				this.backup_list[i].ypos = new_y;
-				if ((last_pos_y - new_y) < 2) {
+				if ((last_pos_y - ((int) (0.5 + new_y))) < 2) {
 					continue;
 				}
 				last_pos_y = new_y;
-				c_base.move_to(this.timeline_x, new_y);
+				// trick to ensure that the lines are located exactly over a pixel
+				c_base.move_to(this.timeline_x, 0.5 + (int) (new_y));
+				var text_position = Cairo.Rectangle();
+				// the upper and lower coordinates are the same
+				text_position.y      = new_y;
+				text_position.height = new_y;
+				// The type of line (thus, the tipe of text that should be put there) is stored in .x
 				if ((last_year != -1) && (last_year != time_now_dt.get_year())) {
+					c_base.set_source_rgb(1, 1, 1);
 					c_base.rel_line_to(this.timeline_indicator_width, 0);
+					text_position.x = 0;
 				} else if ((last_month != -1) && (last_month != time_now_dt.get_month())) {
+					c_base.set_source_rgb(1, 1, 1);
 					c_base.rel_line_to(this.timeline_indicator_width * 3 / 5, 0);
+					text_position.x = 1;
 				} else {
+					c_base.set_source_rgb(0.5, 0.5, 0.5);
 					c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
+					text_position.x = 3;
 				}
+				locked_pos.add(text_position);
 				last_year  = time_now_dt.get_year();
 				last_month = time_now_dt.get_month();
 				c_base.stroke();
 			}
 			c_base.set_source_rgb(1, 1, 1);
-			var  locked_pos = new Gee.ArrayList<double ?>();
-			bool painted    = false;
+			bool painted = false;
 			for (int i = 0; i < 4; i++) {
 				painted |= this.set_topaint(i, text_height, locked_pos, c_base, painted, layout);
 			}
@@ -454,14 +466,15 @@ namespace cronopete {
 			c_base.restore();
 		}
 
-		private bool set_topaint(int what_to_use, double text_height, Gee.ArrayList<double ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
+		private bool set_topaint(int what_to_use, double text_height, Gee.ArrayList<Cairo.Rectangle ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
 			if ((what_to_use == 3) && prev_painted) {
 				return false;
 			}
 			Pango.Rectangle r1, r2;
-			bool painted = false;
-			var  last_v  = -1;
-			var  paint_y = 0;
+			Cairo.Rectangle text_position;
+			bool            painted = false;
+			var             last_v  = -1;
+			var             paint_y = 0;
 			for (int h = this.backup_list.size; h > 0; h--) {
 				var    i        = this.backup_list[h - 1];
 				int    now_v    = -1;
@@ -482,7 +495,7 @@ namespace cronopete {
 
 				case 2:
 					now_v    = i.local_time.get_day_of_month();
-					now_text = i.local_time.format("%a %e");
+					now_text = i.local_time.format("%a %e").replace("  ", " ");
 					break;
 
 				case 3:
@@ -494,21 +507,44 @@ namespace cronopete {
 					last_v = now_v;
 				}
 				if ((last_v != now_v)) {
+					layout.set_markup("<span size=\"small\">" + now_text + "</span>", -1);
+					layout.get_pixel_extents(out r1, out r2);
+					text_position       = Cairo.Rectangle();
+					text_position.width = i.ypos;
+					// the upper coordinate
+					text_position.y = i.ypos - r1.y - r1.height * 0.5;
+					// it is not the height, but the lower coordinate
+					text_position.height = r2.height + text_position.y;
 					bool found = false;
-					var  min_y = i.ypos - (text_height * 1.1);
-					var  max_y = i.ypos + (text_height * 1.1);
 					foreach (var j in locked_pos) {
-						if ((j >= min_y) && (j <= max_y)) {
+						if (j.x >= what_to_use) {
+							continue;
+						}
+						if ((j.y >= text_position.y) && (j.y <= text_position.height)) {
+							found = true;
+							break;
+						}
+						if ((j.width >= text_position.y) && (j.width <= text_position.height)) {
+							found = true;
+							break;
+						}
+						if ((text_position.y >= j.y) && (text_position.y <= j.height)) {
+							found = true;
+							break;
+						}
+						if ((text_position.height >= j.y) && (text_position.height <= j.height)) {
 							found = true;
 							break;
 						}
 					}
 					if (!found) {
-						layout.set_markup("<span size=\"small\">" + now_text + "</span>", -1);
-						layout.get_pixel_extents(out r1, out r2);
-						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, i.ypos - r1.y - r1.height * 0.5);
+						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, text_position.y);
 						Pango.cairo_show_layout(c_base, layout);
-						locked_pos.add(i.ypos);
+						locked_pos.add(text_position);
+						text_position.x = what_to_use;
+						c_base.move_to(this.timeline_x, 0.5 + (int) (text_position.width));
+						c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
+						c_base.stroke();
 						painted = true;
 					}
 					last_v = now_v;
