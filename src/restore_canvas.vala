@@ -458,6 +458,7 @@ namespace cronopete {
 			if ((what_to_use == 3) && prev_painted) {
 				return false;
 			}
+			Pango.Rectangle r1, r2;
 			bool painted = false;
 			var  last_v  = -1;
 			var  paint_y = 0;
@@ -503,8 +504,9 @@ namespace cronopete {
 						}
 					}
 					if (!found) {
-						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2, i.ypos - text_height * 0.5);
 						layout.set_markup("<span size=\"small\">" + now_text + "</span>", -1);
+						layout.get_pixel_extents(out r1, out r2);
+						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, i.ypos - r1.y - r1.height * 0.5);
 						Pango.cairo_show_layout(c_base, layout);
 						locked_pos.add(i.ypos);
 						painted = true;
