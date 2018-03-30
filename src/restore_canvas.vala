@@ -430,9 +430,10 @@ namespace cronopete {
 				c_base.stroke();
 			}
 			c_base.set_source_rgb(1, 1, 1);
+			var  now     = time_t();
 			bool painted = false;
 			for (int i = 0; i < 4; i++) {
-				painted |= this.set_topaint(i, locked_pos, c_base, painted, layout);
+				painted |= this.set_topaint(i, now, locked_pos, c_base, painted, layout);
 			}
 			this.current_timeline = this.backup_list[this.current_backup].ypos;
 			this.desired_timeline = this.current_timeline;
@@ -467,7 +468,7 @@ namespace cronopete {
 		/**
 		 * Paints the years, months, days and hour:minutes in the timeline
 		 */
-		private bool set_topaint(int what_to_use, Gee.ArrayList<Cairo.Rectangle ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
+		private bool set_topaint(int what_to_use, time_t now, Gee.ArrayList<Cairo.Rectangle ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
 			if ((what_to_use == 3) && prev_painted) {
 				return false;
 			}
@@ -482,34 +483,48 @@ namespace cronopete {
 				int    now_v    = -1;
 				string now_text = "";
 				double scale    = 1.0 / 3.0;
+				if ((what_to_use == 3) && (i.utc_time < (now - 86400))) {
+					// don't show hour:minute before the last 24 hours
+					continue;
+				}
+				if ((what_to_use == 2) && (i.utc_time < (now - 2592000))) {
+					// don't show day before the last 30 days
+					continue;
+				}
 				switch (what_to_use) {
 				case 0:
+					// year
 					now_v    = i.local_time.get_year();
 					now_text = i.local_time.format("%Y");
 					scale    = 1.0;
 					break;
 
 				case 1:
+					// month
 					now_v    = i.local_time.get_month() + (12 * i.local_time.get_year());
 					now_text = i.local_time.format("%b");
 					scale    = 3.0 / 5.0;
 					break;
 
 				case 2:
+					// day_of_week day_number
 					now_v    = i.local_time.get_day_of_month() + 31 * (i.local_time.get_month() + (12 * i.local_time.get_year()));
 					now_text = i.local_time.format("%a %e").replace("  ", " ");
 					break;
 
 				case 3:
+					// hour:minute
 					now_v    = i.local_time.get_hour() * 60 + i.local_time.get_minute() + 24 * (i.local_time.get_day_of_month() + 31 * (i.local_time.get_month() + (12 * i.local_time.get_year())));
 					now_text = i.local_time.format("%k:%M");
 					break;
 				}
-				if ((last_v_text == -1) && (what_to_use < 2)) {
-					last_v_text = now_v;
-				}
-				if ((last_v_line == -1) && (what_to_use < 2)) {
-					last_v_line = now_v;
+				if (what_to_use < 2) {
+					if (last_v_text == -1) {
+						last_v_text = now_v;
+					}
+					if (last_v_line == -1) {
+						last_v_line = now_v;
+					}
 				}
 				if (last_v_line != now_v) {
 					last_y_line = i.ypos;
