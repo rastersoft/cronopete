@@ -5,7 +5,7 @@ po_comment_tag: TRANSLATOR
 vala_version: 0.30
 
 vala_binary: src/cronopete
-*version: 3.99.3
+*version: 3.99.4
 compile_options: --target-glib 2.32
 *vala_package: posix
 vala_check_package: gtk+-3.0
