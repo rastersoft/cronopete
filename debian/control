@@ -7,7 +7,7 @@ Build-Depends: build-essential, po-debconf, valac (>=0.30), libc6-dev, libgtk-3-
 
 Package: cronopete
 Architecture: any
-Version: 3.99.2
+Version: 3.99.3
 Depends: libappindicator3-1, libgee-0.8-2, libgsl23 | libgsl2, libc6-dev, libudisks2-0, rsync
 Description: A backup utility for Linux.
  .
