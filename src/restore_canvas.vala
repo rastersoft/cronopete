@@ -432,7 +432,7 @@ namespace cronopete {
 			c_base.set_source_rgb(1, 1, 1);
 			bool painted = false;
 			for (int i = 0; i < 4; i++) {
-				painted |= this.set_topaint(i, text_height, locked_pos, c_base, painted, layout);
+				painted |= this.set_topaint(i, locked_pos, c_base, painted, layout);
 			}
 			this.current_timeline = this.backup_list[this.current_backup].ypos;
 			this.desired_timeline = this.current_timeline;
@@ -467,14 +467,16 @@ namespace cronopete {
 		/**
 		 * Paints the years, months, days and hour:minutes in the timeline
 		 */
-		private bool set_topaint(int what_to_use, double text_height, Gee.ArrayList<Cairo.Rectangle ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
+		private bool set_topaint(int what_to_use, Gee.ArrayList<Cairo.Rectangle ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
 			if ((what_to_use == 3) && prev_painted) {
 				return false;
 			}
 			Pango.Rectangle r1, r2;
 			Cairo.Rectangle text_position;
-			bool            painted = false;
-			var             last_v  = -1;
+			bool            painted     = false;
+			var             last_v_text = -1;
+			var             last_v_line = -1;
+			double          last_y_line = -1;
 			for (int h = this.backup_list.size; h > 0; h--) {
 				var    i        = this.backup_list[h - 1];
 				int    now_v    = -1;
@@ -488,26 +490,34 @@ namespace cronopete {
 					break;
 
 				case 1:
-					now_v    = i.local_time.get_month();
+					now_v    = i.local_time.get_month() + (12 * i.local_time.get_year());
 					now_text = i.local_time.format("%b");
 					scale    = 3.0 / 5.0;
 					break;
 
 				case 2:
-					now_v    = i.local_time.get_day_of_month();
+					now_v    = i.local_time.get_day_of_month() + 31 * (i.local_time.get_month() + (12 * i.local_time.get_year()));
 					now_text = i.local_time.format("%a %e").replace("  ", " ");
 					break;
 
 				case 3:
-					now_v    = i.local_time.get_hour() * 60 + i.local_time.get_minute();
+					now_v    = i.local_time.get_hour() * 60 + i.local_time.get_minute() + 24 * (i.local_time.get_day_of_month() + 31 * (i.local_time.get_month() + (12 * i.local_time.get_year())));
 					now_text = i.local_time.format("%k:%M");
 					break;
 				}
-				if ((last_v == -1) && (what_to_use < 2)) {
-					last_v = now_v;
+				if ((last_v_text == -1) && (what_to_use < 2)) {
+					last_v_text = now_v;
 				}
-				if ((last_v != now_v)) {
-					layout.set_markup("<span size=\"small\">" + now_text + "</span>", -1);
+				if ((last_v_line == -1) && (what_to_use < 2)) {
+					last_v_line = now_v;
+				}
+				if (last_v_line != now_v) {
+					print("%f %s\n".printf(i.ypos, now_text));
+					last_y_line = i.ypos;
+					last_v_line = now_v;
+				}
+				if (last_v_text != now_v) {
+					layout.set_markup(this.timeline_font_size + now_text + "</span>", -1);
 					layout.get_pixel_extents(out r1, out r2);
 					text_position       = Cairo.Rectangle();
 					text_position.width = i.ypos;
@@ -538,15 +548,17 @@ namespace cronopete {
 						}
 					}
 					if (!found) {
-						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, text_position.y);
-						Pango.cairo_show_layout(c_base, layout);
-						locked_pos.add(text_position);
-						text_position.x = what_to_use;
-						c_base.move_to(this.timeline_x, 0.5 + (int) (text_position.width));
-						c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
-						c_base.stroke();
-						painted = true;
-						last_v = now_v;
+						if (last_v_text != now_v) {
+							c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, text_position.y);
+							Pango.cairo_show_layout(c_base, layout);
+							locked_pos.add(text_position);
+							text_position.x = what_to_use;
+							c_base.move_to(this.timeline_x, 0.5 + (int) (last_y_line));
+							c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
+							c_base.stroke();
+							painted     = true;
+							last_v_text = now_v;
+						}
 					}
 				}
 			}
