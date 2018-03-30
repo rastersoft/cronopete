@@ -512,7 +512,6 @@ namespace cronopete {
 					last_v_line = now_v;
 				}
 				if (last_v_line != now_v) {
-					print("%f %s\n".printf(i.ypos, now_text));
 					last_y_line = i.ypos;
 					last_v_line = now_v;
 				}
