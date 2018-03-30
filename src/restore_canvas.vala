@@ -385,7 +385,6 @@ namespace cronopete {
 				this.timeline_scale_factor = this.timeline_h;
 			}
 
-			double pos_y = this.timeline_y + this.timeline_h;
 			double new_y;
 			this.timeline_x += radius;
 
@@ -398,7 +397,6 @@ namespace cronopete {
 			int    last_year  = -1;
 			for (var i2 = this.backup_list.size; i2 > 0; i2--) {
 				var i           = i2 - 1;
-				var time_now    = this.backup_list[i].utc_time;
 				var time_now_dt = this.backup_list[i].local_time;
 				new_y = this.timeline_y + this.timeline_scale_factor * i;
 				this.backup_list[i].ypos = new_y;
@@ -474,7 +472,6 @@ namespace cronopete {
 			Cairo.Rectangle text_position;
 			bool            painted = false;
 			var             last_v  = -1;
-			var             paint_y = 0;
 			for (int h = this.backup_list.size; h > 0; h--) {
 				var    i        = this.backup_list[h - 1];
 				int    now_v    = -1;

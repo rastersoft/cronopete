@@ -173,7 +173,7 @@ namespace cronopete {
 			var rendersize = new CellRendererText();
 			rendersize.xalign = 1;
 			// TRANSLATOR this is the column in a file manager where file sizes are displayed
-			sizecolumn        = new Gtk.TreeViewColumn.with_attributes(_("Size"), rendersize, "text", 4);
+			sizecolumn = new Gtk.TreeViewColumn.with_attributes(_("Size"), rendersize, "text", 4);
 			this.path_view2.insert_column(sizecolumn, -1);
 			sizecolumn.clicked.connect(this.sort_size_clicked);
 			sizecolumn.resizable = true;
@@ -510,7 +510,7 @@ namespace cronopete {
 
 			this.menu.show_all();
 			this.menu.popup(null, null, null, 2, Gtk.get_current_event_time());
-			//this.menu.popup_at_pointer(event);
+			// this.menu.popup_at_pointer(event);
 		}
 
 		private void set_view_as_icons() {
@@ -700,17 +700,17 @@ namespace cronopete {
 			this.buttons_path.insert(btn, -1);
 			this.path_list.add(btn);
 
-			var elements = this.current_path.split("/");
+			var elements  = this.current_path.split("/");
 			var full_path = "/";
 			foreach (string s in elements) {
 				if (s == "") {
 					continue;
 				}
 				full_path = Path.build_filename(full_path, s);
-				ibtn = new TopButton();
+				ibtn      = new TopButton();
 				ibtn.set_label(s);
 				ibtn.full_path = full_path;
-				btn = new Gtk.ToolItem();
+				btn            = new Gtk.ToolItem();
 				btn.add(ibtn);
 				btn.show_all();
 				ibtn.clicked.connect(this.change_path);
@@ -740,11 +740,7 @@ namespace cronopete {
 		 * @param btn The pressed button
 		 */
 		public void change_path(Gtk.Widget btn) {
-			string fpath = "";
-			bool   found;
-
 			var btn2 = (TopButton) btn;
-
 			this.current_path = btn2.full_path;
 			this.refresh_icons();
 			this.set_scroll_top();

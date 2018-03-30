@@ -190,21 +190,21 @@ namespace  cronopete {
 				msg = msg_original;
 			}
 
-			if (false) {
-				// a simple log for debugging purposes
-				var file = File.new_for_path(Path.build_filename("/home", Environment.get_user_name(), ".cronopete_log"));
-				DataOutputStream dos;
-				FileIOStream     os;
-				if (file.query_exists()) {
-					os = file.open_readwrite();
-					os.seek(0, SeekType.END);
-					dos = new DataOutputStream(os.output_stream);
-				} else {
-					dos = new DataOutputStream(file.create(FileCreateFlags.REPLACE_DESTINATION));
-				}
-				var now = Time.local(time_t());
-				dos.put_string("%s: %s".printf(now.to_string(), msg));
-			}
+			/*
+			 *      // a simple log for debugging purposes
+			 *      var file = File.new_for_path(Path.build_filename("/home", Environment.get_user_name(), ".cronopete_log"));
+			 *      DataOutputStream dos;
+			 *      FileIOStream     os;
+			 *      if (file.query_exists()) {
+			 *              os = file.open_readwrite();
+			 *              os.seek(0, SeekType.END);
+			 *              dos = new DataOutputStream(os.output_stream);
+			 *      } else {
+			 *              dos = new DataOutputStream(file.create(FileCreateFlags.REPLACE_DESTINATION));
+			 *      }
+			 *      var now = Time.local(time_t());
+			 *      dos.put_string("%s: %s".printf(now.to_string(), msg));
+			 */
 
 			this.messages.append(msg);
 
