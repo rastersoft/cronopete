@@ -464,6 +464,9 @@ namespace cronopete {
 			c_base.restore();
 		}
 
+		/**
+		 * Paints the years, months, days and hour:minutes in the timeline
+		 */
 		private bool set_topaint(int what_to_use, double text_height, Gee.ArrayList<Cairo.Rectangle ?> locked_pos, Cairo.Context c_base, bool prev_painted, Pango.Layout layout) {
 			if ((what_to_use == 3) && prev_painted) {
 				return false;
@@ -543,8 +546,8 @@ namespace cronopete {
 						c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
 						c_base.stroke();
 						painted = true;
+						last_v = now_v;
 					}
-					last_v = now_v;
 				}
 			}
 			if (what_to_use == 2) {
