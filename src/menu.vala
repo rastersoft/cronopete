@@ -48,14 +48,17 @@ namespace  cronopete {
 		public bool is_visible;
 		private GLib.Settings cronopete_settings;
 
+		private cronopete_class cronopete_p;
+
 		ulong[] handlers;
 
-		public c_main_menu(cronopete_class cronopete, backup_base[] backends) {
+		public c_main_menu(cronopete_class cronopete_p, backup_base[] backends) {
+			this.cronopete_p        = cronopete_p;
 			this.handlers           = {};
 			this.backend            = null;
 			this.cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
 			this.messages           = new StringBuilder("");
-			cronopete.changed_backend.connect(this.backend_changed);
+			cronopete_p.changed_backend.connect(this.backend_changed);
 
 			this.builder = new Builder();
 			try {
@@ -253,7 +256,7 @@ namespace  cronopete {
 			time_t next = newest + this.cronopete_settings.get_uint("backup-period");
 			time_t now  = time_t();
 			if (next < now) {
-				next = now + 600;
+				next = now + 60 * this.cronopete_p.first_delay;
 			}
 			if (this.backend.storage_is_available()) {
 				this.label_next.set_text(cronopete.date_to_string(next));

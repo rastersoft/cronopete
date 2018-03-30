@@ -34,6 +34,8 @@ namespace cronopete {
 	enum BackupStatus { STOPPED, ALLFINE, WARNING, ERROR }
 
 	public class cronopete_class : GLib.Object {
+		public int first_delay = 0;
+
 		private backup_base backend;
 		private backup_base[] backend_list;
 		private int current_backend;
@@ -50,7 +52,6 @@ namespace cronopete {
 
 		private int iconpos;
 		private uint animation_timer;
-		private uint32 backup_timeout;
 
 		private restore_iface restore_window;
 		private bool restore_window_visible;
@@ -91,8 +92,9 @@ namespace cronopete {
 			this.changed_config("visible");
 			this.repaint_tray_icon();
 			// wait 10 minutes before checking if a backup is needed, to allow the desktop to be fully loaded
-			this.backup_timeout = 600;
-			GLib.Timeout.add(this.backup_timeout * 1000, this.check_backup);
+			this.first_delay = 10;
+			// Check every minute if we have to do a backup
+			GLib.Timeout.add(60000, this.check_backup);
 		}
 
 		public void updated_backend() {
@@ -133,6 +135,10 @@ namespace cronopete {
 		 * the next backup
 		 */
 		private bool check_backup() {
+			if (this.first_delay > 0) {
+				this.first_delay--;
+				return true;
+			}
 			if (this.can_do_backup()) {
 				var last_backup = this.backend.get_last_backup();
 				var now         = time_t();
@@ -198,7 +204,7 @@ namespace cronopete {
 			string description = "";
 			if (this.backend.storage_is_available() == false) {
 				// There's no disk connected
-				icon_color  = "red";
+				icon_color = "red";
 				// TRANSLATORS Specify that the disk configured for backups is not available
 				description = _("Disk not available");
 			} else {
@@ -206,7 +212,7 @@ namespace cronopete {
 					switch (this.current_status) {
 					case BackupStatus.STOPPED:
 						// Idle
-						icon_color  = "white";
+						icon_color = "white";
 						// TRANSLATORS The program state, used in a tooltip, when it is waiting to do the next backup
 						description = _("Idle");
 						break;
@@ -230,20 +236,20 @@ namespace cronopete {
 					break;
 
 					case BackupStatus.WARNING:
-						icon_color  = "yellow";
+						icon_color = "yellow";
 						// TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, a warning message
 						description = _("Doing backup, have a warning");
 						break;
 
 					case BackupStatus.ERROR:
-						icon_color  = "red";
+						icon_color = "red";
 						// TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, an error message
 						description = _("Doing backup, have an error");
 						break;
 					}
 				} else {
 					// the backup is disabled
-					icon_color  = "orange";
+					icon_color = "orange";
 					// TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
 					description = _("Backup is disabled");
 				}
@@ -414,8 +420,8 @@ namespace cronopete {
 				this.restore_window.present();
 			} else {
 				this.restore_window_visible = true;
-				this.restore_window = new restore_iface(this.backend);
-				this.restore_window.destroy.connect( ()=> {
+				this.restore_window         = new restore_iface(this.backend);
+				this.restore_window.destroy.connect(() => {
 					this.restore_window_visible = false;
 				});
 			}
