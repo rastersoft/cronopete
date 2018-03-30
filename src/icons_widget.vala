@@ -1017,7 +1017,7 @@ namespace cronopete {
 					fssize = "%01.1f GB".printf(fsize / 1000000000.0);
 				}
 				this.path_model.set(iter, 4, fssize);
-				GLib.DateTime timeval = new GLib.DateTime.from_timeval_utc(f.mod_time);
+				GLib.DateTime timeval = new GLib.DateTime.from_timeval_local(f.mod_time);
 				this.path_model.set(iter, 5, timeval.format("%c"));
 				string file_type = "";
 				if (f.type != null) {
