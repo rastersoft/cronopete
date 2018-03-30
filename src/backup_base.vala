@@ -344,7 +344,7 @@ namespace cronopete {
 
 		protected void set_common_data(time_t t) {
 			this.utc_time   = t;
-			this.local_time = new GLib.DateTime.from_unix_utc(t);
+			this.local_time = new GLib.DateTime.from_unix_local(t);
 			this.keep       = true;
 		}
 	}

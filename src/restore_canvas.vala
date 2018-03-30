@@ -339,6 +339,9 @@ namespace cronopete {
 				if (month_width < w) {
 					month_width = w;
 				}
+				if (text_height < h) {
+					text_height = h;
+				}
 			}
 			for (int i = 1; i <= 7; i++) {
 				var date = new GLib.DateTime(new TimeZone.local(), 2000, 1, i, 0, 0, 0);
@@ -347,6 +350,9 @@ namespace cronopete {
 				layout.get_pixel_size(out w, out h);
 				if (day_width < w) {
 					day_width = w;
+				}
+				if (text_height < h) {
+					text_height = h;
 				}
 			}
 
@@ -488,8 +494,8 @@ namespace cronopete {
 				}
 				if ((last_v != now_v)) {
 					bool found = false;
-					var  min_y = i.ypos - (text_height * 1.2);
-					var  max_y = i.ypos + (text_height * 1.2);
+					var  min_y = i.ypos - (text_height * 1.1);
+					var  max_y = i.ypos + (text_height * 1.1);
 					foreach (var j in locked_pos) {
 						if ((j >= min_y) && (j <= max_y)) {
 							found = true;
@@ -595,7 +601,6 @@ namespace cronopete {
 				Pango.cairo_show_layout(cr, layout);
 				cr.restore();
 			}
-			layout.set_font_description(null);
 			return false;
 		}
 
