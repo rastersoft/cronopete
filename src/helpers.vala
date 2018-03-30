@@ -25,22 +25,25 @@ namespace cronopete {
 			return _("Not available");
 		}
 
-		var last_backup = GLib.Time.local(datetime);
+		var last_backup = new GLib.DateTime.from_unix_local(datetime);
+		var lb_day      = last_backup.get_day_of_month();
+		var lb_month    = last_backup.get_month();
+		var lb_year     = last_backup.get_year();
 		var now         = time_t();
-		var today       = GLib.Time.local(now);
+		var today       = new GLib.DateTime.from_unix_local(now);
+		var yesterday   = new GLib.DateTime.from_unix_local(now - 86400);
+		var tomorrow    = new GLib.DateTime.from_unix_local(now + 86400);
 		// 60 * 60 * 24 = 86400 seconds / day
-		var yesterday = GLib.Time.local(now - 86400);
-		var tomorrow  = GLib.Time.local(now + 86400);
 
-		if ((last_backup.day == today.day) && (last_backup.month == today.month) && (last_backup.year == today.year)) {
+		if ((lb_day == today.get_day_of_month()) && (lb_month == today.get_month()) && (lb_year == today.get_year())) {
 			/// TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
 			return last_backup.format(_("today at %R"));
 		}
-		if ((last_backup.day == yesterday.day) && (last_backup.month == yesterday.month) && (last_backup.year == yesterday.year)) {
+		if ((lb_day == yesterday.get_day_of_month()) && (lb_month == yesterday.get_month()) && (lb_year == yesterday.get_year())) {
 			/// TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
 			return last_backup.format(_("yesterday at %R"));
 		}
-		if ((last_backup.day == tomorrow.day) && (last_backup.month == tomorrow.month) && (last_backup.year == tomorrow.year)) {
+		if ((lb_day == tomorrow.get_day_of_month()) && (lb_month == tomorrow.get_month()) && (lb_year == tomorrow.get_year())) {
 			/// TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
 			return last_backup.format(_("tomorrow at %R"));
 		} else {
