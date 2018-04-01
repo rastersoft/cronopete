@@ -690,17 +690,17 @@ namespace cronopete {
 				// keep the framerate at 20 FPS
 				return true;
 			}
+			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
 			if ((lt - this.last_time_frame) > 500000) {
 				// if the graphics system is so slow that can't do more than two fps, just go to the last frame
 				this.current_timeline = this.desired_timeline;
-				this.current_z_pos = this.desired_z_pos;
+				this.current_z_pos = desired_z_pos;
 				this.tick_cb = 0;
 				this.file_browser_visible = true;
 				this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
 				this.file_browser.show();
 				return false;
 			}
-			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
 			this.last_time_frame  = lt;
 			this.current_timeline = (2 * this.current_timeline + this.desired_timeline) / 3;
 			double dif_timeline;
