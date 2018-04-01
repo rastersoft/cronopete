@@ -680,14 +680,25 @@ namespace cronopete {
 		 * It is used to repaint and animate the windows and timeline
 		 */
 		private bool tick_callback(Gtk.Widget widget, Gdk.FrameClock clock) {
+			var lt = clock.get_frame_time();
 			if (this.file_browser_visible) {
 				this.file_browser_visible = false;
 				this.file_browser.hide();
+				this.last_time_frame = lt - 50001;
 			}
-			var lt = clock.get_frame_time();
 			if ((lt - this.last_time_frame) < 50000) {
 				// keep the framerate at 20 FPS
 				return true;
+			}
+			if ((lt - this.last_time_frame) > 500000) {
+				// if the graphics system is so slow that can't do more than two fps, just go to the last frame
+				this.current_timeline = this.desired_timeline;
+				this.current_z_pos = this.desired_z_pos;
+				this.tick_cb = 0;
+				this.file_browser_visible = true;
+				this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
+				this.file_browser.show();
+				return false;
 			}
 			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
 			this.last_time_frame  = lt;
