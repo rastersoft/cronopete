@@ -71,6 +71,7 @@ namespace cronopete {
 		private double timeline_h;
 		private double timeline_scale_factor;
 		private double timeline_indicator_width;
+		private double timeline_text_margin = 0.2;
 
 		// stores the tick callback uid, to know if it is already set
 		private uint tick_cb;
@@ -395,6 +396,8 @@ namespace cronopete {
 			double last_pos_y = this.screen_h;
 			int    last_month = -1;
 			int    last_year  = -1;
+			int    last_day   = -1;
+			var    now        = time_t();
 			for (var i2 = this.backup_list.size; i2 > 0; i2--) {
 				var i           = i2 - 1;
 				var time_now_dt = this.backup_list[i].local_time;
@@ -410,6 +413,7 @@ namespace cronopete {
 				// the upper and lower coordinates are the same
 				text_position.y      = new_y;
 				text_position.height = new_y;
+				text_position.width = new_y;
 				// The type of line (thus, the tipe of text that should be put there) is stored in .x
 				if ((last_year != -1) && (last_year != time_now_dt.get_year())) {
 					c_base.set_source_rgb(1, 1, 1);
@@ -427,10 +431,10 @@ namespace cronopete {
 				locked_pos.add(text_position);
 				last_year  = time_now_dt.get_year();
 				last_month = time_now_dt.get_month();
+				last_day   = time_now_dt.get_day_of_month();
 				c_base.stroke();
 			}
 			c_base.set_source_rgb(1, 1, 1);
-			var  now     = time_t();
 			bool painted = false;
 			for (int i = 0; i < 4; i++) {
 				painted |= this.set_topaint(i, now, locked_pos, c_base, painted, layout);
@@ -476,8 +480,6 @@ namespace cronopete {
 			Cairo.Rectangle text_position;
 			bool            painted     = false;
 			var             last_v_text = -1;
-			var             last_v_line = -1;
-			double          last_y_line = -1;
 			for (int h = this.backup_list.size; h > 0; h--) {
 				var    i        = this.backup_list[h - 1];
 				int    now_v    = -1;
@@ -518,62 +520,52 @@ namespace cronopete {
 					now_text = i.local_time.format("%k:%M");
 					break;
 				}
-				if (what_to_use < 2) {
-					if (last_v_text == -1) {
-						last_v_text = now_v;
-					}
-					if (last_v_line == -1) {
-						last_v_line = now_v;
-					}
-				}
-				if (last_v_line != now_v) {
-					last_y_line = i.ypos;
-					last_v_line = now_v;
+				if ((what_to_use < 2) && (last_v_text == -1)) {
+					last_v_text = now_v;
 				}
 				if (last_v_text != now_v) {
 					layout.set_markup(this.timeline_font_size + now_text + "</span>", -1);
 					layout.get_pixel_extents(out r1, out r2);
 					text_position       = Cairo.Rectangle();
-					text_position.width = i.ypos;
 					// the upper coordinate
 					text_position.y = i.ypos - r1.y - r1.height * 0.5;
-					// it is not the height, but the lower coordinate
-					text_position.height = r2.height + text_position.y;
+					// it is not the width, but the top coordinate plus the margin
+					text_position.width = i.ypos - r1.y - r1.height * (0.5 + this.timeline_text_margin);
+					// it is not the height, but the lower coordinate plus the margin
+					text_position.height = (r2.height * (1 + this.timeline_text_margin) + text_position.y);
 					bool found = false;
 					foreach (var j in locked_pos) {
 						if (j.x >= what_to_use) {
 							continue;
 						}
-						if ((j.y >= text_position.y) && (j.y <= text_position.height)) {
+						if ((j.width >= text_position.width) && (j.width <= text_position.height)) {
 							found = true;
 							break;
 						}
-						if ((j.width >= text_position.y) && (j.width <= text_position.height)) {
+						if ((j.height >= text_position.width) && (j.height <= text_position.height)) {
 							found = true;
 							break;
 						}
-						if ((text_position.y >= j.y) && (text_position.y <= j.height)) {
+						if ((text_position.width >= j.width) && (text_position.width <= j.height)) {
 							found = true;
 							break;
 						}
-						if ((text_position.height >= j.y) && (text_position.height <= j.height)) {
+						if ((text_position.height >= j.width) && (text_position.height <= j.height)) {
 							found = true;
 							break;
 						}
 					}
 					if (!found) {
-						if (last_v_text != now_v) {
-							c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, text_position.y);
-							Pango.cairo_show_layout(c_base, layout);
-							locked_pos.add(text_position);
-							text_position.x = what_to_use;
-							c_base.move_to(this.timeline_x, 0.5 + (int) (last_y_line));
-							c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
-							c_base.stroke();
-							painted     = true;
-							last_v_text = now_v;
-						}
+						c_base.move_to(this.timeline_x + this.timeline_indicator_width * scale + 2 + r1.x, text_position.y);
+						Pango.cairo_show_layout(c_base, layout);
+						locked_pos.add(text_position);
+						text_position.x = what_to_use;
+						c_base.move_to(this.timeline_x, 0.5 + (int) (i.ypos));
+						c_base.rel_line_to(this.timeline_indicator_width / 3, 0);
+						c_base.stroke();
+						painted = true;
 					}
+					last_v_text = now_v;
 				}
 			}
 			if (what_to_use == 2) {
