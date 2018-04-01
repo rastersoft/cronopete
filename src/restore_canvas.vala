@@ -636,7 +636,8 @@ namespace cronopete {
 				var z2 = z_offset + i * 1000;
 				this.transform_coords(z2, out ox, out oy, out ow, out oh, out s_factor);
 				var date = cronopete.date_to_string(this.backup_list[z_index + i].utc_time);
-				layout.set_markup(this.title_font_size + date + "</span>", -1);
+				//layout.set_markup(this.title_font_size + date + "</span>", -1);
+				layout.set_markup("<span size=\"%d\">%s</span>".printf((int)(12800 * s_factor), date), -1);
 				int w, h;
 				layout.get_pixel_size(out w, out h);
 				w = (int) (w * s_factor);
@@ -650,12 +651,12 @@ namespace cronopete {
 				cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
 				cr.stroke();
 				cr.move_to(ox + (ow - w) / 2, oy - h - final_add);
-				cr.save();
+				/*cr.save();
 				if (s_factor != 1.0) {
 					cr.scale(s_factor, s_factor);
-				}
+				}*/
 				Pango.cairo_show_layout(cr, layout);
-				cr.restore();
+				//cr.restore();
 			}
 			return false;
 		}
@@ -691,30 +692,22 @@ namespace cronopete {
 				return true;
 			}
 			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
-			if ((lt - this.last_time_frame) > 500000) {
-				// if the graphics system is so slow that can't do more than two fps, just go to the last frame
-				this.current_timeline = this.desired_timeline;
-				this.current_z_pos = desired_z_pos;
-				this.tick_cb = 0;
-				this.file_browser_visible = true;
-				this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
-				this.file_browser.show();
-				return false;
-			}
-			this.last_time_frame  = lt;
-			this.current_timeline = (2 * this.current_timeline + this.desired_timeline) / 3;
-			double dif_timeline;
-			if (this.current_timeline > this.desired_timeline) {
-				dif_timeline = this.current_timeline - this.desired_timeline;
-			} else {
-				dif_timeline = this.desired_timeline - this.current_timeline;
-			}
-			if (dif_timeline < 2) {
-				this.current_timeline = this.desired_timeline;
-			}
-			this.current_z_pos = (2 * this.current_z_pos + desired_z_pos) / 3;
-			if (((this.current_z_pos - desired_z_pos).abs()) < 20) {
-				this.current_z_pos = desired_z_pos;
+			while((lt - this.last_time_frame) >= 50000) {
+				this.last_time_frame  += 50000;
+				this.current_timeline = (2 * this.current_timeline + this.desired_timeline) / 3;
+				double dif_timeline;
+				if (this.current_timeline > this.desired_timeline) {
+					dif_timeline = this.current_timeline - this.desired_timeline;
+				} else {
+					dif_timeline = this.desired_timeline - this.current_timeline;
+				}
+				if (dif_timeline < 2) {
+					this.current_timeline = this.desired_timeline;
+				}
+				this.current_z_pos = (2 * this.current_z_pos + desired_z_pos) / 3;
+				if (((this.current_z_pos - desired_z_pos).abs()) < 20) {
+					this.current_z_pos = desired_z_pos;
+				}
 			}
 			this.queue_draw();
 			if ((this.desired_timeline == this.current_timeline) && (this.current_z_pos == desired_z_pos)) {
