@@ -647,13 +647,17 @@ namespace cronopete {
 				cr.set_source_rgb(1, 1, 1);
 				double final_add = 4.0 * s_factor;
 				if (i == last) {
-					//cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
+					cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
 				} else {
 					cr.rectangle(ox, oy - 2 * final_add - h, ow, oh2);
 				}
 				cr.fill();
 				cr.set_source_rgb(0.0, 0.0, 0.0);
-				//cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
+				if (i == last) {
+					cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
+				} else {
+					cr.rectangle(ox, oy - 2 * final_add - h, ow, oh2);
+				}
 				cr.stroke();
 				cr.move_to(ox + (ow - w) / 2, oy - h - final_add);
 				cr.save();
@@ -663,8 +667,6 @@ namespace cronopete {
 				Pango.cairo_show_layout(cr, layout);
 				cr.restore();
 			}
-			//print("Tiempo: %lld\n".printf(this.last_time_frame - this.last2));
-			//this.last2 = this.last_time_frame;
 			return false;
 		}
 
@@ -723,7 +725,7 @@ namespace cronopete {
 				this.tick_cb = 0;
 				this.file_browser_visible = true;
 				this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
-				//this.file_browser.show();
+				this.file_browser.show();
 				return false;
 			} else {
 				return true;
