@@ -617,6 +617,7 @@ namespace cronopete {
 			double oy;
 			double ow;
 			double oh;
+			double oh2;
 			double s_factor;
 			int64  z_offset = (1000 - (this.current_z_pos % 1000)) % 1000;
 			int    z_index  = (int) (this.current_z_pos / 1000);
@@ -629,25 +630,30 @@ namespace cronopete {
 			}
 			cr.set_line_width(1.5);
 			cr.set_source_rgb(0.2, 0.2, 0.2);
+			int bw, bh;
+			layout.get_pixel_size(out bw, out bh);
 			for (int i = 9; i >= last; i--) {
 				if (((z_index + i) < 0) || ((z_index + i) >= this.backup_list.size)) {
 					continue;
 				}
 				var z2 = z_offset + i * 1000;
-				this.transform_coords(z2, out ox, out oy, out ow, out oh, out s_factor);
+				this.transform_coords(z2, out ox, out oy, out ow, out oh, out oh2, out s_factor);
 				var date = cronopete.date_to_string(this.backup_list[z_index + i].utc_time);
 				layout.set_markup(this.title_font_size + date + "</span>", -1);
 				int w, h;
-				layout.get_pixel_size(out w, out h);
-				w = (int) (w * s_factor);
-				h = (int) (h * s_factor);
+				w = (int) (bw * s_factor);
+				h = (int) (bh * s_factor);
 
 				cr.set_source_rgb(1, 1, 1);
 				double final_add = 4.0 * s_factor;
-				cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
+				if (i == last) {
+					//cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
+				} else {
+					cr.rectangle(ox, oy - 2 * final_add - h, ow, oh2);
+				}
 				cr.fill();
 				cr.set_source_rgb(0.0, 0.0, 0.0);
-				cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
+				//cr.rectangle(ox, oy - 2 * final_add - h, ow, oh + 2 * final_add + h);
 				cr.stroke();
 				cr.move_to(ox + (ow - w) / 2, oy - h - final_add);
 				cr.save();
@@ -657,6 +663,8 @@ namespace cronopete {
 				Pango.cairo_show_layout(cr, layout);
 				cr.restore();
 			}
+			//print("Tiempo: %lld\n".printf(this.last_time_frame - this.last2));
+			//this.last2 = this.last_time_frame;
 			return false;
 		}
 
@@ -664,13 +672,14 @@ namespace cronopete {
 		 * Given the Z coordinate for a pseudo-3D window, calculates and returns the X and Y coordinates,
 		 * the width, height and scale factor
 		 */
-		private void transform_coords(double z, out int ox, out int oy, out int ow, out int oh, out double s_factor) {
+		private void transform_coords(double z, out int ox, out int oy, out int ow, out int oh, out int oh2, out double s_factor) {
 			double eyedist = 2500.0;
 
 			ox       = (int) ((this.browser_x * eyedist + (z * ((double) this.screen_w) / 2)) / (z + eyedist));
 			oy       = (int) (((this.browser_margin) * eyedist) / (z + eyedist));
 			ow       = (int) ((this.browser_w * eyedist) / (z + eyedist));
 			oh       = (int) ((this.browser_h * eyedist) / (z + eyedist));
+			oh2      = (int) ((((this.browser_margin) * eyedist) / (z + eyedist - 1000)) - oy);
 			oy      += (int) (this.browser_y);
 			s_factor = eyedist / (z + eyedist);
 		}
@@ -714,7 +723,7 @@ namespace cronopete {
 				this.tick_cb = 0;
 				this.file_browser_visible = true;
 				this.file_browser.set_backup_time(this.backup_list.get(this.current_backup));
-				this.file_browser.show();
+				//this.file_browser.show();
 				return false;
 			} else {
 				return true;
