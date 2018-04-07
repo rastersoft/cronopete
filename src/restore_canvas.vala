@@ -630,8 +630,6 @@ namespace cronopete {
 			}
 			cr.set_line_width(1.5);
 			cr.set_source_rgb(0.2, 0.2, 0.2);
-			int bw, bh;
-			layout.get_pixel_size(out bw, out bh);
 			for (int i = 9; i >= last; i--) {
 				if (((z_index + i) < 0) || ((z_index + i) >= this.backup_list.size)) {
 					continue;
@@ -641,8 +639,9 @@ namespace cronopete {
 				var date = cronopete.date_to_string(this.backup_list[z_index + i].utc_time);
 				layout.set_markup(this.title_font_size + date + "</span>", -1);
 				int w, h;
-				w = (int) (bw * s_factor);
-				h = (int) (bh * s_factor);
+				layout.get_pixel_size(out w, out h);
+				w = (int) (w * s_factor);
+				h = (int) (h * s_factor);
 
 				cr.set_source_rgb(1, 1, 1);
 				double final_add = 4.0 * s_factor;
