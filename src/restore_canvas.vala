@@ -413,7 +413,7 @@ namespace cronopete {
 				// the upper and lower coordinates are the same
 				text_position.y      = new_y;
 				text_position.height = new_y;
-				text_position.width = new_y;
+				text_position.width  = new_y;
 				// The type of line (thus, the tipe of text that should be put there) is stored in .x
 				if ((last_year != -1) && (last_year != time_now_dt.get_year())) {
 					c_base.set_source_rgb(1, 1, 1);
@@ -526,7 +526,7 @@ namespace cronopete {
 				if (last_v_text != now_v) {
 					layout.set_markup(this.timeline_font_size + now_text + "</span>", -1);
 					layout.get_pixel_extents(out r1, out r2);
-					text_position       = Cairo.Rectangle();
+					text_position = Cairo.Rectangle();
 					// the upper coordinate
 					text_position.y = i.ypos - r1.y - r1.height * 0.5;
 					// it is not the width, but the top coordinate plus the margin
@@ -701,8 +701,8 @@ namespace cronopete {
 				return true;
 			}
 			int64 desired_z_pos = 1000 * ((int64) this.current_backup);
-			while((lt - this.last_time_frame) >= 50000) {
-				this.last_time_frame  += 50000;
+			while ((lt - this.last_time_frame) >= 50000) {
+				this.last_time_frame += 50000;
 				this.current_timeline = (2 * this.current_timeline + this.desired_timeline) / 3;
 				double dif_timeline;
 				if (this.current_timeline > this.desired_timeline) {
@@ -748,6 +748,30 @@ namespace cronopete {
 		}
 
 		private bool on_click(Gtk.Widget widget, Gdk.EventButton event) {
+			if ((event.x >= this.timeline_x) && (event.x < (this.timeline_x + this.timeline_w))) {
+				double distance = 0;
+				backup_element ? element = null;
+				int backup_pos = 0;
+				int counter    = 0;
+				foreach (var backup in this.backup_list) {
+					if ((element == null) || ((event.y - backup.ypos).abs() < distance)) {
+						element    = backup;
+						backup_pos = counter;
+						distance   = (event.y - backup.ypos).abs();
+					}
+					counter++;
+				}
+				if (element != null) {
+					this.current_backup   = backup_pos;
+					this.desired_timeline = this.backup_list[this.current_backup].ypos;
+					this.changed_backup_time(this.current_backup);
+					if (this.tick_cb == 0) {
+						this.tick_cb = this.add_tick_callback(this.tick_callback);
+					}
+				}
+				return true;
+			}
+
 			if ((event.x < this.arrows_x) || (event.x > (this.arrows_x + this.arrows_w)) || (event.y < this.arrows_y) || (event.y > (this.arrows_y + this.arrows_h))) {
 				return false;
 			}
