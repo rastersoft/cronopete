@@ -195,7 +195,11 @@ namespace cronopete {
 			}
 			this.aborting = true;
 			if (this.current_child_pid != -1) {
+#if VALA_0_40
+				Posix.kill(this.current_child_pid, Posix.Signal.TERM);
+#else
 				Posix.kill(this.current_child_pid, Posix.SIGTERM);
+#endif
 				this.current_child_pid = -1;
 			}
 		}
