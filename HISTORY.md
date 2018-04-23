@@ -1,5 +1,7 @@
 # History of versions #
 
+* Version 4.0.1 (2018/04/23)
+      * Updated GL translation
 * Version 4.0.0 (2018/04/19)
       * Code refactorization
       * Now utilizes RSYNC instead of own code

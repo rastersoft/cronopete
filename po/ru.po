@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 3.21.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-28 17:52+0200\n"
+"POT-Creation-Date: 2018-04-23 22:50+0200\n"
 "PO-Revision-Date: 2017-09-14 00:12+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -36,7 +36,7 @@ msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr ""
 "Невозможно создать базовые папки для резервной копии. Операция прервана.\n"
 
-#: src/backup_folder.vala:256 src/backup_rsync.vala:265
+#: src/backup_folder.vala:260 src/backup_rsync.vala:269
 #, fuzzy, c-format
 msgid "Failed to launch cp to restore: %s"
 msgstr ""
@@ -44,33 +44,33 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/backup_folder.vala:284 src/backup_rsync.vala:297
+#: src/backup_folder.vala:288 src/backup_rsync.vala:301
 #, fuzzy
 msgid "Starting backup"
 msgstr "Резервирование\n"
 
-#: src/backup_folder.vala:322 src/backup_rsync.vala:335
+#: src/backup_folder.vala:326 src/backup_rsync.vala:339
 #, fuzzy
 msgid "Cleaning incomplete backups"
 msgstr "Удаление старых резервных копий"
 
-#: src/backup_folder.vala:353 src/backup_rsync.vala:366
+#: src/backup_folder.vala:357 src/backup_rsync.vala:370
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr ""
 
-#: src/backup_folder.vala:360 src/backup_rsync.vala:373
+#: src/backup_folder.vala:364 src/backup_rsync.vala:377
 #, fuzzy
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Нет свободного места на диске для запуска резервирования. Операция "
 "прервана.\n"
 
-#: src/backup_folder.vala:375 src/backup_rsync.vala:388
+#: src/backup_folder.vala:379 src/backup_rsync.vala:392
 msgid "Backup aborted"
 msgstr "Резервирование прекращено"
 
-#: src/backup_folder.vala:402 src/backup_rsync.vala:415
+#: src/backup_folder.vala:406 src/backup_rsync.vala:419
 #, fuzzy, c-format
 msgid "Failed to delete folders: %s"
 msgstr ""
@@ -78,92 +78,92 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/backup_folder.vala:418 src/backup_rsync.vala:431
+#: src/backup_folder.vala:422 src/backup_rsync.vala:435
 #, fuzzy, c-format
 msgid "Failed to delete aborted backups: %s"
 msgstr ""
 "Нет свободного места на диске для запуска резервирования. Операция "
 "прервана.\n"
 
-#: src/backup_folder.vala:443 src/backup_rsync.vala:456
+#: src/backup_folder.vala:447 src/backup_rsync.vala:460
 #, fuzzy, c-format
 msgid "Backing up folder %s"
 msgstr "Резервирование папки %s\n"
 
-#: src/backup_folder.vala:464 src/backup_rsync.vala:477
+#: src/backup_folder.vala:468 src/backup_rsync.vala:481
 #, fuzzy, c-format
 msgid "Excluding folder %s"
 msgstr "Исключить папку %s.\n"
 
-#: src/backup_folder.vala:473 src/backup_rsync.vala:486
+#: src/backup_folder.vala:477 src/backup_rsync.vala:490
 #, fuzzy, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr ""
 "Нет свободного места на диске для запуска резервирования. Операция "
 "прервана.\n"
 
-#: src/backup_folder.vala:492 src/backup_rsync.vala:505
+#: src/backup_folder.vala:496 src/backup_rsync.vala:509
 #, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr ""
 
-#: src/backup_folder.vala:507 src/backup_rsync.vala:520
+#: src/backup_folder.vala:511 src/backup_rsync.vala:524
 #, fuzzy, c-format
 msgid "Backing up %s"
 msgstr "Резервирование папки %s\n"
 
-#: src/backup_folder.vala:540 src/backup_folder.vala:541
-#: src/backup_rsync.vala:553 src/backup_rsync.vala:554
+#: src/backup_folder.vala:544 src/backup_folder.vala:545
+#: src/backup_rsync.vala:557 src/backup_rsync.vala:558
 #, fuzzy
 msgid "Syncing disk"
 msgstr "Синхронизация диска\n"
 
-#: src/backup_folder.vala:547 src/backup_rsync.vala:560
+#: src/backup_folder.vala:551 src/backup_rsync.vala:564
 msgid "Failed to launch sync command"
 msgstr ""
 
-#: src/backup_folder.vala:570 src/backup_rsync.vala:583
+#: src/backup_folder.vala:574 src/backup_rsync.vala:587
 #, fuzzy
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr ""
 "Нет свободного места на диске для запуска резервирования. Операция "
 "прервана.\n"
 
-#: src/backup_folder.vala:583 src/backup_rsync.vala:596
+#: src/backup_folder.vala:587 src/backup_rsync.vala:600
 msgid "Failed to launch final sync command"
 msgstr ""
 
-#: src/backup_folder.vala:593 src/backup_rsync.vala:606
+#: src/backup_folder.vala:597 src/backup_rsync.vala:610
 #, fuzzy
 msgid "Disk synced, cleaning old backups"
 msgstr "Удаление старых резервных копий"
 
-#: src/backup_folder.vala:609 src/backup_rsync.vala:622 src/cronopete.vala:224
+#: src/backup_folder.vala:613 src/backup_rsync.vala:626 src/cronopete.vala:232
 #, fuzzy
 msgid "Cleaning old backups"
 msgstr "Удаление старых резервных копий"
 
-#: src/backup_folder.vala:615 src/backup_rsync.vala:628
+#: src/backup_folder.vala:619 src/backup_rsync.vala:632
 msgid "No old backups to delete"
 msgstr ""
 
-#: src/backup_folder.vala:642 src/backup_rsync.vala:655
+#: src/backup_folder.vala:646 src/backup_rsync.vala:659
 #, fuzzy, c-format
 msgid "Deleting old backup %s"
 msgstr "Удаление старых резервных копий"
 
-#: src/backup_folder.vala:649 src/backup_rsync.vala:662
+#: src/backup_folder.vala:653 src/backup_rsync.vala:666
 #, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr ""
 
 #. TRANSLATORS This is the text for a Cancel button, that cancels the current action of choosing a folder where to do the backups
-#: src/backup_folder.vala:687 src/options.vala:185 src/options.vala:223
+#: src/backup_folder.vala:691 src/options.vala:185 src/options.vala:223
 msgid "Cancel"
 msgstr "Отмена"
 
 #. TRANSLATORS This is the text for an Add button, that adds a selected folder as the destination where to do the backups when using the "backup to folder" backend
-#: src/backup_folder.vala:689 src/options.vala:186 src/options.vala:224
+#: src/backup_folder.vala:693 src/options.vala:186 src/options.vala:224
 #: data/interface/options.ui:115 data/interface/options.ui:205
 msgid "Add"
 msgstr "Добавить"
@@ -218,61 +218,61 @@ msgid "Unknown size"
 msgstr "Неизвестный размер"
 
 #. TRANSLATORS Specify that the disk configured for backups is not available
-#: src/cronopete.vala:201
+#: src/cronopete.vala:209
 #, fuzzy
 msgid "Disk not available"
 msgstr "Хранилище недоступно"
 
 #. TRANSLATORS The program state, used in a tooltip, when it is waiting to do the next backup
-#: src/cronopete.vala:209
+#: src/cronopete.vala:217
 msgid "Idle"
 msgstr "Бездействие"
 
-#: src/cronopete.vala:219
+#: src/cronopete.vala:227
 #, fuzzy
 msgid "Doing backup"
 msgstr "Резервирование\n"
 
 #. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, a warning message
-#: src/cronopete.vala:233
+#: src/cronopete.vala:241
 msgid "Doing backup, have a warning"
 msgstr ""
 
 #. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, an error message
-#: src/cronopete.vala:239
+#: src/cronopete.vala:247
 msgid "Doing backup, have an error"
 msgstr ""
 
 #. TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
-#: src/cronopete.vala:246
+#: src/cronopete.vala:254
 #, fuzzy
 msgid "Backup is disabled"
 msgstr "Резервирование отключено"
 
 #. TRANSLATORS Menu entry to start a new backup manually
-#: src/cronopete.vala:348
+#: src/cronopete.vala:356
 msgid "Back Up Now"
 msgstr "Начать резервировать"
 
 #. TRANSLATORS Menu entry to abort the current backup manually
-#: src/cronopete.vala:352
+#: src/cronopete.vala:360
 msgid "Stop Backing Up"
 msgstr "Остановить резервирование"
 
 #. TRANSLATORS Menu entry to open the interface for restoring files from a backup
 #. TRANSLATORS Text for the button that restores the selected files
-#: src/cronopete.vala:357 src/restore.vala:90
+#: src/cronopete.vala:365 src/restore.vala:90
 msgid "Restore files"
 msgstr "Восстановить файлы"
 
 #. TRANSLATORS Menu entry to open the configuration window
-#: src/cronopete.vala:366
+#: src/cronopete.vala:374
 #, fuzzy
 msgid "Configure the backups"
 msgstr "Настройте резервное копирование"
 
 #. TRANSLATORS Show the date of the last backup
-#: src/cronopete.vala:375
+#: src/cronopete.vala:383
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Последняя копия: %s"
@@ -284,22 +284,22 @@ msgid "Not available"
 msgstr "Хранилище недоступно"
 
 #. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
-#: src/helpers.vala:37
+#: src/helpers.vala:40
 msgid "today at %R"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
-#: src/helpers.vala:41
+#: src/helpers.vala:44
 msgid "yesterday at %R"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
-#: src/helpers.vala:45
+#: src/helpers.vala:48
 msgid "tomorrow at %R"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour and minute. Results in a text which is like "March 23, 2018 at 18:43". Example of translation for spanish: "%e de %B de %Y a las %R", which gives "23 de marzo de 2018 a las 18:43"
-#: src/helpers.vala:48
+#: src/helpers.vala:51
 msgid "%B %e, %Y at %R"
 msgstr ""
 
@@ -364,35 +364,35 @@ msgid "View as list"
 msgstr "Отобразить списком"
 
 #. TRANSLATOR this is the string to put in the list of files, as the type for the folders inside the current folder. It is a file type like "video", "text document", "mp3 audio"...
-#: src/icons_widget.vala:1029
+#: src/icons_widget.vala:1023
 msgid "Folder"
 msgstr ""
 
 #. TRANSLATORS Shows a warning message with "warning" in Orange color
-#: src/menu.vala:139
+#: src/menu.vala:142
 #, c-format
 msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
 msgstr ""
 
 #. TRANSLATORS Shows an error message with "error" in Orange color
-#: src/menu.vala:143
+#: src/menu.vala:146
 #, c-format
 msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 msgstr ""
 
 #. TRANSLATORS This string shows the current status of Cronopete. It can be "Status: idle", or "Status: copying file"...
-#: src/menu.vala:174
+#: src/menu.vala:177
 #, c-format
 msgid "Status: %s"
 msgstr "Состояние: %s"
 
 #. TRANSLATORS This text means that the user still has not selected a hard disk where to do the backups
-#: src/menu.vala:247
+#: src/menu.vala:250
 msgid "Not defined"
 msgstr "Не выбран"
 
 #. TRANSLATORS This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
-#: src/menu.vala:275
+#: src/menu.vala:278
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld Гб из %lld Гб"
