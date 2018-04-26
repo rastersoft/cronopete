@@ -1,3 +1,9 @@
+cronopete (4.0.1-Debian1) sid; urgency=low
+
+  * Updated GL translation
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Mon, 23 Apr 2018 23:55:00 +0200
+
 cronopete (4.0.0-Debian1) sid; urgency=low
 
   * Code refactorization
