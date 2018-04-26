@@ -1,417 +1,227 @@
 <html>
-  <head>
-    <title>Cronopete 3.18.4</title>
-    <style type="text/css" media="all">
-      .menu { background-color: #dddbd8; }
-      .filename { color: green; }
-      .command {color: #0030FF; }
-    </style>
-  </head>
+
+<head>
+  <title>Cronopete 4.0.1</title>
+  <style type="text/css" media="all">
+    .menu {
+      background-color: #dddbd8;
+    }
+
+    .filename {
+      color: green;
+    }
+
+    .command {
+      color: #0030FF;
+    }
+  </style>
+</head>
+
 <body>
-<div align="center"><h1>CRONOPETE 3.18.5</h1></div>
+  <div align="center">
+    <h1>CRONOPETE 4.0.1</h1>
+  </div>
 
-<p>The Apple's TimeMachine clone for Linux</p>
+  <p>The Apple's TimeMachine clone for Linux</p>
 
-<p>Cronopete is a backup program, designed to mimic Apple's TimeMachine as close
-as possible. Currently it only does backups, but lacks the restoring interface.
-This is not a problem, because files are stored without compressing, so you can
-just go to your backup hard disk and copy the desired file to your home folder.
-In future versions, an interface for this will be added, using clutter.</p>
+  <p>Cronopete is a backup program, designed to mimic Apple's TimeMachine as close as possible.</p>
 
-<p>The name comes from <i>anacronopete</i> (who flies through time), which is a time machine featured in the novel from Enrique Gaspar y Rimbaud, and
-published in 1887 (eight years before than H.G. Wells'<i>Time Machine</i>.</p>
+  <p>The name comes from
+    <i>anacronopete</i> (who flies through time), which is a time machine featured in the novel from Enrique Gaspar y Rimbaud,
+    and published in 1887 (eight years before than H.G. Wells'
+    <i>Time Machine</i>.</p>
 
-<p>Cronopete is distributed under <a href="gpl.html">GPL v3 license</a>.</p>
+  <p>Cronopete is distributed under
+    <a href="gpl.html">GPL v3 license</a>.</p>
 
-<h2>How does it work?</h2>
+  <h2>How does it work?</h2>
 
-<p>Cronopete makes a full copy of the local hard disk each hour, storing it <i>as-is</i> in an external hard disk. To save space and speed up the copy
-proccess, only modified files are copied, while non-modified files are linked to the previous backup. That way, if a file of 4GB is not modified, it won't
-occupy 4GB in each backup, but only in the first one.</p>
+  <p>Cronopete makes a full copy of the local hard disk each hour, storing it
+    <i>as-is</i> in an external hard disk. To save space and speed up the copy proccess, only modified files are copied, while
+    non-modified files are linked to the previous backup. That way, if a file of 4GB is not modified, it won't occupy 4GB
+    in each backup, but only in the first one.</p>
 
-<p>Cronopete uses only the date to decide if a file has been modified or not since last backup, so it's very fast and uses very little CPU and disk
-resources. It also does as many operations as possible in the external hard disk, to reduce the traffic in the main hard disk.</p>
+  <p>Cronopete is designed to be able to use several backends for doing the backups. Currently there are two backends available,
+    both using
+    <b>rsync</b>. The first one can do backups only to external hard disks, and is the default one. The second backend allows
+    to do backups to any folder, but by default is disabled.</p>
 
-<p>Storing the files <i>as-is</i> allows to restore a file without needing specific tools, just using your usual file manager.</p>
+  <p>To save even more disk space, cronopete keeps only hourly copies for the last 24 hours. In the past month stores a daily
+    copy. Finally, keeps a weekly copy until the hard disk is full.</p>
 
-<p>To save even more disk space, cronopete keeps only hourly copies for the last 24 hours. In the past month stores a daily copy. Finally, keeps a
-weekly copy until the hard disk is full.</p>
+  <p>To ensure the integrity of the backups, cronopete follows these steps:</p>
+  <ul>
+    <li>Creates the backup in a temporary folder in the final destination. This temporary folder is clearly marked as it, so,
+      in case that the backup fails, it's easily deleted.</li>
+    <li>Syncs the hard disk to write all the cache data, ensuring that all the files have been physically stored in the media.</li>
+    <li>Renames the temporary folder to its final name.</li>
+    <li>Syncs again the hard disk to ensure that the name change has been physically stored.</li>
+  </ul>
 
-<p>Finally, to ensure the integrity of the backups, cronopete follows these steps:</p>
-<ul>
-<li>Copy all the files to a temporary folder in the external hard disk. This temporary folder is clearly marked as it, so, in case that the backup fails,
-it's easily deleted.</li>
-<li>Syncs the hard disk to dump all the cache data, ensuring that all the files have been physically stored in the media.</li>
-<li>Renames the temporary folder to its final name.</li>
-<li>Syncs again the hard disk to ensure that the name change has been physically stored.</li>
-</ul>
+  <p>This procedure ensures that a backup, when successful, will remain correct even in the case of power failure or other problems.</p>
 
-<p>This procedure ensures that a backup, when successful, will remain correct even in the case of power failure or other problems.</p>
+  <p>After doing a backup, old backups are deleted. To ensure data integrity, the backup folders to be deleted are first renamed,
+    then the disk is synced, and finally the renamed folders are deleted. This ensures that, in case the delete process is
+    interrupted, an incomplete backup won't be used as the basis for a new one.</p>
 
-<p>Currently, it only can do backups to local hard disks; in a near future I hope to add support for remote disks.</p>
+  <p>Cronopete creates in the external disk a folder, called
+    <strong>cronopete</strong>, and inside it creates one folder for each user using it. The name of these folders are the user login
+    name. Then, inside each user's folder, cronopete creates one folder for each backup. The name of that folder follows
+    the format:</p>
+  <div align="center">
+    <p>YYYY_MM_DD_hh:mm:ss_unixtime</p>
+  </div>
 
-<p>Cronopete creates in the external disk a folder, called <strong>cronopete</strong>, and inside it creates one folder for each user using it. The name
-of these folders are the user login name.</p>
+  <p>Being
+    <em>YYYY</em> the year,
+    <em>MM</em> the month,
+    <em>DD</em> the day,
+    <em>hh</em> the hour,
+    <em>mm</em> the minutes,
+    <em>ss</em> the seconds, all of them in local time; and
+    <em>unixtime</em> the UTC time in UNIX format (seconds since Jan, 1, 1970). If the folder begins with a
+    <em>B</em> letter, is a temporal backup (one that is still being made).</p>
 
-<p>Then, inside each user folder, cronopete creates one folder for each backup. The name of that folder follows the format:</p>
-<div align="center"><p>YYYY_MM_DD_hh:mm:ss_unixtime</p></div>
+  <h2>Installing Cronopete</h2>
 
-<p>Being <em>YYYY</em> the year, <em>MM</em> the month, <em>DD</em> the day, <em>hh</em> the hour, <em>mm</em> the minutes, <em>ss</em> the seconds, all
-of them in local time; and <em>unixtime</em> the UTC time in UNIX format (seconds since Jan, 1, 1970). If the folder begins with a <em>B</em> letter, is
-a temporal backup (one that is still being made).</p>
+  <p>Cronopete is written in Vala, so you need to install it:</p>
+  <p>
+    <ul>
+      <li>A recent version of Vala</li>
+      <li>GSL library</li>
+      <li>Gee library</li>
+      <li>GTK+ 2.20 or later, or GTK+ 3.0 or later</li>
+      <li>rsync</li>
+      <li>(Optional) ReiserFS tools (for Reiser 3.0)</li>
+      <li>CMake or Meson/ninja</li>
+    </ul>
+  </p>
 
-<h2>Installing Cronopete</h2>
+  <p>After installing all the dependencies, you can type this to install cronopete in your system and get it ready to be automatically
+    launched each time you log into your session:</p>
 
-<p>Cronopete is written in Vala, so you need to install it:</p>
-<p><ul>
-<li>A recent version of Vala (0.20 or later)</li>
-<li>GSL library</li>
-<li>Gee library</li>
-<li>GTK+ 2.20 or later, or GTK+ 3.0 or later</li>
-<li>(Optional) ReiserFS tools (for Reiser 3.0)</li>
-<li>CMake</li>
-</ul></p>
-<p>You will also need the last version of the CMake utilities for Vala. You can download with</p>
-<pre>bzr branch lp:~elementary-apps/+junk/cmake-modules</pre>
-<p>After that, you must copy the <em>cmake</em> folder, which is inside the <em>cmake-modules</em> folder, to the <em>cronopete</em> folder.
-<p>If your Vala version is too old (maybe because you are using Ubuntu 12.04 or older), you can add the Vala team PPA, just typing in a terminal:</p>
-<pre>sudo apt-add-repository ppa:vala-team/ppa</pre>
-<p>followed by:</p>
-<pre>sudo apt-get update</pre>
-
-<p>After installing all the dependencies, you can type this to install cronopete in your system and get it ready to be automatically launched each time
-you log into your session:</p>
-<pre>mkdir Build
+  <pre>mkdir Build
 cd Build
 cmake ..
 make
 sudo make install</pre>
-<p>to make the GTK3 version, or</p>
-<pre>mkdir Build
-cd Build
-cmake -DUSE_GTK2=ON ..
-make
-sudo make install</pre>
-<p>to make the GTK2 version. Another option is <em>NO_APPINDICATOR</em>, which will make cronopete without using <em>libappindicator</em>.</p>
-<p>Now, in order to run it, just type</p>
-<pre>cronopete &</pre>
-<h2>Using Cronopete</h2>
-<p>After a delay of 2 seconds, you should see this orange icon in your system tray:</p>
-<div align="center"><img src="cronopete1.png" /></div>
-<p>This icon shows the current status of Cronopete. If it's red, then there's a critical problem that prevents backups to be done (like if there's no external
-disk configured or connected, or the backups are disabled). If it's orange, then there was some problem during backup (like when one file wouldn't be backed
-up, or can't access into a folder). If it's green or white, all is working fine.</p>
-<p>When cronopete is doing a backup, the icon is animated, like a green backward-moving clock. When it stops, the backup ended.</p>
-<p>If your system doesn't show the icon, you can still use Cronopete with the options in the launcher: in the <b>Other</b> section, you will find two programs:
-<span class="menu">Restore backed up files</span>, and <span class="menu">Setup Cronopete</span>.
-<p>Now it's time to configure cronopete. If you click on the icon, you will see this menu:</p>
-<div align="center"><img src="cronopete2.png" /></div>
-<p>By clicking on <span class="menu">Open cronopete preferences...</span> (or choosing the <span class="menu">Setup Cronopete option</span> in the application menu) you will see the main window:</p>
-<div align="center"><img src="cronopete3.png" /></div>
-<p>Here are two tabs: the main, with all the configuration options, and the <span class="menu">Log</span> tab, where you can check if a backup ended fine, or there were errors.</p>
-<p>The first thing to do is to choose the external hard disk to use to do the backups. By clicking the <span class="menu">Change disk</span> button a windows with the currently
-mounted USB hard disks will be shown:</p>
-<div align="center"><img src="cronopete4.png" /></div>
-<p>By default only the USB drives will be shown, but if the option <i>Show all disks (except /home)</i> is marked, all other hard disks in the system will be shown,
-except the one where the <i>/home</i> personal folder is. This is because Cronopete is a backup program, and a backup never should be in the same physical disk than
-the data to be backed up, because in case the disk fails, both the original data and the backup would be lost.</p>
-<div align="center"><img src="cronopete4b.png" /></div>
-<p>If we choose the MSDOS/FAT formatted disk, a new window will be shown:</p>
-<div align="center"><img src="cronopete6.png" /></div>
-<p>Cronopete supports both ReiserFS and Ext3/Ext4, but to use the former, the user must manually format the drive and ensure that it has permissions for reading and
-writting; if Cronopete formats a drive, will do it in Ext4 format. BTRFS is not allowed because it still has bugs which prevents it to be reliabely used with
-cronopete.</p>
-<p>If you click the <span class="menu">Format disk</span> button, cronopete will try to format the disk in ReiserFS format; if it fails (let's say, because reiserfstools are not
-installed in the system), then it will try to format it in EXT4 format. Of course, this operation will erase all the data in the external disk.</p>
-<p>When the disk is ready, cronopete will show its main window like this:</p>
-<div align="center"><img src="cronopete7.png" /></div>
-<p>Now we can see the currently active disk, the available disk space, when the first and last backups were made and when will be done the next backup, the
-current status, and, in the switch under the <strong>anaCRONOPETE</strong> name, the ON/OFF status of cronopete.</p>
-<p>Now it's time to set up the folders to backup. By clicking the <span class="menu">Options</span> button, this window will be shown:</p>
-<div align="center"><img src="cronopete5.png" /></div>
-<p>The first list contains the folders to be backed up. By default it backs up the HOME folder only, but you can add other folders if you like.</p>
-<p>The second list contains the folders to be skip. By default is empty (but, internally, cronopete automatically refuses to backup the <span class="filename">.gvfs</span> folder
-in your HOME directory, for obvious reasons). You can add here folders like <span class="filename">aMule's Incoming</span> folder, or similar. The first list takes precedence over
-this, so if a folder is in both lists, it will be backed up.</p>
-<p>Then, the checkbutton at the bottom allows you to avoid to back up the hidden files and folders in your HOME directory. By unchecking it, cronopete
-will not backup them (but hidden files/folders in other folders will be copied). Again, the first list takes precedence over this, so you can uncheck it
-to save disk space, but add your <span class="filename">HOME/.mozilla-thunderbird</span> folder in the first list to backup all your local mail.</p>
-<p>Finally, you can choose the time interval between backups. By default it is one hour, but you can set it to up 12 hours (but I strongly recommend to keep
-it to one backup each hour).</p>
-<p>Here is an example of this:</p>
-<div align="center"><img src="cronopete8.png" /></div>
-<h2>Restoring files</h2>
-<p>To restore a file from your backups, just click on cronopete's icon and choose <span class="menu">Restore files</span> (or choose <span class="menu">Restore backed up files</span>
-in your applications menu). You will see this interface:</p>
-<div align="center"><img src="cronopete9.png" /></div>
-<p>Now you can navigate through the folders as usual, until you reach the place where the file you want to restore is/was. You can also go back and forward through time, so you
-can restore a file from any of the currently available backups.</p>
-<p>Let's say that you erased a file two weeks ago, and now you need
-it: just go to the folder where it was, and then, using the mouse wheel, go back in time two weeks (checking the time/date in the upper clock), until the desired file appears.
-Then, click on it to mark it, and then click on the <strong>Restore</strong> button. You can mark several files and folders also, restoring all of them in one single step.</p>
-<p>The file/s and folder/s will be restored to your hard disk with a <strong>.restored</strong> suffix added, to avoid overwritting currently existing files (if there's already a
-file/folder with that name and suffix, cronopete will add .1, .2, and so on, when needed, so you also can restore the same file from several dates).</p>
-<p>The timeline at the left of the screen allows to know where we are relative to the first and last backup, and also shows the granularity of the backups. It clearly shows that
-the most recent backups are kept for 24 hours (top); then it jumps to one backup per day during a month (middle); finally it stores only one backup per week (bottom).</p>
-<h2>Uninstalling cronopete</h2>
-<p>To uninstall cronopete, just use <i>make uninstall</i>.</p>
 
-<h2>Using Dbus to control Cronopete</h2>
-<p>Dbus remote control can be used to control Cronopete in systems without system tray. It offers the following four methods in com.rastersoft.cronopete,
-path /com/backup/cronopete:</p>
-<ul>
-<li><b>DoBackup</b>: will force a backup now. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.DoBackup</pre></li>
-<li><b>StopBackup</b>: will stop a current backup proccess. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.StopBackup</pre></li>
-<li><b>ShowPreferences</b>: will show the preferences window, to let you configure Cronopete. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.ShowPreferences</pre>,
-or with the program <span class="command">/usr/bin/cronopete_preferences</span></li>
-<li><b>RestoreFiles</b>: will show the restoring files interface. You can launch it from command line with <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.RestoreFiles</pre>,
-or with the program <span class="command">/usr/bin/cronopete_restore</span></li>
-</ul>
+  <p>Now, in order to run it, just type</p>
+  <pre>cronopete &</pre>
+  <h2>Using Cronopete</h2>
+  <p>After a delay of 2 seconds, you should see this orange icon in your system tray:</p>
+  <div align="center">
+    <img src="cronopete1.png" />
+  </div>
+  <p>This icon shows the current status of Cronopete. If it's red, then there's a critical problem that prevents backups to
+    be done (like if there's no external disk configured or connected, or the backups are disabled). If it's orange, then
+    there was some problem during backup (like when one file wouldn't be backed up, or can't access into a folder). If it's
+    green or white, all is working fine.</p>
+  <p>When cronopete is doing a backup, the icon is animated, like a green backward-moving clock. When it stops, the backup ended.
+  </p>
+  <p>If your system doesn't show the icon, you can still use Cronopete with the options in the launcher: in the
+    <b>Other</b> section, you will find two programs:
+    <span class="menu">Restore backed up files</span>, and
+    <span class="menu">Setup Cronopete</span>.
+    <p>Now it's time to configure cronopete. If you click on the icon, you will see this menu:</p>
+    <div align="center">
+      <img src="cronopete2.png" />
+    </div>
+    <p>By clicking on
+      <span class="menu">Open cronopete preferences...</span> (or choosing the
+      <span class="menu">Setup Cronopete option</span> in the application menu) you will see the main window:</p>
+    <div align="center">
+      <img src="cronopete3.png" />
+    </div>
+    <p>Here are two tabs: the main, with all the configuration options, and the
+      <span class="menu">Log</span> tab, where you can check if a backup ended fine, or there were errors.</p>
 
-<h2>History of versions</h2>
-<ul>
+    <p>In the main tab, you can see the currently active disk, the available disk space, when the first and last backups were
+      made and when will be done the next backup, the current status, and, in the switch under the
+      <strong>anaCRONOPETE</strong> name, the ON/OFF status of cronopete.</p>
 
-<li>version 3.18.4 (2015/04/04)></li>
-<ul>
-<li>Fixed a bug when detecting and listing hard disks</li>
-</ul>
+    <p>The first thing to do is to choose the external hard disk to use to do the backups. By clicking the
+      <span class="menu">Change destination</span> button a windows with the currently mounted USB hard disks will be shown. By default only
+      the USB drives will be shown, but if the option
+      <i>Show all disks (except /home)</i> is marked, all other hard disks in the system will be shown, except the one where
+      the
+      <i>/home</i> personal folder is. This is because Cronopete is a backup program, and a backup never should be in the same
+      physical disk than the data to be backed up, because in case the disk fails, both the original data and the backup
+      would be lost.</p>
+    <p>Cronopete preffers Ext3/Ext4, but also supports ReiserFS and BTRFS. If Cronopete formats a drive, will do it in Ext4
+      format.
+    </p>
 
-<li>version 3.18.4 (2015/04/04)></li>
-<ul>
-<li>Now uses only the UUID to find disks, to guarantee that the path used is the right one, even if it changes after launching cronopete</li>
-<li>If the backup is enabled, cronopete will remount the disk if it is unmounted; if the backup is disabled, the disk can be removed</li>
-<li>Now shows the GTK2 and GTK3 bookmarks in the Restore files window</li>
-<li>The window asking for formating a disk now has the right size</li>
-<li>Code cleanup</li>
-<li>Removed deprecated GTK and GDK methods, like Gtk.Stock</li>
-</ul>
+    <p>It is possible to use other backends instead the default one by choosing them in the selector located in the window upper
+      zone.
+    </p>
 
-<li>version 3.18.3 (2015/04/03)></li>
-<ul>
-<li>Migrated to UDisks2, to fix the problems when formating disks</li>
-</ul>
+    <p>By clicking in the
+      <span class="menu">Options</span> button, you will be able to choose the folders to backup. This window will be shown:</p>
+    <div align="center">
+      <img src="cronopete5.png" />
+    </div>
+    <p>The first list contains the folders to be backed up. By default it backs up the HOME folder only, but you can add other
+      folders if you like.</p>
+    <p>The second list contains the folders to be skipped. By default is empty. You can add here folders like
+      <span class="filename">aMule's Incoming</span> folder, or similar.</p>
+    <p>Then, the checkbutton at the bottom allows you to avoid to back up the hidden files and folders in your HOME directory.
+      By unchecking it, cronopete will not backup them (but hidden files/folders in other folders will always be copied).</p>
+    <p>Finally, you can choose the time interval between backups. By default it is one hour, but you can set it to up 12 hours
+      (but I strongly recommend to keep it to one backup each hour).</p>
+    <h2>Restoring files</h2>
+    <p>To restore a file from your backups, just click on cronopete's icon and choose
+      <span class="menu">Restore files</span> (or choose
+      <span class="menu">Restore backed up files</span>
+      in your applications menu). You will see this interface:</p>
+    <div align="center">
+      <img src="cronopete9b.png" />
+    </div>
+    <p>Now you can navigate through the folders as usual, until you reach the place where the file you want to restore is/was.
+      You can also go back and forward through time, so you can restore a file from any of the currently available backups. To do this you can use the mouse wheel, the two arrows in the screen, or the PgUp and PdDown keys.</p>
+    <p>Let's say that you erased a file two weeks ago, and now you need it: just go to the folder where it was, and then, using
+      the mouse wheel, go back in time two weeks (checking the time/date in the upper clock), until the desired file appears.
+      Then, click on it to mark it, and then click on the
+      <strong>Restore</strong> button. You can mark several files and folders also, restoring all of them in one single step.</p>
+    <p>The file/s and folder/s will be restored to your hard disk with a
+      <strong>.restored</strong> suffix added, to avoid overwritting currently existing files (if there's already a file/folder with
+      that name and suffix, cronopete will add .1, .2, and so on, when needed, so you also can restore the same file from
+      several dates).</p>
+    <p>The timeline at the left of the screen allows to know where we are relative to the first and last backup, and also shows
+      the granularity of the backups. It clearly shows that the most recent backups are kept for 24 hours (top); then it
+      jumps to one backup per day during a month (middle); finally it stores only one backup per week (bottom).</p>
+    <h2>Using Dbus to control Cronopete</h2>
+    <p>Dbus remote control can be used to control Cronopete in systems without system tray. It offers the following four methods
+      in com.rastersoft.cronopete, path /com/backup/cronopete:</p>
+    <ul>
+      <li>
+        <b>DoBackup</b>: will force a backup now. You can launch it from command line with
+        <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.DoBackup</pre>
+      </li>
+      <li>
+        <b>StopBackup</b>: will stop a current backup proccess. You can launch it from command line with
+        <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.StopBackup</pre>
+      </li>
+      <li>
+        <b>ShowPreferences</b>: will show the preferences window, to let you configure Cronopete. You can launch it from command
+        line with
+        <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.ShowPreferences</pre>, or with the program
+        <span class="command">/usr/bin/cronopete_preferences</span>
+      </li>
+      <li>
+        <b>RestoreFiles</b>: will show the restoring files interface. You can launch it from command line with
+        <pre>dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/backup/cronopete com.rastersoft.cronopete.RestoreFiles</pre>, or with the program
+        <span class="command">/usr/bin/cronopete_restore</span>
+      </li>
+    </ul>
+    <h2>Contacting the author</h2>
+    <p>Sergio Costas Rodriguez
+      <br/>
+      <a href="mailto:raster@rastersoft.com">raster@rastersoft.com</a>
+      <br/>
+      <a href="http://www.rastersoft.com">http://www.rastersoft.com</a>
+    </p>
 
-<li>version 3.18.2 (2015/04/03)></li>
-<ul>
-<li>Now doesn't fail if, at startup, the hard disk isn't mounted</li>
-<li>Now the main window doesn't get expanded if the status text is too big</li>
-</ul>
+</body>
 
-<li>version 3.18.1 (2015/04/03)></li>
-<ul>
-<li>Fixed bugs when choosing a new disk</li>
-</ul>
-
-<li>version 3.18.0 (2015/04/02)></li>
-<ul>
-<li>Now searchs disks using the UUID</li>
-</ul>
-
-<li>version 3.17.0 (2015/02/23)></li>
-<ul>
-<li>Added Czech translation</li>
-<li>Fixed the icon path</li>
-<li>Allows to add several folders simultaneously</li>
-</ul>
-
-<li>version 3.16.0 (2014/08/08)></li>
-<ul>
-<li>Removed GTK2 support</li>
-<li>Fixed the problems when mixing fullscreen and popup windows</li>
-</ul>
-
-<li>Version 3.15.3 (2013/12/14)</li>
-<ul>
-<li>Now uses Gee 0.8</li>
-</ul>
-
-<li>Version 3.15.2 (2013/11/01)</li>
-<ul>
-<li>Fixed galician translation</li>
-<li>Removed the access to GTK from several threads</li>
-<li>The CANCEL button when choosing a folder to (or not) backup now works</li>
-<li>Now doesn't fail if pressing the ACCEPT button in the folder selection dialog without a folder selected</li>
-<li>Now removes the wellcome message also if the user shows the configuration dialog</li>
-</ul>
-
-<li>Version 3.15.1 (2013/10/26)</li>
-<ul>
-<li>Added a Welcome window</li>
-</ul>
-
-<li>Version 3.15.0 (2013/10/26)</li>
-<ul>
-<li>Now doesn't hang when trying to set the partition type during disk formating</li>
-<li>Changed the schema path from <i>apps.cronopete</i> to <i>org.rastersoft.cronopete</i> to be compliant with the Gnome rules (requires reconfiguration!!!)</li>
-<li>Removed formating in ReiserFS; now only formats in Ext4, but still supports ReiserFS if formated manually by the user</li>
-<li>Allows to show the non-usb disks directly from the interface</li>
-<li>Now automounts the drive during launch</li>
-<li>Build system migrated to Autovala+CMake</li>
-<li>The code now uses the data automatically detected by Autovala</li>
-</ul>
-
-<li>Version 3.14.0 (2013/06/15)</li>
-<ul>
-<li>Fixed the refresh bug when the timer line has to do a big jump.</li>
-</ul>
-
-<li>Version 3.13.0 (2013/06/09)</li>
-<ul>
-<li>Fixed picture refresh bug in the file restoring system.</li>
-<li>Fixed bug when formating external drives without partition table.</li>
-<li>Removed several deprecated calls.</li>
-</ul>
-
-<li>Version 3.12.0 (2013/05/11)</li>
-<ul>
-<li>Fixed a bug when trying to do a backup in a disk 100% full.</li>
-</ul>
-
-<li>Version 3.11.0 (2013/05/05)</li>
-<ul>
-<li>Added a delay to avoid failure launch in Gnome Shell</li>
-<li>Fixed return value in DRAW y EXPOSE-EVENT callbacks</li>
-</ul>
-
-<li>Version 3.10.0 (2013/01/27)</li>
-<ul>
-<li>Fixed colors in symbolic icons.</li>
-</ul>
-
-<li>Version 3.9.0</li>
-<ul>
-<li>Development version</li>
-</ul>
-
-<li>Version 3.8.0/1 (2013/01/20)</li>
-<ul>
-<li>Fixed the scroll and the icons in the restore interface.</li>
-<li>Fixed the background painting in the restore interface.</li>
-<li>Added texts in the buttons of the restore interface.</li>
-<li>Fixed compilation under Gtk2.</li>
-<li>Added .deb packages for Gtk2.</li>
-</ul>
-<li>Version 3.7.0</li>
-
-<ul>
-<li>Development version</li>
-</ul>
-
-<li>Version 3.6.0 (2012/12/21)</li>
-<ul>
-<li>New restoring interface</li>
-<li>Allows to use internal, non-removable drives (for testing)</li>
-<li>Added new icons based in the -symbolic standard</li>
-<li>Fixed the bug that made the restore window to grow each time the user changed the folder</li>
-<li>Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete</li>
-</ul>
-
-<li>Version 3.5.0</li>
-<ul>
-<li>Development version</li>
-</ul>
-
-<li>Version 3.4.6 (2012/10/28)</li>
-<ul>
-<li>The configuration icon in Elementary will keep in the icon window</li>
-<li>Removed sleep during startup because, with libappnotify, it's not needed</li>
-<li>Now doesn't recreate the menu in the system bar each time something changes, but takes advantage of the capabilities of libappindicator (when used)</li>
-</ul>
-
-<li>Version 3.4.5 (2012/10/17)</li>
-<ul>
-<li>Added D-Bus activation, to launch Cronopete when opening the configuration icon</li>
-<li>CMake files modified to ensure that the autostart file is copied in the right place even when using a non-standard folder</li>
-<li>Included the Vala CMake files</li>
-<li>Added control files for PPA repositories with DEB packages for Ubuntu and Elementary OS</li>
-</ul>
-
-<li>Version 3.4.0 (2012/10/13)</li>
-<ul>
-<li>Changed to CMake</li>
-<li>Optional support for libappindicator</li>
-<li>Simplified messages</li>
-<li>New graphics</li>
-<li>Added a progress bar for each file being restored</li>
-<li>Now uses GConf to store the configuration</li>
-<li>Now shows only external devices when asking for a drive</li>
-<li>Added a .PLUG file for Elementary OS compatibility</li>
-<li>Allows to show or hide the icon in the main bar</li>
-</ul>
-
-
-<li>Version 3.2.0 (2012/09/09)</li>
-<ul>
-<li>Now compiles with Vala 0.16 (compatible with Debian)</li>
-<li>Now new disks are formatted right, without returning a false error</li>
-<li>Disks are also formatted when the access rights are incorrect</li>
-<li>Added icons in windows and in window manager</li>
-<li>Now it uses asynchronous calls when restoring files, instead of a thread</li>
-<li>Reduced FPS in clock animation to reduce CPU usage</li>
-<li>Added a "Restored ended successfully" message at the end of file restoration</li>
-<li>Now also shows the date in the windows titlebar during file restoring</li>
-<li>Updated animation during restoring to do it more efficient and smooth when not having GPU acceleration</li>
-</ul>
-
-<li>Version 3.1.0</li>
-<ul>
-<li>Internal version</li>
-</ul>
-
-<li>Version 3.0.0 (2011/12/18)</li>
-<ul>
-<li>Added support for GTK3 (GTK2 still supported)</li>
-<li>Now keeps the file extension when restoring a file</li>
-</ul>
-
-<li>Version 2.3.0 (2011/12/02)</li>
-<ul>
-<li>Added launcher from main menu, for systems without systray</li>
-<li>Added Dbus remote control</li>
-<li>Added icon cache to speed up the restoring interface</li>
-</ul>
-
-<li>Version 2.2.0 (2011/11/18)</li>
-<ul>
-<li>It made a window capture when changing the restore view to list or icons. Fixed.</li>
-<li>Fixed a core dump when unmounting the hard disk after launching the restore interface.</li>
-</ul>
-
-<li>Version 2.1.0 (2011/11/13)</li>
-<ul>
-<li>Little modification to ensure that the zoom effect works better in slow computers.</li>
-</ul>
-
-
-<li>Version 2.0.0 (2011/11/11)</li>
-<ul>
-<li>Added an interface to restore files from the backups.</li>
-</ul>
-
-<li>Version 1.3.0 (2011/10/23)</li>
-<ul>
-<li>Cronopete closes when trying to format a NTFS-formated external drive. Fixed.</li>
-</ul>
-<li>Version 1.2.0 (2011/10/07)</li>
-<ul>
-<li>Now keeps the modified date and time of the folders in the backups</li>
-</ul>
-<li>Version 1.1.0 (2011/09/17)</li>
-<ul>
-<li>Allows to set the time interval between backups</li>
-<li>Allows to choose the installation folder in the Makefile</li>
-<li>Fixed a bug that produced a clock skew of five minutes; now the backups are done precisely at time</li>
-<li>Now the popup menu is shown under the main bar, not over it</li>
-<li>Some little adjustments in the interface</li>
-</ul>
-<li>Version 1.0.0 (2011/09/03)</li>
-<ul>
-<li>First public version</li>
-</ul>
-</ul>
-<h2>Contacting the author</h2>
-<p>Sergio Costas Rodriguez<br/>
-<a href="mailto:raster@rastersoft.com">raster@rastersoft.com</a><br/>
-<a href="http://www.rastersoft.com">http://www.rastersoft.com</a></p>
-
-</body></html>
+</html>
