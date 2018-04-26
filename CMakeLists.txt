@@ -51,6 +51,9 @@ set(MODULES_TO_CHECK ${MODULES_TO_CHECK} udisks2)
 
 pkg_check_modules(DEPS REQUIRED ${MODULES_TO_CHECK})
 
+if ( (NOT EXISTS "/usr/bin/rsync"))
+	message(FATAL_ERROR "Can't find any of the files /usr/bin/rsync")
+endif()
 
 add_subdirectory(doc)
 add_subdirectory(po)

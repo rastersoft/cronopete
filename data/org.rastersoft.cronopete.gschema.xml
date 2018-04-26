@@ -21,11 +21,6 @@
       <summary>UID of the external disk</summary>
       <description>UID of the partition where to do the backups.</description>
     </key>
-    <key type="s" name="backup-path">
-      <default>""</default>
-      <summary>Path to the external disk</summary>
-      <description>Path to the location where the external disk is mounted.</description>
-    </key>
     <key type="as" name="backup-folders">
       <default>[]</default>
       <summary>Folders to back up</summary>
@@ -55,6 +50,33 @@
       <default>true</default>
       <summary>Shows the welcome message</summary>
       <description>When enabled, Cronopete will show the welcome message asking the user to configure the backups.</description>
+    </key>
+    <key type="b" name="show-restore-as-icon-view">
+      <default>true</default>
+      <summary>Show the files in the restore window as an icon view</summary>
+      <description>When enabled, the restore window will show the files as an icon view; when disabled, they will be shown as an icon list.</description>
+    </key>
+
+    <key type="i" name="current-backend">
+      <default>0</default>
+      <summary>Current backend ID</summary>
+      <description>The ID number for the current backend</description>
+    </key>
+
+    <key type="s" name="folder-backup">
+      <default>""</default>
+      <summary>Destination folder for the "folder backend"</summary>
+      <description>This is the folder where the "Folder backend" will store the backups.</description>
+    </key>
+
+    <key type="b" name="enable-folder-backend">
+      <default>false</default>
+      <summary>Whether the 'store backups in a folder' backend should be enabled</summary>
+      <description>The 'store backups in a folder' backend can be considered quite dangerous because it allows to do what are considered 'bad practices' for a secure backup. Specifically, it allows to store the backups in the same physical disk (and even in the same partition) than the data to be backed up. This means that a disk failure will result in the loss of both the data and the backup.
+
+Due to this, the user must put a lot of care when using this backend to ensure that the folder where (s)he stores the backups belongs to a different disk. Or when using the same physical disk, that (s)he understands that there is no true backup of the data.
+
+To enable this backend, change this setting to 'true'.</description>
     </key>
 
 	<!--<key type="" name="">

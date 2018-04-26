@@ -1,14 +1,15 @@
-src/backup.vala
-src/choose.vala
+src/backup_base.vala
+src/backup_folder.vala
+src/backup_rsync.vala
+src/choose_disk.vala
 src/cronopete.vala
-src/error_window.vala
 src/fixedlabel.vala
+src/helpers.vala
 src/icons_widget.vala
-src/ipc.vala
 src/menu.vala
 src/options.vala
 src/restore.vala
-src/usbhd_backend.vala
+src/restore_canvas.vala
 data/interface/about.ui
 data/interface/chooser.ui
 data/interface/config_exported.ui
@@ -22,4 +23,5 @@ data/interface/options.ui
 data/interface/restore_error.ui
 data/interface/restore_ok.ui
 data/interface/restoring.ui
+data/interface/warning_folder_backend.ui
 data/interface/welcome.ui

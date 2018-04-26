@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.0 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkDialog" id="warning_dialog">
+    <property name="width_request">512</property>
+    <property name="can_focus">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">512</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="button1">
+                <property name="label" translatable="yes">OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">16</property>
+                <property name="margin_right">16</property>
+                <property name="margin_top">16</property>
+                <property name="margin_bottom">16</property>
+                <property name="label" translatable="yes">The &lt;i&gt;folder backend&lt;/i&gt; is considered valid only for advanced users. To enable it, set the &lt;i&gt;gconf&lt;/i&gt; key 'enable-folder-backend' to &lt;i&gt;true&lt;/i&gt;. If you don't know how to do this, probably you should not use this backend.</property>
+                <property name="use_markup">True</property>
+                <property name="wrap">True</property>
+                <property name="track_visited_links">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkExpander">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">16</property>
+                    <property name="margin_right">16</property>
+                    <property name="margin_top">16</property>
+                    <property name="margin_bottom">16</property>
+                    <property name="label" translatable="yes">The &lt;i&gt;store backups in a folder&lt;/i&gt; backend can be considered quite dangerous because it allows to do what are considered 'bad practices' for a secure backup. Specifically, it allows to store the backups in the same physical disk (and even in the same partition) than the data to be backed up. This means that a disk failure will result in the loss of both the data and the backup.
+
+This means that the user must put a lot of care when using this backend to ensure that the folder where (s)he stores the backups belongs to a different disk. Or when using the same physical disk, that (s)he understands that there is no true backup of the data.</property>
+                    <property name="use_markup">True</property>
+                    <property name="wrap">True</property>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Read more...</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">button1</action-widget>
+    </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>

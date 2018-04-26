@@ -4,7 +4,7 @@ cfg_cronopete.set('PKGDATADIR', join_paths(get_option('prefix'),get_option('data
 cfg_cronopete.set('GETTEXT_PACKAGE', 'cronopete')
 cfg_cronopete.set('RELEASE_NAME', 'cronopete')
 cfg_cronopete.set('PREFIX', get_option('prefix'))
-cfg_cronopete.set('VERSION', '3.28.0')
+cfg_cronopete.set('VERSION', '4.0.1')
 cfg_cronopete.set('TESTSRCDIR', meson.source_root())
 
 cfgfile_3 = configure_file(input: 'Config.vala.base',output: 'Config.vala',configuration: cfg_cronopete)
@@ -25,17 +25,18 @@ cronopete_deps += [pango_dep]
 cronopete_deps += [pangocairo_dep]
 cronopete_deps += [udisks2_dep]
 cronopete_sources = [cfgfile_3]
-cronopete_sources += ['backup.vala']
-cronopete_sources += ['choose.vala']
+cronopete_sources += ['backup_base.vala']
+cronopete_sources += ['backup_folder.vala']
+cronopete_sources += ['backup_rsync.vala']
+cronopete_sources += ['choose_disk.vala']
 cronopete_sources += ['cronopete.vala']
-cronopete_sources += ['error_window.vala']
 cronopete_sources += ['fixedlabel.vala']
+cronopete_sources += ['helpers.vala']
 cronopete_sources += ['icons_widget.vala']
-cronopete_sources += ['ipc.vala']
 cronopete_sources += ['menu.vala']
 cronopete_sources += ['options.vala']
 cronopete_sources += ['restore.vala']
-cronopete_sources += ['usbhd_backend.vala']
+cronopete_sources += ['restore_canvas.vala']
 cronopete_vala_args = ['--pkg','posix']
 cronopete_vala_args += ['--target-glib', '2.32']
 cronopete_c_args = []

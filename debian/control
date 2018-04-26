@@ -2,12 +2,13 @@ Source: cronopete
 Maintainer: Sergio Costas <rastersoft@gmail.com>
 Priority: optional
 Section: misc
-Build-Depends: build-essential, po-debconf, valac, libc6-dev, libappindicator3-dev, libatk1.0-dev, libcairo2-dev, libgtk-3-dev, libgdk-pixbuf2.0-dev, libgee-0.8-dev, libglib2.0-dev, libgsl-dev, libpango1.0-dev, libudisks2-dev, libx11-dev, cmake, gettext, pkg-config, gcc, g++, make, intltool
+Standards-Version: 4.0.0
+Build-Depends: build-essential, po-debconf, valac (>=0.30), libc6-dev, libgtk-3-dev, libappindicator3-dev, libgee-0.8-dev, libgsl-dev, libudisks2-dev, cmake, intltool
 
 Package: cronopete
 Architecture: any
-Version: 3.28.0
-Depends: libappindicator3-1, libdbusmenu-glib4, libgtk-3-0, libpangocairo-1.0-0, libpango-1.0-0, libatk1.0-0, libcairo-gobject2, libcairo2, libgdk-pixbuf2.0-0, libglib2.0-0, libgee-0.8-2, libgsl23, libc6-dev, libudisks2-0, libx11-6
+Version: 4.0.0
+Depends: libappindicator3-1, libgee-0.8-2, libgsl23 | libgsl2, libc6-dev, libudisks2-0, rsync
 Description: A backup utility for Linux.
  .
  Cronopete is a backup utility for Linux, modeled after Apple's Time

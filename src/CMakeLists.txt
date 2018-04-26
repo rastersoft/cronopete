@@ -7,19 +7,27 @@ set (GETTEXT_PACKAGE "cronopete")
 set (RELEASE_NAME "cronopete")
 set (CMAKE_C_FLAGS "")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
+<<<<<<< HEAD
 set (VERSION "3.28.0")
+=======
+set (VERSION "4.0.1")
+>>>>>>> rsync
 set (TESTSRCDIR "${CMAKE_SOURCE_DIR}")
 set (DOLLAR "$")
 
 configure_file (${CMAKE_SOURCE_DIR}/src/Config.vala.base ${CMAKE_BINARY_DIR}/src/Config.vala)
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
+<<<<<<< HEAD
 set (VERSION "3.28.0")
+=======
+set (VERSION "4.0.1")
+>>>>>>> rsync
 add_definitions (${DEPS_CFLAGS})
 link_libraries ( ${DEPS_LIBRARIES} )
 link_directories ( ${DEPS_LIBRARY_DIRS} )
 find_package (Vala REQUIRED)
 include (ValaVersion)
-ensure_vala_version ("0.26" MINIMUM)
+ensure_vala_version ("0.30" MINIMUM)
 include (ValaPrecompile)
 
 set (VALA_PACKAGES ${VALA_PACKAGES} posix)
@@ -40,17 +48,18 @@ set (VALA_PACKAGES ${VALA_PACKAGES} pangocairo)
 set (VALA_PACKAGES ${VALA_PACKAGES} udisks2)
 
 set (APP_SOURCES ${APP_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Config.vala)
-set (APP_SOURCES ${APP_SOURCES} backup.vala)
-set (APP_SOURCES ${APP_SOURCES} choose.vala)
+set (APP_SOURCES ${APP_SOURCES} backup_base.vala)
+set (APP_SOURCES ${APP_SOURCES} backup_folder.vala)
+set (APP_SOURCES ${APP_SOURCES} backup_rsync.vala)
+set (APP_SOURCES ${APP_SOURCES} choose_disk.vala)
 set (APP_SOURCES ${APP_SOURCES} cronopete.vala)
-set (APP_SOURCES ${APP_SOURCES} error_window.vala)
 set (APP_SOURCES ${APP_SOURCES} fixedlabel.vala)
+set (APP_SOURCES ${APP_SOURCES} helpers.vala)
 set (APP_SOURCES ${APP_SOURCES} icons_widget.vala)
-set (APP_SOURCES ${APP_SOURCES} ipc.vala)
 set (APP_SOURCES ${APP_SOURCES} menu.vala)
 set (APP_SOURCES ${APP_SOURCES} options.vala)
 set (APP_SOURCES ${APP_SOURCES} restore.vala)
-set (APP_SOURCES ${APP_SOURCES} usbhd_backend.vala)
+set (APP_SOURCES ${APP_SOURCES} restore_canvas.vala)
 
 if (NO_APPINDICATOR)
 	set (COMPILE_OPTIONS ${COMPILE_OPTIONS} -D NO_APPINDICATOR)

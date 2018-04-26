@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.0 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkTextBuffer" id="textbuffer1"/>
@@ -7,10 +7,11 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">anaCRONOPETE</property>
     <property name="resizable">False</property>
-    <property name="window_position">center</property>
+    <property name="window_position">center-always</property>
     <property name="icon">anacronopete.svg</property>
-    <signal name="delete-event" handler="c_main_menu_on_delete_event" swapped="no"/>
-    <signal name="destroy-event" handler="c_main_menu_on_destroy_event" swapped="no"/>
+    <property name="gravity">center</property>
+    <signal name="delete-event" handler="cronopete_c_main_menu_on_delete_event" swapped="no"/>
+    <signal name="destroy-event" handler="cronopete_c_main_menu_on_destroy_event" swapped="no"/>
     <child>
       <object class="GtkNotebook" id="notebook1">
         <property name="visible">True</property>
@@ -148,9 +149,26 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
+                  <object class="GtkComboBox" id="backend_list">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">32</property>
+                    <property name="margin_right">32</property>
+                    <property name="active">0</property>
+                    <property name="id_column">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_right">12</property>
                     <child>
                       <object class="GtkImage" id="image_disk">
                         <property name="visible">True</property>
@@ -170,6 +188,7 @@
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="column_spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="label_volume">
                             <property name="visible">True</property>
@@ -212,30 +231,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label_next_backup">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label11">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Next backup:</property>
-                            <property name="justify">right</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">4</property>
                           </packing>
                         </child>
                         <child>
@@ -282,12 +277,35 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Device:</property>
+                            <property name="label" translatable="yes">Destination:</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">Next backup:</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label_next_backup">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">4</property>
                           </packing>
                         </child>
                       </object>
@@ -301,33 +319,23 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame" id="frame1">
+                  <object class="GtkBox" id="status_frame">
+                    <property name="height_request">80</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkAlignment" id="status_frame">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label_item">
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="padding">4</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -336,13 +344,12 @@
                     <property name="can_focus">False</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkButton" id="button2">
-                        <property name="label" translatable="yes">Change disk...</property>
-                        <property name="use_action_appearance">False</property>
+                      <object class="GtkButton" id="change_destination">
+                        <property name="label" translatable="yes">Change destination...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="c_main_menu_cronopete_change_disk_callback" swapped="no"/>
+                        <signal name="clicked" handler="cronopete_c_main_menu_change_disk_callback" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -352,13 +359,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button3">
+                      <object class="GtkButton" id="set_options">
                         <property name="label" translatable="yes">Options</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="c_main_menu_cronopete_options_callback" swapped="no"/>
+                        <signal name="clicked" handler="cronopete_c_main_menu_options_callback" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -371,7 +377,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -381,7 +387,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Cronopete keeps:
 
- * Hourly backups for the past 24 hours
+ * All backups for the past 24 hours
  * Daily backups for the past month
  * Weekly backups until your hard disk is full</property>
                   </object>
@@ -389,7 +395,7 @@
                     <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="padding">4</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -399,13 +405,11 @@
                     <child>
                       <object class="GtkCheckButton" id="show_in_bar">
                         <property name="label" translatable="yes">Show Cronopete in menu bar</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="valign">end</property>
-                        <property name="xalign">0.5</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -418,11 +422,10 @@
                     <child>
                       <object class="GtkButton" id="button1">
                         <property name="label" translatable="yes">About</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="c_main_menu_cronopete_about_clicked" swapped="no"/>
+                        <signal name="clicked" handler="cronopete_c_main_menu_about_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -435,7 +438,7 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
               </object>
@@ -488,6 +491,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
