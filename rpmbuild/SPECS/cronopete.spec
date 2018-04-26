@@ -1,9 +1,5 @@
 Name: cronopete
-<<<<<<< HEAD
-Version: 3.28.0
-=======
 Version: 4.0.0
->>>>>>> rsync
 Release: 1
 License: Unknown/not set
 Summary: A backup utility for Linux.
