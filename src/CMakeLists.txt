@@ -7,21 +7,13 @@ set (GETTEXT_PACKAGE "cronopete")
 set (RELEASE_NAME "cronopete")
 set (CMAKE_C_FLAGS "")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
-<<<<<<< HEAD
-set (VERSION "3.28.0")
-=======
 set (VERSION "4.0.1")
->>>>>>> rsync
 set (TESTSRCDIR "${CMAKE_SOURCE_DIR}")
 set (DOLLAR "$")
 
 configure_file (${CMAKE_SOURCE_DIR}/src/Config.vala.base ${CMAKE_BINARY_DIR}/src/Config.vala)
 add_definitions(-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
-<<<<<<< HEAD
-set (VERSION "3.28.0")
-=======
 set (VERSION "4.0.1")
->>>>>>> rsync
 add_definitions (${DEPS_CFLAGS})
 link_libraries ( ${DEPS_LIBRARIES} )
 link_directories ( ${DEPS_LIBRARY_DIRS} )
