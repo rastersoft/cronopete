@@ -96,8 +96,6 @@ namespace  cronopete {
 
 			this.show_in_bar_ch.notify_property("active");
 
-			(VBox) this.builder.get_object("vbox_switch");
-
 			this.enabled_ch = (Gtk.Switch) this.builder.get_object("switch_main");
 			this.enabled_ch.notify_property("active");
 
