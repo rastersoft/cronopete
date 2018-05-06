@@ -1,3 +1,9 @@
+cronopete (4.1.0-Debian1) sid; urgency=low
+
+  * Now detects better the external disks
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Sun, 06 May 2018 23:55:00 +0200
+
 cronopete (4.0.1-Debian1) sid; urgency=low
 
   * Updated GL translation
