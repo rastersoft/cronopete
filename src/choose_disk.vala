@@ -67,14 +67,15 @@ public class c_format : GLib.Object {
 			foreach (var b in blocks.keys) {
 				if (blocks.get(b).IdUUID == disk_uuid) {
 					disk = b;
+					break;
 				}
 			}
 		} catch (GLib.IOError e) {
 			print("IO error: %s\n".printf(e.message));
-			final_uuid = null;
+			disk = null;
 		} catch (GLib.DBusError e) {
 			print("DBus error: %s\n".printf(e.message));
-			final_uuid = null;
+			disk = null;
 		}
 
 		// Failed to find the disk!!!!!!
