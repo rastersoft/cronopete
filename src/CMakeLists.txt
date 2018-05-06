@@ -52,6 +52,7 @@ set (APP_SOURCES ${APP_SOURCES} menu.vala)
 set (APP_SOURCES ${APP_SOURCES} options.vala)
 set (APP_SOURCES ${APP_SOURCES} restore.vala)
 set (APP_SOURCES ${APP_SOURCES} restore_canvas.vala)
+set (APP_SOURCES ${APP_SOURCES} udisk2_cronopete.vala)
 
 if (NO_APPINDICATOR)
 	set (COMPILE_OPTIONS ${COMPILE_OPTIONS} -D NO_APPINDICATOR)

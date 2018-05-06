@@ -22,37 +22,16 @@ using Gdk;
 using Posix;
 using UDisks;
 
-[DBus(name = "org.freedesktop.DBus.ObjectManager")]
-interface UDisk2_if : GLib.Object {
-	public abstract void GetManagedObjects(out GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant> > > path) throws GLib.IOError, GLib.DBusError;
-}
-
-[DBus(timeout = 10000000, name = "org.freedesktop.DBus.Introspectable")]
-interface Introspectable_if : GLib.Object {
-	public abstract async void Introspect(out string xml_data) throws GLib.IOError, GLib.DBusError;
-}
-
-[DBus(timeout = 1000000, name = "org.freedesktop.UDisks2.Block")]
-interface Block_if : GLib.Object {
-	public abstract string IdLabel { owned get; }
-	public abstract string IdUUID { owned get; }
-
-	public abstract async void Format(string type, GLib.HashTable<string, Variant> options) throws GLib.IOError, GLib.DBusError;
-}
-
-[DBus(timeout = 10000000, name = "org.freedesktop.UDisks2.Filesystem")]
-interface Filesystem_if : GLib.Object {
-	public abstract async void Mount(GLib.HashTable<string, Variant> options, out string mount_path) throws GLib.IOError, GLib.DBusError;
-	public abstract async void Unmount(GLib.HashTable<string, Variant> options) throws GLib.IOError, GLib.DBusError;
-}
 
 public class c_format : GLib.Object {
 	private Gtk.Window parent_window;
+	private udisk2_cronopete udisk2;
 
 	public signal void format_ended(int status);
 
 	public c_format(Gtk.Window parent) {
 		this.parent_window = parent;
+		this.udisk2        = new udisk2_cronopete();
 	}
 
 	private void show_error(string msg) {
@@ -78,25 +57,16 @@ public class c_format : GLib.Object {
 	private async string ? do_format(string disk_uuid) {
 		string ? final_uuid = null;
 		ObjectPath ? disk   = null;
-		Block_if ? block    = null;
+
+		Gee.Map<ObjectPath, Drive_if>      drives      = new Gee.HashMap<ObjectPath, Drive_if>();
+		Gee.Map<ObjectPath, Block_if>      blocks      = new Gee.HashMap<ObjectPath, Block_if>();
+		Gee.Map<ObjectPath, Filesystem_if> filesystems = new Gee.HashMap<ObjectPath, Filesystem_if>();
 
 		try {
-			GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant> > > objects;
-			UDisk2_if udisk = Bus.get_proxy_sync<UDisk2_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", "/org/freedesktop/UDisks2");
-			udisk.GetManagedObjects(out objects);
-
-			foreach (var o in objects.get_keys()) {
-				Introspectable_if intro = Bus.get_proxy_sync<Introspectable_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", o);
-				string            data;
-				yield intro.Introspect(out data);
-
-				// check if it has the Block and Filesystem interfaces
-				if (data.contains("org.freedesktop.UDisks2.Block") && data.contains("org.freedesktop.UDisks2.Filesystem")) {
-					block = Bus.get_proxy_sync<Block_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", o);
-					if (block.IdUUID == disk_uuid) {
-						disk = o;
-						break;
-					}
+			this.udisk2.get_drives(out drives, out blocks, out filesystems);
+			foreach (var b in blocks.keys) {
+				if (blocks.get(b).IdUUID == disk_uuid) {
+					disk = b;
 				}
 			}
 		} catch (GLib.IOError e) {
@@ -113,14 +83,8 @@ public class c_format : GLib.Object {
 			return final_uuid;
 		}
 
-		Filesystem_if filesystem;
-		try {
-			filesystem = Bus.get_proxy_sync<Filesystem_if>(BusType.SYSTEM, "org.freedesktop.UDisks2", disk);
-		} catch (GLib.IOError e) {
-			this.show_error(_("Failed to unmount the disk. Aborting format operation."));
-			return final_uuid;
-		}
-		var hash = new GLib.HashTable<string, Variant>(str_hash, str_equal);
+		Filesystem_if filesystem = filesystems.get(disk);
+		var           hash       = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 		try {
 			yield filesystem.Unmount(hash);
 		} catch (GLib.Error e) {
@@ -145,6 +109,8 @@ public class c_format : GLib.Object {
 		hash.insert("take-ownership", boolvariant);
 		hash.insert("update-partition-type", boolvariant2);
 		hash.insert("erase", boolvariant3);
+
+		Block_if block = blocks.get(disk);
 
 		try {
 			yield block.Format("ext4", hash);
@@ -195,12 +161,13 @@ public class c_format : GLib.Object {
 		var rv = window.run();
 		window.destroy();
 		// format
+		var loop = new GLib.MainLoop();
 		if (rv == 1) {
 			this.do_format.begin(disk_uuid, (obj, res) => {
 				new_uuid = this.do_format.end(res);
-				Gtk.main_quit();
+				loop.quit();
 			});
-			Gtk.main();
+			loop.run();
 		}
 		return new_uuid;
 	}
@@ -215,13 +182,14 @@ public class c_choose_disk : GLib.Object {
 	private Builder builder;
 	Gtk.ListStore disk_listmodel;
 	private Button ok_button;
-	private VolumeMonitor monitor;
 	private TreeView disk_list;
 	private Gtk.Window parent_window;
 	private Dialog choose_w;
 	private GLib.Settings cronopete_settings;
 
 	private Gtk.CheckButton show_all_disks;
+
+	private udisk2_cronopete udisk2;
 
 	private void show_all_toggled() {
 		/**
@@ -232,6 +200,7 @@ public class c_choose_disk : GLib.Object {
 
 	public c_choose_disk(Gtk.Window parent) {
 		this.parent_window = parent;
+		this.udisk2        = new udisk2_cronopete();
 	}
 
 	private bool create_folders(string backup_path) {
@@ -278,9 +247,9 @@ public class c_choose_disk : GLib.Object {
 		this.disk_list.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 2);
 		this.disk_list.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 3);
 
-		this.monitor = VolumeMonitor.get();
-		this.monitor.mount_added.connect_after(this.refresh_list);
-		this.monitor.mount_removed.connect_after(this.refresh_list);
+		this.udisk2.InterfacesAdded.connect_after(this.refresh_list);
+		this.udisk2.InterfacesRemoved.connect_after(this.refresh_list);
+
 		this.refresh_list();
 		this.set_ok();
 
@@ -393,59 +362,69 @@ public class c_choose_disk : GLib.Object {
 
 	private void refresh_list() {
 		TreeIter iter;
-		Mount    mnt;
-		File     root;
-		string   path;
-		string   bpath;
+
 		string   ssize;
-		string   fsystem;
-		string   uid;
 		bool     first;
 
-		var volumes = this.monitor.get_volumes();
+		Gee.Map<ObjectPath, Drive_if>      drives      = new Gee.HashMap<ObjectPath, Drive_if>();
+		Gee.Map<ObjectPath, Block_if>      blocks      = new Gee.HashMap<ObjectPath, Block_if>();
+		Gee.Map<ObjectPath, Filesystem_if> filesystems = new Gee.HashMap<ObjectPath, Filesystem_if>();
+
+		try {
+			this.udisk2.get_drives(out drives, out blocks, out filesystems);
+		} catch (GLib.IOError e) {
+			print("IO error: %s\n".printf(e.message));
+			return;
+		} catch (GLib.DBusError e) {
+			print("DBus error: %s\n".printf(e.message));
+			return;
+		}
 
 		this.disk_listmodel.clear();
 		first = true;
 
-		foreach (Volume v in volumes) {
-			mnt = v.get_mount();
-			if ((mnt is Mount) == false) {
+		foreach (var disk_obj in blocks.keys) {
+			var block = blocks.get(disk_obj);
+			var fs    = filesystems.get(disk_obj);
+			var mps = fs.MountPoints;
+			if (mps.length[0] == 0) {
 				continue;
 			}
-
-			root = mnt.get_root();
-			FileInfo info = null;
-			fsystem = null;
-			uint64 size = 0;
-			try {
-				info    = root.query_filesystem_info("filesystem::type,filesystem::size", null);
-				fsystem = info.get_attribute_string("filesystem::type");
-				size    = info.get_attribute_uint64("filesystem::size");
-			} catch (GLib.Error e) {
-				fsystem = null;
-				print("Failed to get filesystem data");
+			var mount_points = this.udisk2.array_to_string(mps);
+			foreach(var s in mount_points) {
+				print("Montaje: %s\n".printf(s));
 			}
-			uid = v.get_identifier("uuid");
+			print("\n");
+			string path = "";
+			var drv = block.Drive;
+			var drive = drives.get(drv);
 
-			if (fsystem == "isofs") {
-				continue;
-			}
+			string fsystem = block.IdType;
+			uint64 size    = block.Size;
+			var uid = block.IdUUID;
 
-			if (fsystem == null) {
+			if ((fsystem == null) || (fsystem == "")) {
 				// TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
 				fsystem = _("Unknown FS");
 			}
 
-			path = root.get_path();
 			if (false == this.check_is_external(uid)) {
 				continue;
 			}
 
-			bpath = root.get_basename();
+			var bpath = block.IdLabel;
+			if (bpath == "") {
+				bpath = uid;
+			}
 
 			this.disk_listmodel.append(out iter);
 
-			var tmp = new ThemedIcon.from_names(v.get_icon().to_string().split(" "));
+			string? icon = block.HintIconName;
+			if ((icon == null) || (icon == "")) {
+				icon = "drive-harddisk";
+			}
+
+			var tmp = new ThemedIcon.from_names(icon.split(" "));
 
 			this.disk_listmodel.set(iter, 0, tmp);
 			this.disk_listmodel.set(iter, 1, bpath);
