@@ -246,6 +246,7 @@ public class c_choose_disk : GLib.Object {
 		this.disk_list.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 1);
 		this.disk_list.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 2);
 		this.disk_list.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 3);
+		this.disk_list.insert_column_with_attributes(-1, "", new CellRendererText(), "text", 4);
 
 		this.udisk2.InterfacesAdded.connect_after(this.refresh_list);
 		this.udisk2.InterfacesRemoved.connect_after(this.refresh_list);
@@ -330,41 +331,11 @@ public class c_choose_disk : GLib.Object {
 		}
 	}
 
-	private bool check_is_external(string uid) {
-		/**
-		 * Returns if an specific disk is external or internal, to decide if it
-		 * is shown in the list of available disks or not
-		 */
-		if (this.show_all_disks.get_active()) {
-			// If the "show all disks" togglebutton is marked, return always TRUE
-			// to ensure that all disks are shown
-			return true;
-		}
-
-		try {
-			var client = new UDisks.Client.sync();
-			var blocks = client.get_block_for_uuid(uid);
-			foreach (var o in blocks) {
-				var drive = client.get_drive_for_block(o);
-				if (drive != null) {
-					if (drive.removable || drive.media_removable) {
-						return true;
-					} else {
-						return false;
-					}
-				}
-			}
-		} catch (GLib.Error e) {
-			GLib.stdout.printf(e.message);
-		}
-		return true;
-	}
-
 	private void refresh_list() {
 		TreeIter iter;
 
-		string   ssize;
-		bool     first;
+		string ssize;
+		bool   first;
 
 		Gee.Map<ObjectPath, Drive_if>      drives      = new Gee.HashMap<ObjectPath, Drive_if>();
 		Gee.Map<ObjectPath, Block_if>      blocks      = new Gee.HashMap<ObjectPath, Block_if>();
@@ -383,33 +354,50 @@ public class c_choose_disk : GLib.Object {
 		this.disk_listmodel.clear();
 		first = true;
 
+		string home_folder = Environment.get_home_dir();
 		foreach (var disk_obj in blocks.keys) {
-			var block = blocks.get(disk_obj);
-			var fs    = filesystems.get(disk_obj);
-			var mps = fs.MountPoints;
-			if (mps.length[0] == 0) {
+			var block        = blocks.get(disk_obj);
+			var fs           = filesystems.get(disk_obj);
+			var mount_points = this.udisk2.get_mountpoints(fs);
+			if (mount_points.length == 0) {
+				// show only the ones already mounted
 				continue;
 			}
-			var mount_points = this.udisk2.array_to_string(mps);
-			foreach(var s in mount_points) {
-				print("Montaje: %s\n".printf(s));
+
+			// check if this partition is where the HOME folder is
+			// or is the "/boot" partition
+			bool forbiden_folder = false;
+			foreach (var mp in mount_points) {
+				if ((home_folder.has_prefix(mp)) || (mp.has_prefix("/boot"))) {
+					forbiden_folder = true;
+					break;
+				}
 			}
-			print("\n");
-			string path = "";
-			var drv = block.Drive;
-			var drive = drives.get(drv);
+
+			if (forbiden_folder) {
+				continue;
+			}
+
+			string path  = mount_points[0];
+			var    drv   = block.Drive;
+			var    drive = drives.get(drv);
 
 			string fsystem = block.IdType;
 			uint64 size    = block.Size;
-			var uid = block.IdUUID;
+			var    uid     = block.IdUUID;
 
 			if ((fsystem == null) || (fsystem == "")) {
 				// TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
 				fsystem = _("Unknown FS");
 			}
 
-			if (false == this.check_is_external(uid)) {
-				continue;
+			if (this.show_all_disks.get_active() == false) {
+				if (block.ReadOnly) {
+					continue;
+				}
+				if (drive.Removable == false) {
+					continue;
+				}
 			}
 
 			var bpath = block.IdLabel;
@@ -419,7 +407,7 @@ public class c_choose_disk : GLib.Object {
 
 			this.disk_listmodel.append(out iter);
 
-			string? icon = block.HintIconName;
+			string ? icon = block.HintIconName;
 			if ((icon == null) || (icon == "")) {
 				icon = "drive-harddisk";
 			}

@@ -79,7 +79,7 @@ namespace cronopete {
 				}
 			}
 			// If this folder is the home folder, check if the hidden files/folders must be copied or not
-			var home_folder = Path.build_filename("/home", Environment.get_user_name()) + "/";
+			var home_folder = Environment.get_home_dir() + "/";
 			if ((this.folder == home_folder) && (skip_hidden_at_home)) {
 				this.exclude += "/.*";
 			}

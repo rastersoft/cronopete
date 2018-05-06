@@ -193,7 +193,7 @@ namespace  cronopete {
 
 			/*
 			 *      // a simple log for debugging purposes
-			 *      var file = File.new_for_path(Path.build_filename("/home", Environment.get_user_name(), ".cronopete_log"));
+			 *      var file = File.new_for_path(Path.build_filename(Environment.get_home_dir(), ".cronopete_log"));
 			 *      DataOutputStream dos;
 			 *      FileIOStream     os;
 			 *      if (file.query_exists()) {
