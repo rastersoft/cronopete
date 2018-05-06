@@ -679,36 +679,39 @@ namespace cronopete {
 		}
 
 		private void refresh_connect() {
-			var volumes    = this.monitor.get_volumes();
+			var drives     = this.monitor.get_connected_drives();
 			var drive_uuid = cronopete_settings.get_string("backup-uid");
 			this.base_drive_path = null;
-			foreach (Volume v in volumes) {
-				if ((drive_uuid != "") && (drive_uuid == v.get_identifier("uuid"))) {
-					var mnt = v.get_mount();
-					if (!(mnt is Mount)) {
-						this.last_backup_time = 0;
-						// the drive is not mounted!!!!!!
-						if (this.drive_path != null) {
-							this.drive_path = null;
-							this.is_available_changed(false);
-						}
-						if (this.backend_enabled && cronopete_settings.get_boolean("enabled")) {
-							// if backups are enabled, remount it
-							v.mount.begin(GLib.MountMountFlags.NONE, null);
-						}
-					} else {
-						if (this.drive_path == null) {
+			foreach (var d in drives) {
+				var volumes = d.get_volumes();
+				foreach (Volume v in volumes) {
+					if ((drive_uuid != "") && (drive_uuid == v.get_identifier("uuid"))) {
+						var mnt = v.get_mount();
+						if (!(mnt is Mount)) {
 							this.last_backup_time = 0;
-							this.drive_path       = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
-							this.base_drive_path  = Path.build_filename(mnt.get_root().get_path(), "cronopete");
-							// only each user can read and write in their backup folder
-							Posix.chmod(this.drive_path, 0x01C0);
-							// everybody can read and write in the CRONOPETE folder
-							Posix.chmod(this.base_drive_path, 0x01FF);
-							this.is_available_changed(true);
+							// the drive is not mounted!!!!!!
+							if (this.drive_path != null) {
+								this.drive_path = null;
+								this.is_available_changed(false);
+							}
+							if (this.backend_enabled && cronopete_settings.get_boolean("enabled")) {
+								// if backups are enabled, remount it
+								v.mount.begin(GLib.MountMountFlags.NONE, null);
+							}
+						} else {
+							if (this.drive_path == null) {
+								this.last_backup_time = 0;
+								this.drive_path       = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
+								this.base_drive_path  = Path.build_filename(mnt.get_root().get_path(), "cronopete");
+								// only each user can read and write in their backup folder
+								Posix.chmod(this.drive_path, 0x01C0);
+								// everybody can read and write in the CRONOPETE folder
+								Posix.chmod(this.base_drive_path, 0x01FF);
+								this.is_available_changed(true);
+							}
 						}
+						return;
 					}
-					return;
 				}
 			}
 			// the backup disk isn't connected
