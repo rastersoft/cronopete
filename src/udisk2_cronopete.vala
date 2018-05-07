@@ -32,6 +32,8 @@ interface Block_if : GLib.Object {
 [DBus(timeout = 100000000, name = "org.freedesktop.UDisks2.Filesystem")]
 interface Filesystem_if : GLib.Object {
 	public abstract uint64 Size { owned get; }
+	[DBus (signature="aay")]
+	public abstract Variant MountPoints { owned get; }
 
 	public abstract async void Mount(GLib.HashTable<string, Variant> options, out string mount_path) throws GLib.IOError, GLib.DBusError;
 	public abstract async void Unmount(GLib.HashTable<string, Variant> options) throws GLib.IOError, GLib.DBusError;
@@ -62,13 +64,7 @@ class udisk2_cronopete {
 		this.udisk.InterfacesRemoved.connect((object_path, interfaces) => { this.InterfacesRemoved(); });
 	}
 
-	public string[] get_mountpoints(Filesystem_if fs) {
-		var fs2 = fs as DBusProxy;
-		var mps = fs2.get_cached_property("MountPoints");
-		return mps.dup_bytestring_array();
-	}
-
-	public void get_drives(out Gee.HashMap<ObjectPath, Drive_if> drives, out Gee.HashMap<ObjectPath, Block_if> blocks, out Gee.HashMap<ObjectPath, Filesystem_if> filesystems) {
+	public void get_drives(out Gee.HashMap<ObjectPath, Drive_if> drives, out Gee.HashMap<ObjectPath, Block_if> blocks, out Gee.HashMap<ObjectPath, Filesystem_if> filesystems) throws GLib.IOError, GLib.DBusError {
 		GLib.HashTable<ObjectPath, GLib.HashTable<string, GLib.HashTable<string, Variant> > > objects;
 
 		drives      = new Gee.HashMap<ObjectPath, Drive_if>();

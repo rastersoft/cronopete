@@ -699,7 +699,7 @@ namespace cronopete {
 					var block = blocks.get(partition_id);
 					var fs    = filesystems.get(partition_id);
 					if ((drive_uuid != "") && (drive_uuid == block.IdUUID)) {
-						var mnt = this.udisk2.get_mountpoints(fs);
+						var mnt = fs.MountPoints.dup_bytestring_array();
 						if (mnt.length == 0) {
 							this.last_backup_time = 0;
 							// the drive is not mounted!!!!!!

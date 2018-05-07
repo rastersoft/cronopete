@@ -359,7 +359,7 @@ public class c_choose_disk : GLib.Object {
 		foreach (var disk_obj in blocks.keys) {
 			var block        = blocks.get(disk_obj);
 			var fs           = filesystems.get(disk_obj);
-			var mount_points = this.udisk2.get_mountpoints(fs);
+			var mount_points = fs.MountPoints.dup_bytestring_array();
 			if (mount_points.length == 0) {
 				// show only the ones already mounted
 				continue;
