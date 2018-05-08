@@ -1,3 +1,10 @@
+cronopete (4.1.1-Debian1) sid; urgency=low
+
+  * Allows to open an specific folder to restore files (allows to integrate with file managers)
+  * Preliminar integration with Nautilus
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Tue, 08 May 2018 23:55:00 +0200
+
 cronopete (4.1.0-Debian1) sid; urgency=low
 
   * Now detects better the external disks
