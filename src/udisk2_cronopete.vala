@@ -32,7 +32,7 @@ interface Block_if : GLib.Object {
 [DBus(timeout = 100000000, name = "org.freedesktop.UDisks2.Filesystem")]
 interface Filesystem_if : GLib.Object {
 	public abstract uint64 Size { owned get; }
-	[DBus (signature="aay")]
+	[DBus(signature = "aay")]
 	public abstract Variant MountPoints { owned get; }
 
 	public abstract async void Mount(GLib.HashTable<string, Variant> options, out string mount_path) throws GLib.IOError, GLib.DBusError;
@@ -56,12 +56,16 @@ class udisk2_cronopete {
 	public signal void InterfacesRemoved();
 
 	public udisk2_cronopete() {
-		this.dbus_connection = Bus.get_sync(BusType.SYSTEM);
+		try {
+			this.dbus_connection = Bus.get_sync(BusType.SYSTEM);
 
-		this.udisk = this.dbus_connection.get_proxy_sync<UDisk2_if>("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2");
-
-		this.udisk.InterfacesAdded.connect((object_path, interfaces_and_properties) => { this.InterfacesAdded(); });
-		this.udisk.InterfacesRemoved.connect((object_path, interfaces) => { this.InterfacesRemoved(); });
+			this.udisk = this.dbus_connection.get_proxy_sync<UDisk2_if>("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2");
+			this.udisk.InterfacesAdded.connect((object_path, interfaces_and_properties) => { this.InterfacesAdded(); });
+			this.udisk.InterfacesRemoved.connect((object_path, interfaces) => { this.InterfacesRemoved(); });
+		} catch (GLib.IOError e) {
+			this.udisk           = null;
+			this.dbus_connection = null;
+		}
 	}
 
 	public void get_drives(out Gee.HashMap<ObjectPath, Drive_if> drives, out Gee.HashMap<ObjectPath, Block_if> blocks, out Gee.HashMap<ObjectPath, Filesystem_if> filesystems) throws GLib.IOError, GLib.DBusError {
@@ -70,6 +74,10 @@ class udisk2_cronopete {
 		drives      = new Gee.HashMap<ObjectPath, Drive_if>();
 		blocks      = new Gee.HashMap<ObjectPath, Block_if>();
 		filesystems = new Gee.HashMap<ObjectPath, Filesystem_if>();
+
+		if (this.dbus_connection == null) {
+			return;
+		}
 
 		udisk.GetManagedObjects(out objects);
 		foreach (var o in objects.get_keys()) {

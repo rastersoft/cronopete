@@ -712,7 +712,11 @@ namespace cronopete {
 								var opts = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 								fs.Mount.begin(opts, (obj, res) => {
 									string mount_point;
-									fs.Mount.end(res, out mount_point);
+									try {
+									    fs.Mount.end(res, out mount_point);
+									} catch (GLib.DBusError e) {
+									} catch (GLib.IOError e) {
+									}
 								});
 							}
 						} else {
