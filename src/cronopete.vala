@@ -457,10 +457,6 @@ namespace cronopete {
 		var file_origin      = GLib.File.new_for_path(GLib.Path.build_filename(Constants.PKGDATADIR, "cronopete"));
 		file_origin.copy(file_destination, FileCopyFlags.OVERWRITE);
 		GLib.FileUtils.chmod(GLib.Path.build_filename(folder, "cronopete"), 493);
-		folder           = null;
-		f2               = null;
-		file_destination = null;
-		file_origin      = null;
 	}
 
 	int main(string[] args) {
