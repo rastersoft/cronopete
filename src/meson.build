@@ -45,6 +45,7 @@ if NO_APPINDICATOR
   cronopete_vala_args += ['-D', 'NO_APPINDICATOR']
   cronopete_c_args += ['-DNO_APPINDICATOR']
 endif
+cronopete_link_args = ['-rdynamic']
 
-executable('cronopete',cronopete_sources,dependencies: cronopete_deps,vala_args: cronopete_vala_args,c_args: cronopete_c_args,install: true)
+executable('cronopete',cronopete_sources,dependencies: cronopete_deps,vala_args: cronopete_vala_args,c_args: cronopete_c_args,link_args: cronopete_link_args,install: true)
 
