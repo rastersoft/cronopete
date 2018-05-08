@@ -419,7 +419,7 @@ namespace cronopete {
 			this.restore_files_from_folder(null);
 		}
 
-		public void restore_files_from_folder(string? folder) {
+		public void restore_files_from_folder(string ? folder) {
 			if (this.restore_window_visible) {
 				this.restore_window.present();
 			} else {
@@ -445,8 +445,8 @@ namespace cronopete {
 
 	void install_script() {
 		// Install Gnome Files script
-		var folder = GLib.Path.build_filename(Environment.get_home_dir(),".local","share","nautilus","scripts");
-		var f2 = GLib.File.new_for_path(folder);
+		var folder = GLib.Path.build_filename(Environment.get_home_dir(), ".local", "share", "nautilus", "scripts");
+		var f2     = GLib.File.new_for_path(folder);
 		if (f2.query_exists() == false) {
 			try {
 				f2.make_directory_with_parents();
@@ -454,13 +454,13 @@ namespace cronopete {
 			}
 		}
 		var file_destination = GLib.File.new_for_path(GLib.Path.build_filename(folder, "cronopete"));
-		var file_origin = GLib.File.new_for_path(GLib.Path.build_filename(Constants.PKGDATADIR, "cronopete"));
+		var file_origin      = GLib.File.new_for_path(GLib.Path.build_filename(Constants.PKGDATADIR, "cronopete"));
 		file_origin.copy(file_destination, FileCopyFlags.OVERWRITE);
 		GLib.FileUtils.chmod(GLib.Path.build_filename(folder, "cronopete"), 493);
-		folder = null;
-		f2 = null;
+		folder           = null;
+		f2               = null;
 		file_destination = null;
-		file_origin = null;
+		file_origin      = null;
 	}
 
 	int main(string[] args) {
