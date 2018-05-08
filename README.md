@@ -18,6 +18,16 @@ Now, type
 
 This will compile Cronopete.
 
+## DBUS INTERFACE
+
+Cronopete offers a DBus interface to allow a remote control. It is at the session bus, at the address **com.rastersoft.cronopete**. The object **com/rastersoft/cronopete** offers the **com.rastersoft.cronopete** interface, which has the follow methods:
+
+* DoPing(Int32) -> Int32 : receives a 32bit integer and returns that integer plus 1. Useful for tests.
+* DoBackup() : starts a backup now
+* StopBakup() : ends the current backup
+* ShowPreferences() : shows the preferences window
+* RestoreFiles() : shows the restore interface
+* RestoreFilesFromFolder(string folder) : shows the restore interface, setting it to show the specified folder. The folder can be passed as an URI (file:///...). This is useful for integration with file managers.
 
 ## CONTACTING THE AUTHOR
 
