@@ -4,7 +4,7 @@ cfg_cronopete.set('PKGDATADIR', join_paths(get_option('prefix'),get_option('data
 cfg_cronopete.set('GETTEXT_PACKAGE', 'cronopete')
 cfg_cronopete.set('RELEASE_NAME', 'cronopete')
 cfg_cronopete.set('PREFIX', get_option('prefix'))
-cfg_cronopete.set('VERSION', '4.0.1')
+cfg_cronopete.set('VERSION', '4.1.1')
 cfg_cronopete.set('TESTSRCDIR', meson.source_root())
 
 cfgfile_3 = configure_file(input: 'Config.vala.base',output: 'Config.vala',configuration: cfg_cronopete)
@@ -37,6 +37,7 @@ cronopete_sources += ['menu.vala']
 cronopete_sources += ['options.vala']
 cronopete_sources += ['restore.vala']
 cronopete_sources += ['restore_canvas.vala']
+cronopete_sources += ['udisk2_cronopete.vala']
 cronopete_vala_args = ['--pkg','posix']
 cronopete_vala_args += ['--target-glib', '2.32']
 cronopete_c_args = []

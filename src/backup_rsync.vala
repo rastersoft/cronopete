@@ -24,7 +24,7 @@ namespace cronopete {
 		// contains all the folders that must be backed up, and the exclusions for each one
 		private Gee.List<folder_container ?> ? folders;
 		// the disk monitor object to manage the disks
-		private VolumeMonitor monitor;
+		private udisk2_cronopete udisk2;
 		// the current disk path (or null if the drive is not available), which will be /path/to/disk/cronopete/username
 		private string ? drive_path;
 		// the current disk path (or null if the drive is not available) without the user
@@ -60,10 +60,10 @@ namespace cronopete {
 			this.last_backup       = null;
 			this.current_backup    = null;
 			this.deleting_mode     = -1;
-			this.monitor           = VolumeMonitor.get();
 			this.last_backup_time  = 0;
-			this.monitor.mount_added.connect_after(this.refresh_connect);
-			this.monitor.mount_removed.connect_after(this.refresh_connect);
+			this.udisk2            = new udisk2_cronopete();
+			this.udisk2.InterfacesAdded.connect_after(this.refresh_connect);
+			this.udisk2.InterfacesRemoved.connect_after(this.refresh_connect);
 			this.refresh_connect();
 		}
 
@@ -679,36 +679,60 @@ namespace cronopete {
 		}
 
 		private void refresh_connect() {
-			var volumes    = this.monitor.get_volumes();
-			var drive_uuid = cronopete_settings.get_string("backup-uid");
-			this.base_drive_path = null;
-			foreach (Volume v in volumes) {
-				if ((drive_uuid != "") && (drive_uuid == v.get_identifier("uuid"))) {
-					var mnt = v.get_mount();
-					if (!(mnt is Mount)) {
-						this.last_backup_time = 0;
-						// the drive is not mounted!!!!!!
-						if (this.drive_path != null) {
-							this.drive_path = null;
-							this.is_available_changed(false);
-						}
-						if (this.backend_enabled && cronopete_settings.get_boolean("enabled")) {
-							// if backups are enabled, remount it
-							v.mount.begin(GLib.MountMountFlags.NONE, null);
-						}
-					} else {
-						if (this.drive_path == null) {
+			Gee.Map<ObjectPath, Drive_if>      drives      = new Gee.HashMap<ObjectPath, Drive_if>();
+			Gee.Map<ObjectPath, Block_if>      blocks      = new Gee.HashMap<ObjectPath, Block_if>();
+			Gee.Map<ObjectPath, Filesystem_if> filesystems = new Gee.HashMap<ObjectPath, Filesystem_if>();
+
+			bool get_drives_error = false;
+			try {
+				this.udisk2.get_drives(out drives, out blocks, out filesystems);
+			} catch (GLib.IOError e) {
+				get_drives_error = true;
+			} catch (GLib.DBusError e) {
+				get_drives_error = true;
+			}
+
+			if (get_drives_error == false) {
+				var drive_uuid = cronopete_settings.get_string("backup-uid");
+				this.base_drive_path = null;
+				foreach (var partition_id in blocks.keys) {
+					var block = blocks.get(partition_id);
+					var fs    = filesystems.get(partition_id);
+					if ((drive_uuid != "") && (drive_uuid == block.IdUUID)) {
+						var mnt = fs.MountPoints.dup_bytestring_array();
+						if (mnt.length == 0) {
 							this.last_backup_time = 0;
-							this.drive_path       = Path.build_filename(mnt.get_root().get_path(), "cronopete", Environment.get_user_name());
-							this.base_drive_path  = Path.build_filename(mnt.get_root().get_path(), "cronopete");
-							// only each user can read and write in their backup folder
-							Posix.chmod(this.drive_path, 0x01C0);
-							// everybody can read and write in the CRONOPETE folder
-							Posix.chmod(this.base_drive_path, 0x01FF);
-							this.is_available_changed(true);
+							// the drive is not mounted!!!!!!
+							if (this.drive_path != null) {
+								this.drive_path = null;
+								this.is_available_changed(false);
+							}
+							if (this.backend_enabled && cronopete_settings.get_boolean("enabled")) {
+								// if backups are enabled, remount it
+								var opts = new GLib.HashTable<string, Variant>(str_hash, str_equal);
+								fs.Mount.begin(opts, (obj, res) => {
+									string mount_point;
+									try {
+									    fs.Mount.end(res, out mount_point);
+									} catch (GLib.DBusError e) {
+									} catch (GLib.IOError e) {
+									}
+								});
+							}
+						} else {
+							if (this.drive_path == null) {
+								this.last_backup_time = 0;
+								this.drive_path       = Path.build_filename(mnt[0], "cronopete", Environment.get_user_name());
+								this.base_drive_path  = Path.build_filename(mnt[0], "cronopete");
+								// only each user can read and write in their backup folder
+								Posix.chmod(this.drive_path, 0x01C0);
+								// everybody can read and write in the CRONOPETE folder
+								Posix.chmod(this.base_drive_path, 0x01FF);
+								this.is_available_changed(true);
+							}
 						}
+						return;
 					}
-					return;
 				}
 			}
 			// the backup disk isn't connected

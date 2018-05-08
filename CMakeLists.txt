@@ -57,6 +57,7 @@ endif()
 
 add_subdirectory(doc)
 add_subdirectory(po)
+add_subdirectory(data/local)
 add_subdirectory(data/pixmaps)
 add_subdirectory(data)
 add_subdirectory(data/dbus)

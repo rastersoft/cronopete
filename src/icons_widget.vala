@@ -742,7 +742,13 @@ namespace cronopete {
 		public void change_path(Gtk.Widget btn) {
 			var btn2 = (TopButton) btn;
 			this.current_path = btn2.full_path;
-			this.refresh_icons();
+			this.refresh_path_list();
+			this.set_scroll_top();
+		}
+
+		public void set_folder(string new_folder) {
+			this.current_path = new_folder;
+			this.refresh_path_list();
 			this.set_scroll_top();
 		}
 

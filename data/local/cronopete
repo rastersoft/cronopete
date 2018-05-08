@@ -1,0 +1,1 @@
+dbus-send --session --print-reply --dest=com.rastersoft.cronopete /com/rastersoft/cronopete com.rastersoft.cronopete.RestoreFilesFromFolder string:"$NAUTILUS_SCRIPT_CURRENT_URI"
