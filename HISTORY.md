@@ -1,5 +1,8 @@
 # History of versions #
 
+* Version 4.1.1 (2018/05/08)
+      * Allows to open an specific folder to restore files (allows to integrate with file managers)
+      * Integration with Nautilus
 * Version 4.1.0 (2018/05/06)
       * Now detects better the external disks
 * Version 4.0.1 (2018/04/23)

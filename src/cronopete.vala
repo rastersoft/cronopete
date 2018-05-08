@@ -26,7 +26,7 @@ using Gsl;
 using Posix;
 using AppIndicator;
 
-// project version=4.1.0
+// project version=4.1.1
 
 namespace cronopete {
 	cronopete_class callback_object;
@@ -416,6 +416,10 @@ namespace cronopete {
 		}
 
 		public void restore_files() {
+			this.restore_files_from_folder(null);
+		}
+
+		public void restore_files_from_folder(string? folder) {
 			if (this.restore_window_visible) {
 				this.restore_window.present();
 			} else {
@@ -424,6 +428,9 @@ namespace cronopete {
 				this.restore_window.destroy.connect(() => {
 					this.restore_window_visible = false;
 				});
+			}
+			if (folder != null) {
+				this.restore_window.set_folder(folder);
 			}
 		}
 	}
@@ -434,6 +441,26 @@ namespace cronopete {
 		} catch (IOError e) {
 			GLib.stderr.printf("Could not register DBUS service\n");
 		}
+	}
+
+	void install_script() {
+		// Install Gnome Files script
+		var folder = GLib.Path.build_filename(Environment.get_home_dir(),".local","share","nautilus","scripts");
+		var f2 = GLib.File.new_for_path(folder);
+		if (f2.query_exists() == false) {
+			try {
+				f2.make_directory_with_parents();
+			} catch (GLib.Error e) {
+			}
+		}
+		var file_destination = GLib.File.new_for_path(GLib.Path.build_filename(folder, "cronopete"));
+		var file_origin = GLib.File.new_for_path(GLib.Path.build_filename(Constants.PKGDATADIR, "cronopete"));
+		file_origin.copy(file_destination, FileCopyFlags.OVERWRITE);
+		GLib.FileUtils.chmod(GLib.Path.build_filename(folder, "cronopete"), 493);
+		folder = null;
+		f2 = null;
+		file_destination = null;
+		file_origin = null;
 	}
 
 	int main(string[] args) {
@@ -456,6 +483,7 @@ namespace cronopete {
 					GLib.stderr.printf("Cronopete is already running.\n");
 					Posix.exit(1);
 				});
+				install_script();
 				Gtk.main();
 				return 0;
 			}
@@ -489,6 +517,14 @@ namespace cronopete {
 
 		public void restore_files() throws GLib.DBusError, GLib.IOError {
 			callback_object.restore_files();
+		}
+
+		public void restore_files_from_folder(string folder) throws GLib.DBusError, GLib.IOError {
+			string folder2 = folder;
+			if (folder.has_prefix("file://")) {
+				folder2 = folder2.substring(7);
+			}
+			callback_object.restore_files_from_folder(folder2);
 		}
 	}
 }

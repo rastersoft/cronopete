@@ -271,6 +271,10 @@ namespace cronopete {
 			this.current_date.set_markup("<span size=\"xx-large\">%s</span>".printf(date_to_string(time_now)));
 		}
 
+		public void set_folder(string new_folder) {
+			this.restore_canvas.set_folder(new_folder);
+		}
+
 		[CCode(instance_pos = -1)]
 		public void on_cancel_restore_clicked(Gtk.Button emitter) {
 			if (this.cancel_to_ok) {

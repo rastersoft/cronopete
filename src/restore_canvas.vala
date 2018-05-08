@@ -124,6 +124,10 @@ namespace cronopete {
 			this.changed_backup_time(this.current_backup);
 		}
 
+		public void set_folder(string new_folder) {
+			this.file_browser.set_folder(new_folder);
+		}
+
 		/**
 		 * Updates the background and the size variables when the window is resized
 		 */
