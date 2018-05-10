@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 22:50+0200\n"
-"PO-Revision-Date: 2018-05-04 22:40+0200\n"
+"PO-Revision-Date: 2018-05-10 11:01+0200\n"
 "Last-Translator: Maïeul Rouquette <maieul@maieul.net>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural= (n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #. TRANSLATOR this message is shown in the configuration window to specify that cronopete is in idle state, not doing a backup
 #: src/backup_base.vala:99
@@ -29,18 +29,18 @@ msgstr "Prêt"
 #. TRANSLATORS This is the name for the backend that allows to store the backups in a folder, instead of choosing a disk.
 #: src/backup_folder.vala:68
 msgid "Store backups in a folder"
-msgstr "Sauvegarder dans un dossier"
+msgstr "Conserver les sauvegardes dans un dossier"
 
 #: src/backup_folder.vala:117 src/backup_rsync.vala:126
 msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr ""
-"Ne peut pas créer les dossiers de base pour exécuter cette sauvegarde. "
+"Impossible de créer les dossiers de base pour effectuer cette sauvegarde. "
 "Interruption de la sauvegarde."
 
 #: src/backup_folder.vala:260 src/backup_rsync.vala:269
 #, c-format
 msgid "Failed to launch cp to restore: %s"
-msgstr "Impossible de restaurer le fichier %s"
+msgstr "Impossible d'exécuter cp pour restaurer le fichier %s"
 
 #: src/backup_folder.vala:288 src/backup_rsync.vala:301
 msgid "Starting backup"
@@ -54,7 +54,7 @@ msgstr "Suppression d’anciennes sauvegardes"
 #: src/backup_folder.vala:357 src/backup_rsync.vala:370
 #, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
-msgstr "Sauvegarde effectuée. Temps restant : %d:%02d"
+msgstr "Sauvegarde effectuée. Temps écoulé : %d:%02d"
 
 #: src/backup_folder.vala:364 src/backup_rsync.vala:377
 msgid "Asked for freeing disk space when there is free space. Aborting backup"
@@ -74,7 +74,7 @@ msgstr "Impossible de restaurer le fichier %s"
 #: src/backup_folder.vala:422 src/backup_rsync.vala:435
 #, c-format
 msgid "Failed to delete aborted backups: %s"
-msgstr "Impossible de supprimer la sauvegarde échouée : %s."
+msgstr "Impossible de supprimer les sauvegardes échouées : %s."
 
 #: src/backup_folder.vala:447 src/backup_rsync.vala:460
 #, c-format
@@ -89,7 +89,7 @@ msgstr "Exclusion du dossier %s."
 #: src/backup_folder.vala:477 src/backup_rsync.vala:490
 #, c-format
 msgid "Failed to launch rsync for '%s'. Aborting backup"
-msgstr "Impossible de lancer rsync pour \"%s\". Sauvegarde abandonnée."
+msgstr "Impossible d'exécuter rsync pour \"%s\". Sauvegarde abandonnée."
 
 #: src/backup_folder.vala:496 src/backup_rsync.vala:509
 #, c-format
@@ -108,7 +108,7 @@ msgstr "Synchronisation du disque"
 
 #: src/backup_folder.vala:551 src/backup_rsync.vala:564
 msgid "Failed to launch sync command"
-msgstr "Échec du chargement de la commande sync"
+msgstr "Échec de l'exécution de la commande sync"
 
 #: src/backup_folder.vala:574 src/backup_rsync.vala:587
 msgid "Failed to rename backup folder. Aborting backup"
@@ -118,7 +118,7 @@ msgstr ""
 
 #: src/backup_folder.vala:587 src/backup_rsync.vala:600
 msgid "Failed to launch final sync command"
-msgstr "Échec du chargement de la commande sync"
+msgstr "Échec de l'exécution de la commande sync finale"
 
 #: src/backup_folder.vala:597 src/backup_rsync.vala:610
 msgid "Disk synced, cleaning old backups"
@@ -172,8 +172,8 @@ msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
-"Impossible de formater le disque (peut-être cela a nécessité trop de temps). "
-"Essayez à nouveau, s’il vous plaît."
+"Impossible de formater le disque (peut-être cela a-t-il nécessité trop de "
+"temps). Essayez à nouveau, s’il vous plaît."
 
 #: src/choose_disk.vala:167
 msgid "Failed to mount again the disk. Aborting the format operation."
@@ -398,7 +398,7 @@ msgstr "Annulée"
 #: src/restore.vala:193
 #, c-format
 msgid "Error while restoring %s"
-msgstr "Erreur durant la restauration de %"
+msgstr "Erreur durant la restauration de %s"
 
 #: src/restore.vala:203
 #, c-format
@@ -426,13 +426,12 @@ msgid "Aborting restore operation"
 msgstr "Annulation de la restauration"
 
 #: data/interface/about.ui:15
-#, fuzzy
 msgid "©2011-2018 Raster Software Vigo"
-msgstr "©2011-15 Raster Software Vigo"
+msgstr "©2011-2018 Raster Software Vigo"
 
 #: data/interface/about.ui:16
 msgid "An Apple's Time Machine clone for Linux"
-msgstr "Un clone pour Linux de la Time Machine d’Appel"
+msgstr "Un clone pour Linux du logiciel Time Machine d’Apple"
 
 #: data/interface/about.ui:683
 msgid ""
@@ -450,18 +449,18 @@ msgid ""
 "Linux."
 msgstr ""
 "En 1895, H.G. Wells a publié <b>The Time Machine</b>, considéré pendant des "
-"années comme première nouvelle avec une machine à voyager dans le temps.\n"
+"années comme le premier roman avec une machine à voyager dans le temps.\n"
 "\n"
-"Mais en 1887, huit ans avant, Enrique Gaspar y Rimbau a publié <b>El "
-"anacronópete</b>, une nouvelle dans le format d’une Zarzuela, qui est la "
-"vraie première nouvelle de mettre en scène une machine qui permet de « voler "
-"contre le temps ».\n"
+"Mais en 1887, huit ans avant, Enrique Gaspar y Rimbau avait publié <b>El "
+"anacronópete</b>, un roman dans le format d’une Zarzuela, qui est le vrai "
+"premier roman à mettre en scène une machine qui permet de « voler contre le "
+"temps ».\n"
 "\n"
 "En 2007, Apple a lancé <b>Time Machine</b>, un programme de sauvegarde pour "
 "MacOS X Leopard. Plusieurs programmes similaires pour Linux ont émergé.\n"
 "\n"
-"En 2011, arrive ana<b>CRONOPETE</b>. LE clone pour Linux de la Time Machine "
-"d’Appel."
+"En 2011, arrive ana<b>CRONOPETE</b>. LE clone pour Linux du logiciel Time "
+"Machine d’Apple."
 
 #: data/interface/about.ui:705
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
@@ -485,14 +484,14 @@ msgid ""
 "Please, check the list of folders to ensure that everything went fine."
 msgstr ""
 "La configuration de sauvegarde a été exportée.\n"
-"Merci de vérifier la liste des dossiers pour assurer que tout s’est bien "
+"Merci de vérifier la liste des dossiers pour s'assurer que tout s’est bien "
 "passé."
 
 #: data/interface/format_error.ui:51
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
-msgstr "Il y avait une erreur lors du processus de formatage. Annulation."
+msgstr "Il y a eu une erreur lors du processus de formatage. Annulation."
 
 #: data/interface/format_error.ui:89
 msgid "<b>Error info</b>"
@@ -558,7 +557,7 @@ msgid ""
 " * Daily backups for the past month\n"
 " * Weekly backups until your hard disk is full"
 msgstr ""
-"Cronopete garde des sauvegardes :\n"
+"Cronopete conserve des sauvegardes :\n"
 "\n"
 "* toutes celles des 24 dernières heures\n"
 "* journalières du dernier mois\n"
@@ -625,7 +624,7 @@ msgstr ""
 "Le <i>dossier de sauvegarde</i> n'est considéré comme fonctionnel que pour "
 "les utilisateurs avancés. Pour l'activer, configurer la clef <i>gconf</i> "
 "'enable-folder-backend' à <i>true</i>. Si vous ne savez pas comment faire "
-"cela, vous ne devriez probablement utiliser ce mode de sauvegarde."
+"cela, vous ne devriez probablement pas utiliser ce mode de sauvegarde."
 
 #: data/interface/warning_folder_backend.ui:76
 msgid ""
@@ -641,10 +640,10 @@ msgid ""
 "disk. Or when using the same physical disk, that (s)he understands that "
 "there is no true backup of the data."
 msgstr ""
-"Le système <i>conserver les sauvegarde dans un dossier</i> peut être "
-"considéré comme un choix assez dangereus, parce qu'il permet de faire ce qui "
+"Le système <i>conserver les sauvegardes dans un dossier</i> peut être "
+"considéré comme un choix assez dangereux, parce qu'il permet de faire ce qui "
 "est considéré comme une « mauvaise pratique » pour une sauvegarde sécurisée. "
-"En particulier, il permet de stocker les sauvegarde sur le même disque "
+"En particulier, il permet de stocker les sauvegardes sur le même disque "
 "physique (et même dans la même partition) que les données qui doivent être "
 "sauvegardées. Ceci signifie qu'un défaut du disque entraînera une perte "
 "simultanée des données et de la sauvegarde.\n"
@@ -687,9 +686,9 @@ msgstr ""
 "copies régulières de vos données et de les restaurer à partir de plusieurs "
 "dates.\n"
 "\n"
-"Maintenant, vous pouvez paramétrer quel disque externe à utiliser pour faire "
-"des copies et quels dossiers vous souhaitez sauvegarder, ou vous pouvez le "
-"faire plus tard."
+"Vous pouvez paramétrer dès maintenant quel disque externe utiliser pour "
+"faire des copies et quels dossiers vous souhaitez sauvegarder. Mais vous "
+"pouvez aussi le faire plus tard."
 
 #~ msgid "Select"
 #~ msgstr "Sélectionner"
