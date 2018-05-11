@@ -54,37 +54,11 @@ public class c_format : GLib.Object {
 		w.destroy();
 	}
 
-	private async string ? do_format(string disk_uuid) {
+	private async string ? do_format(string disk_device) {
 		string ? final_uuid = null;
 		ObjectPath ? disk   = null;
 
-		Gee.Map<ObjectPath, Drive_if>      drives      = new Gee.HashMap<ObjectPath, Drive_if>();
-		Gee.Map<ObjectPath, Block_if>      blocks      = new Gee.HashMap<ObjectPath, Block_if>();
-		Gee.Map<ObjectPath, Filesystem_if> filesystems = new Gee.HashMap<ObjectPath, Filesystem_if>();
-
-		try {
-			this.udisk2.get_drives(out drives, out blocks, out filesystems);
-			foreach (var b in blocks.keys) {
-				if (blocks.get(b).IdUUID == disk_uuid) {
-					disk = b;
-					break;
-				}
-			}
-		} catch (GLib.IOError e) {
-			print("IO error: %s\n".printf(e.message));
-			disk = null;
-		} catch (GLib.DBusError e) {
-			print("DBus error: %s\n".printf(e.message));
-			disk = null;
-		}
-
-		// Failed to find the disk!!!!!!
-		if (disk == null) {
-			this.show_error(_("Failed to find the disk!!!!!"));
-			return final_uuid;
-		}
-
-		Filesystem_if filesystem = filesystems.get(disk);
+		Filesystem_if filesystem = this.udisk2.get_filesystem_if(disk_device);
 		var           hash       = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 		try {
 			yield filesystem.Unmount(hash);
@@ -111,7 +85,7 @@ public class c_format : GLib.Object {
 		hash.insert("update-partition-type", boolvariant2);
 		hash.insert("erase", boolvariant3);
 
-		Block_if block = blocks.get(disk);
+		Block_if block = this.udisk2.get_block_if(disk_device);
 
 		try {
 			yield block.Format("ext4", hash);
@@ -126,6 +100,7 @@ public class c_format : GLib.Object {
 		format_window.destroy();
 		format_window = null;
 
+		filesystem = this.udisk2.get_filesystem_if(disk_device);
 		hash = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 		string mount_path;
 		try {
@@ -135,11 +110,12 @@ public class c_format : GLib.Object {
 			return final_uuid;
 		}
 
+		block = this.udisk2.get_block_if(disk_device);
 		final_uuid = block.IdUUID;
 		return final_uuid;
 	}
 
-	public string ? run(string disk_uuid) {
+	public string ? run(string disk_device) {
 		string ? new_uuid = null;
 		string message;
 		var    builder = new Builder();
@@ -164,7 +140,7 @@ public class c_format : GLib.Object {
 		// format
 		var loop = new GLib.MainLoop();
 		if (rv == 1) {
-			this.do_format.begin(disk_uuid, (obj, res) => {
+			this.do_format.begin(disk_device, (obj, res) => {
 				new_uuid = this.do_format.end(res);
 				loop.quit();
 			});
@@ -239,7 +215,7 @@ public class c_choose_disk : GLib.Object {
 		this.cronopete_settings.bind("all-drives", this.show_all_disks, "active", GLib.SettingsBindFlags.DEFAULT);
 		this.show_all_disks.toggled.connect(this.show_all_toggled);
 
-		this.disk_listmodel = new Gtk.ListStore(6, typeof(Icon), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+		this.disk_listmodel = new Gtk.ListStore(7, typeof(Icon), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
 		this.disk_list.set_model(this.disk_listmodel);
 		var crpb = new CellRendererPixbuf();
 		crpb.stock_size = IconSize.DIALOG;
@@ -273,14 +249,17 @@ public class c_choose_disk : GLib.Object {
 				GLib.Value spath;
 				GLib.Value stype;
 				GLib.Value suid;
+				GLib.Value device;
 
 				selected.get_selected(out model, out iter);
 				model.get_value(iter, 4, out spath);
 				model.get_value(iter, 5, out suid);
 				model.get_value(iter, 2, out stype);
-				var fstype     = stype.get_string().dup();
-				var final_path = spath.get_string().dup();
-				var final_uid  = suid.get_string().dup();
+				model.get_value(iter, 6, out device);
+				var fstype       = stype.get_string().dup();
+				var final_path   = spath.get_string().dup();
+				var final_uid    = suid.get_string().dup();
+				var final_device = device.get_string().dup();
 				// EXT4 is the recomended filesystem for cronopete, but supports reiser, ext3 and btrfs for preformated disks
 				if ((fstype == "reiserfs") || (fstype == "btrfs") || (fstype.has_prefix("ext3")) || (fstype.has_prefix("ext4"))) {
 					var backup_path = Path.build_filename(final_path, "cronopete");
@@ -310,7 +289,7 @@ public class c_choose_disk : GLib.Object {
 				}
 				this.choose_w.hide();
 				var w = new c_format(this.parent_window);
-				final_disk_uuid = w.run(final_uid);
+				final_disk_uuid = w.run(final_device);
 				if (final_disk_uuid != null) {
 					break;
 				}
@@ -387,6 +366,10 @@ public class c_choose_disk : GLib.Object {
 			uint64 size    = block.Size;
 			var    uid     = block.IdUUID;
 
+			if ((fsystem == "iso9660") || (fsystem == "squashfs")) {
+				continue;
+			}
+
 			if ((fsystem == null) || (fsystem == "")) {
 				// TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
 				fsystem = _("Unknown FS");
@@ -434,6 +417,7 @@ public class c_choose_disk : GLib.Object {
 			this.disk_listmodel.set(iter, 3, ssize);
 			this.disk_listmodel.set(iter, 4, path);
 			this.disk_listmodel.set(iter, 5, uid);
+			this.disk_listmodel.set(iter, 6, disk_obj);
 			if (first) {
 				this.disk_list.get_selection().select_iter(iter);
 				first = false;

@@ -1,3 +1,13 @@
+cronopete (4.2.0-Debian1) sid; urgency=low
+
+  * Now only sets low priority to RSYNC itself, not to the whole program
+  * Better management of external disks with UDisks2
+  * Now the format doesn't fail if it last too much time
+  * Fixed french translation (thanks to Maieul)
+  * Now doesn't show CDROMs or Squashfs file systems
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 11 May 2018 23:55:00 +0200
+
 cronopete (4.1.1-Debian1) sid; urgency=low
 
   * Allows to open an specific folder to restore files (allows to integrate with file managers)

@@ -16,7 +16,7 @@ interface Introspectable_if : GLib.Object {
 	public abstract void Introspect(out string xml_data) throws GLib.IOError, GLib.DBusError;
 }
 
-[DBus(timeout = 100000000, name = "org.freedesktop.UDisks2.Block")]
+[DBus(timeout = 1000000, name = "org.freedesktop.UDisks2.Block")]
 interface Block_if : GLib.Object {
 	public abstract string IdLabel { owned get; }
 	public abstract string IdUUID { owned get; }
@@ -29,7 +29,7 @@ interface Block_if : GLib.Object {
 	public abstract async void Format(string type, GLib.HashTable<string, Variant> options) throws GLib.IOError, GLib.DBusError;
 }
 
-[DBus(timeout = 100000000, name = "org.freedesktop.UDisks2.Filesystem")]
+[DBus(timeout = 100000, name = "org.freedesktop.UDisks2.Filesystem")]
 interface Filesystem_if : GLib.Object {
 	public abstract uint64 Size { owned get; }
 	[DBus(signature = "aay")]
@@ -66,6 +66,14 @@ class udisk2_cronopete {
 			this.udisk           = null;
 			this.dbus_connection = null;
 		}
+	}
+
+	public Filesystem_if get_filesystem_if(string device) {
+		return this.dbus_connection.get_proxy_sync<Filesystem_if>("org.freedesktop.UDisks2", device);
+	}
+
+	public Block_if get_block_if(string device) {
+		return this.dbus_connection.get_proxy_sync<Block_if>("org.freedesktop.UDisks2", device);
 	}
 
 	public void get_drives(out Gee.HashMap<ObjectPath, Drive_if> drives, out Gee.HashMap<ObjectPath, Block_if> blocks, out Gee.HashMap<ObjectPath, Filesystem_if> filesystems) throws GLib.IOError, GLib.DBusError {

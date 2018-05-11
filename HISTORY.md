@@ -1,5 +1,11 @@
 # History of versions #
 
+* Version 4.2.0 (2018/05/11)
+      * Now only sets low priority to RSYNC itself, not to the whole program
+      * Better management of external disks with UDisks2
+      * Now the format doesn't fail if it last too much time
+      * Fixed french translation (thanks to Maieul)
+      * Now doesn't show CDROMs or Squashfs file systems
 * Version 4.1.1 (2018/05/08)
       * Allows to open an specific folder to restore files (allows to integrate with file managers)
       * Preliminar integration with Nautilus

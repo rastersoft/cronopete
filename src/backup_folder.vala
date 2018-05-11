@@ -479,6 +479,9 @@ namespace cronopete {
 				return;
 			}
 			this.current_child_pid = child_pid;
+			if (cronopete_settings.get_boolean("reduce-priority-rsync")) {
+				Posix.setpriority(Posix.PRIO_PROCESS, child_pid, 19);
+			}
 			ChildWatch.add(child_pid, (pid, status) => {
 				Process.close_pid(pid);
 				this.current_child_pid = -1;

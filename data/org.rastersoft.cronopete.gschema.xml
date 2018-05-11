@@ -79,6 +79,12 @@ Due to this, the user must put a lot of care when using this backend to ensure t
 To enable this backend, change this setting to 'true'.</description>
     </key>
 
+  <key type="b" name="reduce-priority-rsync">
+      <default>true</default>
+      <summary>Reduces the rsync priority to 19 (lowest)</summary>
+      <description>When enabled, sets rsync priority to 19, the lowest, to avoid using too much resources during backup.</description>
+    </key>
+
 	<!--<key type="" name="">
       <default></default>
       <summary></summary>

@@ -26,7 +26,7 @@ using Gsl;
 using Posix;
 using AppIndicator;
 
-// project version=4.1.1
+// project version=4.2.0
 
 namespace cronopete {
 	cronopete_class callback_object;
@@ -471,8 +471,6 @@ namespace cronopete {
 			// If the child dies, launch cronopete again, to ensure that the backup always work
 			fork_pid = Posix.fork();
 			if (fork_pid == 0) {
-				// Minimum priority
-				nice(19);
 				Intl.bindtextdomain(Constants.GETTEXT_PACKAGE, GLib.Path.build_filename(Constants.DATADIR, "locale"));
 				Intl.textdomain("cronopete");
 				Intl.bind_textdomain_codeset("cronopete", "UTF-8");
