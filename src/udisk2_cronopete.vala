@@ -68,11 +68,11 @@ class udisk2_cronopete {
 		}
 	}
 
-	public Filesystem_if get_filesystem_if(string device) {
+	public Filesystem_if get_filesystem_if(string device) throws GLib.IOError {
 		return this.dbus_connection.get_proxy_sync<Filesystem_if>("org.freedesktop.UDisks2", device);
 	}
 
-	public Block_if get_block_if(string device) {
+	public Block_if get_block_if(string device) throws GLib.IOError {
 		return this.dbus_connection.get_proxy_sync<Block_if>("org.freedesktop.UDisks2", device);
 	}
 

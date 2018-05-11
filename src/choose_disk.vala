@@ -56,15 +56,15 @@ public class c_format : GLib.Object {
 
 	private async string ? do_format(string disk_device) {
 		string ? final_uuid = null;
-		ObjectPath ? disk   = null;
+		GLib.HashTable<string, Variant> hash;
 
-		Filesystem_if filesystem = this.udisk2.get_filesystem_if(disk_device);
-		var           hash       = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 		try {
+			Filesystem_if filesystem = this.udisk2.get_filesystem_if(disk_device);
+			hash = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 			yield filesystem.Unmount(hash);
 		} catch (GLib.Error e) {
 			this.show_error(_("Failed to unmount the disk. Aborting format operation."));
-			return final_uuid;
+			return null;
 		}
 
 		var builder2 = new Builder();
@@ -72,6 +72,7 @@ public class c_format : GLib.Object {
 			builder2.add_from_file(Path.build_filename(Constants.PKGDATADIR, "formatting.ui"));
 		} catch (GLib.Error e) {
 			print("Failed to create the FORMATTING window\n");
+			return null;
 		}
 		var format_window = (Dialog) builder2.get_object("formatting");
 		format_window.set_transient_for(this.parent_window);
@@ -85,33 +86,37 @@ public class c_format : GLib.Object {
 		hash.insert("update-partition-type", boolvariant2);
 		hash.insert("erase", boolvariant3);
 
-		Block_if block = this.udisk2.get_block_if(disk_device);
-
 		try {
+			var block = this.udisk2.get_block_if(disk_device);
 			yield block.Format("ext4", hash);
 		} catch (GLib.Error e) {
 			this.show_error(_("Failed to format the disk (maybe it is needing too much time). Please, try again."));
 			format_window.hide();
 			format_window.destroy();
 			format_window = null;
-			return final_uuid;
+			return null;
 		}
 		format_window.hide();
 		format_window.destroy();
 		format_window = null;
 
-		filesystem = this.udisk2.get_filesystem_if(disk_device);
-		hash = new GLib.HashTable<string, Variant>(str_hash, str_equal);
-		string mount_path;
 		try {
+			var filesystem = this.udisk2.get_filesystem_if(disk_device);
+			hash = new GLib.HashTable<string, Variant>(str_hash, str_equal);
+			string mount_path;
 			yield filesystem.Mount(hash, out mount_path);
 		} catch (GLib.Error e) {
 			this.show_error(_("Failed to mount again the disk. Aborting the format operation."));
-			return final_uuid;
+			return null;
 		}
 
-		block = this.udisk2.get_block_if(disk_device);
-		final_uuid = block.IdUUID;
+		try {
+			var block      = this.udisk2.get_block_if(disk_device);
+			final_uuid = block.IdUUID;
+		} catch (GLib.IOError e) {
+			this.show_error(_("Failed to get the final UUID. Aborting the format operation."));
+			return null;
+		}
 		return final_uuid;
 	}
 
