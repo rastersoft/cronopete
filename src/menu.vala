@@ -33,6 +33,7 @@ namespace  cronopete {
 		private Gtk.Label text_status;
 		private Gtk.Button change_destination;
 		private Gtk.Button set_options;
+		private Gtk.Button unmount_button;
 		private Gtk.Image disk_icon;
 		private Gtk.ToggleButton show_in_bar_ch;
 		private Gtk.TextMark mark;
@@ -81,6 +82,7 @@ namespace  cronopete {
 			this.disk_icon             = (Gtk.Image) this.builder.get_object("image_disk");
 			this.change_destination    = (Gtk.Button) this.builder.get_object("change_destination");
 			this.set_options           = (Gtk.Button) this.builder.get_object("set_options");
+			this.unmount_button        = (Gtk.Button) this.builder.get_object("unmount_backup_drive");
 			this.backend_list          = (Gtk.ComboBox) this.builder.get_object("backend_list");
 			this.backend_list_store    = new Gtk.ListStore(2, typeof(string), typeof(int));
 			this.show_in_bar_ch        = (Gtk.ToggleButton) this.builder.get_object("show_in_bar");
@@ -156,6 +158,17 @@ namespace  cronopete {
 			this.handlers += this.backend.is_available_changed.connect(this.backend_available_changed);
 			this.refresh_backup_data();
 			this.backend_list.set_active(this.cronopete_settings.get_int("current-backend"));
+		}
+
+		[CCode(instance_pos = -1)]
+		public void unmount_clicked(Gtk.Button source) {
+			print("Desmonto\n");
+			if (this.backend != null) {
+				this.backend.umount_destination();
+			}else {
+				print("Es null\n");
+			}
+			print("Hecho\n");
 		}
 
 		public void backend_available_changed(bool is_available) {
@@ -275,6 +288,14 @@ namespace  cronopete {
 			// TRANSLATORS This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
 			this.label_space.set_text(_("%lld GB of %lld GB").printf((uint64) (free_space + 900000000) / 1000000000, (uint64) (total_space + 900000000) / 1000000000));
 			// Adding 900000000 and dividing by 1000000000 allows to round up to the nearest size instead of the lowest one
+
+			var can_unmount = this.backend.can_umount_destination();
+			if (can_unmount == null) {
+				this.unmount_button.hide();
+			} else {
+				this.unmount_button.show();
+				this.unmount_button.set_label(can_unmount);
+			}
 		}
 
 		[CCode(instance_pos = -1)]

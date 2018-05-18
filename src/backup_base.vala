@@ -29,6 +29,9 @@ namespace cronopete {
 
 	public enum backup_current_status { IDLE, RUNNING, SYNCING, CLEANING }
 
+	/**
+	 * This abstract class contains all the methods and signals that must be implemented by any backup backend
+	 */
 	public abstract class backup_base : GLib.Object {
 		/**
 		 * This signal is emitted every time the availability of the
@@ -195,6 +198,19 @@ namespace cronopete {
 		 * @return TRUE if there was an error; FALSE if everything went fine
 		 */
 		public abstract bool restore_file_folder(backup_element backup, string path, string origin_filename, string destination_filename, bool is_folder);
+
+
+		/**
+		 * Returns whether this backend has control over the backup media or not
+		 * If it can, it returns the string to show in the menu
+		 * If it can't, it returns null
+		 */
+		public abstract string ? can_umount_destination();
+
+		/**
+		 * Umounts the backup media
+		 */
+		public abstract void umount_destination();
 
 		/**
 		 * Returns a list with all the current backups, and will set the "keep" property as TRUE if

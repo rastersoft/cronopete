@@ -50,7 +50,10 @@ namespace cronopete {
 
 		private bool backend_enabled;
 
+		private bool do_umount;
+
 		public backup_rsync() {
+			this.do_umount         = false;
 			this.backend_enabled   = false;
 			this.drive_path        = null;
 			this.base_drive_path   = null;
@@ -710,8 +713,8 @@ namespace cronopete {
 								this.drive_path = null;
 								this.is_available_changed(false);
 							}
-							if (this.backend_enabled && cronopete_settings.get_boolean("enabled")) {
-								// if backups are enabled, remount it
+							if (this.backend_enabled && cronopete_settings.get_boolean("enabled") && (this.do_umount == false)) {
+								// if backups are enabled and the user didn't force an umount, remount it
 								var opts = new GLib.HashTable<string, Variant>(str_hash, str_equal);
 								fs.Mount.begin(opts, (obj, res) => {
 									string mount_point;
@@ -724,6 +727,7 @@ namespace cronopete {
 							}
 						} else {
 							if (this.drive_path == null) {
+								this.do_umount        = false;
 								this.last_backup_time = 0;
 								this.drive_path       = Path.build_filename(mnt[0], "cronopete", Environment.get_user_name());
 								this.base_drive_path  = Path.build_filename(mnt[0], "cronopete");
@@ -740,9 +744,44 @@ namespace cronopete {
 			}
 			// the backup disk isn't connected
 			this.last_backup_time = 0;
+			this.do_umount        = false;
 			if (this.drive_path != null) {
 				this.drive_path = null;
 				this.is_available_changed(false);
+			}
+		}
+
+		public override string ? can_umount_destination() {
+			return _("Unmount backup disk");
+		}
+
+		public override void umount_destination() {
+			Gee.Map<ObjectPath, Drive_if>      drives      = new Gee.HashMap<ObjectPath, Drive_if>();
+			Gee.Map<ObjectPath, Block_if>      blocks      = new Gee.HashMap<ObjectPath, Block_if>();
+			Gee.Map<ObjectPath, Filesystem_if> filesystems = new Gee.HashMap<ObjectPath, Filesystem_if>();
+
+			try {
+				this.udisk2.get_drives(out drives, out blocks, out filesystems);
+			} catch (GLib.IOError e) {
+				return;
+			} catch (GLib.DBusError e) {
+				return;
+			}
+
+			var drive_uuid = cronopete_settings.get_string("backup-uid");
+			this.base_drive_path = null;
+			foreach (var partition_id in blocks.keys) {
+				var block = blocks.get(partition_id);
+				var fs    = filesystems.get(partition_id);
+				if ((drive_uuid != "") && (drive_uuid == block.IdUUID)) {
+					var mnt = fs.MountPoints.dup_bytestring_array();
+					if (mnt.length != 0) {
+						this.do_umount = true;
+						var opts = new GLib.HashTable<string, Variant>(str_hash, str_equal);
+						fs.Unmount.begin(opts, (obj, res) => {});
+					}
+					return;
+				}
 			}
 		}
 

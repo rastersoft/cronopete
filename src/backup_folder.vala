@@ -59,6 +59,13 @@ namespace cronopete {
 			this.check_folder_exists();
 		}
 
+		public override string ? can_umount_destination() {
+			return null;
+		}
+
+		public override void umount_destination() {
+		}
+
 		public override void in_use(bool backend_enabled) {
 			this.backend_enabled = backend_enabled;
 		}
@@ -722,7 +729,7 @@ namespace cronopete {
 
 		private bool check_folder_exists() {
 			var is_enabled = this.cronopete_settings.get_boolean("enable-folder-backend");
-			var folder = this.cronopete_settings.get_string("folder-backup");
+			var folder     = this.cronopete_settings.get_string("folder-backup");
 
 			if ((folder == null) || (folder == "") || (is_enabled == false)) {
 				if (this.folder_path != null) {

@@ -48,6 +48,7 @@ namespace cronopete {
 		private Gtk.MenuItem menuDate;
 		private Gtk.MenuItem menuBUnow;
 		private Gtk.MenuItem menuSBUnow;
+		private Gtk.MenuItem menuUnmount;
 		private Gtk.MenuItem menuEnter;
 
 		private int iconpos;
@@ -95,6 +96,12 @@ namespace cronopete {
 			this.first_delay = 10;
 			// Check every minute if we have to do a backup
 			GLib.Timeout.add(60000, this.check_backup);
+		}
+
+		public void unmount_disk() {
+			if (this.backend != null) {
+				this.backend.umount_destination();
+			}
 		}
 
 		public void updated_backend() {
@@ -363,9 +370,12 @@ namespace cronopete {
 
 				// TRANSLATORS Menu entry to open the interface for restoring files from a backup
 				this.menuEnter = new Gtk.MenuItem.with_label(_("Restore files"));
-				menuEnter.activate.connect(this.restore_files);
-				menuSystem.append(menuEnter);
+				this.menuEnter.activate.connect(this.restore_files);
+				menuSystem.append(this.menuEnter);
 
+				this.menuUnmount = new Gtk.MenuItem.with_label("");
+				this.menuUnmount.activate.connect(this.unmount_disk);
+				menuSystem.append(this.menuUnmount);
 
 				var menuBar = new Gtk.SeparatorMenuItem();
 				menuSystem.append(menuBar);
@@ -406,6 +416,18 @@ namespace cronopete {
 			} else {
 				menuBUnow.sensitive  = false;
 				menuSBUnow.sensitive = false;
+			}
+			var can_unmount = this.backend.can_umount_destination();
+			if (can_unmount != null) {
+				this.menuUnmount.show();
+				this.menuUnmount.set_label(can_unmount);
+				if (this.backend.storage_is_available()) {
+					this.menuUnmount.sensitive = true;
+				} else {
+					this.menuUnmount.sensitive = false;
+				}
+			} else {
+				this.menuUnmount.hide();
 			}
 		}
 
