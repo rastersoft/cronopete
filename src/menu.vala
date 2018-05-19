@@ -295,6 +295,11 @@ namespace  cronopete {
 			} else {
 				this.unmount_button.show();
 				this.unmount_button.set_label(can_unmount);
+				if (this.backend.storage_is_available() &&  (this.backend.current_status == backup_current_status.IDLE)) {
+					this.unmount_button.sensitive = true;
+				} else {
+					this.unmount_button.sensitive = false;
+				}
 			}
 		}
 

@@ -49,6 +49,7 @@ namespace cronopete {
 		private Gtk.MenuItem menuBUnow;
 		private Gtk.MenuItem menuSBUnow;
 		private Gtk.MenuItem menuUnmount;
+		private Gtk.SeparatorMenuItem unmountSeparatorBar;
 		private Gtk.MenuItem menuEnter;
 
 		private int iconpos;
@@ -373,6 +374,9 @@ namespace cronopete {
 				this.menuEnter.activate.connect(this.restore_files);
 				menuSystem.append(this.menuEnter);
 
+				this.unmountSeparatorBar = new Gtk.SeparatorMenuItem();
+				menuSystem.append(this.unmountSeparatorBar);
+
 				this.menuUnmount = new Gtk.MenuItem.with_label("");
 				this.menuUnmount.activate.connect(this.unmount_disk);
 				menuSystem.append(this.menuUnmount);
@@ -420,14 +424,16 @@ namespace cronopete {
 			var can_unmount = this.backend.can_umount_destination();
 			if (can_unmount != null) {
 				this.menuUnmount.show();
+				this.unmountSeparatorBar.show();
 				this.menuUnmount.set_label(can_unmount);
-				if (this.backend.storage_is_available()) {
+				if (this.backend.storage_is_available() && (this.backend.current_status == backup_current_status.IDLE)) {
 					this.menuUnmount.sensitive = true;
 				} else {
 					this.menuUnmount.sensitive = false;
 				}
 			} else {
 				this.menuUnmount.hide();
+				this.unmountSeparatorBar.hide();
 			}
 		}
 
