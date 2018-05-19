@@ -778,7 +778,19 @@ namespace cronopete {
 					if (mnt.length != 0) {
 						this.do_umount = true;
 						var opts = new GLib.HashTable<string, Variant>(str_hash, str_equal);
-						fs.Unmount.begin(opts, (obj, res) => {});
+						fs.Unmount.begin(opts, (obj, res) => {
+							bool had_error = false;
+							try {
+							    fs.Unmount.end(res);
+							} catch (GLib.IOError e) {
+							    had_error = true;
+							} catch (GLib.DBusError e) {
+							    had_error = true;
+							}
+							if (had_error) {
+								show_error_window(_("Can't unmount the backup disk. Another process is using it."), null);
+							}
+						});
 					}
 					return;
 				}

@@ -18,6 +18,7 @@ data/interface/folder_selector.ui
 data/interface/format_error.ui
 data/interface/format_force.ui
 data/interface/formatting.ui
+data/interface/generic_error.ui
 data/interface/main.ui
 data/interface/nodisk.ui
 data/interface/options.ui

@@ -47,6 +47,7 @@ end
 *translate: glade data/interface/format_error.ui
 *translate: glade data/interface/format_force.ui
 *translate: glade data/interface/formatting.ui
+*translate: glade data/interface/generic_error.ui
 *translate: glade data/interface/main.ui
 *translate: glade data/interface/nodisk.ui
 *translate: glade data/interface/options.ui
@@ -94,6 +95,7 @@ end
 *glade: data/interface/format_error.ui
 *glade: data/interface/format_force.ui
 *glade: data/interface/formatting.ui
+*glade: data/interface/generic_error.ui
 *glade: data/interface/main.ui
 *glade: data/interface/nodisk.ui
 *glade: data/interface/options.ui

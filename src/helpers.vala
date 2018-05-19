@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 using GLib;
+using Gtk;
 
 namespace cronopete {
 	string date_to_string(time_t datetime) {
@@ -84,5 +85,27 @@ namespace cronopete {
 				this.exclude += "/.*";
 			}
 		}
+	}
+
+	void show_error_window(string msg, Gtk.Window ? parent_window) {
+		GLib.stdout.printf("Error: %s\n", msg);
+
+		var builder = new Builder();
+		try {
+			builder.add_from_file(Path.build_filename(Constants.PKGDATADIR, "generic_error.ui"));
+		} catch (GLib.Error e) {
+			print("Can't show the ERROR window: %s\n".printf(e.message));
+			return;
+		}
+		var label = (Gtk.Label)builder.get_object("label_error");
+		label.set_label(msg);
+		var w = (Gtk.Dialog)builder.get_object("error_dialog");
+		if (parent_window != null) {
+			w.set_transient_for(parent_window);
+		}
+		w.show_all();
+		w.run();
+		w.hide();
+		w.destroy();
 	}
 }
