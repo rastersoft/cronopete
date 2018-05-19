@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the cronopete package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: cronopete 4.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-18 21:01+0200\n"
+"POT-Creation-Date: 2018-05-19 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Disk synced, cleaning old backups"
 msgstr ""
 
-#: src/backup_folder.vala:623 src/backup_rsync.vala:632 src/cronopete.vala:239
+#: src/backup_folder.vala:623 src/backup_rsync.vala:632 src/cronopete.vala:240
 msgid "Cleaning old backups"
 msgstr ""
 
@@ -149,6 +149,10 @@ msgstr ""
 
 #: src/backup_rsync.vala:755
 msgid "Unmount backup disk"
+msgstr ""
+
+#: src/backup_rsync.vala:791
+msgid "Can't unmount the backup disk. Another process is using it."
 msgstr ""
 
 #: src/choose_disk.vala:66
@@ -189,83 +193,83 @@ msgid "Unknown size"
 msgstr ""
 
 #. TRANSLATORS Specify that the disk configured for backups is not available
-#: src/cronopete.vala:216
+#: src/cronopete.vala:217
 msgid "Disk not available"
 msgstr ""
 
 #. TRANSLATORS The program state, used in a tooltip, when it is waiting to do the next backup
-#: src/cronopete.vala:224
+#: src/cronopete.vala:225
 msgid "Idle"
 msgstr ""
 
-#: src/cronopete.vala:234
+#: src/cronopete.vala:235
 msgid "Doing backup"
 msgstr ""
 
 #. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, a warning message
-#: src/cronopete.vala:248
+#: src/cronopete.vala:249
 msgid "Doing backup, have a warning"
 msgstr ""
 
 #. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, an error message
-#: src/cronopete.vala:254
+#: src/cronopete.vala:255
 msgid "Doing backup, have an error"
 msgstr ""
 
 #. TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
-#: src/cronopete.vala:261
+#: src/cronopete.vala:262
 msgid "Backup is disabled"
 msgstr ""
 
 #. TRANSLATORS Menu entry to start a new backup manually
-#: src/cronopete.vala:363
+#: src/cronopete.vala:364
 msgid "Back Up Now"
 msgstr ""
 
 #. TRANSLATORS Menu entry to abort the current backup manually
-#: src/cronopete.vala:367
+#: src/cronopete.vala:368
 msgid "Stop Backing Up"
 msgstr ""
 
 #. TRANSLATORS Menu entry to open the interface for restoring files from a backup
 #. TRANSLATORS Text for the button that restores the selected files
-#: src/cronopete.vala:372 src/restore.vala:90
+#: src/cronopete.vala:373 src/restore.vala:90
 msgid "Restore files"
 msgstr ""
 
 #. TRANSLATORS Menu entry to open the configuration window
-#: src/cronopete.vala:384
+#: src/cronopete.vala:388
 msgid "Configure the backups"
 msgstr ""
 
 #. TRANSLATORS Show the date of the last backup
-#: src/cronopete.vala:393
+#: src/cronopete.vala:397
 #, c-format
 msgid "Latest backup: %s"
 msgstr ""
 
 #. TRANSLATORS "Not available" refers to a backup (e.g. when the disk is not connected, the backups are not available)
-#: src/helpers.vala:25
+#: src/helpers.vala:26
 msgid "Not available"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
-#: src/helpers.vala:40
+#: src/helpers.vala:41
 msgid "today at %R"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
-#: src/helpers.vala:44
+#: src/helpers.vala:45
 msgid "yesterday at %R"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
-#: src/helpers.vala:48
+#: src/helpers.vala:49
 msgid "tomorrow at %R"
 msgstr ""
 
 #. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour and minute. Results in a text which is like "March 23, 2018 at 18:43". Example of translation for spanish: "%e de %B de %Y a las %R", which gives "23 de marzo de 2018 a las 18:43"
-#: src/helpers.vala:51
+#: src/helpers.vala:52
 msgid "%B %e, %Y at %R"
 msgstr ""
 
