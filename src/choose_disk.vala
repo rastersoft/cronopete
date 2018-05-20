@@ -130,7 +130,7 @@ public class c_format : GLib.Object {
 		} catch (GLib.Error e) {
 			return null;
 		}
-		message = _("The selected drive\n\n%s\n\nwith a capacity of %s must be formated to be used for backups.\n\nTo do it, click the <i>Format disk</i> button.\n\n<b>All the data in the drive will be erased</b>".printf(disk_id, disk_capacity));
+		message = _("The selected drive\n\n%1$s\n\nwith a capacity of %2$s must be formated to be used for backups.\n\nTo do it, click the <i>Format disk</i> button.\n\n<b>All the data in the drive will be erased</b>".printf(disk_id, disk_capacity));
 		builder.connect_signals(this);
 
 		var label = (Label) builder.get_object("label_text");
