@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-20 13:35+0200\n"
-"PO-Revision-Date: 2018-05-10 11:01+0200\n"
+"PO-Revision-Date: 2018-05-20 15:09+0200\n"
 "Last-Translator: Maïeul Rouquette <maieul@maieul.net>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural= (n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #. TRANSLATOR this message is shown in the configuration window to specify that cronopete is in idle state, not doing a backup
 #: src/backup_base.vala:102
@@ -47,9 +47,8 @@ msgid "Starting backup"
 msgstr "Démarrage de la sauvegarde"
 
 #: src/backup_folder.vala:333 src/backup_rsync.vala:342
-#, fuzzy
 msgid "Cleaning incomplete backups"
-msgstr "Suppression d’anciennes sauvegardes"
+msgstr "Suppression des sauvegardes incomplètes"
 
 #: src/backup_folder.vala:364 src/backup_rsync.vala:373
 #, c-format
@@ -125,9 +124,8 @@ msgid "Disk synced, cleaning old backups"
 msgstr "Disque synchronisé. Suppression d’anciennes sauvegardes"
 
 #: src/backup_folder.vala:623 src/backup_rsync.vala:632 src/cronopete.vala:240
-#, fuzzy
 msgid "Cleaning old backups"
-msgstr "Suppression d’anciennes sauvegardes"
+msgstr "Suppression des anciennes sauvegardes"
 
 #: src/backup_folder.vala:629 src/backup_rsync.vala:638
 msgid "No old backups to delete"
@@ -161,11 +159,13 @@ msgstr "Conserver les sauvegardes dans un disque dur externe"
 
 #: src/backup_rsync.vala:755
 msgid "Unmount backup disk"
-msgstr ""
+msgstr "Démontage du disque de sauvegarde"
 
 #: src/backup_rsync.vala:791
 msgid "Can't unmount the backup disk. Another process is using it."
 msgstr ""
+"Impossible de démonter le disque de sauvegarde. Un autre processus "
+"l'utilise. "
 
 #: src/choose_disk.vala:66
 msgid "Failed to unmount the disk. Aborting format operation."
@@ -184,12 +184,12 @@ msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr "Impossible de remonter le disque. Abandon de l’opération de formatage."
 
 #: src/choose_disk.vala:117
-#, fuzzy
 msgid "Failed to get the final UUID. Aborting the format operation."
-msgstr "Impossible de remonter le disque. Abandon de l’opération de formatage."
+msgstr ""
+"Impossible de trouver l'UUID final. Abandon de l’opération de formatage."
 
 #: src/choose_disk.vala:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The selected drive\n"
 "\n"
@@ -201,10 +201,10 @@ msgid ""
 "\n"
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
-"Le disque sélectionné doit être formaté pour être utilisé pour des "
-"sauvegarde.\n"
+"Le disque sélectionné, d'une capacité de %s, doit être formaté pour être "
+"utilisé pour des sauvegarde.\n"
 "\n"
-"Pour faire cela, cliquez sur le bouton <i>Formater le disque</i>.\n"
+"Pour cela, cliquez sur le bouton <i>Formater le disque</i>.\n"
 "\n"
 "<b>Toutes les données sur le disque seront effacées</b>"
 
@@ -244,9 +244,8 @@ msgstr "Sauvegarde en cours, erreur"
 
 #. TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
 #: src/cronopete.vala:262
-#, fuzzy
 msgid "Backup is disabled"
-msgstr "Sauvegarde désactivée"
+msgstr "La sauvegarde est désactivée"
 
 #. TRANSLATORS Menu entry to start a new backup manually
 #: src/cronopete.vala:364
@@ -277,9 +276,8 @@ msgstr "Dernière sauvegarde : %s"
 
 #. TRANSLATORS "Not available" refers to a backup (e.g. when the disk is not connected, the backups are not available)
 #: src/helpers.vala:26
-#, fuzzy
 msgid "Not available"
-msgstr "Stockage non disponible"
+msgstr "Non disponible"
 
 #. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
 #: src/helpers.vala:41
@@ -686,7 +684,7 @@ msgstr "Paramétrer maintenant"
 
 #: data/interface/welcome.ui:76
 msgid "Welcome to Cronopete"
-msgstr "Bienvenu à Cronopete"
+msgstr "Bienvenu dans Cronopete"
 
 #: data/interface/welcome.ui:105
 msgid ""
