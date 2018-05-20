@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-19 14:17+0200\n"
+"POT-Creation-Date: 2018-05-20 13:35+0200\n"
 "PO-Revision-Date: 2017-09-14 00:14+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
@@ -205,8 +205,13 @@ msgid "Failed to get the final UUID. Aborting the format operation."
 msgstr "Nepodařilo se znovupřipojit (flash)disk. Formátování přerušeno."
 
 #: src/choose_disk.vala:133
+#, fuzzy, c-format
 msgid ""
-"The selected drive must be formated to be used for backups.\n"
+"The selected drive\n"
+"\n"
+"%s\n"
+"\n"
+"with a capacity of %s must be formated to be used for backups.\n"
 "\n"
 "To do it, click the <i>Format disk</i> button.\n"
 "\n"
@@ -219,12 +224,12 @@ msgstr ""
 "<b>Veškerá data na tomto (flash)disku budou smazána!</b>."
 
 #. TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
-#: src/choose_disk.vala:380
+#: src/choose_disk.vala:384
 msgid "Unknown FS"
 msgstr "Neznámý souborový systém"
 
 #. TRANSLATORS Specifies that the size of an external disk is unknown
-#: src/choose_disk.vala:411
+#: src/choose_disk.vala:415
 msgid "Unknown size"
 msgstr "Neznámá velikost"
 
@@ -551,42 +556,38 @@ msgstr "ana"
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:147
-msgid "button"
-msgstr ""
-
-#: data/interface/main.ui:291
+#: data/interface/main.ui:290
 msgid "Latest backup:"
 msgstr "Nejnovější záloha:"
 
-#: data/interface/main.ui:304
+#: data/interface/main.ui:303
 msgid "Oldest backup:"
 msgstr "Nejstarší záloha:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:317
+#: data/interface/main.ui:316
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "K dispozici (volné):"
 
-#: data/interface/main.ui:330
+#: data/interface/main.ui:329
 msgid "Destination:"
 msgstr ""
 
-#: data/interface/main.ui:343
+#: data/interface/main.ui:342
 msgid "Next backup:"
 msgstr "Příští záloha:"
 
-#: data/interface/main.ui:398
+#: data/interface/main.ui:397
 #, fuzzy
 msgid "Change destination..."
 msgstr "Změnit (flash)disk…"
 
-#: data/interface/main.ui:413 data/interface/options.ui:17
+#: data/interface/main.ui:412 data/interface/options.ui:17
 msgid "Options"
 msgstr "Možnosti"
 
-#: data/interface/main.ui:438
+#: data/interface/main.ui:437
 #, fuzzy
 msgid ""
 "Cronopete keeps:\n"
@@ -601,19 +602,19 @@ msgstr ""
 " * Zálohu z každého dne za minulý měsíc\n"
 " * Zálohu z každého týdne až do výše kapacity datového úložiště"
 
-#: data/interface/main.ui:457
+#: data/interface/main.ui:456
 msgid "Show Cronopete in menu bar"
 msgstr "Zobrazovat ikonu Cronopete v oznamovací oblasti systémového panelu"
 
-#: data/interface/main.ui:474
+#: data/interface/main.ui:473
 msgid "About"
 msgstr "O aplikaci"
 
-#: data/interface/main.ui:507
+#: data/interface/main.ui:506
 msgid "Configuration"
 msgstr "Nastavení"
 
-#: data/interface/main.ui:536
+#: data/interface/main.ui:535
 msgid "Log"
 msgstr "Záznam událostí"
 

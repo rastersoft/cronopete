@@ -120,7 +120,7 @@ public class c_format : GLib.Object {
 		return final_uuid;
 	}
 
-	public string ? run(string disk_device) {
+	public string ? run(string disk_device, string disk_id, string disk_capacity) {
 		string ? new_uuid = null;
 		string message;
 		var    builder = new Builder();
@@ -130,7 +130,7 @@ public class c_format : GLib.Object {
 		} catch (GLib.Error e) {
 			return null;
 		}
-		message = _("The selected drive must be formated to be used for backups.\n\nTo do it, click the <i>Format disk</i> button.\n\n<b>All the data in the drive will be erased</b>");
+		message = _("The selected drive\n\n%s\n\nwith a capacity of %s must be formated to be used for backups.\n\nTo do it, click the <i>Format disk</i> button.\n\n<b>All the data in the drive will be erased</b>".printf(disk_id, disk_capacity));
 		builder.connect_signals(this);
 
 		var label = (Label) builder.get_object("label_text");
@@ -294,7 +294,11 @@ public class c_choose_disk : GLib.Object {
 				}
 				this.choose_w.hide();
 				var w = new c_format(this.parent_window);
-				final_disk_uuid = w.run(final_device);
+				GLib.Value disk_id;
+				GLib.Value disk_size;
+				model.get_value(iter, 1, out disk_id);
+				model.get_value(iter, 3, out disk_size);
+				final_disk_uuid = w.run(final_device, disk_id.get_string(), disk_size.get_string());
 				if (final_disk_uuid != null) {
 					break;
 				}

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-19 14:17+0200\n"
-"PO-Revision-Date: 2018-03-28 17:49+0200\n"
+"POT-Creation-Date: 2018-05-20 13:35+0200\n"
+"PO-Revision-Date: 2018-05-20 13:31+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: \n"
@@ -155,11 +155,13 @@ msgstr "Almacenar las copias en un disco duro externo"
 
 #: src/backup_rsync.vala:755
 msgid "Unmount backup disk"
-msgstr ""
+msgstr "Desmontar el disco de copia."
 
 #: src/backup_rsync.vala:791
 msgid "Can't unmount the backup disk. Another process is using it."
 msgstr ""
+"No se ha podido desmontar el disco de copias. Otro proceso lo está "
+"utilizando."
 
 #: src/choose_disk.vala:66
 msgid "Failed to unmount the disk. Aborting format operation."
@@ -181,34 +183,40 @@ msgstr ""
 "formateo."
 
 #: src/choose_disk.vala:117
-#, fuzzy
 msgid "Failed to get the final UUID. Aborting the format operation."
 msgstr ""
-"No se ha podido montar de nuevo el disco. Cancelando la operación de "
-"formateo."
+"No se ha podido obtener el UUID final. Cancelando la operación de formateo."
 
 #: src/choose_disk.vala:133
+#, c-format
 msgid ""
-"The selected drive must be formated to be used for backups.\n"
+"The selected drive\n"
+"\n"
+"%s\n"
+"\n"
+"with a capacity of %s must be formated to be used for backups.\n"
 "\n"
 "To do it, click the <i>Format disk</i> button.\n"
 "\n"
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
-"Es necesario formatear la unidad seleccionada para poder hacer copias de "
-"seguridad en ella.\n"
+"Es necesario formatear la unidad\n"
+"\n"
+"%s\n"
+"\n"
+"con capacidad de %s para poder hacer copias de seguridad en ella.\n"
 "\n"
 "Para ello, pulse el botón <i>Formatear disco</i>.\n"
 "\n"
 "<b>Todos los datos contenidos en el disco se perderán</b>."
 
 #. TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
-#: src/choose_disk.vala:380
+#: src/choose_disk.vala:384
 msgid "Unknown FS"
 msgstr "FS desconocido"
 
 #. TRANSLATORS Specifies that the size of an external disk is unknown
-#: src/choose_disk.vala:411
+#: src/choose_disk.vala:415
 msgid "Unknown size"
 msgstr "Tamaño desconocido"
 
@@ -528,41 +536,37 @@ msgstr "ana"
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:147
-msgid "button"
-msgstr ""
-
-#: data/interface/main.ui:291
+#: data/interface/main.ui:290
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: data/interface/main.ui:304
+#: data/interface/main.ui:303
 msgid "Oldest backup:"
 msgstr "Primera copia:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:317
+#: data/interface/main.ui:316
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Disponible:"
 
-#: data/interface/main.ui:330
+#: data/interface/main.ui:329
 msgid "Destination:"
 msgstr "Destino:"
 
-#: data/interface/main.ui:343
+#: data/interface/main.ui:342
 msgid "Next backup:"
 msgstr "Próxima copia:"
 
-#: data/interface/main.ui:398
+#: data/interface/main.ui:397
 msgid "Change destination..."
 msgstr "Cambiar el destino..."
 
-#: data/interface/main.ui:413 data/interface/options.ui:17
+#: data/interface/main.ui:412 data/interface/options.ui:17
 msgid "Options"
 msgstr "Opciones"
 
-#: data/interface/main.ui:438
+#: data/interface/main.ui:437
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -576,19 +580,19 @@ msgstr ""
 " * Una copia diaria para el último mes\n"
 " * Copias semanales hasta que se llene el disco"
 
-#: data/interface/main.ui:457
+#: data/interface/main.ui:456
 msgid "Show Cronopete in menu bar"
 msgstr "Mostrar Cronopete en la barra"
 
-#: data/interface/main.ui:474
+#: data/interface/main.ui:473
 msgid "About"
 msgstr "Acerca de"
 
-#: data/interface/main.ui:507
+#: data/interface/main.ui:506
 msgid "Configuration"
 msgstr "Configuración"
 
-#: data/interface/main.ui:536
+#: data/interface/main.ui:535
 msgid "Log"
 msgstr "Registro"
 

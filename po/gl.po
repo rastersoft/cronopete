@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-19 14:17+0200\n"
+"POT-Creation-Date: 2018-05-20 13:35+0200\n"
 "PO-Revision-Date: 2018-04-23 09:45+0200\n"
 "Last-Translator: Miguel A. Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Proxecto Trasno <proxecto@trasno.net>\n"
@@ -186,8 +186,13 @@ msgstr ""
 "Non foi posíbel montar de novo o disco. Cancelase a operación de formatado."
 
 #: src/choose_disk.vala:133
+#, fuzzy, c-format
 msgid ""
-"The selected drive must be formated to be used for backups.\n"
+"The selected drive\n"
+"\n"
+"%s\n"
+"\n"
+"with a capacity of %s must be formated to be used for backups.\n"
 "\n"
 "To do it, click the <i>Format disk</i> button.\n"
 "\n"
@@ -201,12 +206,12 @@ msgstr ""
 "<b>Perderanse todos os datos contidos no disco</b>."
 
 #. TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
-#: src/choose_disk.vala:380
+#: src/choose_disk.vala:384
 msgid "Unknown FS"
 msgstr "Sistema de ficheiros descoñecido"
 
 #. TRANSLATORS Specifies that the size of an external disk is unknown
-#: src/choose_disk.vala:411
+#: src/choose_disk.vala:415
 msgid "Unknown size"
 msgstr "Tamaño descoñecido"
 
@@ -524,41 +529,37 @@ msgstr "ana"
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:147
-msgid "button"
-msgstr ""
-
-#: data/interface/main.ui:291
+#: data/interface/main.ui:290
 msgid "Latest backup:"
 msgstr "Última copia:"
 
-#: data/interface/main.ui:304
+#: data/interface/main.ui:303
 msgid "Oldest backup:"
 msgstr "Primeira copia:"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:317
+#: data/interface/main.ui:316
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Dispoñíbel:"
 
-#: data/interface/main.ui:330
+#: data/interface/main.ui:329
 msgid "Destination:"
 msgstr "Destino:"
 
-#: data/interface/main.ui:343
+#: data/interface/main.ui:342
 msgid "Next backup:"
 msgstr "Próxima copia:"
 
-#: data/interface/main.ui:398
+#: data/interface/main.ui:397
 msgid "Change destination..."
 msgstr "Cambiar o destino..."
 
-#: data/interface/main.ui:413 data/interface/options.ui:17
+#: data/interface/main.ui:412 data/interface/options.ui:17
 msgid "Options"
 msgstr "Opcións"
 
-#: data/interface/main.ui:438
+#: data/interface/main.ui:437
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -572,19 +573,19 @@ msgstr ""
 " * Unha copia diaria para o último mes\n"
 " * Copias semanais ata que se encha o disco"
 
-#: data/interface/main.ui:457
+#: data/interface/main.ui:456
 msgid "Show Cronopete in menu bar"
 msgstr "Amosar Cronopete na barra"
 
-#: data/interface/main.ui:474
+#: data/interface/main.ui:473
 msgid "About"
 msgstr "Sobre"
 
-#: data/interface/main.ui:507
+#: data/interface/main.ui:506
 msgid "Configuration"
 msgstr "Configuración"
 
-#: data/interface/main.ui:536
+#: data/interface/main.ui:535
 msgid "Log"
 msgstr "Rexistro"
 

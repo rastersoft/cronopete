@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cronopete 4.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-19 15:44+0200\n"
+"POT-Creation-Date: 2018-05-20 13:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,8 +174,13 @@ msgid "Failed to get the final UUID. Aborting the format operation."
 msgstr ""
 
 #: src/choose_disk.vala:133
+#, c-format
 msgid ""
-"The selected drive must be formated to be used for backups.\n"
+"The selected drive\n"
+"\n"
+"%s\n"
+"\n"
+"with a capacity of %s must be formated to be used for backups.\n"
 "\n"
 "To do it, click the <i>Format disk</i> button.\n"
 "\n"
@@ -183,12 +188,12 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
-#: src/choose_disk.vala:380
+#: src/choose_disk.vala:384
 msgid "Unknown FS"
 msgstr ""
 
 #. TRANSLATORS Specifies that the size of an external disk is unknown
-#: src/choose_disk.vala:411
+#: src/choose_disk.vala:415
 msgid "Unknown size"
 msgstr ""
 
@@ -489,41 +494,37 @@ msgstr ""
 msgid "cronopete"
 msgstr ""
 
-#: data/interface/main.ui:147
-msgid "button"
-msgstr ""
-
-#: data/interface/main.ui:291
+#: data/interface/main.ui:290
 msgid "Latest backup:"
 msgstr ""
 
-#: data/interface/main.ui:304
+#: data/interface/main.ui:303
 msgid "Oldest backup:"
 msgstr ""
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:317
+#: data/interface/main.ui:316
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr ""
 
-#: data/interface/main.ui:330
+#: data/interface/main.ui:329
 msgid "Destination:"
 msgstr ""
 
-#: data/interface/main.ui:343
+#: data/interface/main.ui:342
 msgid "Next backup:"
 msgstr ""
 
-#: data/interface/main.ui:398
+#: data/interface/main.ui:397
 msgid "Change destination..."
 msgstr ""
 
-#: data/interface/main.ui:413 data/interface/options.ui:17
+#: data/interface/main.ui:412 data/interface/options.ui:17
 msgid "Options"
 msgstr ""
 
-#: data/interface/main.ui:438
+#: data/interface/main.ui:437
 msgid ""
 "Cronopete keeps:\n"
 "\n"
@@ -532,19 +533,19 @@ msgid ""
 " * Weekly backups until your hard disk is full"
 msgstr ""
 
-#: data/interface/main.ui:457
+#: data/interface/main.ui:456
 msgid "Show Cronopete in menu bar"
 msgstr ""
 
-#: data/interface/main.ui:474
+#: data/interface/main.ui:473
 msgid "About"
 msgstr ""
 
-#: data/interface/main.ui:507
+#: data/interface/main.ui:506
 msgid "Configuration"
 msgstr ""
 
-#: data/interface/main.ui:536
+#: data/interface/main.ui:535
 msgid "Log"
 msgstr ""
 
