@@ -3,273 +3,395 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Sergio Costas <rastersoft@gmail.com>, 2017.
+# Maïeul Rouquette <maieul@maieul.net>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 00:11+0200\n"
-"PO-Revision-Date: 2017-09-14 00:12+0200\n"
-"Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
-"Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
+"POT-Creation-Date: 2018-05-20 18:43+0200\n"
+"PO-Revision-Date: 2018-05-20 18:49+0200\n"
+"Last-Translator: Maïeul Rouquette <maieul@maieul.net>\n"
+"Language-Team: français <>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=4; plural= (n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
+"11) ? 2 : 3;\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: src/backup.vala:287
-#, c-format
-msgid "Backing up folder %s.\n"
-msgstr "Sauvegarde du dossier %s.\n"
+#. TRANSLATOR this message is shown in the configuration window to specify that cronopete is in idle state, not doing a backup
+#: src/backup_base.vala:102
+msgid "Ready"
+msgstr "Prêt"
 
-#: src/backup.vala:291
-#, c-format
-msgid "Excluding folder %s.\n"
-msgstr "Exclusion du dossier %s.\n"
+#. TRANSLATORS This is the name for the backend that allows to store the backups in a folder, instead of choosing a disk.
+#: src/backup_folder.vala:75
+msgid "Store backups in a folder"
+msgstr "Conserver les sauvegardes dans un dossier"
 
-#: src/backup.vala:297
-#, c-format
-msgid "Excluding hidden folders in %s.\n"
-msgstr "Exclusion des dossiers cachés dans %s.\n"
-
-#: src/backup.vala:299
-#, c-format
-msgid "Backing up hidden folders in %s.\n"
-msgstr "Sauvegarde des dossiers cachés dans %s.\n"
-
-#: src/backup.vala:347
-msgid "Can't create the folder for this backup. Aborting backup.\n"
+#: src/backup_folder.vala:124 src/backup_rsync.vala:129
+msgid "Can't create the base folders to do backups. Aborting backup"
 msgstr ""
-"Ne peut pas créer le dossier pour cette sauvegarde. Interruption de la "
-"sauvegarde.\n"
+"Impossible de créer les dossiers de base pour effectuer cette sauvegarde. "
+"Interruption de la sauvegarde."
 
-#: src/backup.vala:350
-msgid "Can't create the base folders to do backups. Aborting backup.\n"
-msgstr ""
-"Ne peut pas créer les dossiers de base pour exécuter cette sauvegarde. "
-"Interruption de la sauvegarde.\n"
+#: src/backup_folder.vala:267 src/backup_rsync.vala:272
+#, c-format
+msgid "Failed to launch cp to restore: %s"
+msgstr "Impossible d'exécuter cp pour restaurer le fichier %s"
 
-#: src/backup.vala:353
-msgid "Backup device not available. Aborting backup.\n"
-msgstr "Unité de sauvegarde non disponible. Interruption de la sauvegarde.\n"
+#: src/backup_folder.vala:295 src/backup_rsync.vala:304
+msgid "Starting backup"
+msgstr "Démarrage de la sauvegarde"
 
-#: src/backup.vala:356
-msgid "Already started a backup.\n"
-msgstr "Une sauvegarde est déjà démarrée.\n"
+#: src/backup_folder.vala:333 src/backup_rsync.vala:342
+msgid "Cleaning incomplete backups"
+msgstr "Suppression des sauvegardes incomplètes"
 
-#: src/backup.vala:360
-msgid "Failed to free disk space to start a backup. Aborting backup.\n"
+#: src/backup_folder.vala:364 src/backup_rsync.vala:373
+#, c-format
+msgid "Backup done. Elapsed time: %d:%02d"
+msgstr "Sauvegarde effectuée. Temps écoulé : %d:%02d"
+
+#: src/backup_folder.vala:371 src/backup_rsync.vala:380
+msgid "Asked for freeing disk space when there is free space. Aborting backup"
 msgstr ""
 "Impossible de libérer de l’espace disque pour démarrer une sauvegarde. "
-"Interruption de la sauvegarde.\n"
+"Interruption de la sauvegarde."
 
-#: src/backup.vala:379
-msgid "Backup aborted\n"
-msgstr "Sauvegarde abandonnée\n"
+#: src/backup_folder.vala:386 src/backup_rsync.vala:395
+msgid "Backup aborted"
+msgstr "Sauvegarde abandonnée"
 
-#: src/backup.vala:393
-msgid ""
-"The disk is too small to hold a single backup.\n"
-"Adjust the list of backup and exclude folders.\n"
-msgstr ""
-"Le disque est trop petit pour contenir une seule sauvegarde.\n"
-"Adapter la liste de sauvegarde et excluez des dossiers.\n"
-
-#: src/backup.vala:407
-msgid "Syncing disk\n"
-msgstr "Synchronisation du disque\n"
-
-#: src/backup.vala:409
-msgid "Can't close the backup. Aborting.\n"
-msgstr "Ne peut pas fermer la sauvegarde. Abandon.\n"
-
-#: src/backup.vala:415
+#: src/backup_folder.vala:413 src/backup_rsync.vala:422
 #, c-format
-msgid "Backup done. Needed %ld seconds.\n"
-msgstr "Sauvegarde effectuée. Durée %ld secondes.\n"
+msgid "Failed to delete folders: %s"
+msgstr "Impossible de restaurer le fichier %s"
 
-#: src/choose.vala:107
-msgid "Failed to find the disk!!!!!"
-msgstr "Impossible de trouver le disque !!!!"
+#: src/backup_folder.vala:429 src/backup_rsync.vala:438
+#, c-format
+msgid "Failed to delete aborted backups: %s"
+msgstr "Impossible de supprimer les sauvegardes échouées : %s."
 
-#: src/choose.vala:116
+#: src/backup_folder.vala:454 src/backup_rsync.vala:463
+#, c-format
+msgid "Backing up folder %s"
+msgstr "Sauvegarde du dossier %s"
+
+#: src/backup_folder.vala:475 src/backup_rsync.vala:484
+#, c-format
+msgid "Excluding folder %s"
+msgstr "Exclusion du dossier %s."
+
+#: src/backup_folder.vala:484 src/backup_rsync.vala:493
+#, c-format
+msgid "Failed to launch rsync for '%s'. Aborting backup"
+msgstr "Impossible d'exécuter rsync pour \"%s\". Sauvegarde abandonnée."
+
+#: src/backup_folder.vala:506 src/backup_rsync.vala:515
+#, c-format
+msgid "There was a problem when backing up the folder '%s'"
+msgstr "Problème en sauvegardant le dossier '%s'"
+
+#: src/backup_folder.vala:521 src/backup_rsync.vala:530
+#, c-format
+msgid "Backing up %s"
+msgstr "Sauvegarde du dossier %s"
+
+#: src/backup_folder.vala:554 src/backup_folder.vala:555
+#: src/backup_rsync.vala:563 src/backup_rsync.vala:564
+msgid "Syncing disk"
+msgstr "Synchronisation du disque"
+
+#: src/backup_folder.vala:561 src/backup_rsync.vala:570
+msgid "Failed to launch sync command"
+msgstr "Échec de l'exécution de la commande sync"
+
+#: src/backup_folder.vala:584 src/backup_rsync.vala:593
+msgid "Failed to rename backup folder. Aborting backup"
+msgstr ""
+"Impossible de renommer le dossier de sauvegarde. Interruption de la "
+"sauvegarde."
+
+#: src/backup_folder.vala:597 src/backup_rsync.vala:606
+msgid "Failed to launch final sync command"
+msgstr "Échec de l'exécution de la commande sync finale"
+
+#: src/backup_folder.vala:607 src/backup_rsync.vala:616
+msgid "Disk synced, cleaning old backups"
+msgstr "Disque synchronisé. Suppression d’anciennes sauvegardes"
+
+#: src/backup_folder.vala:623 src/backup_rsync.vala:632 src/cronopete.vala:240
+msgid "Cleaning old backups"
+msgstr "Suppression des anciennes sauvegardes"
+
+#: src/backup_folder.vala:629 src/backup_rsync.vala:638
+msgid "No old backups to delete"
+msgstr "Pas d'ancienne sauvegarde à supprimer"
+
+#: src/backup_folder.vala:656 src/backup_rsync.vala:665
+#, c-format
+msgid "Deleting old backup %s"
+msgstr "Suppression d’anciennes sauvegardes %s"
+
+#: src/backup_folder.vala:663 src/backup_rsync.vala:672
+#, c-format
+msgid "Failed to delete old backup %s: %s"
+msgstr "Échec de la suppression de l'ancienne sauvegarde %s: %s"
+
+#. TRANSLATORS This is the text for a Cancel button, that cancels the current action of choosing a folder where to do the backups
+#: src/backup_folder.vala:701 src/options.vala:185 src/options.vala:223
+msgid "Cancel"
+msgstr "Annuler"
+
+#. TRANSLATORS This is the text for an Add button, that adds a selected folder as the destination where to do the backups when using the "backup to folder" backend
+#: src/backup_folder.vala:703 src/options.vala:186 src/options.vala:224
+#: data/interface/options.ui:115 data/interface/options.ui:205
+msgid "Add"
+msgstr "Ajouter"
+
+#. TRANSLATORS This is the name for the backend that allows to store the backups in an external disk
+#: src/backup_rsync.vala:80
+msgid "Store backups in an external hard disk"
+msgstr "Conserver les sauvegardes dans un disque dur externe"
+
+#: src/backup_rsync.vala:755
+msgid "Unmount backup disk"
+msgstr "Démontage du disque de sauvegarde"
+
+#: src/backup_rsync.vala:791
+msgid "Can't unmount the backup disk. Another process is using it."
+msgstr ""
+"Impossible de démonter le disque de sauvegarde. Un autre processus l'utilise."
+
+#: src/choose_disk.vala:66
 msgid "Failed to unmount the disk. Aborting format operation."
 msgstr "Impossible de démonter le disque. Abandon de l’opération de formatage."
 
-#: src/choose.vala:137
+#: src/choose_disk.vala:93
 msgid ""
 "Failed to format the disk (maybe it is needing too much time). Please, try "
 "again."
 msgstr ""
-"Impossible de formater le disque (peut-être cela a nécessité trop de temps). "
-"Essayez à nouveau, s’il vous plaît."
+"Impossible de formater le disque (peut-être cela a-t-il nécessité trop de "
+"temps). Essayez à nouveau, s’il vous plaît."
 
-#: src/choose.vala:152
+#: src/choose_disk.vala:109
 msgid "Failed to mount again the disk. Aborting the format operation."
-msgstr ""
-"Impossible de re-monter le disque. Abandon de l’opération de formatage."
+msgstr "Impossible de remonter le disque. Abandon de l’opération de formatage."
 
-#: src/choose.vala:168
+#: src/choose_disk.vala:117
+msgid "Failed to get the final UUID. Aborting the format operation."
+msgstr ""
+"Impossible de trouver l'UUID final. Abandon de l’opération de formatage."
+
+#: src/choose_disk.vala:133
+#, c-format
 msgid ""
-"The selected drive must be formated to be used for backups.\n"
+"The selected drive\n"
+"\n"
+"%1$s\n"
+"\n"
+"with a capacity of %2$s must be formated to be used for backups.\n"
 "\n"
 "To do it, click the <i>Format disk</i> button.\n"
 "\n"
 "<b>All the data in the drive will be erased</b>"
 msgstr ""
-"Le disque sélectionné doit être formaté pour être utilisé pour des "
+"Le disque sélectionné \n"
+"\n"
+"%1$s\n"
+"\n"
+"d'une capacité de %2$s doit être formaté pour être utilisé pour des "
 "sauvegarde.\n"
 "\n"
-"Pour faire cela, cliquez sur le bouton <i>Formater le disque</i>.\n"
+"Pour cela, cliquez sur le bouton <i>Formater le disque</i>.\n"
 "\n"
 "<b>Toutes les données sur le disque seront effacées</b>"
 
-#: src/choose.vala:390
+#. TRANSLATORS this message says that the current File System (FS) in an external disk is unknown. It is shown when listing the external disks connected to the computer
+#: src/choose_disk.vala:384
 msgid "Unknown FS"
 msgstr "Système de fichier inconnu"
 
-#: src/choose.vala:408
+#. TRANSLATORS Specifies that the size of an external disk is unknown
+#: src/choose_disk.vala:415
 msgid "Unknown size"
 msgstr "Taille inconnue"
 
-#: src/cronopete.vala:221 src/cronopete.vala:328 src/cronopete.vala:358
+#. TRANSLATORS Specify that the disk configured for backups is not available
+#: src/cronopete.vala:217
+msgid "Disk not available"
+msgstr "Disque non disponible"
+
+#. TRANSLATORS The program state, used in a tooltip, when it is waiting to do the next backup
+#: src/cronopete.vala:225
 msgid "Idle"
 msgstr "Prêt"
 
-#: src/cronopete.vala:240 src/cronopete.vala:246 src/cronopete.vala:257
-#: src/cronopete.vala:261
+#: src/cronopete.vala:235
+msgid "Doing backup"
+msgstr "Sauvegarde en cours"
+
+#. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, a warning message
+#: src/cronopete.vala:249
+msgid "Doing backup, have a warning"
+msgstr "Sauvegarde en cours, avertissement"
+
+#. TRANSLATORS The program state, used in a tooltip, when it is doing a backup and there is, at least, an error message
+#: src/cronopete.vala:255
+msgid "Doing backup, have an error"
+msgstr "Sauvegarde en cours, erreur"
+
+#. TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
+#: src/cronopete.vala:262
+msgid "Backup is disabled"
+msgstr "La sauvegarde est désactivée"
+
+#. TRANSLATORS Menu entry to start a new backup manually
+#: src/cronopete.vala:364
+msgid "Back Up Now"
+msgstr "Sauvegarder maintenant"
+
+#. TRANSLATORS Menu entry to abort the current backup manually
+#: src/cronopete.vala:368
+msgid "Stop Backing Up"
+msgstr "Arrêter la sauvegarde"
+
+#. TRANSLATORS Menu entry to open the interface for restoring files from a backup
+#. TRANSLATORS Text for the button that restores the selected files
+#: src/cronopete.vala:373 src/restore.vala:90
+msgid "Restore files"
+msgstr "Restaurer des fichiers"
+
+#. TRANSLATORS Menu entry to open the configuration window
+#: src/cronopete.vala:388
+msgid "Configure the backups"
+msgstr "Configurer les stratégies de sauvegarde"
+
+#. TRANSLATORS Show the date of the last backup
+#: src/cronopete.vala:397
 #, c-format
 msgid "Latest backup: %s"
 msgstr "Dernière sauvegarde : %s"
 
-#: src/cronopete.vala:240 src/menu.vala:197
-msgid "Not defined"
-msgstr "Non défini"
+#. TRANSLATORS "Not available" refers to a backup (e.g. when the disk is not connected, the backups are not available)
+#: src/helpers.vala:26
+msgid "Not available"
+msgstr "Non disponible"
 
-#: src/cronopete.vala:246 src/cronopete.vala:257 src/menu.vala:146
-msgid "None"
-msgstr "Nul"
+#. TRANSLATORS This is used when showing the date of a backup done today. %R is the time when the backup was done
+#: src/helpers.vala:41
+msgid "today at %R"
+msgstr "aujourd'hui à %R"
 
-#: src/cronopete.vala:355
-msgid "Storage not available"
-msgstr "Stockage non disponible"
+#. TRANSLATORS This is used when showing the date of a backup done yesterday. %R is the time when the backup was done
+#: src/helpers.vala:45
+msgid "yesterday at %R"
+msgstr "hier à %R"
 
-#: src/cronopete.vala:360
-msgid "Backup disabled"
-msgstr "Sauvegarde désactivée"
+#. TRANSLATORS This is used when showing the date of a backup done tomorrow (just in case). %R is the time when the backup was done
+#: src/helpers.vala:49
+msgid "tomorrow at %R"
+msgstr "demain à %R"
 
-#: src/cronopete.vala:432
-msgid "Back Up Now"
-msgstr "Sauvegarder maintenant"
+#. TRANSLATORS This is used when showing the date of a backup not done today, yesterday nor tomorrow. You can use all the tags in strptime. Adjust the format to the one used in the corresponding country. %B is the month in text format, %e the day in numeric format, %Y is the year in four-digits format, %R is the hour and minute. Results in a text which is like "March 23, 2018 at 18:43". Example of translation for spanish: "%e de %B de %Y a las %R", which gives "23 de marzo de 2018 a las 18:43"
+#: src/helpers.vala:52
+msgid "%B %e, %Y at %R"
+msgstr "%e %B %Y à %R"
 
-#: src/cronopete.vala:435
-msgid "Stop Backing Up"
-msgstr "Arrêter la sauvegarde"
-
-#: src/cronopete.vala:439 src/restore.vala:186
-msgid "Restore files"
-msgstr "Restaurer des fichiers"
-
-#: src/cronopete.vala:447
-msgid "Configure backup policies"
-msgstr "Configurer des stratégies de sauvegarde"
-
-#: src/cronopete.vala:539
-#, c-format
-msgid "Backing up folder %s\n"
-msgstr "Sauvegarde du dossier %s\n"
-
-#: src/cronopete.vala:557
-#, c-format
-msgid "Can't copy file %s\n"
-msgstr "Ne peut pas copier le fichier %s\n"
-
-#: src/cronopete.vala:562
-#, c-format
-msgid "Can't access directory %s\n"
-msgstr "Ne peut pas accéder le répertoire %s\n"
-
-#: src/cronopete.vala:567
-#, c-format
-msgid "Can't create directory %s\n"
-msgstr "Ne peut pas créer le répertoire %s\n"
-
-#: src/cronopete.vala:585
-msgid "\n"
-msgstr "\n"
-
-#: src/cronopete.vala:586
-msgid "Starting backup\n"
-msgstr "Démarrage de la sauvegarde\n"
-
-#: src/cronopete.vala:600
-msgid "Erasing old backups"
-msgstr "Suppression d’anciennes sauvegardes"
-
-#: src/cronopete.vala:612
-msgid "Backup aborted"
-msgstr "Sauvegarde abandonnée"
-
-#: src/cronopete.vala:616
-msgid "Can't do backup; disk is too small"
-msgstr "Ne peut pas effectuer la sauvegarde; le disque est trop petit"
-
-#: src/cronopete.vala:620
-msgid "Can't do backup"
-msgstr "Ne peut pas effectuer la sauvegarde"
-
-#: src/icons_widget.vala:153
+#. TRANSLATOR this is the column in a file manager where file names are displayed
+#: src/icons_widget.vala:160
 msgid "Name"
 msgstr "Nom"
 
-#: src/icons_widget.vala:156
+#. TRANSLATOR this is the column in a file manager where file types are displayed
+#: src/icons_widget.vala:168
+msgid "Type"
+msgstr "Type"
+
+#. TRANSLATOR this is the column in a file manager where file sizes are displayed
+#: src/icons_widget.vala:176
 msgid "Size"
 msgstr "Taille"
 
-#: src/icons_widget.vala:157
+#. TRANSLATOR this is the column in a file manager where file modification dates are displayed
+#: src/icons_widget.vala:182
 msgid "Modification date"
 msgstr "Date de modification"
 
-#: src/icons_widget.vala:392
+#. TRANSLATOR this is for a popup in a file manager, to choose whether the hidden files in a folder should be shown or not
+#: src/icons_widget.vala:437
 msgid "Show hidden files"
 msgstr "Afficher les fichiers cachés"
 
-#: src/icons_widget.vala:400
+#. TRANSLATOR this is for a popup in a file manager, to choose to reverse the sorting order
+#: src/icons_widget.vala:446
 msgid "Reverse order"
 msgstr "Inverser l’ordre"
 
-#: src/icons_widget.vala:408
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by name
+#: src/icons_widget.vala:455
 msgid "Sort by name"
 msgstr "Trier par nom"
 
-#: src/icons_widget.vala:412
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by type
+#: src/icons_widget.vala:460
 msgid "Sort by type"
 msgstr "Trier par type"
 
-#: src/icons_widget.vala:416
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by size
+#: src/icons_widget.vala:465
 msgid "Sort by size"
 msgstr "Trier par taille"
 
-#: src/icons_widget.vala:420
+#. TRANSLATOR this is for a popup in a file manager, to choose to sort the files by date
+#: src/icons_widget.vala:470
 msgid "Sort by date"
 msgstr "Trier par date"
 
-#: src/icons_widget.vala:442
+#. TRANSLATOR this is for a popup in a file manager, to choose to show the files as a bunch of icons
+#: src/icons_widget.vala:496
 msgid "View as icons"
 msgstr "Afficher comme icônes"
 
-#: src/icons_widget.vala:446
+#. TRANSLATOR this is for a popup in a file manager, to choose to show the files as a list with name, size, type and modification date
+#: src/icons_widget.vala:501
 msgid "View as list"
 msgstr "Afficher comme liste"
 
-#: src/menu.vala:111
+#. TRANSLATOR this is the string to put in the list of files, as the type for the folders inside the current folder. It is a file type like "video", "text document", "mp3 audio"...
+#: src/icons_widget.vala:1029
+msgid "Folder"
+msgstr "Dossier"
+
+#. TRANSLATORS Shows a warning message with "warning" in Orange color
+#: src/menu.vala:142
+#, c-format
+msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
+msgstr "<span foreground=\"#FF7F00\">ATTENTION :</span> %s"
+
+#. TRANSLATORS Shows an error message with "error" in Orange color
+#: src/menu.vala:146
+#, c-format
+msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
+msgstr "<span foreground=\"#FF3F3F\">ERREUR :</span> %s"
+
+#. TRANSLATORS This string shows the current status of Cronopete. It can be "Status: idle", or "Status: copying file"...
+#: src/menu.vala:188
 #, c-format
 msgid "Status: %s"
 msgstr "État : %s"
 
-#: src/menu.vala:205
+#. TRANSLATORS This text means that the user still has not selected a hard disk where to do the backups
+#: src/menu.vala:261
+msgid "Not defined"
+msgstr "Non défini"
+
+#. TRANSLATORS This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
+#: src/menu.vala:289
 #, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld Go de %lld Go"
@@ -279,82 +401,52 @@ msgstr "%lld Go de %lld Go"
 msgid "Backup hidden files and folders in %s"
 msgstr "Sauvegarde des fichiers et dossiers cachés dans %s"
 
-#: src/restore.vala:194
+#. TRANSLATORS Text for the button that allows to exit the restore window
+#: src/restore.vala:103
 msgid "Exit"
 msgstr "Sortie"
 
-#: src/restore.vala:697
-msgid "Today, at %H:%M"
-msgid_plural "Today, at %H:%M"
-msgstr[0] "Aujourd’hui, à %S:%M"
-msgstr[1] "Aujourd’hui, à %H:%M"
+#: src/restore.vala:189
+msgid "Aborted"
+msgstr "Annulée"
 
-#: src/restore.vala:702
-msgid "Yesterday, at %H:%M"
-msgid_plural "Yesterday, at %H:%M"
-msgstr[0] "Hier, à %H:%M"
-msgstr[1] "Hier, à %H:%M"
-
-#: src/restore.vala:710
-msgid "%A, %d %B %Y at %H:%M"
-msgid_plural "%A, %d %B %Y at %H:%M"
-msgstr[0] "%A, %d %B %Y à %H:%M"
-msgstr[1] "%A, %d %B %Y à %H:%M"
-
-#: src/restore.vala:717
-msgid "%A, %B %d %Y at %H:%M"
-msgid_plural "%A, %B %d %Y at %H:%M"
-msgstr[0] "%A, %d %B %Y à %H:%M"
-msgstr[1] "%A, %d %B %Y à %H:%M"
-
-#: src/restore.vala:966
+#: src/restore.vala:193
 #, c-format
-msgid ""
-"Restoring file:\n"
-"\n"
-"%s"
-msgstr ""
-"Restauration du fichier:\n"
-"\n"
-"%s"
+msgid "Error while restoring %s"
+msgstr "Erreur durant la restauration de %s"
 
-#: src/restore.vala:978
+#: src/restore.vala:203
 #, c-format
-msgid ""
-"Failed to restore file\n"
-"\n"
-"%s\n"
-"\n"
-"There's not enought free space"
-msgstr ""
-"Impossible de restaurer le fichier\n"
-"\n"
-"%s\n"
-"\n"
-"Il n’y a pas assez d’espace libre"
+msgid "Restoring file %s"
+msgstr "Restauration du fichier %s"
 
-#: src/restore.vala:980
+#: src/restore.vala:209
 #, c-format
-msgid ""
-"Failed to restore file\n"
-"\n"
-"%s"
-msgstr ""
-"Impossible de restaurer le fichier\n"
-"\n"
-"%s"
+msgid "Restoring folder %s"
+msgstr "Restauration du dossier %s"
 
-#: src/restore.vala:1068
-msgid "Preparing folders to restore"
-msgstr "Préparation des dossier à restaurer"
+#. TRANSLATORS Specifies that a rstoring operation has ended
+#: src/restore.vala:215
+msgid "Done"
+msgstr "Fait"
+
+#. TRANSLATORS Text for the button in the window that shows a message with the result of a restoring operation, for closing the window
+#: src/restore.vala:255 data/interface/warning_folder_backend.ui:22
+msgid "OK"
+msgstr "OK"
+
+#. TRANSLATORS Message shown when the user aborts a restoring operation (when restoring files from a backup to the hard disk)
+#: src/restore.vala:287
+msgid "Aborting restore operation"
+msgstr "Annulation de la restauration"
 
 #: data/interface/about.ui:15
-msgid "©2011-15 Raster Software Vigo"
-msgstr "©2011-15 Raster Software Vigo"
+msgid "©2011-2018 Raster Software Vigo"
+msgstr "©2011-2018 Raster Software Vigo"
 
 #: data/interface/about.ui:16
 msgid "An Apple's Time Machine clone for Linux"
-msgstr "Un clone pour Linux de la Time Machine d’Appel"
+msgstr "Un clone pour Linux du logiciel Time Machine d’Apple"
 
 #: data/interface/about.ui:683
 msgid ""
@@ -372,38 +464,28 @@ msgid ""
 "Linux."
 msgstr ""
 "En 1895, H.G. Wells a publié <b>The Time Machine</b>, considéré pendant des "
-"années comme première nouvelle avec une machine à voyager dans le temps.\n"
+"années comme le premier roman avec une machine à voyager dans le temps.\n"
 "\n"
-"Mais en 1887, huit ans avant, Enrique Gaspar y Rimbau a publié <b>El "
-"anacronópete</b>, une nouvelle dans le format d’une Zarzuela, qui est la "
-"vraie première nouvelle de mettre en scène une machine qui permet de « voler "
-"contre le temps ».\n"
+"Mais en 1887, huit ans avant, Enrique Gaspar y Rimbau avait publié <b>El "
+"anacronópete</b>, un roman dans le format d’une Zarzuela, qui est le vrai "
+"premier roman à mettre en scène une machine qui permet de « voler contre le "
+"temps ».\n"
 "\n"
 "En 2007, Apple a lancé <b>Time Machine</b>, un programme de sauvegarde pour "
 "MacOS X Leopard. Plusieurs programmes similaires pour Linux ont émergé.\n"
 "\n"
-"En 2011, arrive ana<b>CRONOPETE</b>. LE clone pour Linux de la Time Machine "
-"d’Appel."
+"En 2011, arrive ana<b>CRONOPETE</b>. LE clone pour Linux du logiciel Time "
+"Machine d’Apple."
 
 #: data/interface/about.ui:705
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
 msgstr "Pourquoi <i>ana<b>CRONOPETE</b></i>?"
 
-#: data/interface/chooser.ui:27 data/interface/folder_selector.ui:28
-#: data/interface/format_force.ui:26 data/interface/options.ui:35
-#: data/interface/restore_error.ui:40 data/interface/restoring.ui:59
-msgid "Cancel"
-msgstr "Annuler"
-
-#: data/interface/chooser.ui:40
-msgid "Select"
-msgstr "Sélectionner"
-
-#: data/interface/chooser.ui:68
+#: data/interface/chooser.ui:70
 msgid "Available USB disks:"
 msgstr "Disques USB disponibles :"
 
-#: data/interface/chooser.ui:103
+#: data/interface/chooser.ui:105
 msgid "Show all disks (except /home)"
 msgstr "Afficher tous les disques (sauf /home)"
 
@@ -417,25 +499,16 @@ msgid ""
 "Please, check the list of folders to ensure that everything went fine."
 msgstr ""
 "La configuration de sauvegarde a été exportée.\n"
-"Merci de vérifier la liste des dossiers pour assurer que tout s’est bien "
+"Merci de vérifier la liste des dossiers pour s'assurer que tout s’est bien "
 "passé."
 
-#: data/interface/config_exported.ui:55 data/interface/format_error.ui:27
-#: data/interface/options.ui:49 data/interface/restore_ok.ui:33
-msgid "Ok"
-msgstr "OK"
-
-#: data/interface/folder_selector.ui:41
-msgid "Add folder(s)"
-msgstr "Ajout de dossier(s)"
-
-#: data/interface/format_error.ui:50
+#: data/interface/format_error.ui:51
 msgid ""
 "There was an error during the\n"
 "formating operation. Aborted."
-msgstr "Il y avait une erreur lors du processus de formatage. Annulation."
+msgstr "Il y a eu une erreur lors du processus de formatage. Annulation."
 
-#: data/interface/format_error.ui:88
+#: data/interface/format_error.ui:89
 msgid "<b>Error info</b>"
 msgstr "<b>Information sur l’erreur</b>"
 
@@ -452,72 +525,72 @@ msgid "anaCRONOPETE"
 msgstr "anaCRONOPETE"
 
 #. Don't translate this. Is part of the name in the main window
-#: data/interface/main.ui:50
+#: data/interface/main.ui:54
 msgid "ana"
 msgstr "ana"
 
 #. Don't translate this. Is part of the name in the main window.
-#: data/interface/main.ui:63
+#: data/interface/main.ui:67
 msgid "cronopete"
 msgstr "cronopete"
 
-#: data/interface/main.ui:233
-msgid "Next backup:"
-msgstr "Sauvegarde suivante :"
-
-#: data/interface/main.ui:246
+#: data/interface/main.ui:290
 msgid "Latest backup:"
 msgstr "Dernière sauvegarde :"
 
-#: data/interface/main.ui:259
+#: data/interface/main.ui:303
 msgid "Oldest backup:"
 msgstr "Sauvegarde la plus ancienne :"
 
 #. Refers to the free disk space available in the backup's hard disk
-#: data/interface/main.ui:272
+#: data/interface/main.ui:316
 msgctxt "Refers to the free disk space available in the backup's hard disk"
 msgid "Available:"
 msgstr "Disponible :"
 
-#: data/interface/main.ui:285
-msgid "Device:"
-msgstr "Disque :"
+#: data/interface/main.ui:329
+msgid "Destination:"
+msgstr "Destination :"
 
-#: data/interface/main.ui:340
-msgid "Change disk..."
-msgstr "Changer de disque…"
+#: data/interface/main.ui:342
+msgid "Next backup:"
+msgstr "Sauvegarde suivante :"
 
-#: data/interface/main.ui:356 data/interface/options.ui:17
+#: data/interface/main.ui:397
+msgid "Change destination..."
+msgstr "Changer de destination…"
+
+#: data/interface/main.ui:412 data/interface/options.ui:17
 msgid "Options"
 msgstr "Options"
 
-#: data/interface/main.ui:382
+#: data/interface/main.ui:437
 msgid ""
 "Cronopete keeps:\n"
 "\n"
-" * Hourly backups for the past 24 hours\n"
+" * All backups for the past 24 hours\n"
 " * Daily backups for the past month\n"
 " * Weekly backups until your hard disk is full"
 msgstr ""
-"Cronopete garde des sauvegardes :\n"
+"Cronopete conserve des sauvegardes :\n"
 "\n"
-"* de chaque heure des 24 dernières heures\n"
+"* toutes celles des 24 dernières heures\n"
 "* journalières du dernier mois\n"
 "* hebdomadaires jusqu’à ce que votre disque dur est plein"
 
-#: data/interface/main.ui:401
+#: data/interface/main.ui:456
 msgid "Show Cronopete in menu bar"
 msgstr "Afficher Cronopete dans la barre de menu"
 
-#: data/interface/main.ui:420
+#: data/interface/main.ui:473
 msgid "About"
 msgstr "À propos"
 
-#: data/interface/main.ui:454
+#: data/interface/main.ui:506
 msgid "Configuration"
 msgstr "Configuration"
 
-#: data/interface/main.ui:483
+#: data/interface/main.ui:535
 msgid "Log"
 msgstr "Logiciel"
 
@@ -525,35 +598,31 @@ msgstr "Logiciel"
 msgid "Folders to backup"
 msgstr "Dossiers à sauvegarder"
 
-#: data/interface/options.ui:115 data/interface/options.ui:207
-msgid "Add"
-msgstr "Ajouter"
-
-#: data/interface/options.ui:130 data/interface/options.ui:222
+#: data/interface/options.ui:129 data/interface/options.ui:219
 msgid "Remove"
 msgstr "Supprimer"
 
-#: data/interface/options.ui:156
+#: data/interface/options.ui:154
 msgid "<b>Backup these folders</b>"
 msgstr "<b>Sauvegarder ces dossiers</b>"
 
-#: data/interface/options.ui:248
+#: data/interface/options.ui:244
 msgid "<b>Exclude these folders</b>"
 msgstr "<b>Exclure ces dossiers</b>"
 
-#: data/interface/options.ui:283
+#: data/interface/options.ui:277
 msgid "Time interval between backups (in hours):"
 msgstr "Intervalle de temps entre les sauvegardes (en heures) :"
 
-#: data/interface/options.ui:296
+#: data/interface/options.ui:290
 msgid "1"
 msgstr "1"
 
-#: data/interface/restore_error.ui:53
+#: data/interface/restore_error.ui:54
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: data/interface/restore_error.ui:66
+#: data/interface/restore_error.ui:67
 msgid "Ignore all"
 msgstr "Tout ignorer"
 
@@ -561,9 +630,48 @@ msgstr "Tout ignorer"
 msgid "Restore ended succesfully"
 msgstr "Restauration terminée avec succès"
 
-#: data/interface/restoring.ui:9
-msgid "Restoring files"
-msgstr "Restauration de fichiers"
+#: data/interface/warning_folder_backend.ui:53
+msgid ""
+"The <i>folder backend</i> is considered valid only for advanced users. To "
+"enable it, set the <i>gconf</i> key 'enable-folder-backend' to <i>true</i>. "
+"If you don't know how to do this, probably you should not use this backend."
+msgstr ""
+"Le <i>dossier de sauvegarde</i> n'est considéré comme fonctionnel que pour "
+"les utilisateurs avancés. Pour l'activer, configurer la clef <i>gconf</i> "
+"'enable-folder-backend' à <i>true</i>. Si vous ne savez pas comment faire "
+"cela, vous ne devriez probablement pas utiliser ce mode de sauvegarde."
+
+#: data/interface/warning_folder_backend.ui:76
+msgid ""
+"The <i>store backups in a folder</i> backend can be considered quite "
+"dangerous because it allows to do what are considered 'bad practices' for a "
+"secure backup. Specifically, it allows to store the backups in the same "
+"physical disk (and even in the same partition) than the data to be backed "
+"up. This means that a disk failure will result in the loss of both the data "
+"and the backup.\n"
+"\n"
+"This means that the user must put a lot of care when using this backend to "
+"ensure that the folder where (s)he stores the backups belongs to a different "
+"disk. Or when using the same physical disk, that (s)he understands that "
+"there is no true backup of the data."
+msgstr ""
+"Le système <i>conserver les sauvegardes dans un dossier</i> peut être "
+"considéré comme un choix assez dangereux, parce qu'il permet de faire ce qui "
+"est considéré comme une « mauvaise pratique » pour une sauvegarde sécurisée. "
+"En particulier, il permet de stocker les sauvegardes sur le même disque "
+"physique (et même dans la même partition) que les données qui doivent être "
+"sauvegardées. Ceci signifie qu'un défaut du disque entraînera une perte "
+"simultanée des données et de la sauvegarde.\n"
+"\n"
+"Ceci signifie que l'utilisateur ou l'utilisatrice doit prendre beaucoup de "
+"précaution lorsqu'il ou elle utilise ce choix, pour s'assurer que les "
+"sauvegardes soient conservées sur un disque différent. Ou bien, si la "
+"personne utilise le même disque, qu'elle comprenne qu'il ne s'agit pas d'une "
+"vraie sauvegarde des données. "
+
+#: data/interface/warning_folder_backend.ui:87
+msgid "Read more..."
+msgstr "Lire plus..."
 
 #: data/interface/welcome.ui:23
 msgid "Don't ask me again"
@@ -579,7 +687,7 @@ msgstr "Paramétrer maintenant"
 
 #: data/interface/welcome.ui:76
 msgid "Welcome to Cronopete"
-msgstr "Bienvenu à Cronopete"
+msgstr "Bienvenu dans Cronopete"
 
 #: data/interface/welcome.ui:105
 msgid ""
@@ -593,6 +701,117 @@ msgstr ""
 "copies régulières de vos données et de les restaurer à partir de plusieurs "
 "dates.\n"
 "\n"
-"Maintenant, vous pouvez paramétrer quel disque externe à utiliser pour faire "
-"des copies et quels dossiers vous souhaitez sauvegarder, ou vous pouvez le "
-"faire plus tard."
+"Vous pouvez paramétrer dès maintenant quel disque externe utiliser pour "
+"faire des copies et quels dossiers vous souhaitez sauvegarder. Mais vous "
+"pouvez aussi le faire plus tard."
+
+#~ msgid "Failed to find the disk!!!!!"
+#~ msgstr "Impossible de trouver le disque !!!!"
+
+#~ msgid "Select"
+#~ msgstr "Sélectionner"
+
+#~ msgid "Ok"
+#~ msgstr "OK"
+
+#~ msgid "Add folder(s)"
+#~ msgstr "Ajout de dossier(s)"
+
+#~ msgid "Device:"
+#~ msgstr "Disque :"
+
+#, fuzzy
+#~ msgid "%x at %R"
+#~ msgstr "Aujourd’hui, à %S:%M"
+
+#, fuzzy
+#~ msgid "Backup done"
+#~ msgstr "Sauvegarde abandonnée"
+
+#~ msgid "Backing up folder %s.\n"
+#~ msgstr "Sauvegarde du dossier %s.\n"
+
+#~ msgid "Excluding hidden folders in %s.\n"
+#~ msgstr "Exclusion des dossiers cachés dans %s.\n"
+
+#~ msgid "Backing up hidden folders in %s.\n"
+#~ msgstr "Sauvegarde des dossiers cachés dans %s.\n"
+
+#~ msgid "Can't create the folder for this backup. Aborting backup.\n"
+#~ msgstr ""
+#~ "Ne peut pas créer le dossier pour cette sauvegarde. Interruption de la "
+#~ "sauvegarde.\n"
+
+#~ msgid "Backup device not available. Aborting backup.\n"
+#~ msgstr ""
+#~ "Unité de sauvegarde non disponible. Interruption de la sauvegarde.\n"
+
+#~ msgid "Already started a backup.\n"
+#~ msgstr "Une sauvegarde est déjà démarrée.\n"
+
+#~ msgid "Backup aborted\n"
+#~ msgstr "Sauvegarde abandonnée\n"
+
+#~ msgid ""
+#~ "The disk is too small to hold a single backup.\n"
+#~ "Adjust the list of backup and exclude folders.\n"
+#~ msgstr ""
+#~ "Le disque est trop petit pour contenir une seule sauvegarde.\n"
+#~ "Adapter la liste de sauvegarde et excluez des dossiers.\n"
+
+#~ msgid "Can't close the backup. Aborting.\n"
+#~ msgstr "Ne peut pas fermer la sauvegarde. Abandon.\n"
+
+#~ msgid "Backup done. Needed %ld seconds.\n"
+#~ msgstr "Sauvegarde effectuée. Durée %ld secondes.\n"
+
+#~ msgid "None"
+#~ msgstr "Nul"
+
+#~ msgid "Can't copy file %s\n"
+#~ msgstr "Ne peut pas copier le fichier %s\n"
+
+#~ msgid "Can't access directory %s\n"
+#~ msgstr "Ne peut pas accéder le répertoire %s\n"
+
+#~ msgid "Can't create directory %s\n"
+#~ msgstr "Ne peut pas créer le répertoire %s\n"
+
+#~ msgid "\n"
+#~ msgstr "\n"
+
+#~ msgid "Can't do backup; disk is too small"
+#~ msgstr "Ne peut pas effectuer la sauvegarde; le disque est trop petit"
+
+#~ msgid "Can't do backup"
+#~ msgstr "Ne peut pas effectuer la sauvegarde"
+
+#~ msgid "%A, %d %B %Y at %H:%M"
+#~ msgid_plural "%A, %d %B %Y at %H:%M"
+#~ msgstr[0] "%A, %d %B %Y à %H:%M"
+#~ msgstr[1] "%A, %d %B %Y à %H:%M"
+
+#~ msgid ""
+#~ "Restoring file:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Restauration du fichier:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Failed to restore file\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "There's not enought free space"
+#~ msgstr ""
+#~ "Impossible de restaurer le fichier\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Il n’y a pas assez d’espace libre"
+
+#~ msgid "Preparing folders to restore"
+#~ msgstr "Préparation des dossier à restaurer"

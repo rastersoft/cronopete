@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.0 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -32,11 +32,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="use_action_appearance">False</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -46,11 +46,11 @@
             </child>
             <child>
               <object class="GtkButton" id="button2">
-                <property name="label" translatable="yes">Ok</property>
-                <property name="use_action_appearance">False</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -113,7 +113,6 @@
                     <child>
                       <object class="GtkButton" id="add_backup">
                         <property name="label" translatable="yes">Add</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -128,7 +127,6 @@
                     <child>
                       <object class="GtkButton" id="remove_backup">
                         <property name="label" translatable="yes">Remove</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -205,7 +203,6 @@
                     <child>
                       <object class="GtkButton" id="add_exclude">
                         <property name="label" translatable="yes">Add</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -220,7 +217,6 @@
                     <child>
                       <object class="GtkButton" id="remove_exclude">
                         <property name="label" translatable="yes">Remove</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -258,11 +254,9 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="backup_root_hiden">
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -315,8 +309,11 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">button1</action-widget>
-      <action-widget response="-6">button2</action-widget>
+      <action-widget response="-6">button1</action-widget>
+      <action-widget response="-5">button2</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

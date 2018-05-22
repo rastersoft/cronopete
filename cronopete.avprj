@@ -1,18 +1,17 @@
 ### AutoVala Project ###
-autovala_version: 24
+autovala_version: 28
 project_name: cronopete
-vala_version: 0.26
-
-*define: NO_APPINDICATOR
+po_comment_tag: TRANSLATOR
+vala_version: 0.30
 
 vala_binary: src/cronopete
-*version: 3.26.1
+*version: 4.2.0
 compile_options: --target-glib 2.32
 *vala_package: posix
+vala_check_package: gtk+-3.0
 if (NOT NO_APPINDICATOR)
 vala_check_package: appindicator3-0.1
 end
-*vala_check_package: atk
 *vala_check_package: cairo
 *vala_check_package: gdk-3.0
 *vala_check_package: gdk-pixbuf-2.0
@@ -21,22 +20,22 @@ end
 *vala_check_package: glib-2.0
 *vala_check_package: gobject-2.0
 *vala_check_package: gsl
-*vala_check_package: gtk+-3.0
 *vala_check_package: pango
 *vala_check_package: pangocairo
 *vala_check_package: udisks2
-*vala_check_package: x11
-*vala_source: backup.vala
-*vala_source: choose.vala
+*vala_source: backup_base.vala
+*vala_source: backup_folder.vala
+*vala_source: backup_rsync.vala
+*vala_source: choose_disk.vala
 *vala_source: cronopete.vala
-*vala_source: error_window.vala
 *vala_source: fixedlabel.vala
+*vala_source: helpers.vala
 *vala_source: icons_widget.vala
-*vala_source: ipc.vala
 *vala_source: menu.vala
 *vala_source: options.vala
 *vala_source: restore.vala
-*vala_source: usbhd_backend.vala
+*vala_source: restore_canvas.vala
+*vala_source: udisk2_cronopete.vala
 
 
 *po: po
@@ -48,24 +47,28 @@ end
 *translate: glade data/interface/format_error.ui
 *translate: glade data/interface/format_force.ui
 *translate: glade data/interface/formatting.ui
+*translate: glade data/interface/generic_error.ui
 *translate: glade data/interface/main.ui
 *translate: glade data/interface/nodisk.ui
 *translate: glade data/interface/options.ui
 *translate: glade data/interface/restore_error.ui
 *translate: glade data/interface/restore_ok.ui
 *translate: glade data/interface/restoring.ui
+*translate: glade data/interface/warning_folder_backend.ui
 *translate: glade data/interface/welcome.ui
-*translate: vala src/backup.vala
-*translate: vala src/choose.vala
+*translate: vala src/backup_base.vala
+*translate: vala src/backup_folder.vala
+*translate: vala src/backup_rsync.vala
+*translate: vala src/choose_disk.vala
 *translate: vala src/cronopete.vala
-*translate: vala src/error_window.vala
 *translate: vala src/fixedlabel.vala
+*translate: vala src/helpers.vala
 *translate: vala src/icons_widget.vala
-*translate: vala src/ipc.vala
 *translate: vala src/menu.vala
 *translate: vala src/options.vala
 *translate: vala src/restore.vala
-*translate: vala src/usbhd_backend.vala
+*translate: vala src/restore_canvas.vala
+*translate: vala src/udisk2_cronopete.vala
 
 *data: data/local
 
@@ -79,7 +82,7 @@ end
 
 *autostart: data/cronopete.desktop
 
-*dbus_service: data/com.rastersoft.cronopete.service.base
+*dbus_service: data/dbus/com.rastersoft.cronopete.service.base
 
 *eos_plug: data/cronopete.plug
 
@@ -92,12 +95,14 @@ end
 *glade: data/interface/format_error.ui
 *glade: data/interface/format_force.ui
 *glade: data/interface/formatting.ui
+*glade: data/interface/generic_error.ui
 *glade: data/interface/main.ui
 *glade: data/interface/nodisk.ui
 *glade: data/interface/options.ui
 *glade: data/interface/restore_error.ui
 *glade: data/interface/restore_ok.ui
 *glade: data/interface/restoring.ui
+*glade: data/interface/warning_folder_backend.ui
 *glade: data/interface/welcome.ui
 
 *full_icon: Hicolor Applications data/icons/anacronopete_128x128.png
@@ -107,6 +112,7 @@ end
 *full_icon: Hicolor Applications data/icons/anacronopete_32x32.png
 *full_icon: Hicolor Applications data/icons/anacronopete_48x48.png
 *full_icon: Hicolor Applications data/icons/anacronopete_64x64.png
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-1-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-1-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-1-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-1-orange-symbolic.svg
@@ -117,6 +123,7 @@ end
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-1-white.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-1-yellow-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-1-yellow.svg
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-2-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-2-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-2-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-2-orange-symbolic.svg
@@ -127,6 +134,7 @@ end
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-2-white.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-2-yellow-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-2-yellow.svg
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-3-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-3-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-3-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-3-orange-symbolic.svg
@@ -137,6 +145,7 @@ end
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-3-white.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-3-yellow-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-3-yellow.svg
+*full_icon: Hicolor Applications data/icons/cronopete-arrow-4-cyan.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-4-green-symbolic.svg
 *full_icon: Hicolor Applications data/icons/cronopete-arrow-4-green.svg
 *full_icon: Hicolor Status data/icons/cronopete-arrow-4-orange-symbolic.svg
@@ -153,4 +162,6 @@ end
 *pixmap: data/pixmaps/anacronopete.svg
 *pixmap: data/pixmaps/anacronopete_tiny.svg
 *pixmap: data/pixmaps/arrows.png
+
+binary_dependency: /usr/bin/rsync
 

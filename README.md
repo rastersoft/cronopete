@@ -2,13 +2,11 @@
 
 A backup utility for Linux.
 
-Cronopete is a backup utility for Linux, modeled after Apple's
-Time Machine. It aims to simplify the creation of periodic
-backups.
+Cronopete is a backup utility for Linux, modeled after Apple's Time Machine. It aims to simplify the creation of periodic backups.
 
 ## BUILDING CRONOPETE
 
-To build Cronopete, you need to install CMAKE and Vala-0.20
+To build Cronopete, you need to install CMAKE or Ninja, Vala-0.30 or later, and Gtk 3.10 or later.
 
 Now, type
 
@@ -18,23 +16,18 @@ Now, type
     make
     sudo make install
 
-This will compile Cronopete with AppIndicator support.
+This will compile Cronopete.
 
-There is one modifier for "cmake" that allows to change the compilation
-options:
+## DBUS INTERFACE
 
-    NO_APPINDICATOR will compile cronopete without the libappindicator library
+Cronopete offers a DBus interface to allow a remote control. It is at the session bus, at the address **com.rastersoft.cronopete**. The object **com/rastersoft/cronopete** offers the **com.rastersoft.cronopete** interface, which has the follow methods:
 
-This modifier must be prepended with "-D", and appended with "=on".
-To use this modifier, first remove all the contents in the BUILD folder,
-and run again cmake. This will compile cronopete without libappindicator
-library:
-
-    cd BUILD
-    rm -rf *
-    cmake .. -DNO_APPINDICATOR=on
-    make
-    sudo make install
+* DoPing(Int32) -> Int32 : receives a 32bit integer and returns that integer plus 1. Useful for tests.
+* DoBackup() : starts a backup now
+* StopBakup() : ends the current backup
+* ShowPreferences() : shows the preferences window
+* RestoreFiles() : shows the restore interface
+* RestoreFilesFromFolder(string folder) : shows the restore interface, setting it to show the specified folder. The folder can be passed as an URI (file:///...). This is useful for integration with file managers.
 
 ## CONTACTING THE AUTHOR
 

@@ -1,2 +1,2 @@
 i18n = import('i18n')
-i18n.gettext('cronopete', languages: ['fr', 'gl', 'cs', 'es', 'ru', 'de'])
+i18n.gettext('cronopete', languages: ['cs', 'de', 'es', 'fr', 'gl', 'ru'])

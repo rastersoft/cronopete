@@ -1,7 +1,6 @@
 ### CMakeLists automatically created with AutoVala
 ### Do not edit
 
-SET(DBUS_PREFIX ${CMAKE_INSTALL_PREFIX})
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.sh DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.sh DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications/ )
@@ -11,8 +10,6 @@ if( NOT ( ${CMAKE_INSTALL_PREFIX} MATCHES "^/home/" ) )
 else()
 	MESSAGE(STATUS "[33mAutostart file data/cronopete.desktop will not be installed. You must create your own .desktop file and put it at ~/.config/autostart[39m")
 endif()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/com.rastersoft.cronopete.service.base ${CMAKE_CURRENT_BINARY_DIR}/com.rastersoft.cronopete.service)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/com.rastersoft.cronopete.service DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/dbus-1/services/)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cronopete.plug ${CMAKE_CURRENT_BINARY_DIR}/cronopete.plug)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cronopete.plug DESTINATION lib/plugs/cronopete/cronopete/)
 include(GSettings)
