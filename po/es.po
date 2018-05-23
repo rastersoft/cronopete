@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-20 18:43+0200\n"
-"PO-Revision-Date: 2018-05-20 18:44+0200\n"
+"PO-Revision-Date: 2018-05-23 19:35+0200\n"
 "Last-Translator: Sergio Costas <rastersoft@gmail.com>\n"
 "Language-Team: Español; Castellano <rastersoft@gmail.com>\n"
 "Language: \n"
@@ -155,7 +155,7 @@ msgstr "Almacenar las copias en un disco duro externo"
 
 #: src/backup_rsync.vala:755
 msgid "Unmount backup disk"
-msgstr "Desmontar el disco de copia."
+msgstr "Desmontar el disco de copia"
 
 #: src/backup_rsync.vala:791
 msgid "Can't unmount the backup disk. Another process is using it."
