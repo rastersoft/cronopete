@@ -19,7 +19,7 @@ link_libraries ( ${DEPS_LIBRARIES} )
 link_directories ( ${DEPS_LIBRARY_DIRS} )
 find_package (Vala REQUIRED)
 include (ValaVersion)
-ensure_vala_version ("0.30" MINIMUM)
+ensure_vala_version ("0.32" MINIMUM)
 include (ValaPrecompile)
 
 set (VALA_PACKAGES ${VALA_PACKAGES} posix)

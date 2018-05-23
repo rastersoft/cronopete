@@ -2,7 +2,7 @@
 autovala_version: 28
 project_name: cronopete
 po_comment_tag: TRANSLATOR
-vala_version: 0.30
+vala_version: 0.32
 
 vala_binary: src/cronopete
 *version: 4.2.0
