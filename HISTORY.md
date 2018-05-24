@@ -1,5 +1,9 @@
 # History of versions #
 
+* Version 4.3.0 (2018/05/24)
+      * Now allows to unmount the backup drive
+      * Now shows more information about the drive when formatting a disk to be used for backup
+      * Updated translations
 * Version 4.2.0 (2018/05/11)
       * Now only sets low priority to RSYNC itself, not to the whole program
       * Better management of external disks with UDisks2

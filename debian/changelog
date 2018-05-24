@@ -1,3 +1,11 @@
+cronopete (4.3.0-Debian1) sid; urgency=low
+
+  * Now allows to unmount the backup drive
+  * Now shows more information about the drive when formatting a disk to be used for backup
+  * Updated translations
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Thu, 24 May 2018 23:55:00 +0200
+
 cronopete (4.2.0-Debian1) sid; urgency=low
 
   * Now only sets low priority to RSYNC itself, not to the whole program
@@ -6,7 +14,7 @@ cronopete (4.2.0-Debian1) sid; urgency=low
   * Fixed french translation (thanks to Maieul)
   * Now doesn't show CDROMs or Squashfs file systems
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 11 May 2018 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 11 May 2018 23:55:00 +0200
 
 cronopete (4.1.1-Debian1) sid; urgency=low
 
@@ -86,13 +94,13 @@ cronopete (3.24.0-Debian1) sid; urgency=low
   * Fixed the bookmarks and the path buttons in the restore interface
   * Now doesn't fail to restore files when the destination folder doesn't exist
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 10 Feb 2017 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 10 Feb 2017 23:55:00 +0200
 
 cronopete (3.23.0-Debian1) sid; urgency=low
 
   * Now supports external drives with blank spaces in their name
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 10 Feb 2017 23:50:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 10 Feb 2017 23:50:00 +0200
 
 cronopete (3.22.0-Debian1) sid; urgency=low
 
@@ -156,20 +164,20 @@ cronopete (3.18.3-Debian1) sid; urgency=low
 
   * Migrated to UDisks2, to fix the problems when formating disks
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 03 Apr 2015 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 03 Apr 2015 23:55:00 +0200
 
 cronopete (3.18.2-Debian1) sid; urgency=low
 
   * Now doesn't fail if, at startup, the hard disk isn't mounted
   * Now the main window doesn't get expanded if the status text is too big
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 03 Apr 2015 23:50:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 03 Apr 2015 23:50:00 +0200
 
 cronopete (3.18.1-Debian1) sid; urgency=low
 
   * Fixed bugs when choosing a new disk
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 03 Apr 2015 23:45:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 03 Apr 2015 23:45:00 +0200
 
 cronopete (3.18.0-Debian1) sid; urgency=low
 
@@ -190,7 +198,7 @@ cronopete (3.16.0-Debian1) sid; urgency=low
   * Removed GTK2 support
   * Fixed the problems when mixing fullscreen and popup windows
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 08 Aug 2014 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 08 Aug 2014 23:55:00 +0200
 
 cronopete (3.15.3-Debian1) sid; urgency=low
 
@@ -206,7 +214,7 @@ cronopete (3.15.2-Debian1) sid; urgency=low
   * Now doesn't fail if pressing the ACCEPT button in the folder selection dialog without a folder selected
   * Now removes the wellcome message also if the user shows the configuration dialog
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 01 Nov 2013 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 01 Nov 2013 23:55:00 +0200
 
 cronopete (3.15.1-Debian1) sid; urgency=low
 
@@ -277,7 +285,7 @@ cronopete (3.6.0-Debian1) sid; urgency=low
   * Fixed the bug that made the restore window to grow each time the user changed the folder
   * Changed DBus bus from com.backup.cronopete to com.rastersoft.cronopete
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 21 Dec 2012 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 21 Dec 2012 23:55:00 +0200
 
 cronopete (3.4.6-Debian1) sid; urgency=low
 
@@ -337,14 +345,14 @@ cronopete (2.3.0-Debian1) sid; urgency=low
   * Added Dbus remote control
   * Added icon cache to speed up the restoring interface
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 02 Dec 2011 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 02 Dec 2011 23:55:00 +0200
 
 cronopete (2.2.0-Debian1) sid; urgency=low
 
   * It made a window capture when changing the restore view to list or icons. Fixed.
   * Fixed a core dump when unmounting the hard disk after launching the restore interface.
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 18 Nov 2011 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 18 Nov 2011 23:55:00 +0200
 
 cronopete (2.1.0-Debian1) sid; urgency=low
 
@@ -356,7 +364,7 @@ cronopete (2.0.0-Debian1) sid; urgency=low
 
   * Added an interface to restore files from the backups.
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 11 Nov 2011 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 11 Nov 2011 23:55:00 +0200
 
 cronopete (1.3.0-Debian1) sid; urgency=low
 
@@ -368,7 +376,7 @@ cronopete (1.2.0-Debian1) sid; urgency=low
 
   * Now keeps the modified date and time of the folders in the backups
 
- -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fri, 07 Oct 2011 23:55:00 +0200
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Fry, 07 Oct 2011 23:55:00 +0200
 
 cronopete (1.1.0-Debian1) sid; urgency=low
 
