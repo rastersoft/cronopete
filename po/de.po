@@ -51,7 +51,7 @@ msgid "Cleaning incomplete backups"
 msgstr "nicht komplette Backups werden bereinigt"
 
 #: src/backup_folder.vala:364 src/backup_rsync.vala:373
-##, c-format
+#, c-format
 msgid "Backup done. Elapsed time: %d:%02d"
 msgstr "Backup fertig. Durchschittliche Zeit: %d:%02d"
 
@@ -91,7 +91,7 @@ msgid "Failed to launch rsync for '%s'. Aborting backup"
 msgstr "rsync konnte nicht gestartet werden für '%s'. Backup abgebrochen."
 
 #: src/backup_folder.vala:506 src/backup_rsync.vala:515
-##, c-format
+#, c-format
 msgid "There was a problem when backing up the folder '%s'"
 msgstr "Es gab ein Problem mit der Sicherung des Ordner '%s'"
 
@@ -139,7 +139,7 @@ msgid "Deleting old backup %s"
 msgstr "Löschen alter Sicherungen %s"
 
 #: src/backup_folder.vala:663 src/backup_rsync.vala:672
-##, c-format
+#, c-format
 msgid "Failed to delete old backup %s: %s"
 msgstr "Fehler bei löschen alter Sicherungen %s: %s"
 
@@ -276,7 +276,7 @@ msgstr "Backupregeln einstellen"
 
 #. TRANSLATORS Show the date of the last backup
 #: src/cronopete.vala:397
-##, c-format
+#, c-format
 msgid "Latest backup: %s"
 msgstr "Letztes Backup: %s"
 
@@ -372,19 +372,19 @@ msgstr "Ordner"
 
 #. TRANSLATORS Shows a warning message with "warning" in Orange color
 #: src/menu.vala:142
-##, c-format
+#, c-format
 msgid "<span foreground=\"#FF7F00\">WARNING:</span> %s"
 msgstr "<span foreground=\"#FF7F00\">WARNUNG:</span> %s"
 
 #. TRANSLATORS Shows an error message with "error" in Orange color
 #: src/menu.vala:146
-##, c-format
+#, c-format
 msgid "<span foreground=\"#FF3F3F\">ERROR:</span> %s"
 msgstr "<span foreground=\"#FF3F3F\">FEHLER:</span> %s"
 
 #. TRANSLATORS This string shows the current status of Cronopete. It can be "Status: idle", or "Status: copying file"...
 #: src/menu.vala:188
-##, c-format
+#, c-format
 msgid "Status: %s"
 msgstr "Status: %s"
 
@@ -395,12 +395,12 @@ msgstr "Nicht definiert"
 
 #. TRANSLATORS This string specifies the available and total disk space in back up drive. Example: 43 GB of 160 GB
 #: src/menu.vala:289
-##, c-format
+#, c-format
 msgid "%lld GB of %lld GB"
 msgstr "%lld GB von %lld GB"
 
 #: src/options.vala:57
-##, c-format
+#, c-format
 msgid "Backup hidden files and folders in %s"
 msgstr "sichere versteckte Dateien und Ordner in %s"
 
@@ -414,7 +414,7 @@ msgid "Aborted"
 msgstr "Abgebrochen"
 
 #: src/restore.vala:193
-##, c-format
+#, c-format
 msgid "Error while restoring %s"
 msgstr "Fehler beim Wiederherstellen %s"
 
