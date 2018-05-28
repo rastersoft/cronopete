@@ -26,13 +26,13 @@ msgstr "Fertig"
 #. TRANSLATORS This is the name for the backend that allows to store the backups in a folder, instead of choosing a disk.
 #: src/backup_folder.vala:75
 msgid "Store backups in a folder"
-msgstr "Speicher der Backups in einen Ordner."
+msgstr "Speicher der Sicherung in einen Ordner."
 
 #: src/backup_folder.vala:124 src/backup_rsync.vala:129
 
 msgid "Can't create the base folders to do backups. Aborting backup\n"
 msgstr ""
-"Es kann nicht der Basisordner für die Backups erstellt werden. Sicherung\n"
+"Es kann nicht der Basisordner für die Sicherung erstellt werden. Sicherung\n"
 "wird abgebrochen.\n"
 
 #: src/backup_folder.vala:267 src/backup_rsync.vala:272
@@ -48,7 +48,7 @@ msgstr "Sicherung starten"
 #: src/backup_folder.vala:333 src/backup_rsync.vala:342
 
 msgid "Cleaning incomplete backups"
-msgstr "nicht komplette Backups werden bereinigt"
+msgstr "nicht komplette Sicherungen werden bereinigt"
 
 #: src/backup_folder.vala:364 src/backup_rsync.vala:373
 #, c-format
@@ -73,7 +73,7 @@ msgstr "Ordner konnten nicht gelöscht werden: %s"
 #: src/backup_folder.vala:429 src/backup_rsync.vala:438
 #, c-format
 msgid "Failed to delete aborted backups: %s"
-msgstr "abgebrochene Backups konnten nicht gelöscht werden: %s"
+msgstr "abgebrochene Sicherungen konnten nicht gelöscht werden: %s"
 
 #: src/backup_folder.vala:454 src/backup_rsync.vala:463
 #, c-format
@@ -467,18 +467,17 @@ msgid ""
 "In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
 "Linux."
 msgstr ""
-"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
-"the first novel with a time-travel machine.\n"
+"1895 veröffentlichte H. G. Wells <b>Die Zeitmaschine</b>. Diesem Roman wird seit Jahren"
+"annerkannt, der erste Roman zu sein, der von einer Zeitmaschine zu handelt. \n"
 "\n"
-"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
-"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
-"first novel to feature a machine that allows to \"fly against time\".\n"
+"Aber im Jahr 1887, acht Jahre zuvor, veröffentlchte Enrique Gaspar y Rimbau <b> El"
+"anacronópete </b>, einen Roman im Zarzuela-Format, der wirklich der erste Roman"
+"ist der eine Maschine einbaut, die \"durch die Zeit reist\". \n"
 "\n"
-"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
-"Leopard. Several simmilar programs for Linux surged.\n"
+"Im Jahr 2007 startete Apple <b>Time Machine</b>, ein Backup-Programm für MacOS X Leopard."
+"Es gibt mehrere ähnliche Programme für Linux. \n"
 "\n"
-"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
-"Linux."
+"In 2011 kommt ana<b>CRONOPETE</b>,der Linux-Klon für \"Time Machine\""
 
 #: data/interface/about.ui:705
 msgid "Why <i>ana<b>CRONOPETE</b></i>?"
