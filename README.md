@@ -28,6 +28,7 @@ Cronopete offers a DBus interface to allow a remote control. It is at the sessio
 * ShowPreferences() : shows the preferences window
 * RestoreFiles() : shows the restore interface
 * RestoreFilesFromFolder(string folder) : shows the restore interface, setting it to show the specified folder. The folder can be passed as an URI (file:///...). This is useful for integration with file managers.
+* UnmoundBackupDisk : tries to unmount the backup disk. If it is not possible (because it is not mounted, or there is a backup in progress) it will return an error
 
 ## CONTACTING THE AUTHOR
 

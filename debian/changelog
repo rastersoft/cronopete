@@ -1,3 +1,9 @@
+cronopete (4.4.0-Debian1) sid; urgency=low
+
+  * Added remote control for unmounting the backup disk
+
+ -- Sergio Costas Rodriguez <raster@rastersoft.com>  Mon, 28 May 2018 23:55:00 +0200
+
 cronopete (4.3.0-Debian1) sid; urgency=low
 
   * Now allows to unmount the backup drive

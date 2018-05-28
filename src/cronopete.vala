@@ -26,7 +26,7 @@ using Gsl;
 using Posix;
 using AppIndicator;
 
-// project version=4.3.0
+// project version=4.4.0
 
 namespace cronopete {
 	cronopete_class callback_object;
@@ -447,6 +447,19 @@ namespace cronopete {
 			this.restore_files_from_folder(null);
 		}
 
+		public bool try_unmount() {
+			if (this.backend != null) {
+				var can_unmount = this.backend.can_umount_destination();
+				if (can_unmount != null) {
+					if (this.backend.storage_is_available() && (this.backend.current_status == backup_current_status.IDLE)) {
+						this.unmount_disk();
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		public void restore_files_from_folder(string ? folder) {
 			if (this.restore_window_visible) {
 				this.restore_window.present();
@@ -542,6 +555,13 @@ namespace cronopete {
 
 		public void restore_files() throws GLib.DBusError, GLib.IOError {
 			callback_object.restore_files();
+		}
+
+
+		public void unmount_backup_disk() throws GLib.DBusError, GLib.IOError {
+			if (false == callback_object.try_unmount()) {
+				throw new GLib.DBusError.FAILED("Can't unmount the backup disk");
+			}
 		}
 
 		public void restore_files_from_folder(string folder) throws GLib.DBusError, GLib.IOError {

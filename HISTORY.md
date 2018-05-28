@@ -1,5 +1,7 @@
 # History of versions #
 
+* Version 4.4.0 (2018/05/28)
+      * Added remote control for unmounting the backup disk
 * Version 4.3.0 (2018/05/24)
       * Now allows to unmount the backup drive
       * Now shows more information about the drive when formatting a disk to be used for backup
