@@ -557,6 +557,13 @@ namespace cronopete {
 			callback_object.restore_files();
 		}
 
+		public void restore_files_from_folder(string folder) throws GLib.DBusError, GLib.IOError {
+			string folder2 = folder;
+			if (folder.has_prefix("file://")) {
+				folder2 = folder2.substring(7);
+			}
+			callback_object.restore_files_from_folder(folder2);
+		}
 
 		public void unmount_backup_disk() throws GLib.DBusError, GLib.IOError {
 			if (false == callback_object.try_unmount()) {
@@ -564,12 +571,9 @@ namespace cronopete {
 			}
 		}
 
-		public void restore_files_from_folder(string folder) throws GLib.DBusError, GLib.IOError {
-			string folder2 = folder;
-			if (folder.has_prefix("file://")) {
-				folder2 = folder2.substring(7);
-			}
-			callback_object.restore_files_from_folder(folder2);
+		public void set_status(bool enable) throws GLib.DBusError, GLib.IOError {
+			var cronopete_settings = new GLib.Settings("org.rastersoft.cronopete");
+			cronopete_settings.set_boolean("enabled", enable);
 		}
 	}
 }

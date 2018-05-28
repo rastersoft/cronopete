@@ -69,8 +69,7 @@ namespace  cronopete {
 				Posix.exit(48);
 			}
 
-			this.main_w = (Window) this.builder.get_object("window1");
-
+			this.main_w                = (Window) this.builder.get_object("window1");
 			this.log                   = (Gtk.TextBuffer) this.builder.get_object("textbuffer1");
 			this.log_view              = (Gtk.TextView) this.builder.get_object("textview1");
 			this.tabs                  = (Gtk.Notebook) this.builder.get_object("notebook1");
@@ -295,7 +294,7 @@ namespace  cronopete {
 			} else {
 				this.unmount_button.show();
 				this.unmount_button.set_label(can_unmount);
-				if (this.backend.storage_is_available() &&  (this.backend.current_status == backup_current_status.IDLE)) {
+				if (this.backend.storage_is_available() && (this.backend.current_status == backup_current_status.IDLE)) {
 					this.unmount_button.sensitive = true;
 				} else {
 					this.unmount_button.sensitive = false;
