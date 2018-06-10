@@ -33,7 +33,7 @@ Cronopete offers a DBus interface to allow a remote control. It is at the sessio
 
 ## CONTACTING THE AUTHOR
 
-Sergio Costas Rodriguez (Raster Software Vigo)  
-raster@rastersoft.com  
+Sergio Costas Rodriguez  
+rastersoft@gmail.com  
 http://www.rastersoft.com  
-GIT: git://github.com/rastersoft/cronopete.git  
+https://gitlab.com/rastersoft/cronopete.git  
