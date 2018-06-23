@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Cronopete 0.92\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-20 18:43+0200\n"
-"PO-Revision-Date: 2018-22-05 17:19+0200\n"
+"PO-Revision-Date: 2018-06-23 20:50+0200\n"
 "Last-Translator: Steffen Taubenheim-Probst <dev@taubenheim.biz>\n"
 "Language-Team: Deutsch <dev@taubenheim.biz>\n"
-"Language: german\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #. TRANSLATOR this message is shown in the configuration window to specify that cronopete is in idle state, not doing a backup
 #: src/backup_base.vala:102
@@ -29,7 +30,6 @@ msgid "Store backups in a folder"
 msgstr "Speicher der Sicherung in einen Ordner."
 
 #: src/backup_folder.vala:124 src/backup_rsync.vala:129
-
 msgid "Can't create the base folders to do backups. Aborting backup\n"
 msgstr ""
 "Es kann nicht der Basisordner für die Sicherung erstellt werden. Sicherung\n"
@@ -41,12 +41,10 @@ msgid "Failed to launch cp to restore: %s"
 msgstr "cp konnte nicht gestartet werdern um %s wiederherzustellen."
 
 #: src/backup_folder.vala:295 src/backup_rsync.vala:304
-
 msgid "Starting backup"
 msgstr "Sicherung starten"
 
 #: src/backup_folder.vala:333 src/backup_rsync.vala:342
-
 msgid "Cleaning incomplete backups"
 msgstr "nicht komplette Sicherungen werden bereinigt"
 
@@ -56,9 +54,9 @@ msgid "Backup done. Elapsed time: %d:%02d"
 msgstr "Backup fertig. Durchschittliche Zeit: %d:%02d"
 
 #: src/backup_folder.vala:371 src/backup_rsync.vala:380
-
 msgid "Asked for freeing disk space when there is free space. Aborting backup\n"
-msgstr "Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten.\n"
+msgstr ""
+"Es ist nicht genug freier Speicher vorhanden um die Sicherung zu starten.\n"
 "Sicherung wird abgebrochen.\n"
 
 #: src/backup_folder.vala:386 src/backup_rsync.vala:395
@@ -100,9 +98,8 @@ msgstr "Es gab ein Problem mit der Sicherung des Ordner '%s'"
 msgid "Backing up %s"
 msgstr "Sichern '%s'"
 
-#: src/backup_folder.vala:554 src/backup_folder.vala:555
-#: src/backup_rsync.vala:563 src/backup_rsync.vala:564
-
+#: src/backup_folder.vala:554 src/backup_folder.vala:555 src/backup_rsync.vala:563
+#: src/backup_rsync.vala:564
 msgid "Syncing disk"
 msgstr "Synchronisiere Festplatte"
 
@@ -111,7 +108,6 @@ msgid "Failed to launch sync command"
 msgstr "Starten des Sync Kommando fehlgeschlagen"
 
 #: src/backup_folder.vala:584 src/backup_rsync.vala:593
-
 msgid "Failed to rename backup folder. Aborting backup"
 msgstr "Sicherungsordner konnte nich umbenannt werden. Sicherung abgebrochen"
 
@@ -120,12 +116,10 @@ msgid "Failed to launch final sync command"
 msgstr "Starten des finalen Sync Kommando fehlgeschlagen"
 
 #: src/backup_folder.vala:607 src/backup_rsync.vala:616
-
 msgid "Disk synced, cleaning old backups"
 msgstr "Platte synchron, lösche alte Sicherung"
 
 #: src/backup_folder.vala:623 src/backup_rsync.vala:632 src/cronopete.vala:240
-
 msgid "Cleaning old backups"
 msgstr "alte Sicherung werden gelöscht"
 
@@ -172,19 +166,16 @@ msgid "Failed to unmount the disk. Aborting format operation."
 msgstr "Fehler bei aushängen der Platte. Formatierung abgebrochen."
 
 #: src/choose_disk.vala:93
-msgid ""
-"Failed to format the disk (maybe it is needing too much time). Please, try "
-"again."
+msgid "Failed to format the disk (maybe it is needing too much time). Please, try again."
 msgstr ""
-"Es ist ein Fehler bei der Formatierung der Festplatte aufgetretten."
-"Bitte versuchen Sie es noch einmal."
+"Es ist ein Fehler bei der Formatierung der Festplatte aufgetretten.Bitte versuchen Sie "
+"es noch einmal."
 
 #: src/choose_disk.vala:109
 msgid "Failed to mount again the disk. Aborting the format operation."
 msgstr "Die Festplatte konnte nicht eingehängt werden. Formatierung abgebrochen."
 
 #: src/choose_disk.vala:117
-
 msgid "Failed to get the final UUID. Aborting the format operation."
 msgstr "Die finale UUID konnte nicht geholt werden. Formatierung abgebrochen."
 
@@ -205,7 +196,8 @@ msgstr ""
 "\n"
 "%1$s\n"
 "\n"
-"mit der Größe von %2$s muss formatiert werden bevor diese für Sicherungen verwendet werden kann.\n"
+"mit der Größe von %2$s muss formatiert werden bevor diese für Sicherungen verwendet "
+"werden kann.\n"
 "\n"
 "Um das zu tun, drücken Sie den <i>Laufwerk formatieren</i> Knopf.\n"
 "\n"
@@ -223,7 +215,6 @@ msgstr "Unbekannte Größe"
 
 #. TRANSLATORS Specify that the disk configured for backups is not available
 #: src/cronopete.vala:217
-
 msgid "Disk not available"
 msgstr "Speicher nicht verfügbar"
 
@@ -233,7 +224,6 @@ msgid "Idle"
 msgstr "Warten"
 
 #: src/cronopete.vala:235
-
 msgid "Doing backup\n"
 msgstr "Sicherung starten\n"
 
@@ -249,7 +239,6 @@ msgstr "Beim Backup wurde ein Fehler festgestellt."
 
 #. TRANSLATORS The program state, used in a tooltip, when the backups are disabled and won't be done
 #: src/cronopete.vala:262
-
 msgid "Backup is disabled"
 msgstr "Backup ausgeschaltet"
 
@@ -421,12 +410,12 @@ msgstr "Fehler beim Wiederherstellen %s"
 #: src/restore.vala:203
 #, c-format
 msgid "Restoring file %s"
-msgstr "Dateien wiederherstellen"
+msgstr "Dateien wiederherstellen %s"
 
 #: src/restore.vala:209
 #, c-format
 msgid "Restoring folder %s"
-msgstr "Dateien wiederherstellen"
+msgstr "Dateien wiederherstellen %s"
 
 #. TRANSLATORS Specifies that a rstoring operation has ended
 #: src/restore.vala:215
@@ -444,7 +433,6 @@ msgid "Aborting restore operation"
 msgstr "Wiederhe ab gebrochen"
 
 #: data/interface/about.ui:15
-
 msgid "©2011-2018 Raster Software Vigo"
 msgstr "©2011-2018 Raster Software Vigo"
 
@@ -454,25 +442,24 @@ msgstr "Ein Apple Time Machine Klone für Linux"
 
 #: data/interface/about.ui:683
 msgid ""
-"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years "
-"the first novel with a time-travel machine.\n"
+"In 1895, H.G. Wells published <b>The Time Machine</b>, considerer for years the first "
+"novel with a time-travel machine.\n"
 "\n"
-"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El "
-"anacronópete</b>, a novel in the format of a zarzuela, which is the truly "
-"first novel to feature a machine that allows to \"fly against time\".\n"
+"But in 1887, eight years before, Enrique Gaspar y Rimbau published <b>El anacronópete</"
+"b>, a novel in the format of a zarzuela, which is the truly first novel to feature a "
+"machine that allows to \"fly against time\".\n"
 "\n"
-"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X "
-"Leopard. Several simmilar programs for Linux surged.\n"
+"In 2007, Apple launched <b>Time Machine</b>, a backup program for MacOS X Leopard. "
+"Several simmilar programs for Linux surged.\n"
 "\n"
-"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for "
-"Linux."
+"In 2011, arrives ana<b>CRONOPETE</b>, THE Apple's Time Machine clone for Linux."
 msgstr ""
-"1895 veröffentlichte H. G. Wells <b>Die Zeitmaschine</b>. Diesem Roman wird seit Jahren"
-"annerkannt, der erste Roman zu sein, der von einer Zeitmaschine zu handelt. \n"
+"1895 veröffentlichte H. G. Wells <b>Die Zeitmaschine</b>. Diesem Roman wird seit "
+"Jahrenannerkannt, der erste Roman zu sein, der von einer Zeitmaschine zu handelt. \n"
 "\n"
-"Aber im Jahr 1887, acht Jahre zuvor, veröffentlchte Enrique Gaspar y Rimbau <b> El"
-"anacronópete </b>, einen Roman im Zarzuela-Format, der wirklich der erste Roman"
-"ist der eine Maschine einbaut, die \"durch die Zeit reist\". \n"
+"Aber im Jahr 1887, acht Jahre zuvor, veröffentlchte Enrique Gaspar y Rimbau <b> "
+"Elanacronópete </b>, einen Roman im Zarzuela-Format, der wirklich der erste Romanist der "
+"eine Maschine einbaut, die \"durch die Zeit reist\". \n"
 "\n"
 "Im Jahr 2007 startete Apple <b>Time Machine</b>, ein Backup-Programm für MacOS X Leopard."
 "Es gibt mehrere ähnliche Programme für Linux. \n"
@@ -501,8 +488,7 @@ msgid ""
 "Please, check the list of folders to ensure that everything went fine."
 msgstr ""
 "Die Schierungseinstellungen wurden exportiert.\n"
-"Bitte überprüfen Sie die Liste der Ordner, um sicherzustellen, dass alles in "
-"Ordnung ist."
+"Bitte überprüfen Sie die Liste der Ordner, um sicherzustellen, dass alles in Ordnung ist."
 
 #: data/interface/format_error.ui:51
 msgid ""
@@ -636,29 +622,41 @@ msgstr "Wiederherstellen wurde abgeschlossen"
 
 #: data/interface/warning_folder_backend.ui:53
 msgid ""
-"The <i>folder backend</i> is considered valid only for advanced users. To "
-"enable it, set the <i>gconf</i> key 'enable-folder-backend' to <i>true</i>. "
-"If you don't know how to do this, probably you should not use this backend."
+"The <i>folder backend</i> is considered valid only for advanced users. To enable it, set "
+"the <i>gconf</i> key 'enable-folder-backend' to <i>true</i>. If you don't know how to do "
+"this, probably you should not use this backend."
 msgstr ""
+"Das <i>Ordner-Backend</i> gilt nur für fortgeschrittene Benutzer. Um es zu aktivieren, "
+"setzen Sie den <i>gconf</i> Schlüssel 'enable-folder-backend' auf <i>true</i>. Wenn Sie "
+"nicht wissen, wie Sie das tun sollen, sollten Sie dieses Backend nicht verwenden."
 
 #: data/interface/warning_folder_backend.ui:76
 msgid ""
-"The <i>store backups in a folder</i> backend can be considered quite "
-"dangerous because it allows to do what are considered 'bad practices' for a "
-"secure backup. Specifically, it allows to store the backups in the same "
-"physical disk (and even in the same partition) than the data to be backed "
-"up. This means that a disk failure will result in the loss of both the data "
-"and the backup.\n"
+"The <i>store backups in a folder</i> backend can be considered quite dangerous because "
+"it allows to do what are considered 'bad practices' for a secure backup. Specifically, "
+"it allows to store the backups in the same physical disk (and even in the same "
+"partition) than the data to be backed up. This means that a disk failure will result in "
+"the loss of both the data and the backup.\n"
 "\n"
-"This means that the user must put a lot of care when using this backend to "
-"ensure that the folder where (s)he stores the backups belongs to a different "
-"disk. Or when using the same physical disk, that (s)he understands that "
-"there is no true backup of the data."
+"This means that the user must put a lot of care when using this backend to ensure that "
+"the folder where (s)he stores the backups belongs to a different disk. Or when using the "
+"same physical disk, that (s)he understands that there is no true backup of the data."
 msgstr ""
+"Das <i> Speichern von Backups in einem Ordner </i> Backend kann als ziemlich gefährlich "
+"angesehen werden, da es erlaubt, das zu tun, was als \"schlechte Praktiken\" für eine "
+"sichere Sicherung angesehen wird. Insbesondere ermöglicht es das Speichern der "
+"Sicherungen auf derselben physischen Festplatte (und sogar in derselben Partition) als "
+"die zu sichernden Daten. Dies bedeutet, dass es bei einem Datenträgerfehler zum Verlust "
+"sowohl der Daten als auch der Sicherung führt kann.\n"
+"\n"
+"Dies bedeutet, dass der Benutzer bei der Verwendung dieses Backends sehr vorsichtig sein "
+"muss, um sicherzustellen, dass der Ordner, in dem er die Sicherungen speichert, zu einem "
+"anderen Datenträger gehört. Oder wenn er die gleiche physische Festplatte verwendet, "
+"versteht er, dass es keine echte Datensicherung ist."
 
 #: data/interface/warning_folder_backend.ui:87
 msgid "Read more..."
-msgstr ""
+msgstr "Lese mehr..."
 
 #: data/interface/welcome.ui:23
 msgid "Don't ask me again"
@@ -678,17 +676,17 @@ msgstr "Willkommen zu Cronopete"
 
 #: data/interface/welcome.ui:105
 msgid ""
-"Cronopete is a backup utility that allows you to make regular copies of your "
-"data, and restore it from several dates.\n"
+"Cronopete is a backup utility that allows you to make regular copies of your data, and "
+"restore it from several dates.\n"
 "\n"
-"Now, you can configure which external disk use to make the copies and which "
-"folders you want to backup, or you can leave it for later."
+"Now, you can configure which external disk use to make the copies and which folders you "
+"want to backup, or you can leave it for later."
 msgstr ""
-"Cronopete ist ein Sicherungswerkzeug das es erlaubt regelmäßig Kopieen "
-"deiner Daten zu erstellen und zu jedem Zeitpunkt wieder herzustellen.\n"
+"Cronopete ist ein Sicherungswerkzeug das es erlaubt regelmäßig Kopieen deiner Daten zu "
+"erstellen und zu jedem Zeitpunkt wieder herzustellen.\n"
 "\n"
-"Du kannst jetzt eine externe Festplatte für die Sicherungen konfigurieren "
-"und angeben welche Ordner gesichert werden sollen, oder du tust es später."
+"Du kannst jetzt eine externe Festplatte für die Sicherungen konfigurieren und angeben "
+"welche Ordner gesichert werden sollen, oder du tust es später."
 
 #~ msgid "Failed to find the disk!!!!!"
 #~ msgstr "Die Festplatte konnte nicht gefunden werden!"
@@ -705,10 +703,8 @@ msgstr ""
 #~ msgid "Device:"
 #~ msgstr "Gerät:"
 
-
 #~ msgid "%x at %R"
 #~ msgstr "Heute, um %H:%M"
-
 
 #~ msgid "Backup done"
 #~ msgstr "Sicherung abbrechen"
@@ -724,8 +720,8 @@ msgstr ""
 
 #~ msgid "Can't create the folder for this backup. Aborting backup.\n"
 #~ msgstr ""
-#~ "Dieser Ordner für die Sicherung kann nicht erstellt werden. Sicherung "
-#~ "wird abgebrochen.\n"
+#~ "Dieser Ordner für die Sicherung kann nicht erstellt werden. Sicherung wird "
+#~ "abgebrochen.\n"
 
 #~ msgid "Backup device not available. Aborting backup.\n"
 #~ msgstr "Sicherungsgerät ist nicht vorhanden. Sicherung wird angebrochen.\n"
@@ -814,34 +810,32 @@ msgstr ""
 #~ "Bitte prüfe die Liste der Ordner für die Sicherung."
 
 #~ msgid ""
-#~ "The file system %s is not valid for Cronopete because, currently, it has "
-#~ "several bugs that can put in risk your backups. The optimal file system "
-#~ "is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+#~ "The file system %s is not valid for Cronopete because, currently, it has several bugs "
+#~ "that can put in risk your backups. The optimal file system is ReiserFS, but you can "
+#~ "also use Ext3/Ext4 if you prefer.\n"
 #~ "\n"
-#~ "To change the file format in the disk, click the <i>Format disk</i> "
-#~ "button. <b>All the data in the drive will be erased</b>."
+#~ "To change the file format in the disk, click the <i>Format disk</i> button. <b>All "
+#~ "the data in the drive will be erased</b>."
 #~ msgstr ""
-#~ "The file system %s is not valid for Cronopete because, currently, it has "
-#~ "several bugs that can put in risk your backups. The optimal file system "
-#~ "is ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+#~ "The file system %s is not valid for Cronopete because, currently, it has several bugs "
+#~ "that can put in risk your backups. The optimal file system is ReiserFS, but you can "
+#~ "also use Ext3/Ext4 if you prefer.\n"
 #~ "\n"
-#~ "To change the file format in the disk, click the <i>Format disk</i> "
-#~ "button. <b>All the data in the drive will be erased</b>."
+#~ "To change the file format in the disk, click the <i>Format disk</i> button. <b>All "
+#~ "the data in the drive will be erased</b>."
 
 #~ msgid ""
-#~ "The file system %s is not valid for Cronopete. The optimal file system is "
-#~ "ReiserFS, but you can also use Ext3/Ext4 if you prefer.\n"
+#~ "The file system %s is not valid for Cronopete. The optimal file system is ReiserFS, "
+#~ "but you can also use Ext3/Ext4 if you prefer.\n"
 #~ "\n"
-#~ "To change the file format in the disk, click the <i>Format disk</i> "
-#~ "button. <b>All the data in the drive will be erased</b>."
+#~ "To change the file format in the disk, click the <i>Format disk</i> button. <b>All "
+#~ "the data in the drive will be erased</b>."
 #~ msgstr ""
-#~ "El sistema de ficheros %s no se puede utilizar con Cronopete. El sistema "
-#~ "de ficheros óptimo es ReiserFS, pero también se puede utilizar Ext3/"
-#~ "Ext4.\n"
+#~ "El sistema de ficheros %s no se puede utilizar con Cronopete. El sistema de ficheros "
+#~ "óptimo es ReiserFS, pero también se puede utilizar Ext3/Ext4.\n"
 #~ "\n"
-#~ "Para cambiar el sistema de ficheros del disco, pulse el botón "
-#~ "<i>Formatear disco</i>. <b>Todos los datos contenidos en el disco se "
-#~ "perderán</b>."
+#~ "Para cambiar el sistema de ficheros del disco, pulse el botón <i>Formatear disco</i>. "
+#~ "<b>Todos los datos contenidos en el disco se perderán</b>."
 
 #~ msgid "Don't show hidden files"
 #~ msgstr "No mostrar ficheros ocultos"
