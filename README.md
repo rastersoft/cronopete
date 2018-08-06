@@ -1,6 +1,6 @@
 # CRONOPETE
 
-** IMPORTANT: Cronopete has been migrated to Gitlab **
+**IMPORTANT: Cronopete has been migrated to Gitlab**
 
 https://gitlab.com/rastersoft/cronopete
 
