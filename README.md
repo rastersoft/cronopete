@@ -1,5 +1,11 @@
 # CRONOPETE
 
+** IMPORTANT: Cronopete has been migrated to Gitlab **
+
+https://gitlab.com/rastersoft/cronopete
+
+
+
 A backup utility for Linux.
 
 Cronopete is a backup utility for Linux, modeled after Apple's Time Machine. It aims to simplify the creation of periodic backups.
